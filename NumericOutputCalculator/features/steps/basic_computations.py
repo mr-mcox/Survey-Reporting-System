@@ -18,11 +18,11 @@ def import_table_data(table):
 
 @given('net formatted values')
 def step(context):
-	context.input_data = import_table_data(context.table)
+	context.numeric_output_calculator = NumericOutputCalculator(net_formatted_values=import_table_data(context.table))
 
 @when('compute net is run')
 def step(context):
-	context.result = NumericOutputCalculator(net_formatted_values=context.input_data).compute_net_results()
+	context.result = context.numeric_output_calculator.compute_net_results()
 
 @then('the display_value for question_id {question_id} is {value}')
 def step(context,question_id,value):
@@ -31,15 +31,15 @@ def step(context,question_id,value):
 
 @when('compute strong is run')
 def step(context):
-    context.result = NumericOutputCalculator(net_formatted_values=context.input_data).compute_strong_results()
+    context.result = context.numeric_output_calculator.compute_strong_results()
 
 @when('compute weak is run')
 def step(context):
-    context.result = NumericOutputCalculator(net_formatted_values=context.input_data).compute_weak_results()
+    context.result = context.numeric_output_calculator.compute_weak_results()
 
 @when('NumericOutputCalculator is initialized')
 def step(context):
-    context.numeric_output_calculator = NumericOutputCalculator(raw_values=context.input_data)
+    pass
 
 @then('net formatted value for person_id {person_id} is {value}')
 def step(context, person_id, value):
@@ -51,4 +51,4 @@ def step(context, person_id, value):
 
 @given('raw 7pt questions results')
 def step(context):
-    context.input_data = import_table_data(context.table)
+    context.numeric_output_calculator = NumericOutputCalculator(raw_values=import_table_data(context.table))
