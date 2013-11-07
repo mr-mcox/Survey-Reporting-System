@@ -24,11 +24,15 @@ def step(context):
 def step(context):
 	context.result = NumericOutputCalculator(net_formatted_values=context.input_data).compute_net_results()
 
-@then('the display_value for question_id 1 is {value}')
-def step(context,value):
+@then('the display_value for question_id {question_id} is {value}')
+def step(context,question_id,value):
     print(context.result)
-    assert context.result.set_index('question_id').loc[1,'value'] == float(value)
+    assert context.result.set_index('question_id').loc[int(question_id),'value'] == float(value)
 
 @when('compute strong is run')
 def step(context):
     context.result = NumericOutputCalculator(net_formatted_values=context.input_data).compute_strong_results()
+
+@when('compute weak is run')
+def step(context):
+    context.result = NumericOutputCalculator(net_formatted_values=context.input_data).compute_weak_results()

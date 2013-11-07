@@ -15,3 +15,9 @@ class NumericOutputCalculator(object):
 		data = self.net_results.copy()
 		data.ix[data.value.notnull() & (data.value != 1),'value'] = 0
 		return data.groupby('question_id').mean().reset_index()
+	
+	def compute_weak_results(self):
+		data = self.net_results.copy()
+		data.ix[data.value.notnull() & (data.value != -1),'value'] = 0
+		data.value = data.value * -1
+		return data.groupby('question_id').mean().reset_index()
