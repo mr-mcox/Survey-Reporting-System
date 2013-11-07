@@ -48,3 +48,25 @@ Scenario: When net formatted values are provided for multiple questions, output 
 		When compute net is run
 		Then the display_value for question_id 1 is 0.5
 		Then the display_value for question_id 2 is -1
+
+Scenario: When 7pt with 1=Strongly Agree questions are given, net formatted values are appropriately computed
+	Given raw 7pt questions results
+		| person_id | value |
+		| 1         | 7     |
+		| 2         | 6     |
+		| 3         | 5     |
+		| 4         | 4     |
+		| 5         | 3     |
+		| 6         | 2     |
+		| 7         | 1     |
+		| 8         | 8     |
+	When NumericOutputCalculator is initialized
+	Then net formatted value for person_id 1 is 1
+	Then net formatted value for person_id 2 is 1
+	Then net formatted value for person_id 3 is 0
+	Then net formatted value for person_id 4 is -1
+	Then net formatted value for person_id 5 is -1
+	Then net formatted value for person_id 6 is -1
+	Then net formatted value for person_id 7 is -1
+	Then net formatted value for person_id 8 is blank
+

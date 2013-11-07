@@ -1,5 +1,5 @@
 from behave import *
-
+import numpy as np
 from NumericOutputCalculator import NumericOutputCalculator
 
 def import_table_data(table):
@@ -36,3 +36,19 @@ def step(context):
 @when('compute weak is run')
 def step(context):
     context.result = NumericOutputCalculator(net_formatted_values=context.input_data).compute_weak_results()
+
+@when('NumericOutputCalculator is initialized')
+def step(context):
+    context.numeric_output_calculator = NumericOutputCalculator(raw_values=context.input_data)
+
+@then('net formatted value for person_id {person_id} is {value}')
+def step(context, person_id, value):
+    if value == 'blank':
+        assert np.isnan(context.numeric_output_calculator.net_formatted_values.set_index('person_id').loc[int(person_id),'value'])
+    else:
+        assert context.numeric_output_calculator.net_formatted_values.set_index('person_id').loc[int(person_id),'value'] == int(value)
+    
+
+@given('raw 7pt questions results')
+def step(context):
+    context.input_data = import_table_data(context.table)
