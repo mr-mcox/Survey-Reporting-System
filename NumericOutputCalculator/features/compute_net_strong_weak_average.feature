@@ -79,3 +79,13 @@ Scenario: When 7pt with 1=Strongly Agree questions are given, net is accurately 
 		| 1           | 2     |
 	When compute net is run
 	Then the display_value for question_id 1 is 0.25
+
+Scenario: When 7pt with 1=Strongly Agree questions are given, average is accurately computed
+	Given raw 7pt questions results
+		| question_id | value |
+		| 1           | 7     |
+		| 1           | 7     |
+		| 1           | 5     |
+		| 1           | 1     |
+	When compute average is run
+	Then the display_value for question_id 1 is 5

@@ -26,7 +26,6 @@ def step(context):
 
 @then('the display_value for question_id {question_id} is {value}')
 def step(context,question_id,value):
-    print(context.result)
     assert context.result.set_index('question_id').loc[int(question_id),'value'] == float(value)
 
 @when('compute strong is run')
@@ -52,3 +51,7 @@ def step(context, person_id, value):
 @given('raw 7pt questions results')
 def step(context):
     context.numeric_output_calculator = NumericOutputCalculator(raw_values=import_table_data(context.table))
+
+@when('compute average is run')
+def step(context):
+    context.result = context.numeric_output_calculator.compute_average_results()
