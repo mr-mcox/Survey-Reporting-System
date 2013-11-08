@@ -1,3 +1,5 @@
+from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, select
+
 class ResultsRetriever(object):
 	"""docstring for ResultsRetriever"""
 	def __init__(self, **kwargs):
@@ -5,5 +7,13 @@ class ResultsRetriever(object):
 
 	def retrieve_results_for_one_survey(self,**kwargs):
 		survey_id = kwargs.pop('survey_id',None)
-		return 	self.db_connection.execute("SELECT * FROM results WHERE survey_id = 1").fetchall()
+		metadata = MetaData()
+		results = Table('results',metadata,
+				Column('respondent_id', Integer),
+				Column('survey_id', Integer),
+				Column('question_id', Integer),
+				Column('response', Integer))
+		select_results = select([results]).where(results.c.survey_id == survey_id)
+
+		return 	self.db_connection.execute(select_results).fetchall()
 

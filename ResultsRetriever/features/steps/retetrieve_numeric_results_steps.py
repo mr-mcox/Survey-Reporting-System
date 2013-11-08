@@ -24,9 +24,7 @@ def step(context):
 @when('retrieve results for survey_id 1 is run')
 def step(context):
 	context.results = ResultsRetriever(db_connection=context.db).retrieve_results_for_one_survey(survey_id=1)
-	#conn.execute("SELECT * FROM results WHERE survey_id = 1").fetchall()
 
 @then('there are 8 rows returned')
 def step(context):
-	print(context.results)
 	assert len(context.results)==8
