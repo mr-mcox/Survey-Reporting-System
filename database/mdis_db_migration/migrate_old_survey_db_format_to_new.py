@@ -9,7 +9,7 @@ survey_codes = question_table.survey.unique().tolist()
 survey_map = dict(zip(survey_codes,range(len(survey_codes))))
 survey_ids = [survey_map[survey_name] for survey_name in survey_codes]
 
-pd.DataFrame({'survey_id':survey_ids,'survey_code':survey_codes}).to_csv('surveys.csv')
+pd.DataFrame({'id':survey_ids,'survey_code':survey_codes}).to_csv('surveys.csv')
 
 #Create question table data
 questions = question_table.survey_specific_qid.unique().tolist()
@@ -17,8 +17,8 @@ question_map = dict(zip(questions,range(len(questions))))
 
 question_table['question_id'] = question_table.survey_specific_qid.map(question_map)
 question_table['survey_id'] = question_table.survey.map(survey_map)
-
-pd.DataFrame(question_table,columns=['question_id','survey_id','master_qid']).to_csv('questions.csv')
+question_table = question_table.rename(columns={'master_qid':'question_code','question_id':'id'})
+pd.DataFrame(question_table,columns=['id','survey_id','question_code']).to_csv('questions.csv')
 
 #Map survey id and question id onto survey responses
 responses['question_id'] = responses.survey_specific_qid.map(question_map)
