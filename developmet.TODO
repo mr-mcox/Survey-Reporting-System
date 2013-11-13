@@ -2,3 +2,9 @@ To implement:
   ✔ For more than one survey @done (13-11-08 10:33)
   ✔ By survey name @done (13-11-08 14:29)
   ☐ End to end demonstration with MySQL DB
+
+Refactor:
+  ☐ Values and responses seems potentially confusing - should they be the same or renamed?
+
+Maybe:
+  ☐ Import 1314F8W survey data automatically on migration from old DB

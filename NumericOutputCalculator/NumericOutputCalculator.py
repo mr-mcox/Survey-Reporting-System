@@ -7,9 +7,9 @@ class NumericOutputCalculator(object):
 		net_formatted_values = kwargs.pop('net_formatted_values', None)
 		raw_values = kwargs.pop('raw_values', None)
 		if net_formatted_values == None:
-			map_7pt_SA_to_net = {8:None,7:1,6:1,5:0,4:-1,3:-1,2:-1,1:-1}
+			map_7pt_SA_to_net = {8:None,7:-1,6:-1,5:-1,4:-1,3:0,2:1,1:1}
 			net_formatted_values = pd.DataFrame(raw_values)
-			net_formatted_values.value = net_formatted_values.value.map(map_7pt_SA_to_net)
+			net_formatted_values['value'] = net_formatted_values.response.map(map_7pt_SA_to_net)
 		net_formatted_values = pd.DataFrame(net_formatted_values)
 		self.net_formatted_values = net_formatted_values
 		self.raw_values = pd.DataFrame(raw_values)

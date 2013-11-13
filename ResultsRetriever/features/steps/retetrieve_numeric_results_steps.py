@@ -46,7 +46,7 @@ def step(context):
 
 @then('there are 8 rows returned')
 def step(context):
-	assert len(context.results)==8
+	assert len(context.results['rows'])==8
 
 @given('a survey table with this data')
 def step(context):

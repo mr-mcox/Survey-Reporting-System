@@ -22,4 +22,5 @@ class ResultsRetriever(object):
 		else:
 			select_results = select([results]).where(results.c.survey_id == survey_id)
 
-		return 	self.db_connection.execute(select_results).fetchall()
+		results = self.db_connection.execute(select_results)
+		return 	{'rows':results.fetchall(),'column_headings':results.keys()}
