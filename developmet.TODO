@@ -1,10 +1,12 @@
 To implement:
   ✔ For more than one survey @done (13-11-08 10:33)
   ✔ By survey name @done (13-11-08 14:29)
-  ☐ End to end demonstration with MySQL DB
+  ✔ End to end demonstration with MySQL DB @done (13-11-13 07:43)
 
 Refactor:
   ☐ Values and responses seems potentially confusing - should they be the same or renamed?
+  ☐ Survey is indentified on questions table and not on results table
 
 Maybe:
   ☐ Import 1314F8W survey data automatically on migration from old DB
+  ☐ Add indicies to the DB

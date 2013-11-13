@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 import sys, os
 import pandas as pd
-if not os.path.abspath("/Users/mcox/Dropbox/MDIS/Code/SurveyReportingSystem") in sys.path : sys.path.insert(0, os.path.abspath("/Users/mcox/Dropbox/MDIS/Code/SurveyReportingSystem")) 
+# if not os.path.abspath("/Users/mcox/Dropbox/MDIS/Code/SurveyReportingSystem") in sys.path : sys.path.insert(0, os.path.abspath("/Users/mcox/Dropbox/MDIS/Code/SurveyReportingSystem")) 
 from NumericOutputCalculator import NumericOutputCalculator
 from ResultsRetriever import ResultsRetriever
 
