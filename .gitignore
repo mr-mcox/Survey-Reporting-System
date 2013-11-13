@@ -1,2 +1,3 @@
 *.pyc
 db_connect_string.txt
+alembic.ini
