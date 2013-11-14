@@ -10,3 +10,4 @@ Refactor:
 Maybe:
   ☐ Import 1314F8W survey data automatically on migration from old DB
   ☐ Add indicies to the DB
+  ☐ Add additional columns to substitute for when importing demographic data
