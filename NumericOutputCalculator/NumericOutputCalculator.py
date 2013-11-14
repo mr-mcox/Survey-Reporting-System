@@ -13,9 +13,18 @@ class NumericOutputCalculator(object):
 		net_formatted_values = pd.DataFrame(net_formatted_values)
 		self.net_formatted_values = net_formatted_values
 		self.raw_values = pd.DataFrame(raw_values)
+		self.demographic_data = kwargs.pop('demographic_data',pd.DataFrame())
 
-	def compute_net_results(self):
-		return self.net_formatted_values.groupby('question_id').mean().reset_index()
+	def compute_net_results(self,**kwargs):
+		cut_demographic = kwargs.pop('cut_demographic', None)
+		nfv = self.net_formatted_values
+		if not self.demographic_data.empty:
+			nfv = nfv.join(self.demographic_data.loc[:,cut_demographic], how = 'outer')
+
+		cut_groupings = ['question_id']
+		if cut_demographic != None:
+			cut_groupings.append(cut_demographic)
+		return nfv.groupby(cut_groupings).mean().reset_index()
 
 	def compute_strong_results(self):
 		data = self.net_formatted_values.copy()
