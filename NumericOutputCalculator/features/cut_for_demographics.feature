@@ -27,3 +27,18 @@ Feature: When provided a set of demographics, cut by those demograhpics when spe
 			| 3             | SoDak   | Male |
 		When compute net with cut_demographic = region and gender is run
 		Then the display_value including region and gender for question_id 1 and region "Atlanta" gender "Female" is 0.5
+
+	Scenario: NumericOutputCalculator should only provide cut columns and display value
+		Given net formatted values
+				| respondent_id | question_id | net_formatted_value |
+				| 1             | 1           | 1     |
+				| 2             | 1           | 0     |
+				| 3             | 1           | -1    |
+			Given demographic data
+				| respondent_id | region  | gender |
+				| 1             | Atlanta | Female |
+				| 2             | Atlanta | Female |
+				| 3             | SoDak   | Male |
+			When compute net with cut_demographic = region is run
+			Then the only columns returned are question_id, region, aggregation_value
+

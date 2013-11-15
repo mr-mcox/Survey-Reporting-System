@@ -1,6 +1,7 @@
 To implement:
  ✔ Log all computations according to cut tuple with metadata on what was done so that we can access them later @done (13-11-15 11:51)
  ✔ Refactor NumericOutputCalculator so it can determine on its own whether a net_formatted_results needs to be added @done (13-11-15 11:59)
+ ☐ NumericOutputCalculator should only provide cut columns and display value
  ☐ Identify demographic fields used across all computations
  ☐ Create a mapping from field value text to unique number
  ☐ Replace all text with integers

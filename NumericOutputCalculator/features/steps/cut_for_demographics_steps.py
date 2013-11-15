@@ -35,3 +35,6 @@ def step(context):
 @then('the display_value including region and gender for question_id 1 and region "Atlanta" gender "Female" is 0.5')
 def step(context):
 	assert context.result.set_index(['question_id','region','gender']).loc[(1,'Atlanta','Female'),'aggregation_value'] == 0.5
+@then('the only columns returned are question_id, region, aggregation_value')
+def step(context):
+    assert set(context.result.columns) == {'question_id','region','aggregation_value'}

@@ -15,3 +15,6 @@ Feature: In order to allow any text to be used in cutting yet maintain sane sort
 		When compute net with cut_demographic = region is run
 		Then computations_generated has a length of 2
 		Then the display_value including region for question_id 1 and region "Atlanta" is 0.5
+
+	Scenario: Identify all demographic columns across multiple cuts
+		Given 

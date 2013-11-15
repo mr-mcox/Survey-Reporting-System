@@ -88,4 +88,4 @@ Scenario: When 7pt with 1=Strongly Agree questions are given, average is accurat
 		| 1           | 3        |
 		| 1           | 7        |
 	When compute average is run
-	Then the display_value for question_id 1 is 3
+	Then the display_value for question_id 1 is 3	

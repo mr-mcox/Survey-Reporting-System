@@ -28,17 +28,21 @@ class NumericOutputCalculator(object):
 			else:
 				cut_groupings.append(cut_demographic)
 
+		aggregation_calulation = pd.DataFrame()
 		if result_type == 'net':
-			return nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+			aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 		if result_type == 'strong':
 			nfv.ix[nfv.net_formatted_value.notnull() & (nfv.net_formatted_value != 1),'net_formatted_value'] = 0
-			return nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+			aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 		if result_type == 'weak':
 			nfv.ix[nfv.net_formatted_value.notnull() & (nfv.net_formatted_value != -1),'net_formatted_value'] = 0
 			nfv.net_formatted_value = nfv.net_formatted_value * -1
-			return nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+			aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 		if result_type == 'raw_average':
-			return self.responses.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()
+			aggregation_calulation = self.responses.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()
+
+		return_columns = cut_groupings + ['aggregation_value']
+		return pd.DataFrame(aggregation_calulation,columns=return_columns)
 
 
 	def compute_net_results(self,**kwargs):
