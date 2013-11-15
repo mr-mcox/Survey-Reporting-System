@@ -2,17 +2,13 @@ import pandas as pd
 
 class NumericOutputCalculator(object):
 
-	def __init__(self, **kwargs):
-		
-		net_formatted_values = kwargs.pop('net_formatted_values', None)
-		raw_values = kwargs.pop('raw_values', None)
-		responses = pd.DataFrame()
-		if net_formatted_values == None:
+	def __init__(self, **kwargs):		
+		responses = pd.DataFrame(kwargs.pop('responses',dict()))
+		assert not responses.empty
+
+		if 'net_formatted_value' not in responses.columns:
 			map_7pt_SA_to_net = {8:None,7:-1,6:-1,5:-1,4:-1,3:0,2:1,1:1}
-			responses = pd.DataFrame(raw_values)
 			responses['net_formatted_value'] = responses.response.map(map_7pt_SA_to_net)
-		else:
-			responses = pd.DataFrame(net_formatted_values)
 		self.responses = responses
 		self.demographic_data = kwargs.pop('demographic_data',pd.DataFrame())
 

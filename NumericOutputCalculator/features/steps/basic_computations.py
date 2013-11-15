@@ -18,7 +18,7 @@ def import_table_data(table):
 
 @given('net formatted values')
 def step(context):
-	context.numeric_output_calculator = NumericOutputCalculator(net_formatted_values=import_table_data(context.table))
+	context.numeric_output_calculator = NumericOutputCalculator(responses=import_table_data(context.table))
 
 @when('compute net is run')
 def step(context):
@@ -57,7 +57,7 @@ def step(context, person_id, value):
 
 @given('raw 7pt questions results')
 def step(context):
-    context.numeric_output_calculator = NumericOutputCalculator(raw_values=import_table_data(context.table))
+    context.numeric_output_calculator = NumericOutputCalculator(responses=import_table_data(context.table))
 
 @when('compute average is run')
 def step(context):

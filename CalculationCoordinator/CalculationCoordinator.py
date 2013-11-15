@@ -20,7 +20,7 @@ class CalculationCoordinator(object):
 		return self.computations_generated[aggregation_key]
 
 	def compute_aggregation(self,**kwargs):
-		calculator = NumericOutputCalculator.NumericOutputCalculator(net_formatted_values=self.results,demographic_data=self.demographic_data)
+		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=self.results,demographic_data=self.demographic_data)
 		calculations = calculator.compute_aggregation(**kwargs)
 
 		cuts = kwargs.pop('cut_demographic',None)
