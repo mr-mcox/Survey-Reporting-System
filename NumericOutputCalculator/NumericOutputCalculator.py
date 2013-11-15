@@ -15,9 +15,12 @@ class NumericOutputCalculator(object):
 		self.raw_values = pd.DataFrame(raw_values)
 		self.demographic_data = kwargs.pop('demographic_data',pd.DataFrame())
 
-	def compute_net_results(self,**kwargs):
+	def compute_aggregation(self,**kwargs):
 		cut_demographic = kwargs.pop('cut_demographic', None)
-		nfv = self.net_formatted_values
+		result_type = kwargs.pop('result_type',None)
+		assert result_type != None
+
+		nfv = self.net_formatted_values.copy()
 		if not self.demographic_data.empty:
 			nfv = nfv.join(self.demographic_data.loc[:,cut_demographic], how = 'outer')
 
@@ -27,18 +30,28 @@ class NumericOutputCalculator(object):
 				cut_groupings = cut_groupings + cut_demographic
 			else:
 				cut_groupings.append(cut_demographic)
-		return nfv.groupby(cut_groupings).mean().reset_index()
 
-	def compute_strong_results(self):
-		data = self.net_formatted_values.copy()
-		data.ix[data.value.notnull() & (data.value != 1),'value'] = 0
-		return data.groupby('question_id').mean().reset_index()
-	
-	def compute_weak_results(self):
-		data = self.net_formatted_values.copy()
-		data.ix[data.value.notnull() & (data.value != -1),'value'] = 0
-		data.value = data.value * -1
-		return data.groupby('question_id').mean().reset_index()
+		if result_type == 'net':
+			return nfv.groupby(cut_groupings).mean().reset_index()
+		if result_type == 'strong':
+			nfv.ix[nfv.value.notnull() & (nfv.value != 1),'value'] = 0
+			return nfv.groupby(cut_groupings).mean().reset_index()
+		if result_type == 'weak':
+			nfv.ix[nfv.value.notnull() & (nfv.value != -1),'value'] = 0
+			nfv.value = nfv.value * -1
+			return nfv.groupby(cut_groupings).mean().reset_index()
+		if result_type == 'raw_average':
+			return self.raw_values.groupby(cut_groupings).mean().reset_index()
 
-	def compute_average_results(self):
-		return self.raw_values.groupby('question_id').mean().reset_index()
+
+	def compute_net_results(self,**kwargs):
+		return self.compute_aggregation(result_type='net',**kwargs)
+
+	def compute_strong_results(self,**kwargs):
+		return self.compute_aggregation(result_type='strong',**kwargs)
+		
+	def compute_weak_results(self,**kwargs):
+		return self.compute_aggregation(result_type='weak',**kwargs)
+
+	def compute_average_results(self,**kwargs):
+		return self.compute_aggregation(result_type='raw_average',**kwargs)

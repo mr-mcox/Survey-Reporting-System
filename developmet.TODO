@@ -2,8 +2,8 @@ To implement:
   ✔ For more than one survey @done (13-11-08 10:33)
   ✔ By survey name @done (13-11-08 14:29)
   ✔ End to end demonstration with MySQL DB @done (13-11-13 07:43)
-  ☐ Do cuts for more than one dimension
-  ☐ Re-factor so that same cut code can be used for strong, weak and net as well
+  ✔ Do cuts for more than one dimension @done (13-11-15 09:51)
+  ✔ Re-factor so that same cut code can be used for strong, weak and net as well @done (13-11-15 10:02)
   ☐ Values and responses seems potentially confusing - should they be the same or renamed?
 
 Refactor:
