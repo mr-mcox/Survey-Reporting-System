@@ -83,3 +83,8 @@ def step(context):
 		('region','net') : pd.DataFrame({'question_id':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
 		('region','strong') : pd.DataFrame({'question_id':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
 	}
+
+@then('there is a mapping of the values back to numbers')
+def step(context):
+	mapping = context.coordinator.dimension_integer_mapping
+	assert {'Male','Atlanta'} <= set(mapping['values'])

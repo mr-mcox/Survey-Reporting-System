@@ -27,3 +27,8 @@ Feature: In order to allow any text to be used in cutting yet maintain sane sort
 		When replace_dimensions_with_integers is run
 		Then columns of computations_generated are strings with filled numbers
 		Then same number of unique values in dimension columns exists before and after
+
+	Scenario: After changing all dimensions to numbers, we have a mapping that we can re-assemble the cuts with
+		Given computations generated that include a cut by gender and a cut by region with duplicates
+		When replace_dimensions_with_integers is run
+		Then there is a mapping of the values back to numbers

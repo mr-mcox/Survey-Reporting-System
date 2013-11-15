@@ -3,7 +3,7 @@ To implement:
  ✔ Refactor NumericOutputCalculator so it can determine on its own whether a net_formatted_results needs to be added @done (13-11-15 11:59)
  ✔ NumericOutputCalculator should only provide cut columns and display value @done (13-11-15 12:33)
  ✔ Replace all text with unique integers @done (13-11-15 16:03)
- ☐ Report mapping of integers back to text
+ ✔ Report mapping of integers back to text @done (13-11-15 16:17)
  ☐ Include type of computation in frame
 Refactor:
   ☐ Survey is indentified on questions table and not on results table

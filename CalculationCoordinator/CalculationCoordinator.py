@@ -56,3 +56,11 @@ class CalculationCoordinator(object):
 				if column != 'aggregation_value':
 					value_map = {key : format_string.format(value) for (key, value) in values_by_column[column].items()}
 					df[column] = df[column].map(value_map)
+
+		#Create mapping to be able to convert back
+		mapping = {'values':[],'integers':[]}
+		for column, value_dict in values_by_column.items():
+			for label, integer in value_dict.items():
+				mapping['values'].append(label)
+				mapping['integers'].append(integer)
+		self.dimension_integer_mapping = mapping
