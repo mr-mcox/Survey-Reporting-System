@@ -23,7 +23,10 @@ class NumericOutputCalculator(object):
 
 		cut_groupings = ['question_id']
 		if cut_demographic != None:
-			cut_groupings.append(cut_demographic)
+			if type(cut_demographic) == list:
+				cut_groupings = cut_groupings + cut_demographic
+			else:
+				cut_groupings.append(cut_demographic)
 		return nfv.groupby(cut_groupings).mean().reset_index()
 
 	def compute_strong_results(self):
