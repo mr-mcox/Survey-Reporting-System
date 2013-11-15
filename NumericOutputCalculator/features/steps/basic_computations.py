@@ -26,10 +26,10 @@ def step(context):
 
 @then('the display_value for question_id {question_id} is {value}')
 def step(context,question_id,value):
-    if 'value' in context.result.columns:
-        assert context.result.set_index('question_id').loc[int(question_id),'value'] == float(value)
+    if 'net_formatted_value' in context.result.columns:
+        assert context.result.set_index('question_id').loc[int(question_id),'aggregation_value'] == float(value)
     else:
-        assert context.result.set_index('question_id').loc[int(question_id),'response'] == float(value)
+        assert context.result.set_index('question_id').loc[int(question_id),'aggregation_value'] == float(value)
 
 @when('compute strong is run')
 def step(context):
@@ -45,9 +45,9 @@ def step(context):
 
 @then('net formatted value for person_id {person_id} is {value}')
 def step(context, person_id, value):
-    nfv = context.numeric_output_calculator.net_formatted_values
-    value_column = 'value'
-    if 'value' not in nfv.columns:
+    nfv = context.numeric_output_calculator.responses
+    value_column = 'net_formatted_value'
+    if 'net_formatted_value' not in nfv.columns:
         value_column = 'response'
     if value == 'blank':
         assert np.isnan(nfv.set_index('person_id').loc[int(person_id),value_column])

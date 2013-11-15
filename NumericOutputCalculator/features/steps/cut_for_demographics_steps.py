@@ -25,7 +25,8 @@ def step(context):
 
 @then('the display_value including region for question_id 1 and region "Atlanta" is 0.5')
 def step(context):
-	assert context.result.set_index(['question_id','region']).loc[(1,'Atlanta'),'value'] == 0.5
+	print(context.result)
+	assert context.result.set_index(['question_id','region']).loc[(1,'Atlanta'),'aggregation_value'] == 0.5
 
 @when('compute net with cut_demographic = region and gender is run')
 def step(context):
@@ -33,4 +34,4 @@ def step(context):
 
 @then('the display_value including region and gender for question_id 1 and region "Atlanta" gender "Female" is 0.5')
 def step(context):
-	assert context.result.set_index(['question_id','region','gender']).loc[(1,'Atlanta','Female'),'value'] == 0.5
+	assert context.result.set_index(['question_id','region','gender']).loc[(1,'Atlanta','Female'),'aggregation_value'] == 0.5

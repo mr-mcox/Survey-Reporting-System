@@ -6,13 +6,14 @@ class NumericOutputCalculator(object):
 		
 		net_formatted_values = kwargs.pop('net_formatted_values', None)
 		raw_values = kwargs.pop('raw_values', None)
+		responses = pd.DataFrame()
 		if net_formatted_values == None:
 			map_7pt_SA_to_net = {8:None,7:-1,6:-1,5:-1,4:-1,3:0,2:1,1:1}
-			net_formatted_values = pd.DataFrame(raw_values)
-			net_formatted_values['value'] = net_formatted_values.response.map(map_7pt_SA_to_net)
-		net_formatted_values = pd.DataFrame(net_formatted_values)
-		self.net_formatted_values = net_formatted_values
-		self.raw_values = pd.DataFrame(raw_values)
+			responses = pd.DataFrame(raw_values)
+			responses['net_formatted_value'] = responses.response.map(map_7pt_SA_to_net)
+		else:
+			responses = pd.DataFrame(net_formatted_values)
+		self.responses = responses
 		self.demographic_data = kwargs.pop('demographic_data',pd.DataFrame())
 
 	def compute_aggregation(self,**kwargs):
@@ -20,7 +21,7 @@ class NumericOutputCalculator(object):
 		result_type = kwargs.pop('result_type',None)
 		assert result_type != None
 
-		nfv = self.net_formatted_values.copy()
+		nfv = self.responses.copy()
 		if not self.demographic_data.empty:
 			nfv = nfv.join(self.demographic_data.loc[:,cut_demographic], how = 'outer')
 
@@ -32,16 +33,16 @@ class NumericOutputCalculator(object):
 				cut_groupings.append(cut_demographic)
 
 		if result_type == 'net':
-			return nfv.groupby(cut_groupings).mean().reset_index()
+			return nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 		if result_type == 'strong':
-			nfv.ix[nfv.value.notnull() & (nfv.value != 1),'value'] = 0
-			return nfv.groupby(cut_groupings).mean().reset_index()
+			nfv.ix[nfv.net_formatted_value.notnull() & (nfv.net_formatted_value != 1),'net_formatted_value'] = 0
+			return nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 		if result_type == 'weak':
-			nfv.ix[nfv.value.notnull() & (nfv.value != -1),'value'] = 0
-			nfv.value = nfv.value * -1
-			return nfv.groupby(cut_groupings).mean().reset_index()
+			nfv.ix[nfv.net_formatted_value.notnull() & (nfv.net_formatted_value != -1),'net_formatted_value'] = 0
+			nfv.net_formatted_value = nfv.net_formatted_value * -1
+			return nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 		if result_type == 'raw_average':
-			return self.raw_values.groupby(cut_groupings).mean().reset_index()
+			return self.responses.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()
 
 
 	def compute_net_results(self,**kwargs):

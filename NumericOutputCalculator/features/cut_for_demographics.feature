@@ -2,7 +2,7 @@ Feature: When provided a set of demographics, cut by those demograhpics when spe
 
 	Scenario: When provided a set of demographics, cut by one dimension
 		Given net formatted values
-			| respondent_id | question_id | value |
+			| respondent_id | question_id | net_formatted_value |
 			| 1             | 1           | 1     |
 			| 2             | 1           | 0     |
 			| 3             | 1           | -1    |
@@ -16,7 +16,7 @@ Feature: When provided a set of demographics, cut by those demograhpics when spe
 
 	Scenario: When provided a set of demographics, cut by multiple dimensions
 		Given net formatted values
-			| respondent_id | question_id | value |
+			| respondent_id | question_id | net_formatted_value |
 			| 1             | 1           | 1     |
 			| 2             | 1           | 0     |
 			| 3             | 1           | -1    |

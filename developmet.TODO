@@ -4,7 +4,7 @@ To implement:
   ✔ End to end demonstration with MySQL DB @done (13-11-13 07:43)
   ✔ Do cuts for more than one dimension @done (13-11-15 09:51)
   ✔ Re-factor so that same cut code can be used for strong, weak and net as well @done (13-11-15 10:02)
-  ☐ Values and responses seems potentially confusing - should they be the same or renamed?
+  ✔ Values and responses seems potentially confusing - should they be the same or renamed? @done (13-11-15 10:22)
 
 Refactor:
   ☐ Survey is indentified on questions table and not on results table

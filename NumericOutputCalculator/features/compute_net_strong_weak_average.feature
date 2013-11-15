@@ -2,7 +2,7 @@ Feature: Compute net/strong/weak/average for all responses on a survey by questi
 
 	Scenario: When net formatted values are provided for a question, output net by question
 		Given net formatted values
-			| question_id | value |
+			| question_id | net_formatted_value |
 			| 1           | 0     |
 			| 1           | 1     |
 			| 1           | 1     |
@@ -14,7 +14,7 @@ Feature: Compute net/strong/weak/average for all responses on a survey by questi
 
 	Scenario: When net formatted values are provided for a question, output strong by question
 		Given net formatted values
-			| question_id | value |
+			| question_id | net_formatted_value |
 			| 1           | 0     |
 			| 1           | 1     |
 			| 1           | 1     |
@@ -26,7 +26,7 @@ Feature: Compute net/strong/weak/average for all responses on a survey by questi
 
 Scenario: When net formatted values are provided for a question, output weak by question
 		Given net formatted values
-			| question_id | value |
+			| question_id | net_formatted_value |
 			| 1           | 0     |
 			| 1           | 1     |
 			| 1           | 1     |
@@ -38,7 +38,7 @@ Scenario: When net formatted values are provided for a question, output weak by 
 
 Scenario: When net formatted values are provided for multiple questions, output net by question
 		Given net formatted values
-			| question_id | value |
+			| question_id | net_formatted_value |
 			| 1           | 0     |
 			| 1           | 1     |
 			| 1           | 1     |
