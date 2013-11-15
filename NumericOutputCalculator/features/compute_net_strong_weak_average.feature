@@ -89,3 +89,15 @@ Scenario: When 7pt with 1=Strongly Agree questions are given, average is accurat
 		| 1           | 7        |
 	When compute average is run
 	Then the display_value for question_id 1 is 3	
+
+Scenario: When cut is created, it should include the type of result
+	Given net formatted values
+			| question_id | net_formatted_value |
+			| 1           | 0     |
+			| 1           | 1     |
+			| 1           | 1     |
+			| 1           | 0     |
+			| 2           | -1    |
+			| 2           |       |
+	When compute net is run
+	Then there is a result_type column where all rows have value of net

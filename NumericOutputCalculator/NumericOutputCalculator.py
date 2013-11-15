@@ -41,7 +41,8 @@ class NumericOutputCalculator(object):
 		if result_type == 'raw_average':
 			aggregation_calulation = self.responses.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()
 
-		return_columns = cut_groupings + ['aggregation_value']
+		aggregation_calulation['result_type'] = result_type
+		return_columns = cut_groupings + ['aggregation_value','result_type']
 		return pd.DataFrame(aggregation_calulation,columns=return_columns)
 
 

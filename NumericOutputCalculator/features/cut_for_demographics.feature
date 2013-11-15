@@ -40,5 +40,5 @@ Feature: When provided a set of demographics, cut by those demograhpics when spe
 				| 2             | Atlanta | Female |
 				| 3             | SoDak   | Male |
 			When compute net with cut_demographic = region is run
-			Then the only columns returned are question_id, region, aggregation_value
+			Then the only columns returned are question_id, region, aggregation_value, result_type
 

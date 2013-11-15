@@ -4,7 +4,7 @@ To implement:
  ✔ NumericOutputCalculator should only provide cut columns and display value @done (13-11-15 12:33)
  ✔ Replace all text with unique integers @done (13-11-15 16:03)
  ✔ Report mapping of integers back to text @done (13-11-15 16:17)
- ☐ Include type of computation in frame
+ ✔ Include type of computation in frame @done (13-11-15 16:25)
 Refactor:
   ☐ Survey is indentified on questions table and not on results table
   ☐ Convert keys for CalculationCorinator to set to avoid order issues

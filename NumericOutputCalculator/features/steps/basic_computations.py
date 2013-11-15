@@ -62,3 +62,9 @@ def step(context):
 @when('compute average is run')
 def step(context):
     context.result = context.numeric_output_calculator.compute_average_results()
+
+@then('there is a result_type column where all rows have value of net')
+def step(context):
+    assert 'result_type' in context.result.columns
+    assert len(context.result['result_type'].unique()) == 1
+    assert context.result.result_type.iloc[0] == 'net'
