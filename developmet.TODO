@@ -1,11 +1,9 @@
 To implement:
-  ✔ For more than one survey @done (13-11-08 10:33)
-  ✔ By survey name @done (13-11-08 14:29)
-  ✔ End to end demonstration with MySQL DB @done (13-11-13 07:43)
-  ✔ Do cuts for more than one dimension @done (13-11-15 09:51)
-  ✔ Re-factor so that same cut code can be used for strong, weak and net as well @done (13-11-15 10:02)
-  ✔ Values and responses seems potentially confusing - should they be the same or renamed? @done (13-11-15 10:22)
-
+ ✔ Log all computations according to cut tuple with metadata on what was done so that we can access them later @done (13-11-15 11:51)
+ ☐ Refactor NumericOutputCalculator so it can determine on its own whether a net_formatted_results needs to be added
+ ☐ Identify demographic fields used across all computations
+ ☐ Create a mapping from field value text to unique number
+ ☐ Replace all text with integers
 Refactor:
   ☐ Survey is indentified on questions table and not on results table
 
@@ -14,3 +12,12 @@ Maybe:
   ☐ Add indicies to the DB
   ☐ Add additional columns to substitute for when importing demographic data
   ☐ Change cut by question ID to cut by question code
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ For more than one survey @done (13-11-08 10:33) @project(To implement)
+ ✔ By survey name @done (13-11-08 14:29) @project(To implement)
+ ✔ End to end demonstration with MySQL DB @done (13-11-13 07:43) @project(To implement)
+ ✔ Do cuts for more than one dimension @done (13-11-15 09:51) @project(To implement)
+ ✔ Re-factor so that same cut code can be used for strong, weak and net as well @done (13-11-15 10:02) @project(To implement)
+ ✔ Values and responses seems potentially confusing - should they be the same or renamed? @done (13-11-15 10:22) @project(To implement)
