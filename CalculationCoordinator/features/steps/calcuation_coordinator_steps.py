@@ -1,5 +1,7 @@
 from behave import *
 import pandas as pd
+import numpy as np
+import re
 from CalculationCoordinator import CalculationCoordinator
 
 def import_table_data(table):
@@ -41,3 +43,43 @@ def step(context):
 @then('computations_generated has a length of 2')
 def step(context):
 	assert len(context.coordinator.computations_generated.keys()) == 2
+
+@given('computations generated that include a cut by gender and a cut by region')
+def step(context):
+	context.coordinator = CalculationCoordinator()
+	context.coordinator.computations_generated = {
+		('gender','net') : pd.DataFrame({'question_id':[0,1,1],'gender':['Male','Female',"Male"]}),
+		('region','net') : pd.DataFrame({'question_id':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
+	}
+
+@when('replace_dimensions_with_integers is run')
+def step(context):
+	context.coordinator.replace_dimensions_with_integers()
+
+@then('columns of computations_generated are strings with filled numbers')
+def step(context):
+	for key, df in context.coordinator.computations_generated.items():
+		for column in df.columns:
+			if column != 'aggregation_value':
+				for value in df[column].unique():
+					assert type(value) == str
+					assert re.search('^\d+$',value) != None
+
+@then('same number of unique values in dimension columns exists before and after')
+def step(context):
+	values = list()
+	for key, df in context.coordinator.computations_generated.items():
+		for column in df.columns:
+			if column != 'aggregation_value':
+				values = values + df[column].unique().tolist()
+	values = set(values)
+	assert len(values) == 6
+
+@given('computations generated that include a cut by gender and a cut by region with duplicates')
+def step(context):
+	context.coordinator = CalculationCoordinator()
+	context.coordinator.computations_generated = {
+		('gender','net') : pd.DataFrame({'question_id':[0,1,1],'gender':['Male','Female',"Male"]}),
+		('region','net') : pd.DataFrame({'question_id':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
+		('region','strong') : pd.DataFrame({'question_id':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
+	}

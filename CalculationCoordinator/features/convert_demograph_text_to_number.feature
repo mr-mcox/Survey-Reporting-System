@@ -17,4 +17,13 @@ Feature: In order to allow any text to be used in cutting yet maintain sane sort
 		Then the display_value including region for question_id 1 and region "Atlanta" is 0.5
 
 	Scenario: Identify all demographic columns across multiple cuts
-		Given 
+		Given computations generated that include a cut by gender and a cut by region
+		When replace_dimensions_with_integers is run
+		Then columns of computations_generated are strings with filled numbers
+		Then same number of unique values in dimension columns exists before and after
+
+	Scenario: Identify all demographic columns across multiple cuts when there are the same values across multiple cuts
+		Given computations generated that include a cut by gender and a cut by region with duplicates
+		When replace_dimensions_with_integers is run
+		Then columns of computations_generated are strings with filled numbers
+		Then same number of unique values in dimension columns exists before and after
