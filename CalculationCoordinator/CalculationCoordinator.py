@@ -84,3 +84,8 @@ class CalculationCoordinator(object):
 			del self._master_aggregation
 		return locals()
 	master_aggregation = property(**master_aggregation())
+
+	def export_to_excel(self,filename):
+		output_df = self.master_aggregation.set_index(['row_heading','column_heading'])
+		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
+		output_series.unstack().to_excel(filename, sheet_name='Sheet1')

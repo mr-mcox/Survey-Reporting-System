@@ -1,7 +1,7 @@
 To implement:
   ✔ Create column and row based headings for each table @done (13-11-15 19:13)
   ✔ Collect all data into a single structure @done (13-11-15 19:31)
-  ☐ Transform structure into a table and export as excel
+  ✔ Transform structure into a table and export as excel @done (13-11-16 14:28)
 Refactor:
   ☐ Survey is indentified on questions table and not on results table
   ☐ Convert keys for CalculationCorinator to set to avoid order issues
@@ -11,6 +11,9 @@ Maybe:
   ☐ Add indicies to the DB
   ☐ Add additional columns to substitute for when importing demographic data
   ☐ Change cut by question ID to cut by question code
+
+Risks:
+  ☐ More than one value for row or column header
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
