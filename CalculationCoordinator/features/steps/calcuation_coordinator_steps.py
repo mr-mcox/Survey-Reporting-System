@@ -88,3 +88,51 @@ def step(context):
 def step(context):
 	mapping = context.coordinator.dimension_integer_mapping
 	assert {'Male','Atlanta'} <= set(mapping['values'])
+
+@given('a set of calculations generated with region and gender and with integer labels')
+def step(context):
+	context.coordinator = CalculationCoordinator()
+	context.coordinator.computations_generated = {
+		('gender','net') : pd.DataFrame(
+			{
+				'question_code':['0','1','1'],
+				'gender':['2','3','2'],
+				'result_type':['6','6','6'],
+				'aggregation_value':[0.2,0.3,0.4]
+			}),
+		('region','net') : pd.DataFrame(
+			{'question_code':['0','1','1'],
+			'region':['4','4',"5"],
+			'result_type':['6','6','6'],
+			'aggregation_value':[0.2,0.3,0.4]
+			}),
+		('region','strong') : pd.DataFrame({
+			'question_code':['0','1','1'],
+			'region':['4','4',"5"],
+			'result_type':['7','7','7'],
+			'aggregation_value':[0.2,0.3,0.4]
+			}),
+	}
+@when('create row and column headers is run')
+def step(context):
+	context.coordinator.create_row_column_headers()
+
+@then('each calcualation table has row and column header columns')
+def step(context):
+	for key, df in context.coordinator.computations_generated.items():
+		assert {'row_heading','column_heading'} <= set(df.columns)
+
+@then('the column header consists of question and result type joined by a "."')
+def step(context):
+	for key, df in context.coordinator.computations_generated.items():
+		for i in range(len(df.index)):
+			assert df.loc[i,'column_heading'] == df.loc[i,'question_code'] + "." + df.loc[i,"result_type"]
+
+@then('the row header consists of either gender or region')
+def step(context):
+	for key, df in context.coordinator.computations_generated.items():
+		for i in range(len(df.index)):
+			if 'gender' in df.columns:
+				assert df.loc[i,'row_heading'] == df.loc[i,'gender']
+			else:
+				assert df.loc[i,'row_heading'] == df.loc[i,'region']

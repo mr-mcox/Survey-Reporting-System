@@ -64,3 +64,9 @@ class CalculationCoordinator(object):
 				mapping['values'].append(label)
 				mapping['integers'].append(integer)
 		self.dimension_integer_mapping = mapping
+
+	def create_row_column_headers(self):
+		for key, df in self.computations_generated.items():
+			remaining_column = list(set(df.columns) - {'question_code','aggregation_value','result_type'})[0]
+			df['row_heading'] = df[remaining_column]
+			df['column_heading'] = df.apply(lambda x: '%s.%s' % (x['question_code'],x['result_type']),axis=1)
