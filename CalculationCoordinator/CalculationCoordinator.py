@@ -70,3 +70,17 @@ class CalculationCoordinator(object):
 			remaining_column = list(set(df.columns) - {'question_code','aggregation_value','result_type'})[0]
 			df['row_heading'] = df[remaining_column]
 			df['column_heading'] = df.apply(lambda x: '%s.%s' % (x['question_code'],x['result_type']),axis=1)
+
+	def master_aggregation():
+		doc = "The master_aggregation property."
+		def fget(self):
+			dfs = list()
+			for key, df in self.computations_generated.items():
+				dfs.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
+			return pd.concat(dfs)
+		def fset(self, value):
+			self._master_aggregation = value
+		def fdel(self):
+			del self._master_aggregation
+		return locals()
+	master_aggregation = property(**master_aggregation())

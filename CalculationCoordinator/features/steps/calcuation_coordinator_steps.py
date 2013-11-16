@@ -136,3 +136,45 @@ def step(context):
 				assert df.loc[i,'row_heading'] == df.loc[i,'gender']
 			else:
 				assert df.loc[i,'row_heading'] == df.loc[i,'region']
+
+@given('a set of calculations with column and header rows (and maybe some other stuff)')
+def step(context):
+	context.coordinator = CalculationCoordinator()
+	context.coordinator.computations_generated = {
+		('gender','net') : pd.DataFrame(
+			{	
+				'column_heading':['6.0','6.1','6.1'],
+				'row_heading':['2','3','2'],
+				'question_code':['0','1','1'],
+				'gender':['2','3','2'],
+				'result_type':['6','6','6'],
+				'aggregation_value':[0.2,0.3,0.4]
+			}),
+		('region','net') : pd.DataFrame(
+			{
+				'column_heading':['6.0','6.1','6.1'],
+				'row_heading':['4','4','5'],
+				'question_code':['0','1','1'],
+				'region':['4','4',"5"],
+				'result_type':['6','6','6'],
+				'aggregation_value':[0.2,0.3,0.4]
+			}),
+		('region','strong') : pd.DataFrame(
+			{
+				'column_heading':['7.0','7.1','7.1'],
+				'row_heading':['4','4','5'],
+				'question_code':['0','1','1'],
+				'region':['4','4',"5"],
+				'result_type':['7','7','7'],
+				'aggregation_value':[0.2,0.3,0.4]
+			}),
+	}
+
+@when('master aggregations is accessed')
+def step(context):
+	context.result  = context.coordinator.master_aggregation
+
+@then('the total number of rows is equal to the number of rows in each of the individual tables')
+def step(context):
+	total_rows = sum([len(df.index) for (key, df) in context.coordinator.computations_generated.items() ])
+	assert len(context.result.index) == total_rows
