@@ -64,6 +64,7 @@ class CalculationCoordinator(object):
 			for label, integer in value_dict.items():
 				mapping['values'].append(label)
 				mapping['integers'].append(integer)
+		self.labels_for_cut_dimensions = values_by_column
 		self.dimension_integer_mapping = mapping
 
 	def create_row_column_headers(self):
@@ -87,13 +88,12 @@ class CalculationCoordinator(object):
 	master_aggregation = property(**master_aggregation())
 
 	def export_to_excel(self,filename):
-		self.excel_dashboard_file = filename
 		output_df = self.master_aggregation.set_index(['row_heading','column_heading'])
 		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
 		output_series.unstack().to_excel(filename, sheet_name='Sheet1')
 
-	def write_excel_dashboard_menus(self):
-		wb = load_workbook(self.excel_dashboard_file)
+
+		wb = load_workbook(filename)
 		ws = wb.create_sheet()
 		ws.title = 'Lookups'
 		mapping = self.dimension_integer_mapping
@@ -101,4 +101,4 @@ class CalculationCoordinator(object):
 		for i in range(len(mapping['values'])):
 			ws.cell(row=i,column=0).value = mapping['values'][i]
 			ws.cell(row=i,column=1).value = mapping['integers'][i]
-		wb.save(self.excel_dashboard_file)
+		wb.save(filename)
