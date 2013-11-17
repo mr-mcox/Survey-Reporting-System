@@ -1,6 +1,7 @@
 import pandas as pd
 from SurveyReportingSystem.NumericOutputCalculator import NumericOutputCalculator
 import math
+from openpyxl import load_workbook
 
 class CalculationCoordinator(object):
 	"""docstring for CalculationCoordinator"""
@@ -86,6 +87,18 @@ class CalculationCoordinator(object):
 	master_aggregation = property(**master_aggregation())
 
 	def export_to_excel(self,filename):
+		self.excel_dashboard_file = filename
 		output_df = self.master_aggregation.set_index(['row_heading','column_heading'])
 		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
 		output_series.unstack().to_excel(filename, sheet_name='Sheet1')
+
+	def write_excel_dashboard_menus(self):
+		wb = load_workbook(self.excel_dashboard_file)
+		ws = wb.create_sheet()
+		ws.title = 'Lookups'
+		mapping = self.dimension_integer_mapping
+		assert len(mapping['values']) == len(mapping['integers'])
+		for i in range(len(mapping['values'])):
+			ws.cell(row=i,column=0).value = mapping['values'][i]
+			ws.cell(row=i,column=1).value = mapping['integers'][i]
+		wb.save(self.excel_dashboard_file)
