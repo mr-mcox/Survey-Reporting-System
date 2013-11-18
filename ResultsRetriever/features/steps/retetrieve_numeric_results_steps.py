@@ -23,11 +23,15 @@ def step(context):
 	results = Table('results',metadata,
 					Column('respondent_id', Integer),
 					Column('survey_id', Integer, ForeignKey('surveys.id')),
-					Column('question_id', Integer),
+					Column('question_id', Integer, ForeignKey('questions.id')),
 					Column('response', Integer))
 	surveys = Table('surveys',metadata,
 					Column('id', Integer, primary_key=True),
 					Column('survey_code', String))
+	questions = Table('questions',metadata,
+					Column('id', Integer, primary_key=True),
+					Column('survey_id', Integer),
+					Column('question_code', String(20)))
 	metadata.create_all(engine)
 
 	conn = engine.connect()
@@ -35,6 +39,7 @@ def step(context):
 	context.db = conn
 	context.results_table = results
 	context.surveys_table = surveys
+	context.questions_table = questions
 
 @given('a results table with this data')
 def step(context):
@@ -55,3 +60,11 @@ def step(context):
 @when('retrieve results for survey_code 1314F8W is run')
 def step(context):
 	context.results = ResultsRetriever(db_connection=context.db).retrieve_results_for_one_survey(survey_code="1314F8W")
+
+@given('a question table with this data')
+def step(context):
+	context.db.execute(context.questions_table.insert(),table_for_db(context.table))
+
+@then('one of the columns returned is question_code')
+def step(context):
+	assert 'question_code' in context.results['column_headings']

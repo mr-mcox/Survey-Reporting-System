@@ -9,14 +9,20 @@ from unittest import mock
 class WriteExcelTestCase(unittest.TestCase):
 
 	def setUp(self):
-		assert not os.path.exists('test_file.xlsx')
+		# assert not os.path.exists('test_file.xlsx')
 		wb = Workbook()
 		wb.save('test_file.xlsx')
 		coordinator = CalculationCoordinator()
 		self.mapping_values = ['a','b','c']
 		self.mapping_integers = ['0','1','2']
+		self.labels_for_cut_dimensions = {
+											'gender':{'male':'0','female':'1'},
+											'region':{'Atlanta':'2','SoDak':'3'}
+										}
+
 		coordinator.dimension_integer_mapping = {'values': self.mapping_values,'integers':self.mapping_integers}
 		coordinator.excel_dashboard_file = 'test_file.xlsx'
+		coordinator.labels_for_cut_dimensions = self.labels_for_cut_dimensions
 		master_aggregation = pd.DataFrame({
 				'row_heading':['0','0','1','1'],
 				'column_heading': ['2.3','2.4','2.3','2.4'],
@@ -42,10 +48,9 @@ class WriteExcelTestCase(unittest.TestCase):
 
 	def test_menus_with_values(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
-		value_column_values = [str(ws.cell(row=i,column=2).value) for i in range(ws.get_highest_row())]
-		integer_column_values = [str(ws.cell(row=i,column=3).value) for i in range(ws.get_highest_row())]
-		self.assertEqual(value_column_values,self.mapping_values)
-		self.assertEqual(integer_column_values,self.mapping_integers)
+		gender_values = [str(ws.cell(row=i,column=2).value) for i in range(ws.get_highest_row())]
+		region_values = [str(ws.cell(row=i,column=3).value) for i in range(ws.get_highest_row())]
+		self.assertEqual(set(gender_values + region_values),{'gender','0','1','region','2','3'})
 
 	def tearDown(self):
 		try:

@@ -51,11 +51,13 @@ class CalculationCoordinator(object):
 
 		format_string = "{0:0" + str(math.floor(current_index/10)) + "d}"
 
+		values_by_column = { column_key : { value : format_string.format(x) for (value, x) in values_dict.items()} for (column_key,values_dict) in values_by_column.items()}
+
 		#Map values to column
 		for key, df in self.computations_generated.items():
 			for column in df.columns:
 				if column != 'aggregation_value':
-					value_map = {key : format_string.format(value) for (key, value) in values_by_column[column].items()}
+					value_map = {key : value for (key, value) in values_by_column[column].items()}
 					df[column] = df[column].map(value_map)
 
 		#Create mapping to be able to convert back
@@ -101,4 +103,13 @@ class CalculationCoordinator(object):
 		for i in range(len(mapping['values'])):
 			ws.cell(row=i,column=0).value = mapping['values'][i]
 			ws.cell(row=i,column=1).value = mapping['integers'][i]
+
+		#Write cut dimensions integer strings
+		cut_dimensions = self.labels_for_cut_dimensions.keys()
+		for i, key in enumerate(cut_dimensions):
+			ws.cell(row=0, column=i+2).value = key
+			j = 1
+			for label, integer_string in self.labels_for_cut_dimensions[key].items():
+				ws.cell(row=j, column=i+2).value = integer_string
+				j += 1
 		wb.save(filename)

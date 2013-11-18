@@ -3,7 +3,10 @@ To implement:
   ✔ Collect all data into a single structure @done (13-11-15 19:31)
   ✔ Transform structure into a table and export as excel @done (13-11-16 14:28)
   ✔ Add lookup sheet that has mapping @done (13-11-16 20:51)
-  ☐ On lookup sheet include columns with the appropriate mappings
+  ✔ On lookup sheet include columns with the appropriate mappings @done (13-11-16 21:24)
+  ☐ End to end on what I've done so far
+  ☐ Identify what isn't working in output and why
+  ☐ Integer strings in order of sorted labels
 Refactor:
   ☐ Survey is indentified on questions table and not on results table
   ☐ Convert keys for CalculationCorinator to set to avoid order issues
@@ -12,7 +15,8 @@ Maybe:
   ☐ Import 1314F8W survey data automatically on migration from old DB
   ☐ Add indicies to the DB
   ☐ Add additional columns to substitute for when importing demographic data
-  ☐ Change cut by question ID to cut by question code
+  ☐ It appears that the table based system for getting results may be a bit too complex. 
+  ✔ Change cut by question ID to cut by question code @done (13-11-18 14:04)
 
 Risks:
   ☐ More than one value for row or column header

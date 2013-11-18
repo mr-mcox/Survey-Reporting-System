@@ -21,7 +21,7 @@ class NumericOutputCalculator(object):
 		if not self.demographic_data.empty:
 			nfv = nfv.join(self.demographic_data.loc[:,cut_demographic], how = 'outer')
 
-		cut_groupings = ['question_id']
+		cut_groupings = ['question_code']
 		if cut_demographic != None:
 			if type(cut_demographic) == list:
 				cut_groupings = cut_groupings + cut_demographic
