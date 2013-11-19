@@ -101,15 +101,16 @@ class CalculationCoordinator(object):
 		mapping = self.dimension_integer_mapping
 		assert len(mapping['values']) == len(mapping['integers'])
 		for i in range(len(mapping['values'])):
-			ws.cell(row=i,column=0).value = mapping['values'][i]
-			ws.cell(row=i,column=1).value = mapping['integers'][i]
+			ws.cell(row=i,column=0).value = mapping['integers'][i]
+			ws.cell(row=i,column=1).value = mapping['values'][i]
+			ws.cell(row=i,column=2).value = mapping['integers'][i]
 
 		#Write cut dimensions integer strings
 		cut_dimensions = self.labels_for_cut_dimensions.keys()
 		for i, key in enumerate(cut_dimensions):
-			ws.cell(row=0, column=i+2).value = key
+			ws.cell(row=0, column=i+3).value = key
 			j = 1
 			for label, integer_string in self.labels_for_cut_dimensions[key].items():
-				ws.cell(row=j, column=i+2).value = integer_string
+				ws.cell(row=j, column=i+3).value = integer_string
 				j += 1
 		wb.save(filename)

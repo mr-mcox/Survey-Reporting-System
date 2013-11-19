@@ -41,15 +41,17 @@ class WriteExcelTestCase(unittest.TestCase):
 
 	def test_write_mappings(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
-		value_column_values = [str(ws.cell(row=i,column=0).value) for i in range(ws.get_highest_row())]
-		integer_column_values = [str(ws.cell(row=i,column=1).value) for i in range(ws.get_highest_row())]
+		integer_column_values = [str(ws.cell(row=i,column=0).value) for i in range(ws.get_highest_row())]
+		value_column_values = [str(ws.cell(row=i,column=1).value) for i in range(ws.get_highest_row())]
+		integer_column_values_copy = [str(ws.cell(row=i,column=2).value) for i in range(ws.get_highest_row())]
 		self.assertEqual(value_column_values,self.mapping_values)
 		self.assertEqual(integer_column_values,self.mapping_integers)
+		self.assertEqual(integer_column_values_copy,self.mapping_integers)
 
 	def test_menus_with_values(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
-		gender_values = [str(ws.cell(row=i,column=2).value) for i in range(ws.get_highest_row())]
-		region_values = [str(ws.cell(row=i,column=3).value) for i in range(ws.get_highest_row())]
+		gender_values = [str(ws.cell(row=i,column=3).value) for i in range(ws.get_highest_row())]
+		region_values = [str(ws.cell(row=i,column=4).value) for i in range(ws.get_highest_row())]
 		self.assertEqual(set(gender_values + region_values),{'gender','0','1','region','2','3'})
 
 	def tearDown(self):
