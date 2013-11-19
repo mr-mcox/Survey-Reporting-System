@@ -2,3 +2,4 @@
 db_connect_string.txt
 alembic.ini
 1314F8W_demographics.xlsx
+*.log
