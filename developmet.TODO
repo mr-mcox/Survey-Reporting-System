@@ -1,16 +1,11 @@
 To implement:
-  ✔ Create column and row based headings for each table @done (13-11-15 19:13)
-  ✔ Collect all data into a single structure @done (13-11-15 19:31)
-  ✔ Transform structure into a table and export as excel @done (13-11-16 14:28)
-  ✔ Add lookup sheet that has mapping @done (13-11-16 20:51)
-  ✔ On lookup sheet include columns with the appropriate mappings @done (13-11-16 21:24)
-  ✔ End to end on what I've done so far @done (13-11-19 09:01)
-  ✔ Convert dot seperators to something else that excel is ok with @done (13-11-19 09:01)
-  ✔ Clean up debug logging and create assertion to check that each CM has only one copy of each of the used demographics @done (13-11-19 09:02)
-  ✔ Identify what isn't working in output and why @done (13-11-18 20:57)
+ ☐ Configuration reader returns the dimensions to be used for each cut, with order being important
+ ☐ 
+
+Eventually:
   ☐ Integer strings in order of sorted labels for individual columns
-  ✔ Tri-column for integer strings @done (13-11-19 09:11)
-  ✔ When columns are exported, they should be sorted by index number @done (13-11-19 09:52)
+  ☐ Change title of output tab to 'display_values'
+  ☐ Create lookup mappings for result_type and question_code specifically
 Refactor:
   ☐ Survey is indentified on questions table and not on results table
   ☐ Convert keys for CalculationCorinator to set to avoid order issues
@@ -20,8 +15,6 @@ Maybe:
   ☐ Add indicies to the DB
   ☐ Add additional columns to substitute for when importing demographic data
   ☐ It appears that the table based system for getting results may be a bit too complex. 
-  ✔ Change cut by question ID to cut by question code @done (13-11-18 14:04)
-  ✔ Logging key steps along the way - like @done (13-11-19 08:59)
   ☐ Create end to end test and way to run behave for all sub folders
   ☐ Figure out why more 0s are padded than necessary in output
 
@@ -30,15 +23,28 @@ Risks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
- ✔ Log all computations according to cut tuple with metadata on what was done so that we can access them later @done (13-11-15 11:51) @project(To implement)
- ✔ Refactor NumericOutputCalculator so it can determine on its own whether a net_formatted_results needs to be added @done (13-11-15 11:59) @project(To implement)
- ✔ NumericOutputCalculator should only provide cut columns and display value @done (13-11-15 12:33) @project(To implement)
- ✔ Replace all text with unique integers @done (13-11-15 16:03) @project(To implement)
- ✔ Report mapping of integers back to text @done (13-11-15 16:17) @project(To implement)
+ ✔ When columns are exported, they should be sorted by index number @done (13-11-19 09:52) @project(To implement)
+ ✔ Tri-column for integer strings @done (13-11-19 09:11) @project(To implement)
+ ✔ Clean up debug logging and create assertion to check that each CM has only one copy of each of the used demographics @done (13-11-19 09:02) @project(To implement)
+ ✔ End to end on what I've done so far @done (13-11-19 09:01) @project(To implement)
+ ✔ Convert dot seperators to something else that excel is ok with @done (13-11-19 09:01) @project(To implement)
+ ✔ Logging key steps along the way - like @done (13-11-19 08:59) @project(Maybe)
+ ✔ Identify what isn't working in output and why @done (13-11-18 20:57) @project(To implement)
+ ✔ Change cut by question ID to cut by question code @done (13-11-18 14:04) @project(Maybe)
+ ✔ On lookup sheet include columns with the appropriate mappings @done (13-11-16 21:24) @project(To implement)
+ ✔ Add lookup sheet that has mapping @done (13-11-16 20:51) @project(To implement)
+ ✔ Transform structure into a table and export as excel @done (13-11-16 14:28) @project(To implement)
+ ✔ Collect all data into a single structure @done (13-11-15 19:31) @project(To implement)
+ ✔ Create column and row based headings for each table @done (13-11-15 19:13) @project(To implement)
  ✔ Include type of computation in frame @done (13-11-15 16:25) @project(To implement)
- ✔ For more than one survey @done (13-11-08 10:33) @project(To implement)
- ✔ By survey name @done (13-11-08 14:29) @project(To implement)
- ✔ End to end demonstration with MySQL DB @done (13-11-13 07:43) @project(To implement)
- ✔ Do cuts for more than one dimension @done (13-11-15 09:51) @project(To implement)
- ✔ Re-factor so that same cut code can be used for strong, weak and net as well @done (13-11-15 10:02) @project(To implement)
+ ✔ Report mapping of integers back to text @done (13-11-15 16:17) @project(To implement)
+ ✔ Replace all text with unique integers @done (13-11-15 16:03) @project(To implement)
+ ✔ NumericOutputCalculator should only provide cut columns and display value @done (13-11-15 12:33) @project(To implement)
+ ✔ Refactor NumericOutputCalculator so it can determine on its own whether a net_formatted_results needs to be added @done (13-11-15 11:59) @project(To implement)
+ ✔ Log all computations according to cut tuple with metadata on what was done so that we can access them later @done (13-11-15 11:51) @project(To implement)
  ✔ Values and responses seems potentially confusing - should they be the same or renamed? @done (13-11-15 10:22) @project(To implement)
+ ✔ Re-factor so that same cut code can be used for strong, weak and net as well @done (13-11-15 10:02) @project(To implement)
+ ✔ Do cuts for more than one dimension @done (13-11-15 09:51) @project(To implement)
+ ✔ End to end demonstration with MySQL DB @done (13-11-13 07:43) @project(To implement)
+ ✔ By survey name @done (13-11-08 14:29) @project(To implement)
+ ✔ For more than one survey @done (13-11-08 10:33) @project(To implement)

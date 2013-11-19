@@ -70,7 +70,6 @@ class CalculationCoordinator(object):
 			'integers': sorted(mapping.keys()),
 			'values': [mapping[key] for key in sorted(mapping.keys())] 
 		}
-		print('mapping:' + str(self.dimension_integer_mapping))
 
 	def create_row_column_headers(self):
 		for key, df in self.computations_generated.items():
