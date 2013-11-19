@@ -16,7 +16,7 @@ class CalculationCoordinator(object):
 		
 		if type(cuts) != list:
 			cuts = [cuts]
-		aggregation_key = tuple(cuts + [result_type])
+		aggregation_key = tuple(cuts + ['result_type_' + result_type])
 
 		assert aggregation_key in self.computations_generated
 		return self.computations_generated[aggregation_key]
@@ -30,7 +30,7 @@ class CalculationCoordinator(object):
 
 		if type(cuts) != list:
 			cuts = [cuts]
-		aggregation_key = tuple(cuts + [result_type])
+		aggregation_key = tuple(cuts + ['result_type_' + result_type])
 
 		self.computations_generated[aggregation_key] = calculations
 

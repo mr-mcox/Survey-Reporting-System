@@ -1,6 +1,11 @@
 To implement:
- ☐ Configuration reader returns the dimensions to be used for each cut, with order being important
- ☐ 
+ ✔ Configuration reader returns the dimensions to be used for each cut, with order being important @done (13-11-19 15:33)
+ ✔ Refactor tuple for CalculationCoordinator so that type of calculations can be determined from key @done (13-11-19 17:26)
+ ☐ When multiple dimensions are passed for cutting, aggregations are based on all of those columns
+ ☐ 0 fill is reserved and used for lack of level
+ ☐ Assembly of row and column headers dependent on levels specified
+ ☐ Dropdowns are output for each level of a cut
+ ☐ cuts are listed in excel output along with each the names of the columns to be used for each level
 
 Eventually:
   ☐ Integer strings in order of sorted labels for individual columns

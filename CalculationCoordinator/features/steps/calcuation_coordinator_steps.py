@@ -51,8 +51,8 @@ def step(context):
 def step(context):
 	context.coordinator = CalculationCoordinator()
 	context.coordinator.computations_generated = {
-		('gender','net') : pd.DataFrame({'question_code':[0,1,1],'gender':['Male','Female',"Male"]}),
-		('region','net') : pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
+		('gender','result_type_net') : pd.DataFrame({'question_code':[0,1,1],'gender':['Male','Female',"Male"]}),
+		('region','result_type_net') : pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
 	}
 
 @when('replace_dimensions_with_integers is run')
@@ -82,8 +82,8 @@ def step(context):
 def step(context):
 	context.coordinator = CalculationCoordinator()
 	context.coordinator.computations_generated = {
-		('gender','net') : pd.DataFrame({'question_code':[0,1,1],'gender':['Male','Female',"Male"]}),
-		('region','net') : pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
+		('gender','result_type_net') : pd.DataFrame({'question_code':[0,1,1],'gender':['Male','Female',"Male"]}),
+		('region','result_type_net') : pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
 		('region','strong') : pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
 	}
 
@@ -96,14 +96,14 @@ def step(context):
 def step(context):
 	context.coordinator = CalculationCoordinator()
 	context.coordinator.computations_generated = {
-		('gender','net') : pd.DataFrame(
+		('gender','result_type_net') : pd.DataFrame(
 			{
 				'question_code':['0','1','1'],
 				'gender':['2','3','2'],
 				'result_type':['6','6','6'],
 				'aggregation_value':[0.2,0.3,0.4]
 			}),
-		('region','net') : pd.DataFrame(
+		('region','result_type_net') : pd.DataFrame(
 			{'question_code':['0','1','1'],
 			'region':['4','4',"5"],
 			'result_type':['6','6','6'],
@@ -144,7 +144,7 @@ def step(context):
 def step(context):
 	context.coordinator = CalculationCoordinator()
 	context.coordinator.computations_generated = {
-		('gender','net') : pd.DataFrame(
+		('gender','result_type_net') : pd.DataFrame(
 			{	
 				'column_heading':['6.0','6.1','6.1'],
 				'row_heading':['2','3','2'],
@@ -153,7 +153,7 @@ def step(context):
 				'result_type':['6','6','6'],
 				'aggregation_value':[0.2,0.3,0.4]
 			}),
-		('region','net') : pd.DataFrame(
+		('region','result_type_net') : pd.DataFrame(
 			{
 				'column_heading':['6.0','6.1','6.1'],
 				'row_heading':['4','4','5'],
