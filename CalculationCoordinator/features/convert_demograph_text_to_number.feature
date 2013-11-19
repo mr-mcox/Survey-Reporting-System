@@ -32,3 +32,9 @@ Feature: In order to allow any text to be used in cutting yet maintain sane sort
 		Given computations generated that include a cut by gender and a cut by region with duplicates
 		When replace_dimensions_with_integers is run
 		Then there is a mapping of the values back to numbers
+
+	Scenario: Mapping is sorted by integer string so that excel doesn't need to re-sort
+		Given computations generated that include a cut by gender and a cut by region with duplicates
+		When replace_dimensions_with_integers is run
+		Then the mapping is in order by integer strings
+		Then the values column corresponds with the appropriate integer strings		

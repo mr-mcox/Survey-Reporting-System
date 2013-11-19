@@ -61,13 +61,16 @@ class CalculationCoordinator(object):
 					df[column] = df[column].map(value_map)
 
 		#Create mapping to be able to convert back
-		mapping = {'values':[],'integers':[]}
+		mapping = dict()
 		for column, value_dict in values_by_column.items():
 			for label, integer in value_dict.items():
-				mapping['values'].append(label)
-				mapping['integers'].append(integer)
+				mapping[integer] = label
 		self.labels_for_cut_dimensions = values_by_column
-		self.dimension_integer_mapping = mapping
+		self.dimension_integer_mapping = {
+			'integers': sorted(mapping.keys()),
+			'values': [mapping[key] for key in sorted(mapping.keys())] 
+		}
+		print('mapping:' + str(self.dimension_integer_mapping))
 
 	def create_row_column_headers(self):
 		for key, df in self.computations_generated.items():

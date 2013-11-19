@@ -8,8 +8,9 @@ To implement:
   ✔ Convert dot seperators to something else that excel is ok with @done (13-11-19 09:01)
   ✔ Clean up debug logging and create assertion to check that each CM has only one copy of each of the used demographics @done (13-11-19 09:02)
   ✔ Identify what isn't working in output and why @done (13-11-18 20:57)
-  ☐ Integer strings in order of sorted labels
-  ☐ Tri-column for integer strings
+  ☐ Integer strings in order of sorted labels for individual columns
+  ✔ Tri-column for integer strings @done (13-11-19 09:11)
+  ✔ When columns are exported, they should be sorted by index number @done (13-11-19 09:52)
 Refactor:
   ☐ Survey is indentified on questions table and not on results table
   ☐ Convert keys for CalculationCorinator to set to avoid order issues

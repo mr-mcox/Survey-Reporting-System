@@ -181,3 +181,19 @@ def step(context):
 def step(context):
 	total_rows = sum([len(df.index) for (key, df) in context.coordinator.computations_generated.items() ])
 	assert len(context.result.index) == total_rows
+
+@then('the mapping is in order by integer strings')
+def step(context):
+	integers = context.coordinator.dimension_integer_mapping['integers']
+	assert integers == sorted(integers)
+
+@then('the values column corresponds with the appropriate integer strings')
+def step(context):
+	values_by_column = context.coordinator.labels_for_cut_dimensions
+	dim = context.coordinator.dimension_integer_mapping
+	integers = dim['integers']
+	for column, value_dict in values_by_column.items():
+		for label, integer in value_dict.items():
+			for i, string in enumerate(integers):
+				if string == integer:
+					assert dim['values'][i] == label

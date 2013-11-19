@@ -13,8 +13,9 @@ class WriteExcelTestCase(unittest.TestCase):
 		wb = Workbook()
 		wb.save('test_file.xlsx')
 		coordinator = CalculationCoordinator()
-		self.mapping_values = ['a','b','c']
-		self.mapping_integers = ['0','1','2']
+		self.mapping_values = ['dos','uno','tres']
+		self.mapping_integers = ['2','1','3']
+		self.mapping_dict = dict(zip(self.mapping_integers,self.mapping_values))
 		self.labels_for_cut_dimensions = {
 											'gender':{'male':'0','female':'1'},
 											'region':{'Atlanta':'2','SoDak':'3'}
@@ -44,7 +45,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		integer_column_values = [str(ws.cell(row=i,column=0).value) for i in range(ws.get_highest_row())]
 		value_column_values = [str(ws.cell(row=i,column=1).value) for i in range(ws.get_highest_row())]
 		integer_column_values_copy = [str(ws.cell(row=i,column=2).value) for i in range(ws.get_highest_row())]
-		self.assertEqual(value_column_values,self.mapping_values)
+		self.assertEqual(value_column_values, self.mapping_values)
 		self.assertEqual(integer_column_values,self.mapping_integers)
 		self.assertEqual(integer_column_values_copy,self.mapping_integers)
 
