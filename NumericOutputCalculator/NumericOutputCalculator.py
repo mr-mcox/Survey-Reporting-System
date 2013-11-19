@@ -9,7 +9,6 @@ class NumericOutputCalculator(object):
 		assert not responses.empty
 
 		logging.debug('values before re-formatting:\n' + str(responses.head()))
-		logging.debug('dtypes:\n' + str(responses.dtypes))
 
 		if 'net_formatted_value' not in responses.columns or responses['net_formatted_value'].notnull().sum() == 0:
 			map_7pt_SA_to_net = {8:None,7:-1,6:-1,5:-1,4:-1,3:0,2:1,1:1}
@@ -36,11 +35,6 @@ class NumericOutputCalculator(object):
 			else:
 				cut_groupings.append(cut_demographic)
 
-		logging.debug('Net formatted values:' + str(nfv.head()))
-		logging.debug('question_codes include ' + str(nfv.question_code.unique()))
-		logging.debug('Length of national cut ' + str(len(nfv.groupby('question_code').mean().index)))
-		logging.debug('Length of these cuts ' + str(cut_groupings) + " " + str(len(nfv.groupby(cut_groupings).mean().index)))
-
 		aggregation_calulation = pd.DataFrame()
 		if result_type == 'net':
 			aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
@@ -56,7 +50,7 @@ class NumericOutputCalculator(object):
 
 		aggregation_calulation['result_type'] = result_type
 		return_columns = cut_groupings + ['aggregation_value','result_type']
-		logging.debug('resutlts for ' + str(return_columns) + ': ' + str(pd.DataFrame(aggregation_calulation,columns=return_columns)))
+		logging.debug('results for ' + str(return_columns) + ': ' + str(pd.DataFrame(aggregation_calulation,columns=return_columns)))
 		return pd.DataFrame(aggregation_calulation,columns=return_columns)
 
 

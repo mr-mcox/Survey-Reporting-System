@@ -4,11 +4,12 @@ To implement:
   ✔ Transform structure into a table and export as excel @done (13-11-16 14:28)
   ✔ Add lookup sheet that has mapping @done (13-11-16 20:51)
   ✔ On lookup sheet include columns with the appropriate mappings @done (13-11-16 21:24)
-  ☐ End to end on what I've done so far
-  ☐ Convert dot seperators to something else that excel is ok with
-  ☐ Clean up debug logging and create assertion to check that each CM has only one copy of each of the used demographics
+  ✔ End to end on what I've done so far @done (13-11-19 09:01)
+  ✔ Convert dot seperators to something else that excel is ok with @done (13-11-19 09:01)
+  ✔ Clean up debug logging and create assertion to check that each CM has only one copy of each of the used demographics @done (13-11-19 09:02)
   ✔ Identify what isn't working in output and why @done (13-11-18 20:57)
   ☐ Integer strings in order of sorted labels
+  ☐ Tri-column for integer strings
 Refactor:
   ☐ Survey is indentified on questions table and not on results table
   ☐ Convert keys for CalculationCorinator to set to avoid order issues
@@ -19,7 +20,9 @@ Maybe:
   ☐ Add additional columns to substitute for when importing demographic data
   ☐ It appears that the table based system for getting results may be a bit too complex. 
   ✔ Change cut by question ID to cut by question code @done (13-11-18 14:04)
-  ☐ Logging key steps along the way - like
+  ✔ Logging key steps along the way - like @done (13-11-19 08:59)
+  ☐ Create end to end test and way to run behave for all sub folders
+  ☐ Figure out why more 0s are padded than necessary in output
 
 Risks:
   ☐ More than one value for row or column header

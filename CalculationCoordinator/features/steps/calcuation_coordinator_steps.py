@@ -34,10 +34,10 @@ def step(context):
 def step(context):
 	context.coordinator.compute_aggregation(cut_demographic='region',result_type='net')
 
-@then('the display_value including region for question_id 1 and region "Atlanta" is 0.5')
+@then('the display_value including region for question_code 1 and region "Atlanta" is 0.5')
 def step(context):
 	results = context.coordinator.get_aggregation(cuts='region',result_type='net')
-	assert results.set_index(['question_id','region']).loc[(1,'Atlanta'),'aggregation_value'] == 0.5
+	assert results.set_index(['question_code','region']).loc[(1,'Atlanta'),'aggregation_value'] == 0.5
 
 @when('compute net with cut_demographic = region and gender is run')
 def step(context):
@@ -51,8 +51,8 @@ def step(context):
 def step(context):
 	context.coordinator = CalculationCoordinator()
 	context.coordinator.computations_generated = {
-		('gender','net') : pd.DataFrame({'question_id':[0,1,1],'gender':['Male','Female',"Male"]}),
-		('region','net') : pd.DataFrame({'question_id':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
+		('gender','net') : pd.DataFrame({'question_code':[0,1,1],'gender':['Male','Female',"Male"]}),
+		('region','net') : pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
 	}
 
 @when('replace_dimensions_with_integers is run')
@@ -82,9 +82,9 @@ def step(context):
 def step(context):
 	context.coordinator = CalculationCoordinator()
 	context.coordinator.computations_generated = {
-		('gender','net') : pd.DataFrame({'question_id':[0,1,1],'gender':['Male','Female',"Male"]}),
-		('region','net') : pd.DataFrame({'question_id':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
-		('region','strong') : pd.DataFrame({'question_id':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
+		('gender','net') : pd.DataFrame({'question_code':[0,1,1],'gender':['Male','Female',"Male"]}),
+		('region','net') : pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
+		('region','strong') : pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
 	}
 
 @then('there is a mapping of the values back to numbers')
@@ -125,11 +125,11 @@ def step(context):
 	for key, df in context.coordinator.computations_generated.items():
 		assert {'row_heading','column_heading'} <= set(df.columns)
 
-@then('the column header consists of question and result type joined by a "."')
+@then('the column header consists of question and result type joined by a ";"')
 def step(context):
 	for key, df in context.coordinator.computations_generated.items():
 		for i in range(len(df.index)):
-			assert df.loc[i,'column_heading'] == df.loc[i,'question_code'] + "." + df.loc[i,"result_type"]
+			assert df.loc[i,'column_heading'] == df.loc[i,'question_code'] + ";" + df.loc[i,"result_type"]
 
 @then('the row header consists of either gender or region')
 def step(context):

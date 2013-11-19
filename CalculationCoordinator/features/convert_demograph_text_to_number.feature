@@ -2,7 +2,7 @@ Feature: In order to allow any text to be used in cutting yet maintain sane sort
 
 	Scenario: When multiple cuts are run, they are stored by tuple
 		Given net formatted values
-			| respondent_id | question_id | net_formatted_value |
+			| respondent_id | question_code | net_formatted_value |
 			| 1             | 1           | 1     |
 			| 2             | 1           | 0     |
 			| 3             | 1           | -1    |
@@ -14,7 +14,7 @@ Feature: In order to allow any text to be used in cutting yet maintain sane sort
 		When compute net with cut_demographic = region and gender is run
 		When compute net with cut_demographic = region is run
 		Then computations_generated has a length of 2
-		Then the display_value including region for question_id 1 and region "Atlanta" is 0.5
+		Then the display_value including region for question_code 1 and region "Atlanta" is 0.5
 
 	Scenario: Identify all demographic columns across multiple cuts
 		Given computations generated that include a cut by gender and a cut by region
