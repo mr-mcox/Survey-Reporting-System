@@ -17,6 +17,7 @@ Maybe:
   ☐ It appears that the table based system for getting results may be a bit too complex. 
   ☐ Create end to end test and way to run behave for all sub folders
   ☐ Figure out why more 0s are padded than necessary in output
+  ☐ cuts_to_be_created should only output unique lists of cuts
 
 Risks:
   ☐ More than one value for row or column header
