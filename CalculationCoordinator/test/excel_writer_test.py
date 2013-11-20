@@ -22,11 +22,10 @@ class WriteExcelTestCase(unittest.TestCase):
 											'region':{'Atlanta':'2','SoDak':'3'}
 										}
 		config_reader = ConfigurationReader.ConfigurationReader()
-		config_reader.config =  {'cuts':{
-								'Ethnicity': {'dimensions':['ethnicity']},
-								'Region':{'dimensions':['region']}
-								}}
+		self.cuts_for_excel_menu_results = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None']]
+		config_reader.cuts_for_excel_menu = mock.MagicMock(return_value = self.cuts_for_excel_menu_results)
 		coordinator.config = config_reader
+
 		coordinator.dimension_integer_mapping = {'values': self.mapping_values,'integers':self.mapping_integers}
 		coordinator.excel_dashboard_file = 'test_file.xlsx'
 		coordinator.labels_for_cut_dimensions = self.labels_for_cut_dimensions
@@ -35,12 +34,23 @@ class WriteExcelTestCase(unittest.TestCase):
 				'column_heading': ['2.3','2.4','2.3','2.4'],
 				'aggregation_value': [0.5,0.5,0.5,0.5]
 			})
+
 		with mock.patch.object(CalculationCoordinator, 'master_aggregation', new_callable=mock.PropertyMock) as m:
 			m.return_value = master_aggregation
 			coordinator.export_to_excel('test_file.xlsx')
 
 	def test_writing_cut_config(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
+		for i in range(2):
+			row_values = [str(ws.cell(row=i,column=j).value) for j in range(5)]
+			row_matches_expected = False
+			for expected_row in self.cuts_for_excel_menu_results:
+				if expected_row == row_values:
+					row_matches_expected = True
+			print(row_values)
+			print(expected_row)
+			self.assertTrue(row_matches_expected)
+
 
 	def test_write_master_as_excel(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Sheet1')

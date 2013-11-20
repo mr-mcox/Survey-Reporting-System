@@ -1,5 +1,6 @@
 import pandas as pd
 from SurveyReportingSystem.NumericOutputCalculator import NumericOutputCalculator
+from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
 import math
 from openpyxl import load_workbook, cell
 
@@ -93,29 +94,34 @@ class CalculationCoordinator(object):
 	master_aggregation = property(**master_aggregation())
 
 	def export_to_excel(self,filename):
+		assert type(self.config) == ConfigurationReader.ConfigurationReader
 		output_df = self.master_aggregation.set_index(['row_heading','column_heading'])
 		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
 		output_series.unstack().to_excel(filename, sheet_name='Sheet1')
 
-
 		wb = load_workbook(filename)
 		ws = wb.create_sheet()
 		ws.title = 'Lookups'
-		mapping = self.dimension_integer_mapping
-		assert len(mapping['values']) == len(mapping['integers'])
-		for i in range(len(mapping['values'])):
-			ws.cell(row=i,column=0).value = mapping['integers'][i]
-			ws.cell(row=i,column=1).value = mapping['values'][i]
-			ws.cell(row=i,column=2).value = mapping['integers'][i]
+		cuts_menus = self.config.cuts_for_excel_menu()
+		max_menu_length = max([len(menu) for menu in cuts_menus])
+		for menu_i, cut_menu in enumerate(cuts_menus):
+			for col_i, item in enumerate(cut_menu):
+				ws.cell(row=menu_i, column = col_i).value = item
+		# mapping = self.dimension_integer_mapping
+		# assert len(mapping['values']) == len(mapping['integers'])
+		# for i in range(len(mapping['values'])):
+		# 	ws.cell(row=i,column=0).value = mapping['integers'][i]
+		# 	ws.cell(row=i,column=1).value = mapping['values'][i]
+		# 	ws.cell(row=i,column=2).value = mapping['integers'][i]
 
-		#Write cut dimensions integer strings
-		cut_dimensions = self.labels_for_cut_dimensions.keys()
-		for i, key in enumerate(cut_dimensions):
-			ws.cell(row=0, column=i+3).value = key
-			j = 1
-			for label, integer_string in self.labels_for_cut_dimensions[key].items():
-				ws.cell(row=j, column=i+3).value = integer_string
-				j += 1
+		# #Write cut dimensions integer strings
+		# cut_dimensions = self.labels_for_cut_dimensions.keys()
+		# for i, key in enumerate(cut_dimensions):
+		# 	ws.cell(row=0, column=i+3).value = key
+		# 	j = 1
+		# 	for label, integer_string in self.labels_for_cut_dimensions[key].items():
+		# 		ws.cell(row=j, column=i+3).value = integer_string
+		# 		j += 1
 		wb.save(filename)
 
 	def rc_to_range(self,row,col,**kwargs):
