@@ -97,3 +97,7 @@ def step(context):
 	created_titles = set([str(cut.title) for key, cut in context.cuts.items()])
 	orig_titles = set(list(context.reader.config['cuts'].keys()))
 	assert created_titles == orig_titles
+
+@then('that dimension has a title of "Ethnicity"')
+def step(context):
+	context.result.title == "Ethnicity"
