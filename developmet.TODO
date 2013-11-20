@@ -6,6 +6,8 @@ To implement:
  ✔ Refactor to remove levels from cuts @done (13-11-20 11:06)
  ✔ Determine how to name ranges @done (13-11-20 11:38)
  ✔ Create helper function for converting row, column and dimension into range string @done (13-11-20 11:56)
+ ✔ Refactor config input to use dicts for cuts than a list @done (13-11-20 13:16)
+ ☐ Dimensions are re-used from master list if they are already available
  ☐ Cuts are output in excel along with dimensions and include 'static' identifier
  ☐ Each dimension has two columns with mapping in excel
  ☐ display_value table row and column headers are constructed according to levels needed (checking whether each row is already in there)

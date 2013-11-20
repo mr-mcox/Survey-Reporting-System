@@ -9,9 +9,9 @@ class ConfigurationReader(object):
 		all_cut_fields = [{}]
 		config = self.config
 		assert 'cuts' in self.config
-		assert type(config['cuts']) == list
+		assert type(config['cuts']) == dict
 
-		for cut in config['cuts']:
+		for cut_title, cut in config['cuts'].items():
 			assert 'dimensions' in cut
 			assert type(cut['dimensions']) == list
 			number_of_levels = len(cut['dimensions'])
@@ -28,12 +28,12 @@ class ConfigurationReader(object):
 		doc = "The cuts property."
 		def fget(self):
 			if not hasattr(self,'_cuts'):
-				cuts = list()
+				cuts = dict()
 				config = self.config
 				assert 'cuts' in config
-				assert type(config['cuts']) == list
-				for cut in config['cuts']:
-					cuts.append(Cut())
+				assert type(config['cuts']) == dict
+				for cut_title, cut in config['cuts'].items():
+					cuts[cut_title] = Cut(title=cut_title)
 				self._cuts = cuts
 			return self._cuts
 		def fset(self, value):
@@ -46,6 +46,7 @@ class ConfigurationReader(object):
 class Cut(object):
 	def __init__(self, **kwargs):
 		config_data = kwargs.pop('config_data',None)
+		self.title = kwargs.pop('title',None)
 		if config_data != None:
 			if 'dimensions' in config_data:
 				assert type(config_data['dimensions']) == list

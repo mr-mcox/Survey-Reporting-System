@@ -5,10 +5,11 @@ from ConfigurationReader import ConfigurationReader, Cut, Dimension
 @given('input yaml that has one one dimension')
 def step(context):
 	context.reader = ConfigurationReader()
-	context.reader.config = {'cuts':[
-	{'dimensions':['ethnicity']},
-	{'dimensions':['region']}
-	]}
+	context.reader.config = {'cuts':{
+	'Ethnicity': {'dimensions':['ethnicity']},
+	'Region':{'dimensions':['region']}
+	}
+	}
 
 @when('cuts_to_be_created is called')
 def step(context):
@@ -29,9 +30,10 @@ def step(context):
 @given('input yaml that has three dimensions')
 def step(context):
 	context.reader = ConfigurationReader()
-	context.reader.config = {'cuts':[
-	{'dimensions':['ethnicity','region','corps']}
-	]}
+	context.reader.config = {'cuts':{
+	'Ethnicity': {'dimensions':['ethnicity','region','corps']},
+	}
+	}
 
 @then('it returns every combination of each of the dimensions being used or not used')
 def step(context):
@@ -46,12 +48,11 @@ def step(context):
 @given('basic set of cut and dimensions in config file')
 def step(context):
 	context.reader = ConfigurationReader()
-	context.reader.config = {'cuts':[
-	{'title': 'Region',
-	'dimensions':['region','corps']},
-	{'title': 'ROSVP',
-	'dimensions':['rosvp','region','corps']},
-	]}
+	context.reader.config = {'cuts':{
+	'Ethnicity': {'dimensions':['ethnicity']},
+	'Region':{'dimensions':['region']}
+	}
+	}
 
 @when('cuts from the config are accessed')
 def step(context):
@@ -59,8 +60,8 @@ def step(context):
 
 @then('the number of cut objects equal to the number of cuts in the config are returned')
 def step(context):
-	assert len(context.cuts) == 2
-	for cut in context.cuts:
+	assert len(list(context.cuts.keys())) == 2
+	for cut_title, cut in context.cuts.items():
 		assert type(cut) == Cut
 
 @given('a cut object with config information')
