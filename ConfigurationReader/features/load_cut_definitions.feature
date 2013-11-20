@@ -23,3 +23,8 @@ Feature: Determine the cuts desired from a configuration file
 		Given a dimension list with a dimension named "Ethnicity"
 		When a new dimension is created that has the title ethnicity
 		Then the new dimension is the same as the original
+
+	Scenario: When a cut is created, it has a title attribute that can later be accessed
+		Given basic set of cut and dimensions in config file
+		When cuts from the config are accessed
+		Then the cuts have titles that they were given in the config

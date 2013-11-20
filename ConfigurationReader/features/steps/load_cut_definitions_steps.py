@@ -91,3 +91,9 @@ def step(context):
 @then('the new dimension is the same as the original')
 def step(context):
 	assert context.result == context.reader._all_dimensions['Ethnicity']
+
+@then('the cuts have titles that they were given in the config')
+def step(context):
+	created_titles = set([str(cut.title) for key, cut in context.cuts.items()])
+	orig_titles = set(list(context.reader.config['cuts'].keys()))
+	assert created_titles == orig_titles

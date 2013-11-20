@@ -42,7 +42,7 @@ class ConfigurationReader(object):
 				assert 'cuts' in config
 				assert type(config['cuts']) == dict
 				for cut_title, cut in config['cuts'].items():
-					cuts[cut_title] = Cut(title=cut_title)
+					cuts[cut_title] = Cut(title=cut_title,config_object=self)
 				self._cuts = cuts
 			return self._cuts
 		def fset(self, value):
@@ -64,8 +64,8 @@ class Cut(object):
 					assert type(config_object) == ConfigurationReader
 					self.dimensions = [config_object.create_dimension(x) for x in config_data['dimensions']]
 				else:
-					self.dimensions = [Dimension() for x in config_data['dimensions']]
+					self.dimensions = [Dimension(title=x) for x in config_data['dimensions']]
 
 class Dimension(object):
 	def __init__(self,**kwargs):
-		pass
+		self.title = kwargs.pop('title',None)
