@@ -25,9 +25,17 @@ class ConfigurationReader(object):
 				all_cut_fields.append(set(levels_for_this))
 		return all_cut_fields
 
+	def cuts_for_excel_menu(self):
+		cut_list = list()
+		for cut_name, cut in self.cuts.items():
+			assert type(cut) == Cut
+			dimension_titles = [dimension.title for dimension in cut.dimensions]
+			cut_list.append([cut.title, 'static'] + dimension_titles)
+		return cut_list
+
 	def create_dimension(self, title):
 		if title not in self._all_dimensions:
-			new_dimension = Dimension()
+			new_dimension = Dimension(title=title)
 			self._all_dimensions[title] = new_dimension
 			return new_dimension
 		else:
@@ -42,7 +50,7 @@ class ConfigurationReader(object):
 				assert 'cuts' in config
 				assert type(config['cuts']) == dict
 				for cut_title, cut in config['cuts'].items():
-					cuts[cut_title] = Cut(title=cut_title,config_object=self)
+					cuts[cut_title] = Cut(title=cut_title,config_object=self, config_data = cut)
 				self._cuts = cuts
 			return self._cuts
 		def fset(self, value):
@@ -56,6 +64,7 @@ class Cut(object):
 	def __init__(self, **kwargs):
 		config_data = kwargs.pop('config_data',None)
 		self.title = kwargs.pop('title',None)
+		self.dimensions = list()
 		config_object = kwargs.pop('config_object', None)
 		if config_data != None:
 			if 'dimensions' in config_data:
