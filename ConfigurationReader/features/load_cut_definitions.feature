@@ -13,3 +13,13 @@ Feature: Determine the cuts desired from a configuration file
 		Given basic set of cut, levels and dimensions in config file
 		When cuts from the config are accessed
 		Then the number of cut objects equal to the number of cuts in the config are returned
+
+	Scenario: When a cut object is created, it creates levels equal corresponding to levels in the config passed to it
+		Given a cut object with config information that includes levels
+		When the cut object is created
+		Then it has level objects that correspond to the levels in the config object
+
+	Scenario: When a level object is created, it creates dimension objects equal corresponding to dimension in the config passed to it
+		Given a level object with config information
+		When the level object is created
+		Then it has dimension objects that correspond to the dimensions in the config object

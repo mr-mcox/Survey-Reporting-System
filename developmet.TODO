@@ -3,10 +3,10 @@ To implement:
  ✔ Refactor tuple for CalculationCoordinator so that type of calculations can be determined from key @done (13-11-19 17:26)
  ✔ When multiple dimensions are passed for cutting, aggregations are based on all of those columns @done (13-11-19 17:32)
  ✔ 0 fill is reserved and used for lack of level @done (13-11-19 17:35)
- ☐ Derive list of levels by cut based on input
- ☐ Assembly of row and column headers dependent on levels specified
- ☐ Dropdowns are output for each level of a cut
- ☐ cuts are listed in excel output along with each the names of the columns to be used for each level
+ ☐ Refactor to remove levels from cuts
+ ☐ Cuts are output in excel along with dimensions
+ ☐ Each dimension has two columns with mapping in excel
+ ☐ display_value table row and column headers are constructed according to levels needed (checking whether each row is already in there)
 
 Eventually:
   ☐ Integer strings in order of sorted labels for individual columns

@@ -44,12 +44,19 @@ class ConfigurationReader(object):
 	cuts = property(**cuts())
 
 class Cut(object):
-	def __init__(self):
-		pass
+	def __init__(self, **kwargs):
+		config_data = kwargs.pop('config_data',None)
+		if config_data != None:
+			if 'levels' in config_data:
+				assert type(config_data['levels']) == list
+				self.levels = [Level() for x in config_data['levels']]
 
 class Level(object):
-	def __init__(self):
-		pass
+	def __init__(self, **kwargs):
+		config_data = kwargs.pop('config_data',None)
+		if config_data != None:
+			assert type(config_data) == list
+			self.dimensions = [Dimension() for x in config_data]
 
 class Dimension(object):
 	def __init__(self):

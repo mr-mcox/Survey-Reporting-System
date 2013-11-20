@@ -62,3 +62,31 @@ def step(context):
 	assert len(context.cuts) == 2
 	for cut in context.cuts:
 		assert type(cut) == Cut
+
+@given('a cut object with config information that includes levels')
+def step(context):
+	context.cut_config_data = 	{'title': 'Region','levels':['region','corps']}
+
+@when('the cut object is created')
+def step(context):
+	context.cut = Cut(config_data = context.cut_config_data)
+
+@then('it has level objects that correspond to the levels in the config object')
+def step(context):
+	assert len(context.cut.levels) == 2
+	for level in context.cut.levels:
+		assert type(level) == Level
+
+@given('a level object with config information')
+def step(context):
+	context.level_config_data = ['region','corps']
+
+@when('the level object is created')
+def step(context):
+	context.level = Level(config_data=context.level_config_data)
+
+@then('it has dimension objects that correspond to the dimensions in the config object')
+def step(context):
+	assert len(context.level.dimensions) == 2
+	for dimension in context.level.dimensions:
+		assert type(dimension) == Dimension
