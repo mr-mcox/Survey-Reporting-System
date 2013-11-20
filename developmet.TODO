@@ -1,8 +1,9 @@
 To implement:
  ✔ Configuration reader returns the dimensions to be used for each cut, with order being important @done (13-11-19 15:33)
  ✔ Refactor tuple for CalculationCoordinator so that type of calculations can be determined from key @done (13-11-19 17:26)
- ☐ When multiple dimensions are passed for cutting, aggregations are based on all of those columns
- ☐ 0 fill is reserved and used for lack of level
+ ✔ When multiple dimensions are passed for cutting, aggregations are based on all of those columns @done (13-11-19 17:32)
+ ✔ 0 fill is reserved and used for lack of level @done (13-11-19 17:35)
+ ☐ Derive list of levels by cut based on input
  ☐ Assembly of row and column headers dependent on levels specified
  ☐ Dropdowns are output for each level of a cut
  ☐ cuts are listed in excel output along with each the names of the columns to be used for each level
@@ -23,6 +24,7 @@ Maybe:
   ☐ Create end to end test and way to run behave for all sub folders
   ☐ Figure out why more 0s are padded than necessary in output
   ☐ cuts_to_be_created should only output unique lists of cuts
+  ☐ NumericOutputCalculator will return more than one set of calculations if multiple are specified on input
 
 Risks:
   ☐ More than one value for row or column header

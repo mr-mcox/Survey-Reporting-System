@@ -1,6 +1,6 @@
 import pandas as pd
 import logging
-import pdb
+# import pdb
 
 class NumericOutputCalculator(object):
 
@@ -30,6 +30,7 @@ class NumericOutputCalculator(object):
 
 		cut_groupings = ['question_code']
 		if cut_demographic != None:
+			assert type(cut_demographic) == str or type(cut_demographic) == list
 			if type(cut_demographic) == list:
 				cut_groupings = cut_groupings + cut_demographic
 			else:

@@ -12,14 +12,45 @@ class ConfigurationReader(object):
 		assert type(config['cuts']) == list
 
 		for cut in config['cuts']:
-			assert 'cut_fields' in cut
-			assert type(cut['cut_fields']) == list
-			number_of_levels = len(cut['cut_fields'])
+			assert 'levels' in cut
+			assert type(cut['levels']) == list
+			number_of_levels = len(cut['levels'])
 			for i in range(2**number_of_levels):
 				levels_for_this = []
 				bit_mask = BitArray(uint=i,length=number_of_levels)
 				for j, bit in enumerate(bit_mask):
 					if bit == True:
-						levels_for_this.append(cut['cut_fields'][j])
+						levels_for_this.append(cut['levels'][j])
 				all_cut_fields.append(set(levels_for_this))
 		return all_cut_fields
+
+	def cuts():
+		doc = "The cuts property."
+		def fget(self):
+			if not hasattr(self,'_cuts'):
+				cuts = list()
+				config = self.config
+				assert 'cuts' in config
+				assert type(config['cuts']) == list
+				for cut in config['cuts']:
+					cuts.append(Cut())
+				self._cuts = cuts
+			return self._cuts
+		def fset(self, value):
+			self._cuts = value
+		def fdel(self):
+			del self._cuts
+		return locals()
+	cuts = property(**cuts())
+
+class Cut(object):
+	def __init__(self):
+		pass
+
+class Level(object):
+	def __init__(self):
+		pass
+
+class Dimension(object):
+	def __init__(self):
+		pass

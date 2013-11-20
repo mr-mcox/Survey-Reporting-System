@@ -8,3 +8,8 @@ Feature: Determine the cuts desired from a configuration file
 		Given input yaml that has three levels
 		When cuts_to_be_created is called
 		Then it returns every combination of each of the levels being used or not used
+
+	Scenario: Given a basic set of cuts with levels and dimensions, a cut object is created for each cut in the input
+		Given basic set of cut, levels and dimensions in config file
+		When cuts from the config are accessed
+		Then the number of cut objects equal to the number of cuts in the config are returned

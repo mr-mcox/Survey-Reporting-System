@@ -35,7 +35,7 @@ class CalculationCoordinator(object):
 		self.computations_generated[aggregation_key] = calculations
 
 	def replace_dimensions_with_integers(self):
-		current_index = 0
+		current_index = 1
 
 		values_by_column = dict()
 		#Collect all values by column
@@ -70,6 +70,7 @@ class CalculationCoordinator(object):
 			'integers': sorted(mapping.keys()),
 			'values': [mapping[key] for key in sorted(mapping.keys())] 
 		}
+		assert format_string.format(0) not in self.dimension_integer_mapping['integers']
 
 	def create_row_column_headers(self):
 		for key, df in self.computations_generated.items():
