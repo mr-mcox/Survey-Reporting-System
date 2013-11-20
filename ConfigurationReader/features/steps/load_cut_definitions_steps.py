@@ -78,3 +78,16 @@ def step(context):
 	assert len(context.cut.dimensions) == 2
 	for dimension in context.cut.dimensions:
 		assert type(dimension) == Dimension
+
+@given('a dimension list with a dimension named "Ethnicity"')
+def step(context):
+	context.reader = ConfigurationReader()
+	context.reader._all_dimensions = {'Ethnicity':Dimension(title='Ethnicity')}
+
+@when('a new dimension is created that has the title ethnicity')
+def step(context):
+	context.result = context.reader.create_dimension('Ethnicity')
+
+@then('the new dimension is the same as the original')
+def step(context):
+	assert context.result == context.reader._all_dimensions['Ethnicity']

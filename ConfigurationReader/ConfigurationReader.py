@@ -4,6 +4,7 @@ class ConfigurationReader(object):
 	"""docstring for ConfigurationReader"""
 	def __init__(self, **kwargs):
 		self.config = dict()
+		self._all_dimensions = dict()
 
 	def cuts_to_be_created(self):
 		all_cut_fields = [{}]
@@ -23,6 +24,14 @@ class ConfigurationReader(object):
 						levels_for_this.append(cut['dimensions'][j])
 				all_cut_fields.append(set(levels_for_this))
 		return all_cut_fields
+
+	def create_dimension(self, title):
+		if title not in self._all_dimensions:
+			new_dimension = Dimension()
+			self._all_dimensions[title] = new_dimension
+			return new_dimension
+		else:
+			return self._all_dimensions[title]
 
 	def cuts():
 		doc = "The cuts property."
@@ -47,11 +56,16 @@ class Cut(object):
 	def __init__(self, **kwargs):
 		config_data = kwargs.pop('config_data',None)
 		self.title = kwargs.pop('title',None)
+		config_object = kwargs.pop('config_object', None)
 		if config_data != None:
 			if 'dimensions' in config_data:
 				assert type(config_data['dimensions']) == list
-				self.dimensions = [Dimension() for x in config_data['dimensions']]
+				if config_object != None:
+					assert type(config_object) == ConfigurationReader
+					self.dimensions = [config_object.create_dimension(x) for x in config_data['dimensions']]
+				else:
+					self.dimensions = [Dimension() for x in config_data['dimensions']]
 
 class Dimension(object):
-	def __init__(self):
+	def __init__(self,**kwargs):
 		pass

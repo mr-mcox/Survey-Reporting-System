@@ -18,3 +18,8 @@ Feature: Determine the cuts desired from a configuration file
 		Given a cut object with config information
 		When the cut object is created
 		Then it has dimension objects that correspond to the dimensions in the config object
+
+	Scenario: Dimensions are re-used from master list if they are already available
+		Given a dimension list with a dimension named "Ethnicity"
+		When a new dimension is created that has the title ethnicity
+		Then the new dimension is the same as the original
