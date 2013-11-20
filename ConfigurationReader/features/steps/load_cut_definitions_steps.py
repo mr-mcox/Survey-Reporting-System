@@ -1,13 +1,13 @@
 from behave import *
-from ConfigurationReader import ConfigurationReader, Cut, Level, Dimension
+from ConfigurationReader import ConfigurationReader, Cut, Dimension
 
 
 @given('input yaml that has one one dimension')
 def step(context):
 	context.reader = ConfigurationReader()
 	context.reader.config = {'cuts':[
-	{'levels':['ethnicity']},
-	{'levels':['region']}
+	{'dimensions':['ethnicity']},
+	{'dimensions':['region']}
 	]}
 
 @when('cuts_to_be_created is called')
@@ -26,14 +26,14 @@ def step(context):
 				cuts_match = True
 		assert cuts_match
 
-@given('input yaml that has three levels')
+@given('input yaml that has three dimensions')
 def step(context):
 	context.reader = ConfigurationReader()
 	context.reader.config = {'cuts':[
-	{'levels':['ethnicity','region','corps']}
+	{'dimensions':['ethnicity','region','corps']}
 	]}
 
-@then('it returns every combination of each of the levels being used or not used')
+@then('it returns every combination of each of the dimensions being used or not used')
 def step(context):
 	cuts_in_the_yaml = [{},{'ethnicity'},{'region'},{'corps'},{'ethnicity','region'},{'ethnicity','corps'},{'region','corps'},{'ethnicity','corps','region'}]
 	for yaml_cut in cuts_in_the_yaml:
@@ -43,14 +43,14 @@ def step(context):
 				cuts_match = True
 		assert cuts_match
 
-@given('basic set of cut, levels and dimensions in config file')
+@given('basic set of cut and dimensions in config file')
 def step(context):
 	context.reader = ConfigurationReader()
 	context.reader.config = {'cuts':[
 	{'title': 'Region',
-	'levels':['region','corps']},
+	'dimensions':['region','corps']},
 	{'title': 'ROSVP',
-	'levels':['rosvp','region','corps']},
+	'dimensions':['rosvp','region','corps']},
 	]}
 
 @when('cuts from the config are accessed')
@@ -63,30 +63,17 @@ def step(context):
 	for cut in context.cuts:
 		assert type(cut) == Cut
 
-@given('a cut object with config information that includes levels')
+@given('a cut object with config information')
 def step(context):
-	context.cut_config_data = 	{'title': 'Region','levels':['region','corps']}
+	context.cut_config_data = {'title': 'Region',
+								'dimensions':['region','corps']}
 
 @when('the cut object is created')
 def step(context):
-	context.cut = Cut(config_data = context.cut_config_data)
-
-@then('it has level objects that correspond to the levels in the config object')
-def step(context):
-	assert len(context.cut.levels) == 2
-	for level in context.cut.levels:
-		assert type(level) == Level
-
-@given('a level object with config information')
-def step(context):
-	context.level_config_data = ['region','corps']
-
-@when('the level object is created')
-def step(context):
-	context.level = Level(config_data=context.level_config_data)
+	context.cut = Cut(config_data=context.cut_config_data)
 
 @then('it has dimension objects that correspond to the dimensions in the config object')
 def step(context):
-	assert len(context.level.dimensions) == 2
-	for dimension in context.level.dimensions:
+	assert len(context.cut.dimensions) == 2
+	for dimension in context.cut.dimensions:
 		assert type(dimension) == Dimension

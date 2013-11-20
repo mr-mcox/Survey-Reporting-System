@@ -12,15 +12,15 @@ class ConfigurationReader(object):
 		assert type(config['cuts']) == list
 
 		for cut in config['cuts']:
-			assert 'levels' in cut
-			assert type(cut['levels']) == list
-			number_of_levels = len(cut['levels'])
+			assert 'dimensions' in cut
+			assert type(cut['dimensions']) == list
+			number_of_levels = len(cut['dimensions'])
 			for i in range(2**number_of_levels):
 				levels_for_this = []
 				bit_mask = BitArray(uint=i,length=number_of_levels)
 				for j, bit in enumerate(bit_mask):
 					if bit == True:
-						levels_for_this.append(cut['levels'][j])
+						levels_for_this.append(cut['dimensions'][j])
 				all_cut_fields.append(set(levels_for_this))
 		return all_cut_fields
 
@@ -47,16 +47,9 @@ class Cut(object):
 	def __init__(self, **kwargs):
 		config_data = kwargs.pop('config_data',None)
 		if config_data != None:
-			if 'levels' in config_data:
-				assert type(config_data['levels']) == list
-				self.levels = [Level() for x in config_data['levels']]
-
-class Level(object):
-	def __init__(self, **kwargs):
-		config_data = kwargs.pop('config_data',None)
-		if config_data != None:
-			assert type(config_data) == list
-			self.dimensions = [Dimension() for x in config_data]
+			if 'dimensions' in config_data:
+				assert type(config_data['dimensions']) == list
+				self.dimensions = [Dimension() for x in config_data['dimensions']]
 
 class Dimension(object):
 	def __init__(self):
