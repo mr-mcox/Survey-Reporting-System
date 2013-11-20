@@ -4,7 +4,8 @@ To implement:
  ✔ When multiple dimensions are passed for cutting, aggregations are based on all of those columns @done (13-11-19 17:32)
  ✔ 0 fill is reserved and used for lack of level @done (13-11-19 17:35)
  ✔ Refactor to remove levels from cuts @done (13-11-20 11:06)
- ☐ Determine how to name ranges
+ ✔ Determine how to name ranges @done (13-11-20 11:38)
+ ✔ Create helper function for converting row, column and dimension into range string @done (13-11-20 11:56)
  ☐ Cuts are output in excel along with dimensions and include 'static' identifier
  ☐ Each dimension has two columns with mapping in excel
  ☐ display_value table row and column headers are constructed according to levels needed (checking whether each row is already in there)

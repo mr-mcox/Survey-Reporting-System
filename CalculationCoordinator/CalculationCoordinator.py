@@ -1,7 +1,7 @@
 import pandas as pd
 from SurveyReportingSystem.NumericOutputCalculator import NumericOutputCalculator
 import math
-from openpyxl import load_workbook
+from openpyxl import load_workbook, cell
 
 class CalculationCoordinator(object):
 	"""docstring for CalculationCoordinator"""
@@ -117,3 +117,14 @@ class CalculationCoordinator(object):
 				ws.cell(row=j, column=i+3).value = integer_string
 				j += 1
 		wb.save(filename)
+
+	def rc_to_range(self,row,col,**kwargs):
+		height = kwargs.pop('height',None)
+		width = kwargs.pop('width',None)
+		if height == None:
+			return cell.get_column_letter(col + 1) + str(row+1)
+		else:
+			assert width != None
+			start_cell =  cell.get_column_letter(col + 1) + str(row+1)
+			end_cell = cell.get_column_letter(col + width) + str(row+height)
+			return start_cell + ":" + end_cell
