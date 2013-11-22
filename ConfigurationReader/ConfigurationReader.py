@@ -42,7 +42,11 @@ class ConfigurationReader(object):
 			return self._all_dimensions[title]
 
 	def all_dimensions(self):
-		return self._all_dimensions
+		"""Returns a list of all dimnsions used by this ConfigurationReader"""
+		return [dimension for key, dimension in self._all_dimensions.items()]
+
+	def dimensions_by_cuts(self):
+		return {cut.title:cut.dimensions for cut_title, cut in self.cuts.items()}
 		
 	def cuts():
 		doc = "The cuts property."

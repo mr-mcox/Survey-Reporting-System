@@ -113,6 +113,17 @@ class CalculationCoordinator(object):
 		for menu_i, cut_menu in enumerate(cuts_menus):
 			for col_i, item in enumerate(cut_menu):
 				ws.cell(row=menu_i, column = col_i).value = item
+
+		next_column_to_use = ws.get_highest_column()
+		for dimension in self.config.all_dimensions():
+			dimension_title = dimension.title
+			mapping = self.get_integer_string_mapping(dimension_title)
+
+			ws.cell(row=0, column = next_column_to_use).value = dimension_title
+			for i in range(len(mapping['integer_strings'])):
+				ws.cell(row=i+1, column = next_column_to_use).value = mapping['labels'][i]
+				ws.cell(row=i+1, column = next_column_to_use+1).value = str(mapping['integer_strings'][i])
+			next_column_to_use += 2
 		# mapping = self.dimension_integer_mapping
 		# assert len(mapping['values']) == len(mapping['integers'])
 		# for i in range(len(mapping['values'])):

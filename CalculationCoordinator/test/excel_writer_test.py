@@ -5,7 +5,7 @@ import os, sys
 from openpyxl import load_workbook
 from openpyxl import Workbook
 from unittest import mock
-from SurveyReportingSystem.ConfigurationReader import ConfigurationReader, Dimension
+from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
 
 class WriteExcelTestCase(unittest.TestCase):
 
@@ -25,6 +25,9 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.cuts_for_excel_menu_results = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None']]
 		config_reader.cuts_for_excel_menu = mock.MagicMock(return_value = self.cuts_for_excel_menu_results)
 		coordinator.config = config_reader
+
+		config_reader.all_dimensions = mock.MagicMock(return_value = [ConfigurationReader.Dimension(title="Gender")])
+		coordinator.get_integer_string_mapping = mock.MagicMock(return_value= {'integer_strings':['0','1'],'labels':['male','female']})
 
 		coordinator.dimension_integer_mapping = {'values': self.mapping_values,'integers':self.mapping_integers}
 		coordinator.excel_dashboard_file = 'test_file.xlsx'
@@ -52,7 +55,12 @@ class WriteExcelTestCase(unittest.TestCase):
 			self.assertTrue(row_matches_expected)
 
 	def test_writing_menu_translations(self):
-		pass
+		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
+		assert ws.cell(row=0,column=5).value == "Gender"
+		assert ws.cell(row=1,column=5).value == "male"
+		assert ws.cell(row=2,column=5).value == "female"
+		assert ws.cell(row=1,column=6).value == 0
+		assert ws.cell(row=2,column=6).value == 1
 
 
 	def test_write_master_as_excel(self):
@@ -80,7 +88,7 @@ class WriteExcelTestCase(unittest.TestCase):
 	def tearDown(self):
 		try:
 			pass
-			os.remove('test_file.xlsx')
+			# os.remove('test_file.xlsx')
 		except:
 			pass
 

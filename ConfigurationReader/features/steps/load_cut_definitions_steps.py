@@ -104,5 +104,5 @@ def step(context):
 
 @then('all_dimensions has dimensions titled "Ethnicity" and "Grade"')
 def step(context):
-	dimension_titles = [dimension.title for dimension_title, dimension in context.reader.all_dimensions().items()]
+	dimension_titles = [dimension.title for dimension in context.reader.all_dimensions()]
 	assert set(dimension_titles) == {'Ethnicity','Grade'}
