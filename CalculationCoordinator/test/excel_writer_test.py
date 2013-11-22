@@ -5,7 +5,7 @@ import os, sys
 from openpyxl import load_workbook
 from openpyxl import Workbook
 from unittest import mock
-from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
+from SurveyReportingSystem.ConfigurationReader import ConfigurationReader, Dimension
 
 class WriteExcelTestCase(unittest.TestCase):
 

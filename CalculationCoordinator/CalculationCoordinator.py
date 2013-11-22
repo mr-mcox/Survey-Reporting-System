@@ -73,6 +73,12 @@ class CalculationCoordinator(object):
 		}
 		assert format_string.format(0) not in self.dimension_integer_mapping['integers']
 
+	def get_integer_string_mapping(self, dimension):
+		assert dimension in self.labels_for_cut_dimensions
+		mapping_as_dict = self.labels_for_cut_dimensions[dimension]
+		sorted_labels = sorted(mapping_as_dict.keys())
+		return {'integer_strings':[mapping_as_dict[label] for label in sorted_labels],'labels':sorted_labels}
+
 	def create_row_column_headers(self):
 		for key, df in self.computations_generated.items():
 			remaining_column = list(set(df.columns) - {'question_code','aggregation_value','result_type'})[0]
