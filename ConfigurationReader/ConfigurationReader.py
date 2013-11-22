@@ -85,3 +85,4 @@ class Cut(object):
 class Dimension(object):
 	def __init__(self,**kwargs):
 		self.title = kwargs.pop('title',None)
+		self.not_included_label = str(self.title) + " Not Used"

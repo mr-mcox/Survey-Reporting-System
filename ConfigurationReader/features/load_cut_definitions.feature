@@ -39,3 +39,8 @@ Feature: Determine the cuts desired from a configuration file
 		When a new dimension is created that has the title "Ethnicity"
 		When a new dimension is created that has the title "Grade"
 		Then all_dimensions has dimensions titled "Ethnicity" and "Grade"
+
+	Scenario: When a dimension is created, by default it should have a not included label
+		Given basic set of cut and dimensions in config file
+		When a new dimension is created that has the title "Ethnicity"
+		Then the dimension has a not included label of "Ethnicity Not Used"

@@ -106,3 +106,7 @@ def step(context):
 def step(context):
 	dimension_titles = [dimension.title for dimension in context.reader.all_dimensions()]
 	assert set(dimension_titles) == {'Ethnicity','Grade'}
+
+@then('the dimension has a not included label of "Ethnicity Not Used"')
+def step(context):
+	assert context.result.not_included_label == "Ethnicity Not Used"
