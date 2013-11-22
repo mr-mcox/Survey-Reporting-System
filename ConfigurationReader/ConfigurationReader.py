@@ -41,6 +41,9 @@ class ConfigurationReader(object):
 		else:
 			return self._all_dimensions[title]
 
+	def all_dimensions(self):
+		return self._all_dimensions
+		
 	def cuts():
 		doc = "The cuts property."
 		def fget(self):

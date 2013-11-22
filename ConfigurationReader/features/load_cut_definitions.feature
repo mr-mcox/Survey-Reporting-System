@@ -21,7 +21,7 @@ Feature: Determine the cuts desired from a configuration file
 
 	Scenario: Dimensions are re-used from master list if they are already available
 		Given a dimension list with a dimension named "Ethnicity"
-		When a new dimension is created that has the title ethnicity
+		When a new dimension is created that has the title "Ethnicity"
 		Then the new dimension is the same as the original
 
 	Scenario: When a cut is created, it has a title attribute that can later be accessed
@@ -31,5 +31,11 @@ Feature: Determine the cuts desired from a configuration file
 
 	Scenario: When a dimension is created, it has a title attribute that can later be accessed
 		Given basic set of cut and dimensions in config file
-		When a new dimension is created that has the title ethnicity
+		When a new dimension is created that has the title "Ethnicity"
 		Then that dimension has a title of "Ethnicity"
+
+	Scenario: All dimensions are returned upon request
+		Given basic set of cut and dimensions in config file
+		When a new dimension is created that has the title "Ethnicity"
+		When a new dimension is created that has the title "Grade"
+		Then all_dimensions has dimensions titled "Ethnicity" and "Grade"

@@ -51,6 +51,9 @@ class WriteExcelTestCase(unittest.TestCase):
 			print(expected_row)
 			self.assertTrue(row_matches_expected)
 
+	def test_writing_menu_translations(self):
+		pass
+
 
 	def test_write_master_as_excel(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Sheet1')

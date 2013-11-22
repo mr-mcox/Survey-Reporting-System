@@ -8,7 +8,7 @@ To implement:
  ✔ Create helper function for converting row, column and dimension into range string @done (13-11-20 11:56)
  ✔ Refactor config input to use dicts for cuts than a list @done (13-11-20 13:16)
  ✔ Dimensions are re-used from master list if they are already available @done (13-11-20 13:43)
- ☐ Cuts are output in excel along with dimensions and include 'static' identifier
+ ✔ Cuts are output in excel along with dimensions and include 'static' identifier @done (13-11-20 16:42)
  ☐ Each dimension has two columns with mapping in excel
  ☐ display_value table row and column headers are constructed according to levels needed (checking whether each row is already in there)
 
@@ -19,6 +19,7 @@ Eventually:
 Refactor:
   ☐ Survey is indentified on questions table and not on results table
   ☐ Convert keys for CalculationCorinator to set to avoid order issues
+  ☐ Disentangle exporting to excel from compilation of results
 
 Maybe:
   ☐ Import 1314F8W survey data automatically on migration from old DB

@@ -84,9 +84,9 @@ def step(context):
 	context.reader = ConfigurationReader()
 	context.reader._all_dimensions = {'Ethnicity':Dimension(title='Ethnicity')}
 
-@when('a new dimension is created that has the title ethnicity')
-def step(context):
-	context.result = context.reader.create_dimension('Ethnicity')
+@when('a new dimension is created that has the title "{title}"')
+def step(context,title):
+	context.result = context.reader.create_dimension(title)
 
 @then('the new dimension is the same as the original')
 def step(context):
@@ -101,3 +101,8 @@ def step(context):
 @then('that dimension has a title of "Ethnicity"')
 def step(context):
 	context.result.title == "Ethnicity"
+
+@then('all_dimensions has dimensions titled "Ethnicity" and "Grade"')
+def step(context):
+	dimension_titles = [dimension.title for dimension_title, dimension in context.reader.all_dimensions().items()]
+	assert set(dimension_titles) == {'Ethnicity','Grade'}

@@ -15,7 +15,7 @@
 			"file": "NumericOutputCalculator/features/compute_net_strong_weak_average.feature",
 			"settings":
 			{
-				"buffer_size": 439,
+				"buffer_size": 3667,
 				"line_ending": "Unix"
 			}
 		},
@@ -23,7 +23,7 @@
 			"file": "NumericOutputCalculator/features/steps/basic_computations.py",
 			"settings":
 			{
-				"buffer_size": 851,
+				"buffer_size": 2619,
 				"line_ending": "Unix",
 				"name": "from behave"
 			}
@@ -32,7 +32,7 @@
 			"file": "NumericOutputCalculator/NumericOutputCalculator.py",
 			"settings":
 			{
-				"buffer_size": 204,
+				"buffer_size": 3315,
 				"line_ending": "Unix"
 			}
 		}
@@ -101,10 +101,10 @@
 	},
 	"file_history":
 	[
-		"/Users/mcox/Dropbox/MDIS/Code/SurveyReportingSystem/NumericOutputCalculator/__init__.py",
+		"/Users/mcox/Dropbox/MDIS/Code/PythonSurveyReportingSystem/NumericOutputCalculator/__init__.py",
 		"/Users/mcox/Library/Application Support/Sublime Text 2/Packages/SideBarEnhancements/messages/11.13.2012.1305.0.txt",
 		"/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1314F8W/Supporting_scripts/for_progress_report/config.yaml",
-		"/Users/mcox/Dropbox/MDIS/Code/CMContinuumET/Transform/features/determine_errant_records.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/PythonCMContinuumET/Transform/features/determine_errant_records.feature",
 		"/Users/mcox/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings"
 	],
 	"find":
@@ -149,15 +149,15 @@
 					"file": "NumericOutputCalculator/features/compute_net_strong_weak_average.feature",
 					"settings":
 					{
-						"buffer_size": 439,
+						"buffer_size": 3667,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								398,
-								439
+								0,
+								0
 							]
 						],
 						"settings":
@@ -355,7 +355,8 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Cucumber/Cucumber Plain Text Feature.tmLanguage"
+							"syntax": "Packages/Cucumber/Cucumber Plain Text Feature.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -368,15 +369,15 @@
 					"file": "NumericOutputCalculator/features/steps/basic_computations.py",
 					"settings":
 					{
-						"buffer_size": 851,
+						"buffer_size": 2619,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								842,
-								842
+								0,
+								0
 							]
 						],
 						"settings":
@@ -575,7 +576,9 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Python/Python.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -588,15 +591,15 @@
 					"file": "NumericOutputCalculator/NumericOutputCalculator.py",
 					"settings":
 					{
-						"buffer_size": 204,
+						"buffer_size": 3315,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								204,
-								204
+								0,
+								0
 							]
 						],
 						"settings":
@@ -794,10 +797,11 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Python/Python.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 248.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
