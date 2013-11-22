@@ -5,6 +5,7 @@ class ConfigurationReader(object):
 	def __init__(self, **kwargs):
 		self.config = dict()
 		self._all_dimensions = dict()
+		self.number_of_levels = 3
 
 	def cuts_to_be_created(self):
 		all_cut_fields = [{}]
@@ -45,7 +46,7 @@ class ConfigurationReader(object):
 		"""Returns a list of all dimnsions used by this ConfigurationReader"""
 		return [dimension for key, dimension in self._all_dimensions.items()]
 
-	def dimensions_by_cuts(self):
+	def columns_for_row_header(self):
 		return {cut.title:cut.dimensions for cut_title, cut in self.cuts.items()}
 		
 	def cuts():
