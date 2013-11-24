@@ -32,7 +32,8 @@ def step(context):
 
 @when('compute net with cut_demographic = region is run')
 def step(context):
-	context.coordinator.compute_aggregation(cut_demographic='region',result_type='net')
+	context.coordinator.result_types =['net']
+	context.coordinator.compute_aggregation(cut_demographic='region')
 
 @then('the display_value including region for question_code 1 and region "Atlanta" is 0.5')
 def step(context):
@@ -41,7 +42,8 @@ def step(context):
 
 @when('compute net with cut_demographic = region and gender is run')
 def step(context):
-	context.coordinator.compute_aggregation(cut_demographic=['region','gender'],result_type='net')
+	context.coordinator.result_types =['net']
+	context.coordinator.compute_aggregation(cut_demographic=['region','gender'])
 
 @then('computations_generated has a length of 2')
 def step(context):

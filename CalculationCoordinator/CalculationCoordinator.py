@@ -9,7 +9,8 @@ class CalculationCoordinator(object):
 	def __init__(self, **kwargs):
 		self.results = kwargs.pop('results',None)
 		self.demographic_data = kwargs.pop('demographic_data',None)
-		self.computations_generated = dict()	
+		self.computations_generated = dict()
+		self.result_types = kwargs.pop('result_types',['net'])
 
 	def get_aggregation(self,**kwargs):
 		cuts = kwargs.pop('cuts',None)
@@ -24,10 +25,14 @@ class CalculationCoordinator(object):
 
 	def compute_aggregation(self,**kwargs):
 		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=self.results,demographic_data=self.demographic_data)
-		calculations = calculator.compute_aggregation(**kwargs)
+		assert type(self.result_types) == list
+
+		calcs = list()
+		for result_type in self.result_types:
+			calcs.append(calculator.compute_aggregation(result_type=result_type,**kwargs))
+		calculations = pd.concat(calcs)
 
 		cuts = kwargs.pop('cut_demographic',None)
-		result_type = kwargs.pop('result_type',None)
 
 		if type(cuts) != list:
 			cuts = [cuts]

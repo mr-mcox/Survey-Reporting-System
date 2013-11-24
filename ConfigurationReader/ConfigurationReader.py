@@ -13,16 +13,15 @@ class ConfigurationReader(object):
 		assert 'cuts' in self.config
 		assert type(config['cuts']) == dict
 
-		for cut_title, cut in config['cuts'].items():
-			assert 'dimensions' in cut
-			assert type(cut['dimensions']) == list
-			number_of_levels = len(cut['dimensions'])
+		for cut_title, cut in self.cuts.items():
+			assert type(cut.dimensions) == list
+			number_of_levels = len(cut.dimensions)
 			for i in range(2**number_of_levels):
 				levels_for_this = []
 				bit_mask = BitArray(uint=i,length=number_of_levels)
 				for j, bit in enumerate(bit_mask):
 					if bit == True:
-						levels_for_this.append(cut['dimensions'][j])
+						levels_for_this.append(cut.dimensions[j].title)
 				all_cut_fields.append(set(levels_for_this))
 		return all_cut_fields
 

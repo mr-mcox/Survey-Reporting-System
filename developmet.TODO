@@ -9,8 +9,14 @@ To implement:
  ✔ Refactor config input to use dicts for cuts than a list @done (13-11-20 13:16)
  ✔ Dimensions are re-used from master list if they are already available @done (13-11-20 13:43)
  ✔ Cuts are output in excel along with dimensions and include 'static' identifier @done (13-11-20 16:42)
- ☐ Each dimension has two columns with mapping in excel
- ☐ display_value table row and column headers are constructed according to levels needed (checking whether each row is already in there)
+ ✔ CalcCoordinator uses result_type specified by class attribute rather than passed variable @done (13-11-24 10:38)
+ ☐ CalcCoordinator computes multiple result types at the same time
+ ☐ CalcCoordinator accepts a list with blanks for cuts
+ ☐ ConfigReader specifies cuts needed as a list with blanks
+ ☐ ColcCoordinator assembles row and column headers and calc from a ConfigReader object
+ ☐ Make list of named ranges needed
+ ☐ Add named ranges to output for excel
+ ☐ Create end to end test for what has been done so far
 
 Eventually:
   ☐ Integer strings in order of sorted labels for individual columns
