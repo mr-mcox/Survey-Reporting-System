@@ -15,7 +15,7 @@ To implement:
  ✔ ConfigReader specifies cuts needed as a list with blanks @done (13-11-24 11:44)
  ✔ Add zero fill when number of levels is less than number of dimensions @done (13-11-24 11:53)
  ✔ Refactor convert dimensions to integers to operate on one cut rather than all saved cuts simultaneously @done (13-11-24 13:28)
- ☐ Refactor create_row_column_headers to operate on one cut rather than all cuts simultaneously
+ ✔ Refactor create_row_column_headers to operate on one cut rather than all cuts simultaneously @done (13-11-24 13:59)
  ☐ CalcCoordinator assembles row and column headers and calc from a ConfigReader object
  ☐ CalcCoordinator generates at least one value for a combinations of the demographics that aren't present so that excel displays something for them
  ☐ Make list of named ranges needed

@@ -107,12 +107,6 @@ def step(context):
 			'result_type':['6','6','6'],
 			'aggregation_value':[0.2,0.3,0.4]
 			}),
-		('region','strong') : pd.DataFrame({
-			'question_code':['0','1','1'],
-			'region':['4','4',"5"],
-			'result_type':['7','7','7'],
-			'aggregation_value':[0.2,0.3,0.4]
-			}),
 	}
 
 @then('each calcualation table has row and column header columns')
@@ -211,3 +205,20 @@ def step(context):
 def step(context):
 	results = context.coordinator.get_aggregation(cuts=['gender','region'])
 	assert results.set_index(['question_code','region','gender']).loc[(1,'Atlanta','Female'),'aggregation_value'] == 0.5
+
+@given('data frame of compuations')
+def step(context):
+	context.df = pd.DataFrame(import_table_data(context.table))
+	context.coordinator = CalculationCoordinator()
+
+@when('create_row_column_headers is run with cuts = [gender, region]')
+def step(context):
+	context.result  = context.coordinator.create_row_column_headers(context.df, ['gender','region'])
+
+@then('column "{column}" has value "{value}"')
+def step(context,column,value):
+	assert value in context.result[column].unique().tolist()
+
+@when('create_row_column_headers is run with cuts = [gender, None]')
+def step(context):
+		context.result  = context.coordinator.create_row_column_headers(context.df, ['gender',None])

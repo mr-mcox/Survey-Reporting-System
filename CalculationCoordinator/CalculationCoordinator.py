@@ -13,7 +13,8 @@ class CalculationCoordinator(object):
 		self.result_types = kwargs.pop('result_types',['net'])
 		self.labels_for_cut_dimensions = dict()
 		self.integers_for_cut_dimensions = dict()
-		self.max_integer_used_for_integer_string = 1 
+		self.max_integer_used_for_integer_string = 1
+		self.zero_integer_string = '0'
 
 	def get_aggregation(self,**kwargs):
 		cuts = kwargs.pop('cuts',None)
@@ -56,6 +57,7 @@ class CalculationCoordinator(object):
 						self.max_integer_used_for_integer_string += 1
 
 		format_string = "{0:0" + str(math.floor(self.max_integer_used_for_integer_string/10)) + "d}"
+		self.zero_integer_string = format_string.format(0)
 
 		integer_strings_by_column = { column_key : { value : format_string.format(x) for (value, x) in values_dict.items()} for (column_key,values_dict) in values_by_column.items()}
 
@@ -86,11 +88,21 @@ class CalculationCoordinator(object):
 		sorted_labels = sorted(mapping_as_dict.keys())
 		return {'integer_strings':[mapping_as_dict[label] for label in sorted_labels],'labels':sorted_labels}
 
-	def create_row_column_headers(self):
-		for key, df in self.computations_generated.items():
-			remaining_column = list(set(df.columns) - {'question_code','aggregation_value','result_type'})[0]
-			df['row_heading'] = df[remaining_column]
-			df['column_heading'] = df.apply(lambda x: '%s;%s' % (x['question_code'],x['result_type']),axis=1)
+	def create_row_column_headers(self, df, cuts):
+		remaining_column = list(set(df.columns) - {'question_code','aggregation_value','result_type'})[0]
+		df['row_heading'] = df.apply( lambda row: self.concat_row_items(row,cuts),axis=1)
+		df['column_heading'] = df.apply(lambda x: '%s;%s' % (x['question_code'],x['result_type']),axis=1)
+		return df
+
+	def concat_row_items(self,row, columns):
+		items_in_order = list()
+		for column in columns:
+			if column == None:
+				items_in_order.append(self.zero_integer_string)
+			else:
+				assert column in row
+				items_in_order.append(str(row[column]))
+		return ";".join(items_in_order)
 
 	def master_aggregation():
 		doc = "The master_aggregation property."
