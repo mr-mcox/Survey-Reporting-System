@@ -17,7 +17,7 @@ def step(context):
 
 @then('it returns the cuts in the yaml and an empty cut')
 def step(context):
-	cuts_in_the_yaml = [{},{'ethnicity'},{'region'}]
+	cuts_in_the_yaml = [[None],['ethnicity'],['region']]
 	for yaml_cut in cuts_in_the_yaml:
 		cuts_match = False
 		for cut in context.cuts:
@@ -35,7 +35,16 @@ def step(context):
 
 @then('it returns every combination of each of the dimensions being used or not used')
 def step(context):
-	cuts_in_the_yaml = [{},{'ethnicity'},{'region'},{'corps'},{'ethnicity','region'},{'ethnicity','corps'},{'region','corps'},{'ethnicity','corps','region'}]
+	cuts_in_the_yaml = [
+						['ethnicity','region','corps'],
+						[None,'region','corps'],
+						['ethnicity',None,'corps'],
+						['ethnicity','region',None],
+						[None,None,'corps'],
+						[None,'region',None],
+						['ethnicity',None,None],
+						[None,None,None],
+						]
 	for yaml_cut in cuts_in_the_yaml:
 		cuts_match = False
 		for cut in context.cuts:

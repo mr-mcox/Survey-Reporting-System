@@ -22,7 +22,9 @@ class ConfigurationReader(object):
 				for j, bit in enumerate(bit_mask):
 					if bit == True:
 						levels_for_this.append(cut.dimensions[j].title)
-				all_cut_fields.append(set(levels_for_this))
+					else:
+						levels_for_this.append(None)
+				all_cut_fields.append(levels_for_this)
 		return all_cut_fields
 
 	def cuts_for_excel_menu(self):
@@ -44,7 +46,7 @@ class ConfigurationReader(object):
 	def all_dimensions(self):
 		"""Returns a list of all dimnsions used by this ConfigurationReader"""
 		return [dimension for key, dimension in self._all_dimensions.items()]
-				
+
 	def cuts():
 		doc = "The cuts property."
 		def fget(self):
