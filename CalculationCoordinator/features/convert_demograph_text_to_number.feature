@@ -78,4 +78,3 @@ Feature: In order to allow any text to be used in cutting yet maintain sane sort
 			| 1             | 4      | 5      | 3           | 0.3               |
 		When create_row_column_headers is run with cuts = [gender, None]
 		Then column "row_heading" has value "2.0;0"
-

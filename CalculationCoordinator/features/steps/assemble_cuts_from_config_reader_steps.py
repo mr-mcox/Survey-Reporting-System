@@ -7,18 +7,17 @@ from CalculationCoordinator import CalculationCoordinator
 def step(context):
 	config_reader = ConfigurationReader.ConfigurationReader()
 	config_reader.cuts_to_be_created = mock.MagicMock(return_value = [["region","gender"], ["region",None]])
-	context.cc = CalculationCoordinator(config = config_reader)
+	context.coordinator.config = config_reader
 	context.config_reader = config_reader
 
 @given('the config reader has 2 levels by default')
 def step(context):
 	context.config_reader.default_number_of_levels = 2
 
-@when('master_aggregation is accessed')
+@when('compute_cuts_from_config is run')
 def step(context):
-	pass
+	context.result = context.coordinator.compute_cuts_from_config()
 
 @then('master_aggregation row_headers has six rows')
 def step(context):
-	pass
-	# assert len(context.cc.master_aggregation['row_heading'].unique()) == 6
+	assert len(context.result['row_heading'].unique()) == 6

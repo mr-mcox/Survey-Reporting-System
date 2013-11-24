@@ -9,6 +9,7 @@ class CalculationCoordinator(object):
 	def __init__(self, **kwargs):
 		self.results = kwargs.pop('results',None)
 		self.demographic_data = kwargs.pop('demographic_data',None)
+		self.config = kwargs.pop('config',None)
 		self.computations_generated = dict()
 		self.result_types = kwargs.pop('result_types',['net'])
 		self.labels_for_cut_dimensions = dict()
@@ -27,6 +28,7 @@ class CalculationCoordinator(object):
 		return self.computations_generated[aggregation_key]
 
 	def compute_aggregation(self,**kwargs):
+		print(self.results)
 		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=self.results,demographic_data=self.demographic_data)
 		assert type(self.result_types) == list
 		orig_cuts = kwargs.pop('cut_demographic',None)
@@ -42,6 +44,7 @@ class CalculationCoordinator(object):
 		aggregation_key = tuple(cuts)
 
 		self.computations_generated[aggregation_key] = calculations
+		return calculations
 
 	def replace_dimensions_with_integers(self, df = None):
 
@@ -104,19 +107,16 @@ class CalculationCoordinator(object):
 				items_in_order.append(str(row[column]))
 		return ";".join(items_in_order)
 
-	def master_aggregation():
-		doc = "The master_aggregation property."
-		def fget(self):
-			dfs = list()
-			for key, df in self.computations_generated.items():
-				dfs.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
-			return pd.concat(dfs)
-		def fset(self, value):
-			self._master_aggregation = value
-		def fdel(self):
-			del self._master_aggregation
-		return locals()
-	master_aggregation = property(**master_aggregation())
+	def compute_cuts_from_config(self):
+		assert self.config != None
+		assert type(self.config) == ConfigurationReader.ConfigurationReader
+		all_aggregations = list()
+		for cut_set in self.config.cuts_to_be_created():
+			df = self.compute_aggregation(cut_demographic=cut_set)
+			df = self.replace_dimensions_with_integers(df)
+			df = self.create_row_column_headers(df,cuts=cut_set)
+			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
+		return pd.concat(all_aggregations)
 
 	def export_to_excel(self,filename):
 		assert type(self.config) == ConfigurationReader.ConfigurationReader
