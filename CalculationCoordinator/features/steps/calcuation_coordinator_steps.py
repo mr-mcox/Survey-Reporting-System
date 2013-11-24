@@ -42,7 +42,7 @@ def step(context):
 @when('compute net with cut_demographic = region and gender is run')
 def step(context):
 	context.coordinator.result_types =['net']
-	context.coordinator.compute_aggregation(cut_demographic=['region','gender'])
+	context.result = context.coordinator.compute_aggregation(cut_demographic=['region','gender'])
 
 @then('computations_generated has a length of 2')
 def step(context):
@@ -222,3 +222,12 @@ def step(context,column,value):
 @when('create_row_column_headers is run with cuts = [gender, None]')
 def step(context):
 		context.result  = context.coordinator.create_row_column_headers(context.df, ['gender',None])
+
+@then('there is a row with SoDak and Female')
+def step(context):
+	res = context.result.set_index(['region','gender'])
+	assert res.index.isin([('SoDak','Female')]).sum() > 0
+
+@given('ensure_combination_for_every_set_of_demographics is True')
+def step(context):
+	context.coordinator.ensure_combination_for_every_set_of_demographics = True

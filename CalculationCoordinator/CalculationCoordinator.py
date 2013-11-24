@@ -3,6 +3,7 @@ from SurveyReportingSystem.NumericOutputCalculator import NumericOutputCalculato
 from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
 import math
 from openpyxl import load_workbook, cell
+import copy
 
 class CalculationCoordinator(object):
 	"""docstring for CalculationCoordinator"""
@@ -16,6 +17,7 @@ class CalculationCoordinator(object):
 		self.integers_for_cut_dimensions = dict()
 		self.max_integer_used_for_integer_string = 1
 		self.zero_integer_string = '0'
+		self.ensure_combination_for_every_set_of_demographics = False
 
 	def get_aggregation(self,**kwargs):
 		cuts = kwargs.pop('cuts',None)
@@ -28,7 +30,6 @@ class CalculationCoordinator(object):
 		return self.computations_generated[aggregation_key]
 
 	def compute_aggregation(self,**kwargs):
-		print(self.results)
 		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=self.results,demographic_data=self.demographic_data)
 		assert type(self.result_types) == list
 		orig_cuts = kwargs.pop('cut_demographic',None)
@@ -41,10 +42,52 @@ class CalculationCoordinator(object):
 			calcs.append(calculator.compute_aggregation(result_type=result_type,cut_demographic=cuts,**kwargs))
 		calculations = pd.concat(calcs)
 
+		if self.ensure_combination_for_every_set_of_demographics:
+			calculations = self.modify_for_combinations_of_demographics(df=calculations,cuts=cuts)
+
 		aggregation_key = tuple(cuts)
 
 		self.computations_generated[aggregation_key] = calculations
 		return calculations
+
+	def modify_for_combinations_of_demographics(self, df, cuts):
+
+		first_result_type = df.ix[0,'result_type']
+
+		#Initialize with first list
+		assert cuts[0] in self.demographic_data
+		master_list_of_demographics = [ [item] for item in self.demographic_data[cuts[0]].unique().tolist()]
+
+		#Create list of combinations to look for
+		for i in range(len(cuts) - 1):
+			cur_cut = cuts[i+1]
+			assert cur_cut in self.demographic_data
+			cur_cut_values = self.demographic_data[cur_cut].unique().tolist()
+			value_set_for_cut = list()
+			for value in cur_cut_values:
+				list_to_add_onto = copy.deepcopy(master_list_of_demographics)
+				for item in list_to_add_onto:
+					item.append(value)
+				value_set_for_cut += list_to_add_onto
+			master_list_of_demographics = value_set_for_cut
+
+		#Add new rows where necessary
+		df_with_cut_index = df.copy().set_index(cuts)
+		for value_set in master_list_of_demographics:
+			if df_with_cut_index.index.isin([tuple(value_set)]).sum()== 0:
+				print("ADDING NEW ROW!")
+				print('value set is ' + str(value_set))
+				dict_for_df = dict()
+				for i in range(len(cuts)):
+					dict_for_df[cuts[i]] = [value_set[i]]
+				dict_for_df['result_type'] = [first_result_type]
+				new_row = pd.DataFrame(dict_for_df)
+				print("new row is " + new_row)
+
+				df = pd.concat([df,new_row])
+		return df
+
+
 
 	def replace_dimensions_with_integers(self, df = None):
 
