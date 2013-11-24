@@ -18,8 +18,6 @@ def step(context):
 @then('it returns the cuts in the yaml and an empty cut')
 def step(context):
 	cuts_in_the_yaml = [{},{'ethnicity'},{'region'}]
-	print(cuts_in_the_yaml)
-	print(context)
 	for yaml_cut in cuts_in_the_yaml:
 		cuts_match = False
 		for cut in context.cuts:
