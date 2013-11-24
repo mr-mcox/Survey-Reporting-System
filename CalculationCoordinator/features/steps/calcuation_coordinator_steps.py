@@ -51,19 +51,22 @@ def step(context):
 @given('computations generated that include a cut by gender and a cut by region')
 def step(context):
 	context.coordinator = CalculationCoordinator()
-	context.coordinator.computations_generated = {
-		('gender','result_type_net') : pd.DataFrame({'question_code':[0,1,1],'gender':['Male','Female',"Male"]}),
-		('region','result_type_net') : pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
-	}
-	context.coordinator.result_types =['net']
+	context.computations_generated_1 = pd.DataFrame({'question_code':[0,1,1],'gender':['Male','Female',"Male"]})
+	context.computations_generated_2 = pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]})
 
 @when('replace_dimensions_with_integers is run')
 def step(context):
 	context.coordinator.replace_dimensions_with_integers()
 
+@when('replace_dimensions_with_integers for both computations is run')
+def step(context):
+	context.results = list()
+	context.results.append(context.coordinator.replace_dimensions_with_integers(context.computations_generated_1))
+	context.results.append(context.coordinator.replace_dimensions_with_integers(context.computations_generated_2))
+
 @then('columns of computations_generated are strings with filled numbers')
 def step(context):
-	for key, df in context.coordinator.computations_generated.items():
+	for df in context.results:
 		for column in df.columns:
 			if column != 'aggregation_value':
 				for value in df[column].unique():
@@ -73,21 +76,14 @@ def step(context):
 @then('same number of unique values in dimension columns exists before and after')
 def step(context):
 	values = list()
-	for key, df in context.coordinator.computations_generated.items():
+	for df in context.results:
 		for column in df.columns:
+			print(df)
 			if column != 'aggregation_value':
 				values = values + df[column].unique().tolist()
 	values = set(values)
+	print(values)
 	assert len(values) == 6
-
-@given('computations generated that include a cut by gender and a cut by region with duplicates')
-def step(context):
-	context.coordinator = CalculationCoordinator()
-	context.coordinator.computations_generated = {
-		('gender','result_type_net') : pd.DataFrame({'question_code':[0,1,1],'gender':['Male','Female',"Male"]}),
-		('region','result_type_net') : pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
-		('region','strong') : pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
-	}
 
 @then('there is a mapping of the values back to numbers')
 def step(context):
@@ -118,9 +114,6 @@ def step(context):
 			'aggregation_value':[0.2,0.3,0.4]
 			}),
 	}
-@when('create row and column headers is run')
-def step(context):
-	context.coordinator.create_row_column_headers()
 
 @then('each calcualation table has row and column header columns')
 def step(context):

@@ -18,24 +18,18 @@ Feature: In order to allow any text to be used in cutting yet maintain sane sort
 
 	Scenario: Identify all demographic columns across multiple cuts
 		Given computations generated that include a cut by gender and a cut by region
-		When replace_dimensions_with_integers is run
-		Then columns of computations_generated are strings with filled numbers
-		Then same number of unique values in dimension columns exists before and after
-
-	Scenario: Identify all demographic columns across multiple cuts when there are the same values across multiple cuts
-		Given computations generated that include a cut by gender and a cut by region with duplicates
-		When replace_dimensions_with_integers is run
+		When replace_dimensions_with_integers for both computations is run
 		Then columns of computations_generated are strings with filled numbers
 		Then same number of unique values in dimension columns exists before and after
 
 	Scenario: After changing all dimensions to numbers, we have a mapping that we can re-assemble the cuts with
-		Given computations generated that include a cut by gender and a cut by region with duplicates
-		When replace_dimensions_with_integers is run
+		Given computations generated that include a cut by gender and a cut by region
+		When replace_dimensions_with_integers for both computations is run
 		Then there is a mapping of the values back to numbers
 
 	Scenario: Mapping is sorted by integer string so that excel doesn't need to re-sort
-		Given computations generated that include a cut by gender and a cut by region with duplicates
-		When replace_dimensions_with_integers is run
+		Given computations generated that include a cut by gender and a cut by region
+		When replace_dimensions_with_integers for both computations is run
 		Then the mapping is in order by integer strings
 		Then the values column corresponds with the appropriate integer strings
 

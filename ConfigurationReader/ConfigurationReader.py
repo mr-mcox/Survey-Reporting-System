@@ -13,7 +13,6 @@ class ConfigurationReader(object):
 		assert 'cuts' in self.config
 		assert type(config['cuts']) == dict
 
-
 		for cut_title, cut in self.cuts.items():
 			assert type(cut.dimensions) == list
 			number_of_levels = len(cut.dimensions)

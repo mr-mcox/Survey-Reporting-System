@@ -11,6 +11,9 @@ class CalculationCoordinator(object):
 		self.demographic_data = kwargs.pop('demographic_data',None)
 		self.computations_generated = dict()
 		self.result_types = kwargs.pop('result_types',['net'])
+		self.labels_for_cut_dimensions = dict()
+		self.integers_for_cut_dimensions = dict()
+		self.max_integer_used_for_integer_string = 1 
 
 	def get_aggregation(self,**kwargs):
 		cuts = kwargs.pop('cuts',None)
@@ -35,50 +38,47 @@ class CalculationCoordinator(object):
 			calcs.append(calculator.compute_aggregation(result_type=result_type,cut_demographic=cuts,**kwargs))
 		calculations = pd.concat(calcs)
 
-		
-
-		
 		aggregation_key = tuple(cuts)
 
 		self.computations_generated[aggregation_key] = calculations
 
-	def replace_dimensions_with_integers(self):
-		current_index = 1
+	def replace_dimensions_with_integers(self, df = None):
 
-		values_by_column = dict()
+		values_by_column = self.integers_for_cut_dimensions
 		#Collect all values by column
-		for key, df in self.computations_generated.items():
-			for column in df.columns:
-				if column != 'aggregation_value':
-					if column not in values_by_column:
-						values_by_column[column] = dict()
-					for value in df[column].unique():
-						if value not in values_by_column[column]:
-							values_by_column[column][value] = current_index
-							current_index += 1
+		for column in df.columns:
+			if column != 'aggregation_value':
+				if column not in values_by_column:
+					values_by_column[column] = dict()
+				for value in df[column].unique():
+					if value not in values_by_column[column]:
+						values_by_column[column][value] = self.max_integer_used_for_integer_string
+						self.max_integer_used_for_integer_string += 1
 
-		format_string = "{0:0" + str(math.floor(current_index/10)) + "d}"
+		format_string = "{0:0" + str(math.floor(self.max_integer_used_for_integer_string/10)) + "d}"
 
-		values_by_column = { column_key : { value : format_string.format(x) for (value, x) in values_dict.items()} for (column_key,values_dict) in values_by_column.items()}
+		integer_strings_by_column = { column_key : { value : format_string.format(x) for (value, x) in values_dict.items()} for (column_key,values_dict) in values_by_column.items()}
 
 		#Map values to column
-		for key, df in self.computations_generated.items():
-			for column in df.columns:
-				if column != 'aggregation_value':
-					value_map = {key : value for (key, value) in values_by_column[column].items()}
-					df[column] = df[column].map(value_map)
+		for column in df.columns:
+			if column != 'aggregation_value':
+				value_map = {key : value for (key, value) in integer_strings_by_column[column].items()}
+				df[column] = df[column].map(value_map)
 
 		#Create mapping to be able to convert back
 		mapping = dict()
-		for column, value_dict in values_by_column.items():
+		for column, value_dict in integer_strings_by_column.items():
 			for label, integer in value_dict.items():
 				mapping[integer] = label
-		self.labels_for_cut_dimensions = values_by_column
+		self.labels_for_cut_dimensions = integer_strings_by_column
+		self.integers_for_cut_dimensions = values_by_column
 		self.dimension_integer_mapping = {
 			'integers': sorted(mapping.keys()),
 			'values': [mapping[key] for key in sorted(mapping.keys())] 
 		}
 		assert format_string.format(0) not in self.dimension_integer_mapping['integers']
+
+		return df
 
 	def get_integer_string_mapping(self, dimension):
 		assert dimension in self.labels_for_cut_dimensions
