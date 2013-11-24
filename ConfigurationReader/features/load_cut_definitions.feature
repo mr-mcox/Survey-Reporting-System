@@ -44,3 +44,9 @@ Feature: Determine the cuts desired from a configuration file
 		Given basic set of cut and dimensions in config file
 		When a new dimension is created that has the title "Ethnicity"
 		Then the dimension has a not included label of "Ethnicity Not Used"
+
+	Scenario: Add zero fill when number of levels is less than number of dimensions
+		Given input yaml that has one one dimension
+		Given that that config has 3 levels by default
+		When cuts_to_be_created is called
+		Then it returns the cuts in the yaml and an empty cut with two blanks at the end of the list

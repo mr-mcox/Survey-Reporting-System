@@ -10,6 +10,7 @@ def step(context):
 	'Region':{'dimensions':['region']}
 	}
 	}
+	context.reader.default_number_of_levels = 1
 
 @when('cuts_to_be_created is called')
 def step(context):
@@ -117,3 +118,17 @@ def step(context):
 @then('the dimension has a not included label of "Ethnicity Not Used"')
 def step(context):
 	assert context.result.not_included_label == "Ethnicity Not Used"
+
+@given('that that config has 3 levels by default')
+def step(context):
+	context.reader.default_number_of_levels = 3
+
+@then('it returns the cuts in the yaml and an empty cut with two blanks at the end of the list')
+def step(context):
+	cuts_in_the_yaml = [[None,None,None],['ethnicity',None,None],['region',None,None]]
+	for yaml_cut in cuts_in_the_yaml:
+		cuts_match = False
+		for cut in context.cuts:
+			if cut == yaml_cut:
+				cuts_match = True
+		assert cuts_match

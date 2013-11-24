@@ -13,7 +13,7 @@ To implement:
  ✔ CalcCoordinator computes multiple result types at the same time @done (13-11-24 10:52)
  ✔ CalcCoordinator accepts a list with blanks for cuts @done (13-11-24 11:22)
  ✔ ConfigReader specifies cuts needed as a list with blanks @done (13-11-24 11:44)
- ☐ Add zero fill when number of levels is greater than number of dimensions
+ ✔ Add zero fill when number of levels is less than number of dimensions @done (13-11-24 11:53)
  ☐ ColcCoordinator assembles row and column headers and calc from a ConfigReader object
  ☐ Make list of named ranges needed
  ☐ Add named ranges to output for excel

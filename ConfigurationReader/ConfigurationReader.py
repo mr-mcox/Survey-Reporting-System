@@ -5,7 +5,7 @@ class ConfigurationReader(object):
 	def __init__(self, **kwargs):
 		self.config = dict()
 		self._all_dimensions = dict()
-		self.number_of_levels = 3
+		self.default_number_of_levels = 3
 
 	def cuts_to_be_created(self):
 		all_cut_fields = [{}]
@@ -13,9 +13,11 @@ class ConfigurationReader(object):
 		assert 'cuts' in self.config
 		assert type(config['cuts']) == dict
 
+
 		for cut_title, cut in self.cuts.items():
 			assert type(cut.dimensions) == list
 			number_of_levels = len(cut.dimensions)
+			zero_fill = [None for x in range(self.default_number_of_levels - number_of_levels )]
 			for i in range(2**number_of_levels):
 				levels_for_this = []
 				bit_mask = BitArray(uint=i,length=number_of_levels)
@@ -24,7 +26,7 @@ class ConfigurationReader(object):
 						levels_for_this.append(cut.dimensions[j].title)
 					else:
 						levels_for_this.append(None)
-				all_cut_fields.append(levels_for_this)
+				all_cut_fields.append(levels_for_this + zero_fill)
 		return all_cut_fields
 
 	def cuts_for_excel_menu(self):
