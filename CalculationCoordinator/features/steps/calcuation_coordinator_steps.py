@@ -209,3 +209,12 @@ def step(context):
 def step(context):
 	results = context.coordinator.get_aggregation(cuts='region')
 	assert set(results.result_type.unique()) == {'net','strong','weak'}
+
+@when('compute aggregation with cut_demographic = [gender,None,region] is run')
+def step(context):
+	context.coordinator.compute_aggregation(cut_demographic=['gender',None,'region'])
+
+@then('the display_value including region for question_code 1 and region "Atlanta" and gender "Female" is 0.5')
+def step(context):
+	results = context.coordinator.get_aggregation(cuts=['gender','region'])
+	assert results.set_index(['question_code','region','gender']).loc[(1,'Atlanta','Female'),'aggregation_value'] == 0.5
