@@ -32,12 +32,11 @@ def step(context):
 
 @when('compute net with cut_demographic = region is run')
 def step(context):
-	context.coordinator.result_types =['net']
 	context.coordinator.compute_aggregation(cut_demographic='region')
 
 @then('the display_value including region for question_code 1 and region "Atlanta" is 0.5')
 def step(context):
-	results = context.coordinator.get_aggregation(cuts='region',result_type='net')
+	results = context.coordinator.get_aggregation(cuts='region')
 	assert results.set_index(['question_code','region']).loc[(1,'Atlanta'),'aggregation_value'] == 0.5
 
 @when('compute net with cut_demographic = region and gender is run')
@@ -56,6 +55,7 @@ def step(context):
 		('gender','result_type_net') : pd.DataFrame({'question_code':[0,1,1],'gender':['Male','Female',"Male"]}),
 		('region','result_type_net') : pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',"SoDak"]}),
 	}
+	context.coordinator.result_types =['net']
 
 @when('replace_dimensions_with_integers is run')
 def step(context):
@@ -199,3 +199,13 @@ def step(context):
 			for i, string in enumerate(integers):
 				if string == integer:
 					assert dim['values'][i] == label
+
+@given('CalcCoordinator result types of net, strong and weak')
+def step(context):
+	context.coordinator.result_types = ['net','strong','weak']
+	print("Result types " + str(context.coordinator.result_types))
+
+@then('result_type of results includes net, strong and weak')
+def step(context):
+	results = context.coordinator.get_aggregation(cuts='region')
+	assert set(results.result_type.unique()) == {'net','strong','weak'}

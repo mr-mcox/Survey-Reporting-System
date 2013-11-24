@@ -37,4 +37,19 @@ Feature: In order to allow any text to be used in cutting yet maintain sane sort
 		Given computations generated that include a cut by gender and a cut by region with duplicates
 		When replace_dimensions_with_integers is run
 		Then the mapping is in order by integer strings
-		Then the values column corresponds with the appropriate integer strings		
+		Then the values column corresponds with the appropriate integer strings
+
+	Scenario: CalcCoordinator computes multiple result types at the same time
+		Given net formatted values
+			| respondent_id | question_code | net_formatted_value |
+			| 1             | 1           | 1     |
+			| 2             | 1           | 0     |
+			| 3             | 1           | -1    |
+		Given demographic data
+			| respondent_id | region  | gender |
+			| 1             | Atlanta | Female |
+			| 2             | Atlanta | Female |
+			| 3             | SoDak   | Male |
+		Given CalcCoordinator result types of net, strong and weak
+		When compute net with cut_demographic = region is run
+		Then result_type of results includes net, strong and weak

@@ -10,7 +10,7 @@ To implement:
  ✔ Dimensions are re-used from master list if they are already available @done (13-11-20 13:43)
  ✔ Cuts are output in excel along with dimensions and include 'static' identifier @done (13-11-20 16:42)
  ✔ CalcCoordinator uses result_type specified by class attribute rather than passed variable @done (13-11-24 10:38)
- ☐ CalcCoordinator computes multiple result types at the same time
+ ✔ CalcCoordinator computes multiple result types at the same time @done (13-11-24 10:52)
  ☐ CalcCoordinator accepts a list with blanks for cuts
  ☐ ConfigReader specifies cuts needed as a list with blanks
  ☐ ColcCoordinator assembles row and column headers and calc from a ConfigReader object

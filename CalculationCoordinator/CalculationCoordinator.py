@@ -14,11 +14,10 @@ class CalculationCoordinator(object):
 
 	def get_aggregation(self,**kwargs):
 		cuts = kwargs.pop('cuts',None)
-		result_type = kwargs.pop('result_type',None)
 		
 		if type(cuts) != list:
 			cuts = [cuts]
-		aggregation_key = tuple(cuts + ['result_type_' + result_type])
+		aggregation_key = tuple(cuts)
 
 		assert aggregation_key in self.computations_generated
 		return self.computations_generated[aggregation_key]
@@ -36,7 +35,7 @@ class CalculationCoordinator(object):
 
 		if type(cuts) != list:
 			cuts = [cuts]
-		aggregation_key = tuple(cuts + ['result_type_' + result_type])
+		aggregation_key = tuple(cuts)
 
 		self.computations_generated[aggregation_key] = calculations
 
