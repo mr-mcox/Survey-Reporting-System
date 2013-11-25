@@ -37,10 +37,8 @@ class WriteExcelTestCase(unittest.TestCase):
 				'column_heading': ['2.3','2.4','2.3','2.4'],
 				'aggregation_value': [0.5,0.5,0.5,0.5]
 			})
-
-		with mock.patch.object(CalculationCoordinator, 'master_aggregation', new_callable=mock.PropertyMock) as m:
-			m.return_value = master_aggregation
-			coordinator.export_to_excel('test_file.xlsx')
+		coordinator.compute_cuts_from_config = mock.MagicMock(return_value=master_aggregation)
+		coordinator.export_to_excel('test_file.xlsx')
 
 	def test_writing_cut_config(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')

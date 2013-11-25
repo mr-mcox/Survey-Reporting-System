@@ -162,7 +162,7 @@ class CalculationCoordinator(object):
 
 	def export_to_excel(self,filename):
 		assert type(self.config) == ConfigurationReader.ConfigurationReader
-		output_df = self.master_aggregation.set_index(['row_heading','column_heading'])
+		output_df = self.compute_cuts_from_config().set_index(['row_heading','column_heading'])
 		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
 		output_series.unstack().to_excel(filename, sheet_name='Sheet1')
 
