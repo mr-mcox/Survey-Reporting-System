@@ -53,6 +53,7 @@ class CalculationCoordinator(object):
 	def modify_for_combinations_of_demographics(self, df, cuts):
 
 		first_result_type = df.ix[0,'result_type']
+		first_question_code = df.ix[0,'question_code']
 
 		#Initialize with first list
 		assert cuts[0] in self.demographic_data
@@ -75,14 +76,12 @@ class CalculationCoordinator(object):
 		df_with_cut_index = df.copy().set_index(cuts)
 		for value_set in master_list_of_demographics:
 			if df_with_cut_index.index.isin([tuple(value_set)]).sum()== 0:
-				print("ADDING NEW ROW!")
-				print('value set is ' + str(value_set))
 				dict_for_df = dict()
 				for i in range(len(cuts)):
 					dict_for_df[cuts[i]] = [value_set[i]]
 				dict_for_df['result_type'] = [first_result_type]
+				dict_for_df['question_code'] = [first_question_code]
 				new_row = pd.DataFrame(dict_for_df)
-				print("new row is " + new_row)
 
 				df = pd.concat([df,new_row])
 		return df
