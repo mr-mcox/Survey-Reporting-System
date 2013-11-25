@@ -22,11 +22,21 @@ class NumericOutputCalculator(object):
 		result_type = kwargs.pop('result_type',None)
 		assert result_type != None
 
+		logging.debug("NumOutput cut_demographic is " + str(cut_demographic))
+		if type(cut_demographic) == list:
+			for cut in cut_demographic:
+				if cut != []:
+					assert cut in self.demographic_data.columns
+		elif cut_demographic != None:
+			assert cut_demographic in self.demographic_data.columns
+
 		nfv = self.responses.copy()
 		if not self.demographic_data.empty:
-			assert 'respondent_id' in nfv, "Expected respondent_id column in responses"
-			assert 'respondent_id' in self.demographic_data, "Expected respondent_id column in demographic_data"			
-			nfv = nfv.set_index('respondent_id').join(self.demographic_data.set_index('respondent_id').loc[:,cut_demographic], how = 'outer')
+			if cut_demographic != []:
+				assert 'respondent_id' in nfv, "Expected respondent_id column in responses"
+				assert 'respondent_id' in self.demographic_data, "Expected respondent_id column in demographic_data"
+				logging.debug("data sets to join " + str(nfv) + " and demographics " + str(self.demographic_data))			
+				nfv = nfv.set_index('respondent_id').join(self.demographic_data.set_index('respondent_id').loc[:,cut_demographic], how = 'outer')
 
 		cut_groupings = ['question_code']
 		if cut_demographic != None:

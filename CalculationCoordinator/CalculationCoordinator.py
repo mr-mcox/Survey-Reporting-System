@@ -4,6 +4,7 @@ from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
 import math
 from openpyxl import load_workbook, cell
 import copy
+import logging
 
 class CalculationCoordinator(object):
 	"""docstring for CalculationCoordinator"""
@@ -134,7 +135,7 @@ class CalculationCoordinator(object):
 		return {'integer_strings':[mapping_as_dict[label] for label in sorted_labels],'labels':sorted_labels}
 
 	def create_row_column_headers(self, df, cuts):
-		remaining_column = list(set(df.columns) - {'question_code','aggregation_value','result_type'})[0]
+		# remaining_column = list(set(df.columns) - {'question_code','aggregation_value','result_type'})[0]
 		df['row_heading'] = df.apply( lambda row: self.concat_row_items(row,cuts),axis=1)
 		df['column_heading'] = df.apply(lambda x: '%s;%s' % (x['question_code'],x['result_type']),axis=1)
 		return df
@@ -151,9 +152,10 @@ class CalculationCoordinator(object):
 
 	def compute_cuts_from_config(self):
 		assert self.config != None
-		assert type(self.config) == ConfigurationReader.ConfigurationReader
+		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		all_aggregations = list()
 		for cut_set in self.config.cuts_to_be_created():
+			logging.debug("Cut set is " + str(cut_set))
 			df = self.compute_aggregation(cut_demographic=cut_set)
 			df = self.replace_dimensions_with_integers(df)
 			df = self.create_row_column_headers(df,cuts=cut_set)
@@ -161,7 +163,7 @@ class CalculationCoordinator(object):
 		return pd.concat(all_aggregations)
 
 	def export_to_excel(self,filename):
-		assert type(self.config) == ConfigurationReader.ConfigurationReader
+		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		output_df = self.compute_cuts_from_config().set_index(['row_heading','column_heading'])
 		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
 		output_series.unstack().to_excel(filename, sheet_name='DisplayValues')

@@ -1,0 +1,10 @@
+cuts:
+    Region:
+        dimensions:
+            - region
+            - corps
+    Ethnicity:
+        dimensions:
+            - ethnicity
+            - region
+            - corps
