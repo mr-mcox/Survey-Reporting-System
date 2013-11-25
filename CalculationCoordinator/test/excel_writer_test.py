@@ -62,26 +62,35 @@ class WriteExcelTestCase(unittest.TestCase):
 
 
 	def test_write_master_as_excel(self):
-		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Sheet1')
+		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'DisplayValues')
 		column_headings = [str(ws.cell(row=0,column=i+1).value) for i in range(ws.get_highest_column()-1)]
 		self.assertEqual(set(column_headings), {'2.3','2.4'}) 
 		row_headings = [str(ws.cell(row=i+1,column=0).value) for i in range(ws.get_highest_row()-1)]
 		self.assertEqual(set(row_headings), {'0','1'})
 
-	# def test_write_mappings(self):
-	# 	ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
-	# 	integer_column_values = [str(ws.cell(row=i,column=0).value) for i in range(ws.get_highest_row())]
-	# 	value_column_values = [str(ws.cell(row=i,column=1).value) for i in range(ws.get_highest_row())]
-	# 	integer_column_values_copy = [str(ws.cell(row=i,column=2).value) for i in range(ws.get_highest_row())]
-	# 	self.assertEqual(value_column_values, self.mapping_values)
-	# 	self.assertEqual(integer_column_values,self.mapping_integers)
-	# 	self.assertEqual(integer_column_values_copy,self.mapping_integers)
+	def test_named_ranges_on_display_values(self):
+		wb = load_workbook(filename = r'test_file.xlsx')
+		range_names = [r.name for r in wb.get_named_ranges()]
+		self.assertTrue( 'disp_value_row_head' in range_names)
+		self.assertTrue( 'disp_value_col_head' in range_names)
+		self.assertTrue( 'dis_value_values' in range_names)
+		self.assertEqual( wb.get_named_range('disp_value_row_head').destinations[0][1],'$A$2:$A$3')
+		self.assertEqual( wb.get_named_range('disp_value_col_head').destinations[0][1],'$B$1:$C$1')
+		self.assertEqual( wb.get_named_range('dis_value_values').destinations[0][1],'$B$2:$C$3')
 
-	# def test_menus_with_values(self):
-	# 	ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
-	# 	gender_values = [str(ws.cell(row=i,column=3).value) for i in range(ws.get_highest_row())]
-	# 	region_values = [str(ws.cell(row=i,column=4).value) for i in range(ws.get_highest_row())]
-	# 	self.assertEqual(set(gender_values + region_values),{'gender','0','1','region','2','3'})
+	def test_named_ranges_on_lookup_tab(self):
+		wb = load_workbook(filename = r'test_file.xlsx')
+		range_names = [r.name for r in wb.get_named_ranges()]
+		self.assertTrue( 'cuts' in range_names)
+		self.assertTrue( 'cuts_config' in range_names)
+		self.assertTrue( 'default_menu' in range_names)
+		self.assertTrue( 'cuts_head' in range_names)
+		self.assertEqual( wb.get_named_range('cuts').destinations[0][1],'$A$1:$A$2')
+		self.assertEqual( wb.get_named_range('cuts_config').destinations[0][1],'$A$1:$E$2')
+		self.assertEqual( wb.get_named_range('default_menu').destinations[0][1],'$E$2:$E$101')
+		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$F$1:$G$1')
+
+
 
 	def tearDown(self):
 		try:

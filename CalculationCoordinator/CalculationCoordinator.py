@@ -164,9 +164,18 @@ class CalculationCoordinator(object):
 		assert type(self.config) == ConfigurationReader.ConfigurationReader
 		output_df = self.compute_cuts_from_config().set_index(['row_heading','column_heading'])
 		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
-		output_series.unstack().to_excel(filename, sheet_name='Sheet1')
+		output_series.unstack().to_excel(filename, sheet_name='DisplayValues')
 
 		wb = load_workbook(filename)
+
+		#Add ranges for display_values tab
+		dv_ws = wb.get_sheet_by_name('DisplayValues')
+		range_width = dv_ws.get_highest_column() -1
+		range_height = dv_ws.get_highest_row() - 1
+		wb.create_named_range('disp_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
+		wb.create_named_range('disp_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
+		wb.create_named_range('dis_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
+
 		ws = wb.create_sheet()
 		ws.title = 'Lookups'
 		cuts_menus = self.config.cuts_for_excel_menu()
@@ -174,6 +183,13 @@ class CalculationCoordinator(object):
 		for menu_i, cut_menu in enumerate(cuts_menus):
 			for col_i, item in enumerate(cut_menu):
 				ws.cell(row=menu_i, column = col_i).value = item
+
+
+		#Added ranges for cut menu
+		range_width = ws.get_highest_column() - 1
+		range_height = ws.get_highest_row() -1 
+		wb.create_named_range('cuts',ws,self.rc_to_range(row=0,col=0,width=1,height=range_height + 1))
+		wb.create_named_range('cuts_config',ws,self.rc_to_range(row=0,col=0,width=range_width + 1,height=range_height + 1))
 
 		next_column_to_use = ws.get_highest_column()
 		for dimension in self.config.all_dimensions():
@@ -185,6 +201,14 @@ class CalculationCoordinator(object):
 				ws.cell(row=i+1, column = next_column_to_use).value = mapping['labels'][i]
 				ws.cell(row=i+1, column = next_column_to_use+1).value = str(mapping['integer_strings'][i])
 			next_column_to_use += 2
+
+		#Add ranges for dimension menus
+		col_for_default_menu = range_width
+		range_width = ws.get_highest_column() -1
+		wb.create_named_range('default_menu',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=1,height=100))
+		wb.create_named_range('cuts_head',ws,self.rc_to_range(row=0,col=col_for_default_menu + 1,
+																width=range_width-col_for_default_menu,height=1))
+
 		# mapping = self.dimension_integer_mapping
 		# assert len(mapping['values']) == len(mapping['integers'])
 		# for i in range(len(mapping['values'])):

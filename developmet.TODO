@@ -19,7 +19,7 @@ To implement:
  ✔ CalcCoordinator assembles row and column headers and calc from a ConfigReader object @done (13-11-24 16:36)
  ✔ CalcCoordinator generates at least one value for a combinations of the demographics that aren't present so that excel displays something for them @done (13-11-24 17:55)
  ✔ Make list of named ranges needed @done (13-11-24 18:45)
- ☐ Add named ranges to output for excel
+ ✔ Add named ranges to output for excel @done (13-11-25 07:37)
  ☐ Create end to end test for what has been done so far
 
 Eventually:
