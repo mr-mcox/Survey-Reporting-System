@@ -8,7 +8,7 @@ class NumericOutputCalculator(object):
 		responses = pd.DataFrame(kwargs.pop('responses',dict())).convert_objects(convert_numeric=True)
 		assert not responses.empty
 
-		logging.debug('values before re-formatting:\n' + str(responses.head()))
+		# logging.debug('values before re-formatting:\n' + str(responses.head()))
 
 		if 'net_formatted_value' not in responses.columns or responses['net_formatted_value'].notnull().sum() == 0:
 			map_7pt_SA_to_net = {8:None,7:-1,6:-1,5:-1,4:-1,3:0,2:1,1:1}
@@ -35,7 +35,7 @@ class NumericOutputCalculator(object):
 			if cut_demographic != []:
 				assert 'respondent_id' in nfv, "Expected respondent_id column in responses"
 				assert 'respondent_id' in self.demographic_data, "Expected respondent_id column in demographic_data"
-				logging.debug("data sets to join " + str(nfv) + " and demographics " + str(self.demographic_data))			
+				# logging.debug("data sets to join " + str(nfv) + " and demographics " + str(self.demographic_data))			
 				nfv = nfv.set_index('respondent_id').join(self.demographic_data.set_index('respondent_id').loc[:,cut_demographic], how = 'outer')
 
 		cut_groupings = ['question_code']
@@ -61,7 +61,7 @@ class NumericOutputCalculator(object):
 
 		aggregation_calulation['result_type'] = result_type
 		return_columns = cut_groupings + ['aggregation_value','result_type']
-		logging.debug('results for ' + str(return_columns) + ': ' + str(pd.DataFrame(aggregation_calulation,columns=return_columns)))
+		# logging.debug('results for ' + str(return_columns) + ': ' + str(pd.DataFrame(aggregation_calulation,columns=return_columns)))
 		return pd.DataFrame(aggregation_calulation,columns=return_columns)
 
 

@@ -20,7 +20,11 @@ To implement:
  ✔ CalcCoordinator generates at least one value for a combinations of the demographics that aren't present so that excel displays something for them @done (13-11-24 17:55)
  ✔ Make list of named ranges needed @done (13-11-24 18:45)
  ✔ Add named ranges to output for excel @done (13-11-25 07:37)
- ☐ Create end to end test for what has been done so far
+ ✔ Create end to end test for what has been done so far @done (13-11-25 10:54)
+ ☐ Figure out why there are additional columns in display values
+ ☐ Add question code and result type to columns output
+ ☐ Add default_menu_start named range
+ ☐ Create macro to automatically create results
 
 Eventually:
   ☐ Integer strings in order of sorted labels for individual columns

@@ -102,7 +102,8 @@ class CalculationCoordinator(object):
 						values_by_column[column][value] = self.max_integer_used_for_integer_string
 						self.max_integer_used_for_integer_string += 1
 
-		format_string = "{0:0" + str(math.floor(self.max_integer_used_for_integer_string/10)) + "d}"
+		format_string = "{0:0" + str(math.floor(math.log(self.max_integer_used_for_integer_string,10) + 1 )) + "d}"
+		logging.debug("max integer used: " + str(self.max_integer_used_for_integer_string) + " and format string " + format_string )
 		self.zero_integer_string = format_string.format(0)
 
 		integer_strings_by_column = { column_key : { value : format_string.format(x) for (value, x) in values_dict.items()} for (column_key,values_dict) in values_by_column.items()}
@@ -165,6 +166,9 @@ class CalculationCoordinator(object):
 	def export_to_excel(self,filename):
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		output_df = self.compute_cuts_from_config().set_index(['row_heading','column_heading'])
+		if not output_df.index.is_unique:
+			df = output_df.reset_index()
+			logging.warning("Duplicate headers found including: " + str(df.ix[df.duplicated(cols=['row_heading','column_heading']),:].head()))
 		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
 		output_series.unstack().to_excel(filename, sheet_name='DisplayValues')
 
