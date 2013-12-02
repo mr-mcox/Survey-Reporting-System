@@ -5,6 +5,7 @@ import math
 from openpyxl import load_workbook, cell
 import copy
 import logging
+import os
 
 class CalculationCoordinator(object):
 	"""docstring for CalculationCoordinator"""
@@ -171,15 +172,20 @@ class CalculationCoordinator(object):
 		assert len(return_table.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(return_table.column_heading.unique())
 		return return_table.drop_duplicates()
 
-	def export_to_excel(self,filename):
+	def export_to_excel(self):
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
+		assert 'excel_template_file' in self.config.config
+		filename = self.config.config['excel_template_file']
 		output_df = self.compute_cuts_from_config().set_index(['row_heading','column_heading'])
-		logging.debug("Snapshot of master table " + str(output_df.head()))
+		# logging.debug("Snapshot of master table " + str(output_df.head()))
 		if not output_df.index.is_unique:
 			df = output_df.reset_index()
 			logging.warning("Duplicate headers found including: " + str(df.ix[df.duplicated(cols=['row_heading','column_heading']),:]))
 		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
-		output_series.unstack().to_excel(filename, sheet_name='DisplayValues')
+		output_series.unstack().to_excel('display_values.xlsx', sheet_name='DisplayValues')
+
+		self.copy_sheet_to_workbook('display_values.xlsx','DisplayValues',filename)
+		os.remove('display_values.xlsx')
 
 		wb = load_workbook(filename)
 
@@ -190,6 +196,10 @@ class CalculationCoordinator(object):
 		wb.create_named_range('disp_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
 		wb.create_named_range('disp_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
 		wb.create_named_range('dis_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
+
+		if 'Lookups' in wb.get_sheet_names():
+			ws_to_del = wb.get_sheet_by_name('Lookups')
+			wb.remove_sheet(ws_to_del)
 
 		ws = wb.create_sheet()
 		ws.title = 'Lookups'
@@ -253,7 +263,7 @@ class CalculationCoordinator(object):
 		src_ws = src_wb.get_sheet_by_name(src_ws_name)
 
 		dest_wb = load_workbook(dest_wb_name)
-		
+
 		if src_ws_name in dest_wb.get_sheet_names():
 			ws_to_del = dest_wb.get_sheet_by_name(src_ws_name)
 			dest_wb.remove_sheet(ws_to_del)

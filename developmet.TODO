@@ -1,5 +1,6 @@
 To implement:
- ☐ Copy sheets to an existing WB
+ ✔ Copy sheets to an existing WB @done (13-12-02 15:07)
+ ✔ Use excel template specified in config @done (13-12-02 15:26)
  ☐ Overwrite existing named ranges
 
 Eventually:

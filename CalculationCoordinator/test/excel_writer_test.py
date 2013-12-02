@@ -12,6 +12,8 @@ class WriteExcelTestCase(unittest.TestCase):
 	def setUp(self):
 		# assert not os.path.exists('test_file.xlsx')
 		wb = Workbook()
+		ws = wb.get_active_sheet()
+		ws.title = "ExistingData"
 		wb.save('test_file.xlsx')
 		coordinator = CalculationCoordinator()
 		self.mapping_values = ['dos','uno','tres']
@@ -22,6 +24,7 @@ class WriteExcelTestCase(unittest.TestCase):
 											'region':{'Atlanta':'2','SoDak':'3'}
 										}
 		config_reader = ConfigurationReader.ConfigurationReader()
+		config_reader.config['excel_template_file'] = 'test_file.xlsx'
 		self.cuts_for_excel_menu_results = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None']]
 		config_reader.cuts_for_excel_menu = mock.MagicMock(return_value = self.cuts_for_excel_menu_results)
 		coordinator.config = config_reader
@@ -38,7 +41,7 @@ class WriteExcelTestCase(unittest.TestCase):
 				'aggregation_value': [0.5,0.5,0.5,0.5]
 			})
 		coordinator.compute_cuts_from_config = mock.MagicMock(return_value=master_aggregation)
-		coordinator.export_to_excel('test_file.xlsx')
+		coordinator.export_to_excel()
 
 	def test_writing_cut_config(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
@@ -100,6 +103,10 @@ class WriteExcelTestCase(unittest.TestCase):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
 		top_row_headings = [str(ws.cell(row=0,column=i).value) for i in range(ws.get_highest_column())]
 		self.assertTrue('result_type' in top_row_headings)
+
+	def test_template_sheets_untouched(self):
+		wb = load_workbook(filename = r'test_file.xlsx')
+		self.assertTrue('ExistingData' in wb.get_sheet_names())
 
 
 
