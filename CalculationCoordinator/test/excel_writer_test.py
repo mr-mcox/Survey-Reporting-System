@@ -88,6 +88,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertEqual( wb.get_named_range('cuts').destinations[0][1],'$A$1:$A$2')
 		self.assertEqual( wb.get_named_range('cuts_config').destinations[0][1],'$A$1:$E$2')
 		self.assertEqual( wb.get_named_range('default_menu').destinations[0][1],'$E$2:$E$101')
+		self.assertEqual( wb.get_named_range('default_menu_start').destinations[0][1],'$E$2')
 		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$F$1:$K$1')
 
 	def test_question_code_mapping_provided(self):

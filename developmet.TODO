@@ -24,7 +24,7 @@ To implement:
  ✔ Figure out why there are additional columns in display values @done (13-11-26 10:12)
  ✔ Leading zeros are added to row and column headers according to the current number format @done (13-12-02 12:57)
  ✔ Add question code and result type to columns output @done (13-12-02 13:22)
- ☐ Add default_menu_start named range
+ ✔ Add default_menu_start named range @done (13-12-02 13:24)
  ☐ Create macro to automatically create results
 
 Eventually:
