@@ -88,7 +88,18 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertEqual( wb.get_named_range('cuts').destinations[0][1],'$A$1:$A$2')
 		self.assertEqual( wb.get_named_range('cuts_config').destinations[0][1],'$A$1:$E$2')
 		self.assertEqual( wb.get_named_range('default_menu').destinations[0][1],'$E$2:$E$101')
-		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$F$1:$G$1')
+		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$F$1:$K$1')
+
+	def test_question_code_mapping_provided(self):
+		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
+		top_row_headings = [str(ws.cell(row=0,column=i).value) for i in range(ws.get_highest_column())]
+		self.assertTrue('question_code' in top_row_headings)
+
+	def test_result_type_mapping_provided(self):
+		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
+		top_row_headings = [str(ws.cell(row=0,column=i).value) for i in range(ws.get_highest_column())]
+		self.assertTrue('result_type' in top_row_headings)
+
 
 
 

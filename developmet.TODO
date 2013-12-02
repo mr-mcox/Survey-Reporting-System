@@ -22,15 +22,16 @@ To implement:
  ✔ Add named ranges to output for excel @done (13-11-25 07:37)
  ✔ Create end to end test for what has been done so far @done (13-11-25 10:54)
  ✔ Figure out why there are additional columns in display values @done (13-11-26 10:12)
- ☐ Leading zeros are added to row and column headers according to the current number format
- ☐ Add question code and result type to columns output
+ ✔ Leading zeros are added to row and column headers according to the current number format @done (13-12-02 12:57)
+ ✔ Add question code and result type to columns output @done (13-12-02 13:22)
  ☐ Add default_menu_start named range
  ☐ Create macro to automatically create results
 
 Eventually:
   ☐ Integer strings in order of sorted labels for individual columns
-  ☐ Change title of output tab to 'display_values'
-  ☐ Create lookup mappings for result_type and question_code specifically
+  ✔ Change title of output tab to 'display_values' @done (13-12-02 12:59)
+  ✔ Create lookup mappings for result_type and question_code specifically @done (13-12-02 13:22)
+  ☐ System can be run from any folder with config file in current working directory
 Refactor:
   ☐ Survey is indentified on questions table and not on results table
   ☐ Convert keys for CalculationCorinator to set to avoid order issues

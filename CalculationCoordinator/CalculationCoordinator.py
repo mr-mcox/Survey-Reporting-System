@@ -208,8 +208,10 @@ class CalculationCoordinator(object):
 		wb.create_named_range('cuts_config',ws,self.rc_to_range(row=0,col=0,width=range_width + 1,height=range_height + 1))
 
 		next_column_to_use = ws.get_highest_column()
-		for dimension in self.config.all_dimensions():
-			dimension_title = dimension.title
+		dimension_titles = [dimension.title for dimension in self.config.all_dimensions()]
+		dimension_titles.append('question_code')
+		dimension_titles.append('result_type')
+		for dimension_title in dimension_titles:
 			mapping = self.get_integer_string_mapping(dimension_title)
 
 			ws.cell(row=0, column = next_column_to_use).value = dimension_title
