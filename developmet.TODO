@@ -1,7 +1,7 @@
 To implement:
  ✔ Copy sheets to an existing WB @done (13-12-02 15:07)
  ✔ Use excel template specified in config @done (13-12-02 15:26)
- ☐ Overwrite existing named ranges
+ ✔ Overwrite existing named ranges @done (13-12-02 15:39)
 
 Eventually:
   ☐ System can be run from any folder with config file in current working directory

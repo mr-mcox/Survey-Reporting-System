@@ -13,6 +13,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		# assert not os.path.exists('test_file.xlsx')
 		wb = Workbook()
 		ws = wb.get_active_sheet()
+		wb.create_named_range('disp_value_col_head',ws,'$A$1')
 		ws.title = "ExistingData"
 		wb.save('test_file.xlsx')
 		coordinator = CalculationCoordinator()

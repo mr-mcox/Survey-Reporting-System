@@ -189,6 +189,10 @@ class CalculationCoordinator(object):
 
 		wb = load_workbook(filename)
 
+		#Remove existing named ranges
+		for range_name in wb.get_named_ranges():
+			wb.remove_named_range(range_name)
+
 		#Add ranges for display_values tab
 		dv_ws = wb.get_sheet_by_name('DisplayValues')
 		range_width = dv_ws.get_highest_column() -1
