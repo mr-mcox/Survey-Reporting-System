@@ -1,36 +1,8 @@
 To implement:
- ✔ Configuration reader returns the dimensions to be used for each cut, with order being important @done (13-11-19 15:33)
- ✔ Refactor tuple for CalculationCoordinator so that type of calculations can be determined from key @done (13-11-19 17:26)
- ✔ When multiple dimensions are passed for cutting, aggregations are based on all of those columns @done (13-11-19 17:32)
- ✔ 0 fill is reserved and used for lack of level @done (13-11-19 17:35)
- ✔ Refactor to remove levels from cuts @done (13-11-20 11:06)
- ✔ Determine how to name ranges @done (13-11-20 11:38)
- ✔ Create helper function for converting row, column and dimension into range string @done (13-11-20 11:56)
- ✔ Refactor config input to use dicts for cuts than a list @done (13-11-20 13:16)
- ✔ Dimensions are re-used from master list if they are already available @done (13-11-20 13:43)
- ✔ Cuts are output in excel along with dimensions and include 'static' identifier @done (13-11-20 16:42)
- ✔ CalcCoordinator uses result_type specified by class attribute rather than passed variable @done (13-11-24 10:38)
- ✔ CalcCoordinator computes multiple result types at the same time @done (13-11-24 10:52)
- ✔ CalcCoordinator accepts a list with blanks for cuts @done (13-11-24 11:22)
- ✔ ConfigReader specifies cuts needed as a list with blanks @done (13-11-24 11:44)
- ✔ Add zero fill when number of levels is less than number of dimensions @done (13-11-24 11:53)
- ✔ Refactor convert dimensions to integers to operate on one cut rather than all saved cuts simultaneously @done (13-11-24 13:28)
- ✔ Refactor create_row_column_headers to operate on one cut rather than all cuts simultaneously @done (13-11-24 13:59)
- ✔ CalcCoordinator assembles row and column headers and calc from a ConfigReader object @done (13-11-24 16:36)
- ✔ CalcCoordinator generates at least one value for a combinations of the demographics that aren't present so that excel displays something for them @done (13-11-24 17:55)
- ✔ Make list of named ranges needed @done (13-11-24 18:45)
- ✔ Add named ranges to output for excel @done (13-11-25 07:37)
- ✔ Create end to end test for what has been done so far @done (13-11-25 10:54)
- ✔ Figure out why there are additional columns in display values @done (13-11-26 10:12)
- ✔ Leading zeros are added to row and column headers according to the current number format @done (13-12-02 12:57)
- ✔ Add question code and result type to columns output @done (13-12-02 13:22)
- ✔ Add default_menu_start named range @done (13-12-02 13:24)
- ☐ Create macro to automatically create results
+ ☐ Copy sheets to an existing WB
+ ☐ Overwrite existing named ranges
 
 Eventually:
-  ☐ Integer strings in order of sorted labels for individual columns
-  ✔ Change title of output tab to 'display_values' @done (13-12-02 12:59)
-  ✔ Create lookup mappings for result_type and question_code specifically @done (13-12-02 13:22)
   ☐ System can be run from any folder with config file in current working directory
 Refactor:
   ☐ Survey is indentified on questions table and not on results table
@@ -40,18 +12,49 @@ Refactor:
 Maybe:
   ☐ Import 1314F8W survey data automatically on migration from old DB
   ☐ Add indicies to the DB
-  ☐ Add additional columns to substitute for when importing demographic data
-  ☐ It appears that the table based system for getting results may be a bit too complex. 
+  ☐ Add additional columns to substitute for when importing demographic data (like 'cm_pid' -> 'respondent_id')
+  ☐ It appears that the table based system for getting results may be a bit too complex. Can we go OO and make it easier?
   ☐ Create end to end test and way to run behave for all sub folders
-  ☐ Figure out why more 0s are padded than necessary in output
   ☐ cuts_to_be_created should only output unique lists of cuts
   ☐ NumericOutputCalculator will return more than one set of calculations if multiple are specified on input
+  ☐ Uncomment class assertions in CalcCoordinator if they don't trip unnecessarily once system is run from other folders
+  ☐ Use optimized reader for copying sheets via http://pythonhosted.org/openpyxl/optimized.html
 
 Risks:
-  ☐ More than one value for row or column header
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Configuration reader returns the dimensions to be used for each cut, with order being important @done (13-11-19 15:33) @project(To implement)
+ ✔ Refactor tuple for CalculationCoordinator so that type of calculations can be determined from key @done (13-11-19 17:26) @project(To implement)
+ ✔ When multiple dimensions are passed for cutting, aggregations are based on all of those columns @done (13-11-19 17:32) @project(To implement)
+ ✔ 0 fill is reserved and used for lack of level @done (13-11-19 17:35) @project(To implement)
+ ✔ Refactor to remove levels from cuts @done (13-11-20 11:06) @project(To implement)
+ ✔ Determine how to name ranges @done (13-11-20 11:38) @project(To implement)
+ ✔ Create helper function for converting row, column and dimension into range string @done (13-11-20 11:56) @project(To implement)
+ ✔ Refactor config input to use dicts for cuts than a list @done (13-11-20 13:16) @project(To implement)
+ ✔ Dimensions are re-used from master list if they are already available @done (13-11-20 13:43) @project(To implement)
+ ✔ Cuts are output in excel along with dimensions and include 'static' identifier @done (13-11-20 16:42) @project(To implement)
+ ✔ CalcCoordinator uses result_type specified by class attribute rather than passed variable @done (13-11-24 10:38) @project(To implement)
+ ✔ CalcCoordinator computes multiple result types at the same time @done (13-11-24 10:52) @project(To implement)
+ ✔ CalcCoordinator accepts a list with blanks for cuts @done (13-11-24 11:22) @project(To implement)
+ ✔ ConfigReader specifies cuts needed as a list with blanks @done (13-11-24 11:44) @project(To implement)
+ ✔ Add zero fill when number of levels is less than number of dimensions @done (13-11-24 11:53) @project(To implement)
+ ✔ Refactor convert dimensions to integers to operate on one cut rather than all saved cuts simultaneously @done (13-11-24 13:28) @project(To implement)
+ ✔ Refactor create_row_column_headers to operate on one cut rather than all cuts simultaneously @done (13-11-24 13:59) @project(To implement)
+ ✔ CalcCoordinator assembles row and column headers and calc from a ConfigReader object @done (13-11-24 16:36) @project(To implement)
+ ✔ CalcCoordinator generates at least one value for a combinations of the demographics that aren't present so that excel displays something for them @done (13-11-24 17:55) @project(To implement)
+ ✔ Make list of named ranges needed @done (13-11-24 18:45) @project(To implement)
+ ✔ Add named ranges to output for excel @done (13-11-25 07:37) @project(To implement)
+ ✔ Create end to end test for what has been done so far @done (13-11-25 10:54) @project(To implement)
+ ✔ Figure out why there are additional columns in display values @done (13-11-26 10:12) @project(To implement)
+ ✔ Leading zeros are added to row and column headers according to the current number format @done (13-12-02 12:57) @project(To implement)
+ ✔ Add question code and result type to columns output @done (13-12-02 13:22) @project(To implement)
+ ✔ Add default_menu_start named range @done (13-12-02 13:24) @project(To implement)
+ ✔ Integer strings in order of sorted labels for individual columns @done (13-12-02 13:26) @project(Eventually)
+ ✔ Change title of output tab to 'display_values' @done (13-12-02 12:59) @project(Eventually)
+ ✔ Create lookup mappings for result_type and question_code specifically @done (13-12-02 13:22) @project(Eventually)
+ ✔ Figure out why more 0s are padded than necessary in output @done (13-12-02 13:28) @project(Maybe)
+ ✔ More than one value for row or column header @done (13-12-02 13:27) @project(Risks)
  ✔ When columns are exported, they should be sorted by index number @done (13-11-19 09:52) @project(To implement)
  ✔ Tri-column for integer strings @done (13-11-19 09:11) @project(To implement)
  ✔ Clean up debug logging and create assertion to check that each CM has only one copy of each of the used demographics @done (13-11-19 09:02) @project(To implement)

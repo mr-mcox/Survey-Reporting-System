@@ -137,7 +137,6 @@ class CalculationCoordinator(object):
 		return {'integer_strings':[mapping_as_dict[label] for label in sorted_labels],'labels':sorted_labels}
 
 	def create_row_column_headers(self, df, cuts):
-		# remaining_column = list(set(df.columns) - {'question_code','aggregation_value','result_type'})[0]
 		df['row_heading'] = df.apply( lambda row: self.concat_row_items(row,cuts),axis=1)
 		df['column_heading'] = df.apply(lambda x: '%s;%s' % (x['question_code'],x['result_type']),axis=1)
 		assert df.row_heading.apply(len).min() > 0, "Blank row header created from cuts " + str(cuts) + "\n" + str(df)
@@ -227,22 +226,6 @@ class CalculationCoordinator(object):
 		wb.create_named_range('default_menu_start',ws,self.rc_to_range(row=1,col=col_for_default_menu))
 		wb.create_named_range('cuts_head',ws,self.rc_to_range(row=0,col=col_for_default_menu + 1,
 																width=range_width-col_for_default_menu,height=1))
-
-		# mapping = self.dimension_integer_mapping
-		# assert len(mapping['values']) == len(mapping['integers'])
-		# for i in range(len(mapping['values'])):
-		# 	ws.cell(row=i,column=0).value = mapping['integers'][i]
-		# 	ws.cell(row=i,column=1).value = mapping['values'][i]
-		# 	ws.cell(row=i,column=2).value = mapping['integers'][i]
-
-		# #Write cut dimensions integer strings
-		# cut_dimensions = self.labels_for_cut_dimensions.keys()
-		# for i, key in enumerate(cut_dimensions):
-		# 	ws.cell(row=0, column=i+3).value = key
-		# 	j = 1
-		# 	for label, integer_string in self.labels_for_cut_dimensions[key].items():
-		# 		ws.cell(row=j, column=i+3).value = integer_string
-		# 		j += 1
 		wb.save(filename)
 
 	def adjust_zero_padding_of_heading(self, input_heading):
@@ -263,3 +246,23 @@ class CalculationCoordinator(object):
 			start_cell =  cell.get_column_letter(col + 1) + str(row+1)
 			end_cell = cell.get_column_letter(col + width) + str(row+height)
 			return start_cell + ":" + end_cell
+
+	def copy_sheet_to_workbook(self,src_wb_name,src_ws_name,dest_wb_name):
+		src_wb = load_workbook(src_wb_name)
+		assert src_ws_name in src_wb.get_sheet_names()
+		src_ws = src_wb.get_sheet_by_name(src_ws_name)
+
+		dest_wb = load_workbook(dest_wb_name)
+		
+		if src_ws_name in dest_wb.get_sheet_names():
+			ws_to_del = dest_wb.get_sheet_by_name(src_ws_name)
+			dest_wb.remove_sheet(ws_to_del)
+
+		dest_ws = dest_wb.create_sheet()
+		dest_ws.title = src_ws_name
+
+		for i in range(src_ws.get_highest_column()):
+			for j in range(src_ws.get_highest_row()):
+				dest_ws.cell(row=j,column=i).value = src_ws.cell(row=j,column=i).value
+
+		dest_wb.save(dest_wb_name)
