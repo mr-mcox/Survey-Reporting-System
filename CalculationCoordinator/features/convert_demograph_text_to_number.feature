@@ -93,3 +93,13 @@ Feature: In order to allow any text to be used in cutting yet maintain sane sort
 		Given ensure_combination_for_every_set_of_demographics is True
 		When compute net with cut_demographic = region and gender is run
 		Then there is a row with SoDak and Female
+
+	Scenario: Row and column header strings should be padded with the appropriate number of zeros even if the format has changed
+		Given a calc coordinator with integer_string_length of 3
+		When adjust_zero_padding_of_heading is run with row_heading of "05"
+		Then the return value is "005"
+
+	Scenario: Row and column header strings should be padded with the appropriate number of zeros even if the format has changed - with separators
+		Given a calc coordinator with integer_string_length of 3
+		When adjust_zero_padding_of_heading is run with row_heading of "05;03"
+		Then the return value is "005;003"

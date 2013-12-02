@@ -102,11 +102,12 @@ class CalculationCoordinator(object):
 						values_by_column[column][value] = self.max_integer_used_for_integer_string
 						self.max_integer_used_for_integer_string += 1
 
-		format_string = "{0:0" + str(math.floor(math.log(self.max_integer_used_for_integer_string,10) + 1 )) + "d}"
-		logging.debug("max integer used: " + str(self.max_integer_used_for_integer_string) + " and format string " + format_string )
-		self.zero_integer_string = format_string.format(0)
+		self.integer_string_length = math.floor(math.log(self.max_integer_used_for_integer_string,10) + 1 )
 
-		integer_strings_by_column = { column_key : { value : format_string.format(x) for (value, x) in values_dict.items()} for (column_key,values_dict) in values_by_column.items()}
+		self.format_string = "{0:0" + str(self.integer_string_length) + "d}"
+		self.zero_integer_string = self.format_string.format(0)
+
+		integer_strings_by_column = { column_key : { value : self.format_string.format(x) for (value, x) in values_dict.items()} for (column_key,values_dict) in values_by_column.items()}
 
 		#Map values to column
 		for column in df.columns:
@@ -125,7 +126,7 @@ class CalculationCoordinator(object):
 			'integers': sorted(mapping.keys()),
 			'values': [mapping[key] for key in sorted(mapping.keys())] 
 		}
-		assert format_string.format(0) not in self.dimension_integer_mapping['integers']
+		assert self.format_string.format(0) not in self.dimension_integer_mapping['integers']
 
 		return df
 
@@ -139,6 +140,8 @@ class CalculationCoordinator(object):
 		# remaining_column = list(set(df.columns) - {'question_code','aggregation_value','result_type'})[0]
 		df['row_heading'] = df.apply( lambda row: self.concat_row_items(row,cuts),axis=1)
 		df['column_heading'] = df.apply(lambda x: '%s;%s' % (x['question_code'],x['result_type']),axis=1)
+		assert df.row_heading.apply(len).min() > 0, "Blank row header created from cuts " + str(cuts) + "\n" + str(df)
+		assert df.column_heading.apply(len).min() > 0, "Blank col header created from cuts " + str(cuts) + "\n" + str(df)
 		return df
 
 	def concat_row_items(self,row, columns):
@@ -155,20 +158,27 @@ class CalculationCoordinator(object):
 		assert self.config != None
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		all_aggregations = list()
+		logging.debug("All cuts are " + str(self.config.cuts_to_be_created()))
 		for cut_set in self.config.cuts_to_be_created():
-			logging.debug("Cut set is " + str(cut_set))
+			# logging.debug("Cut set is " + str(cut_set))
 			df = self.compute_aggregation(cut_demographic=cut_set)
 			df = self.replace_dimensions_with_integers(df)
 			df = self.create_row_column_headers(df,cuts=cut_set)
 			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
-		return pd.concat(all_aggregations)
+		return_table = pd.concat(all_aggregations)
+		return_table.row_heading = return_table.row_heading.map(self.adjust_zero_padding_of_heading)
+		return_table.column_heading = return_table.column_heading.map(self.adjust_zero_padding_of_heading)
+		assert len(return_table.row_heading.apply(len).unique()) == 1, "Not all row headings have the same length\n" + str(return_table.row_heading.unique())
+		assert len(return_table.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(return_table.column_heading.unique())
+		return return_table.drop_duplicates()
 
 	def export_to_excel(self,filename):
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		output_df = self.compute_cuts_from_config().set_index(['row_heading','column_heading'])
+		logging.debug("Snapshot of master table " + str(output_df.head()))
 		if not output_df.index.is_unique:
 			df = output_df.reset_index()
-			logging.warning("Duplicate headers found including: " + str(df.ix[df.duplicated(cols=['row_heading','column_heading']),:].head()))
+			logging.warning("Duplicate headers found including: " + str(df.ix[df.duplicated(cols=['row_heading','column_heading']),:]))
 		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
 		output_series.unstack().to_excel(filename, sheet_name='DisplayValues')
 
@@ -231,6 +241,14 @@ class CalculationCoordinator(object):
 		# 		ws.cell(row=j, column=i+3).value = integer_string
 		# 		j += 1
 		wb.save(filename)
+
+	def adjust_zero_padding_of_heading(self, input_heading):
+		values = input_heading.split(";")
+		try:
+			value_strings = [self.format_string.format(int(value)) for value in values]
+		except:
+			print(values)
+		return ";".join(value_strings)
 
 	def rc_to_range(self,row,col,**kwargs):
 		height = kwargs.pop('height',None)

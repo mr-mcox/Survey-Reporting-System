@@ -231,3 +231,16 @@ def step(context):
 @given('ensure_combination_for_every_set_of_demographics is True')
 def step(context):
 	context.coordinator.ensure_combination_for_every_set_of_demographics = True
+
+@given('a calc coordinator with integer_string_length of {length}')
+def step(context,length):
+	context.coordinator = CalculationCoordinator()
+	context.coordinator.format_string = "{0:0" + length + "d}"
+
+@when('adjust_zero_padding_of_heading is run with row_heading of "{heading}"')
+def step(context,heading):
+	context.result = context.coordinator.adjust_zero_padding_of_heading(heading)
+
+@then('the return value is "{expected_value}"')
+def step(context,expected_value):
+	assert context.result == expected_value

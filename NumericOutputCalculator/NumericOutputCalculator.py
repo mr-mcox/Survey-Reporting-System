@@ -22,7 +22,7 @@ class NumericOutputCalculator(object):
 		result_type = kwargs.pop('result_type',None)
 		assert result_type != None
 
-		logging.debug("NumOutput cut_demographic is " + str(cut_demographic))
+		# logging.debug("NumOutput cut_demographic is " + str(cut_demographic))
 		if type(cut_demographic) == list:
 			for cut in cut_demographic:
 				if cut != []:

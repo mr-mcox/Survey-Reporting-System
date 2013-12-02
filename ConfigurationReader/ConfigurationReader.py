@@ -1,5 +1,6 @@
 from bitstring import BitArray
 import yaml
+import logging
 
 class ConfigurationReader(object):
 	"""docstring for ConfigurationReader"""
@@ -13,7 +14,7 @@ class ConfigurationReader(object):
 			self.config = yaml.load(stream)
 
 	def cuts_to_be_created(self):
-		all_cut_fields = [[]]
+		all_cut_fields = []
 		config = self.config
 		assert 'cuts' in self.config
 		assert type(config['cuts']) == dict
