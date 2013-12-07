@@ -8,7 +8,6 @@ import logging
 logging.basicConfig(filename='debug.log',level=logging.DEBUG)
 
 config = ConfigurationReader.ConfigurationReader(config_file='demonstration_yaml.yaml')
-print(type(config))
 
 #Read connection info
 # connect_info_file = open('db_connect_string.txt')
@@ -32,5 +31,4 @@ print("Starting calculations")
 calc = CalculationCoordinator.CalculationCoordinator(results=results_df,
 													demographic_data=pd.read_excel('1314F8W_demographics.xlsx',sheetname="Sheet1"),
 													config = config)
-calc.export_to_excel('1314F8W_demonstration.xlsx')
-logging.debug(calc.dimension_integer_mapping)
+calc.export_to_excel()

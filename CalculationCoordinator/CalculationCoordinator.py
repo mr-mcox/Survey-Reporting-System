@@ -199,7 +199,7 @@ class CalculationCoordinator(object):
 		range_height = dv_ws.get_highest_row() - 1
 		wb.create_named_range('disp_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
 		wb.create_named_range('disp_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
-		wb.create_named_range('dis_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
+		wb.create_named_range('disp_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
 
 		if 'Lookups' in wb.get_sheet_names():
 			ws_to_del = wb.get_sheet_by_name('Lookups')
@@ -237,6 +237,7 @@ class CalculationCoordinator(object):
 		col_for_default_menu = range_width
 		range_width = ws.get_highest_column() -1
 		wb.create_named_range('default_menu',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=1,height=100))
+		wb.create_named_range('default_mapping',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=2,height=100))
 		wb.create_named_range('default_menu_start',ws,self.rc_to_range(row=1,col=col_for_default_menu))
 		wb.create_named_range('cuts_head',ws,self.rc_to_range(row=0,col=col_for_default_menu + 1,
 																width=range_width-col_for_default_menu,height=1))

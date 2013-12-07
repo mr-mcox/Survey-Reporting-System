@@ -80,7 +80,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertTrue( 'dis_value_values' in range_names)
 		self.assertEqual( wb.get_named_range('disp_value_row_head').destinations[0][1],'$A$2:$A$3')
 		self.assertEqual( wb.get_named_range('disp_value_col_head').destinations[0][1],'$B$1:$C$1')
-		self.assertEqual( wb.get_named_range('dis_value_values').destinations[0][1],'$B$2:$C$3')
+		self.assertEqual( wb.get_named_range('disp_value_values').destinations[0][1],'$B$2:$C$3')
 
 	def test_named_ranges_on_lookup_tab(self):
 		wb = load_workbook(filename = r'test_file.xlsx')
@@ -92,6 +92,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertEqual( wb.get_named_range('cuts').destinations[0][1],'$A$1:$A$2')
 		self.assertEqual( wb.get_named_range('cuts_config').destinations[0][1],'$A$1:$E$2')
 		self.assertEqual( wb.get_named_range('default_menu').destinations[0][1],'$E$2:$E$101')
+		self.assertEqual( wb.get_named_range('default_mapping').destinations[0][1],'$E$2:$F$101')
 		self.assertEqual( wb.get_named_range('default_menu_start').destinations[0][1],'$E$2')
 		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$F$1:$K$1')
 
