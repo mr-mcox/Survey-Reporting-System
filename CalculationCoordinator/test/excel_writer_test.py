@@ -30,7 +30,12 @@ class WriteExcelTestCase(unittest.TestCase):
 		config_reader.cuts_for_excel_menu = mock.MagicMock(return_value = self.cuts_for_excel_menu_results)
 		coordinator.config = config_reader
 
-		config_reader.all_dimensions = mock.MagicMock(return_value = [ConfigurationReader.Dimension(title="Gender")])
+		dimension_with_no_not_included_label = ConfigurationReader.Dimension(title="GenderB")
+		dimension_with_no_not_included_label.not_included_label = None
+		config_reader.all_dimensions = mock.MagicMock(return_value = [
+																		ConfigurationReader.Dimension(title="Gender"),
+																		dimension_with_no_not_included_label,
+																		])
 		coordinator.get_integer_string_mapping = mock.MagicMock(return_value= {'integer_strings':['1','2'],'labels':['male','female']})
 
 		coordinator.dimension_integer_mapping = {'values': self.mapping_values,'integers':self.mapping_integers}
@@ -66,6 +71,14 @@ class WriteExcelTestCase(unittest.TestCase):
 		assert ws.cell(row=2,column=6).value == 1
 		assert ws.cell(row=3,column=6).value == 2
 
+	def test_writing_menu_for_no_not_included_label(self):
+		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
+		assert ws.cell(row=0,column=7).value == "GenderB"
+		assert ws.cell(row=1,column=7).value == "male"
+		assert ws.cell(row=2,column=7).value == "female"
+		assert ws.cell(row=1,column=8).value == 1
+		assert ws.cell(row=2,column=8).value == 2
+
 	def test_write_master_as_excel(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'DisplayValues')
 		column_headings = [str(ws.cell(row=0,column=i+1).value) for i in range(ws.get_highest_column()-1)]
@@ -95,7 +108,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertEqual( wb.get_named_range('default_menu').destinations[0][1],'$E$2:$E$101')
 		self.assertEqual( wb.get_named_range('default_mapping').destinations[0][1],'$E$2:$F$101')
 		self.assertEqual( wb.get_named_range('default_menu_start').destinations[0][1],'$E$2')
-		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$F$1:$K$1')
+		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$F$1:$M$1')
 
 	def test_question_code_mapping_provided(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')

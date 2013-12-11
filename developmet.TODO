@@ -3,7 +3,7 @@ To implement:
  ✔ Use excel template specified in config @done (13-12-02 15:26)
  ✔ Overwrite existing named ranges @done (13-12-02 15:39)
  ✔ Export not included label with blank string by default @done (13-12-10 20:49)
- ☐ Turn off not included label in dimension
+ ✔ Turn off not included label in dimension when desired @done (13-12-11 08:51)
    
 
 Eventually:

@@ -55,3 +55,8 @@ Feature: Determine the cuts desired from a configuration file
 		Given basic set of cut and dimensions in config file with a not included label for ethnicity of "Lack of Ethnicity"
 		When a new dimension is created that has the title "Ethnicity"
 		Then the dimension has a not included label of "Lack of Ethnicity"
+
+	Scenario: If don't include not included label is specified in dimension, use a none value
+		Given a set of cuts and dimensions with the Ethnicity dimensions having a "display_not_included_label" value of "No"
+		When a new dimension is created that has the title "Ethnicity"
+		Then the dimension has a not included label of None

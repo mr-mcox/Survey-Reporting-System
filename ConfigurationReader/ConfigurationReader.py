@@ -100,5 +100,8 @@ class Dimension(object):
 		self.config = kwargs.pop('config',None)
 		self.title = kwargs.pop('title',None)
 		self.not_included_label = str(self.title) + " Not Used"
-		if self.config is not None and 'not_included_label' in self.config:
-			self.not_included_label = self.config['not_included_label']
+		if self.config is not None:
+			if 'display_not_included_label' in self.config and self.config['display_not_included_label'] == 'No':
+				self.not_included_label = None
+			if 'not_included_label' in self.config:
+				self.not_included_label = self.config['not_included_label']
