@@ -115,9 +115,10 @@ def step(context):
 	dimension_titles = [dimension.title for dimension in context.reader.all_dimensions()]
 	assert set(dimension_titles) == {'Ethnicity','Grade'}
 
-@then('the dimension has a not included label of "Ethnicity Not Used"')
-def step(context):
-	assert context.result.not_included_label == "Ethnicity Not Used"
+@then('the dimension has a not included label of "{value}"')
+def step(context,value):
+	print(context.result.not_included_label)
+	assert context.result.not_included_label == value
 
 @given('that that config has 3 levels by default')
 def step(context):
@@ -132,3 +133,14 @@ def step(context):
 			if cut == yaml_cut:
 				cuts_match = True
 		assert cuts_match
+
+@given('basic set of cut and dimensions in config file with a not included label for ethnicity of "Lack of Ethnicity"')
+def step(context):
+	context.reader = ConfigurationReader()
+	context.reader.config = {'cuts':{
+	'Ethnicity': {'dimensions':['Ethnicity']},
+	'Region':{'dimensions':['Region']}
+	},
+	'dimensions':
+	{'Ethnicity':{'not_included_label':"Lack of Ethnicity"}}
+	}

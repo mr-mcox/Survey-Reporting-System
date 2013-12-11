@@ -50,3 +50,8 @@ Feature: Determine the cuts desired from a configuration file
 		Given that that config has 3 levels by default
 		When cuts_to_be_created is called
 		Then it returns the cuts in the yaml and an empty cut with two blanks at the end of the list
+
+	Scenario: If a not included label is specified, use that in instead
+		Given basic set of cut and dimensions in config file with a not included label for ethnicity of "Lack of Ethnicity"
+		When a new dimension is created that has the title "Ethnicity"
+		Then the dimension has a not included label of "Lack of Ethnicity"

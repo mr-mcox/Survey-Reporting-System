@@ -44,7 +44,10 @@ class ConfigurationReader(object):
 
 	def create_dimension(self, title):
 		if title not in self._all_dimensions:
-			new_dimension = Dimension(title=title)
+			dimension_config = None
+			if 'dimensions' in self.config and title in self.config['dimensions']:
+				dimension_config = self.config['dimensions'][title]
+			new_dimension = Dimension(title=title, config = dimension_config)
 			self._all_dimensions[title] = new_dimension
 			return new_dimension
 		else:
@@ -84,11 +87,18 @@ class Cut(object):
 				assert type(config_data['dimensions']) == list
 				if config_object != None:
 					assert type(config_object) == ConfigurationReader
-					self.dimensions = [config_object.create_dimension(x) for x in config_data['dimensions']]
+					cut_dimensions = list()
+					for dimension_name in config_data['dimensions']:
+						cut_dimensions.append(config_object.create_dimension(dimension_name))
+
+					self.dimensions = cut_dimensions
 				else:
 					self.dimensions = [Dimension(title=x) for x in config_data['dimensions']]
 
 class Dimension(object):
 	def __init__(self,**kwargs):
+		self.config = kwargs.pop('config',None)
 		self.title = kwargs.pop('title',None)
 		self.not_included_label = str(self.title) + " Not Used"
+		if self.config is not None and 'not_included_label' in self.config:
+			self.not_included_label = self.config['not_included_label']
