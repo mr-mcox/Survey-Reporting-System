@@ -4,6 +4,350 @@
 		"selected_items":
 		[
 			[
+				"num",
+				"num_rows"
+			],
+			[
+				"new",
+				"new_values"
+			],
+			[
+				"new_",
+				"new_values"
+			],
+			[
+				"list",
+				"list_of_rows	(local, instance)"
+			],
+			[
+				"que",
+				"question_table"
+			],
+			[
+				"re",
+				"responses"
+			],
+			[
+				"rs",
+				"responses"
+			],
+			[
+				"en",
+				"engine_1"
+			],
+			[
+				"getna",
+				"get_named_range"
+			],
+			[
+				"get_nam",
+				"get_named_ranges"
+			],
+			[
+				"excel",
+				"excel_template_file"
+			],
+			[
+				"file",
+				"filename"
+			],
+			[
+				"get_name",
+				"get_sheet_names"
+			],
+			[
+				"src_w",
+				"src_ws"
+			],
+			[
+				"src_s",
+				"src_ws_name"
+			],
+			[
+				"get_se",
+				"get_sheet_by_name"
+			],
+			[
+				"load",
+				"load_workbook"
+			],
+			[
+				"tes",
+				"testclass	testclass"
+			],
+			[
+				"te",
+				"testclass	testclass"
+			],
+			[
+				"uni",
+				"unittest"
+			],
+			[
+				"cuts",
+				"cuts_menus"
+			],
+			[
+				"app",
+				"append"
+			],
+			[
+				"question",
+				"question_code"
+			],
+			[
+				"assT",
+				"assertTrue	(attribute, instance)"
+			],
+			[
+				"co",
+				"column"
+			],
+			[
+				"exc",
+				"except"
+			],
+			[
+				"return",
+				"return_table"
+			],
+			[
+				"value",
+				"value_strings"
+			],
+			[
+				"form",
+				"format_string"
+			],
+			[
+				"inpu",
+				"input_heading"
+			],
+			[
+				"inst",
+				"integer_string_length"
+			],
+			[
+				"lg",
+				"logging"
+			],
+			[
+				"de",
+				"debug"
+			],
+			[
+				"cut",
+				"cut_demographic"
+			],
+			[
+				"dim",
+				"dimensions"
+			],
+			[
+				"ran",
+				"range_width"
+			],
+			[
+				"range",
+				"range_width"
+			],
+			[
+				"get_",
+				"get_highest_column"
+			],
+			[
+				"assertEqu",
+				"assertEqual	(attribute, instance)"
+			],
+			[
+				"ret",
+				"return_value"
+			],
+			[
+				"mo",
+				"modify_for_combinations_of_demographics"
+			],
+			[
+				"mast",
+				"master_list_of_demographics"
+			],
+			[
+				"cur_",
+				"cur_cut_values"
+			],
+			[
+				"dem",
+				"demographic_data"
+			],
+			[
+				"res",
+				"results"
+			],
+			[
+				"agg",
+				"aggregation_value"
+			],
+			[
+				"colu",
+				"columns"
+			],
+			[
+				"all",
+				"all_aggregations"
+			],
+			[
+				"create",
+				"create_row_column_headers"
+			],
+			[
+				"creat",
+				"compute_aggregation"
+			],
+			[
+				"conte",
+				"context	(local, instance)"
+			],
+			[
+				"fomat",
+				"format_string"
+			],
+			[
+				"concat",
+				"concat_row_items"
+			],
+			[
+				"ite",
+				"items_in_order"
+			],
+			[
+				"it",
+				"items_in_order"
+			],
+			[
+				"col",
+				"columns"
+			],
+			[
+				"to",
+				"tolist"
+			],
+			[
+				"im",
+				"import_table_data"
+			],
+			[
+				"un",
+				"unique"
+			],
+			[
+				"row_",
+				"row_heading"
+			],
+			[
+				"mas",
+				"master_aggregation"
+			],
+			[
+				"Cal",
+				"CalculationCoordinator"
+			],
+			[
+				"confi",
+				"config_reader"
+			],
+			[
+				"yaml",
+				"yaml_cut"
+			],
+			[
+				"resu",
+				"result_types"
+			],
+			[
+				"cal",
+				"calculations"
+			],
+			[
+				"di",
+				"dimensions"
+			],
+			[
+				"number",
+				"number_of_levels"
+			],
+			[
+				"foun",
+				"found_three"
+			],
+			[
+				"found",
+				"found_one"
+			],
+			[
+				"exm",
+				"example_one"
+			],
+			[
+				"not",
+				"not_included_label"
+			],
+			[
+				"d",
+				"dimensions"
+			],
+			[
+				"retu",
+				"return"
+			],
+			[
+				"Con",
+				"ConfigurationReader  (module)"
+			],
+			[
+				"Config",
+				"ConfigurationReader"
+			],
+			[
+				"doc",
+				"docstring"
+			],
+			[
+				"Dim",
+				"Dimension"
+			],
+			[
+				"in",
+				"integer_strings"
+			],
+			[
+				"la",
+				"labels"
+			],
+			[
+				"integer",
+				"integer_strings"
+			],
+			[
+				"retun",
+				"return_value"
+			],
+			[
+				"sor",
+				"sorted_labels"
+			],
+			[
+				"inte",
+				"integer_string"
+			],
+			[
+				"Di",
+				"Dimensions"
+			],
+			[
+				"title",
+				"title"
+			],
+			[
 				"net_",
 				"net_formatted_values"
 			]
@@ -12,27 +356,34 @@
 	"buffers":
 	[
 		{
-			"file": "NumericOutputCalculator/features/compute_net_strong_weak_average.feature",
+			"file": "ResultsRetriever/ResultsRetriever.py",
 			"settings":
 			{
-				"buffer_size": 3667,
+				"buffer_size": 1529,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "NumericOutputCalculator/features/steps/basic_computations.py",
+			"file": "database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
 			"settings":
 			{
-				"buffer_size": 2619,
-				"line_ending": "Unix",
-				"name": "from behave"
+				"buffer_size": 4232,
+				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "NumericOutputCalculator/NumericOutputCalculator.py",
+			"file": "execution_demonstration.py",
 			"settings":
 			{
-				"buffer_size": 3315,
+				"buffer_size": 1212,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "database/mdis_db_migration/db_connect_string.txt",
+			"settings":
+			{
+				"buffer_size": 53,
 				"line_ending": "Unix"
 			}
 		}
@@ -40,9 +391,45 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 47.0,
+		"height": 87.0,
 		"selected_items":
 		[
+			[
+				"git push",
+				"Git: Push"
+			],
+			[
+				"git comm",
+				"Git: Commit"
+			],
+			[
+				"git add",
+				"Git: Add..."
+			],
+			[
+				"task",
+				"Tasks: Archive"
+			],
+			[
+				"git com",
+				"Git: Commit"
+			],
+			[
+				"git ad",
+				"Git: Add..."
+			],
+			[
+				"conver",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"cuc",
+				"Gherkin/Cucumber: Format"
+			],
+			[
+				"git",
+				"Git: Commit"
+			],
 			[
 				"git sat",
 				"Git: Status"
@@ -84,7 +471,7 @@
 				"Set Syntax: JavaScript"
 			]
 		],
-		"width": 602.0
+		"width": 449.0
 	},
 	"console":
 	{
@@ -101,6 +488,37 @@
 	},
 	"file_history":
 	[
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic.ini",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/db_connect_string.txt",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/.gitignore",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/ConfigurationReader.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/NumericOutputCalculator.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writer_test.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/execution_demonstration.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/demonstration_yaml.yaml",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/developmet.TODO",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/ResultsRetriever.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/38f83803a29_create_basic_respons.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writing_utilities_test.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/steps/calcuation_coordinator_steps.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/convert_demograph_text_to_number.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/SurveyReportingSystem.sublime-project",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/load_cut_definitions_steps.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/steps/assemble_cuts_from_config_reader_steps.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/assemble_cuts_from_config_reader.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/export_to_grid.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/load_cut_definitions.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/dimensions_by_cut_title_steps.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/dimensions_by_cut_title.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/features/retrieve_numeric_results.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/excel_helper.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/for_excel_export.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/steps/get_mapping_by_dimension_steps.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/get_mapping_by_dimension.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/for_excel_steps.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps/basic_computations.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_net_strong_weak_average.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/PythonSurveyReportingSystem/NumericOutputCalculator/__init__.py",
 		"/Users/mcox/Library/Application Support/Sublime Text 2/Packages/SideBarEnhancements/messages/11.13.2012.1305.0.txt",
 		"/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1314F8W/Supporting_scripts/for_progress_report/config.yaml",
@@ -109,13 +527,14 @@
 	],
 	"find":
 	{
-		"height": 0.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
 		"height": 0.0,
 		"where_history":
 		[
+			"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem"
 		]
 	},
 	"find_state":
@@ -123,12 +542,102 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"value",
+			"results",
+			"src_ws_name",
+			"dest_wb",
+			"get",
+			"ws1",
+			"WB1",
+			"wb1",
+			"get_active",
+			"get_integer_string_mapping",
+			"mappings_to_output",
+			"row_heading",
+			"loggin.debug",
+			"loggin.deb",
+			"zero_integer_string",
+			"replace_dimensions_with_integers",
+			"adjust_zero_padding_of_heading",
+			"create_row_column_headers",
+			"adjust_zero_padding_of_heading",
+			"return_table",
+			"all_aggregations",
+			"apply",
+			"format_string",
+			" \n",
+			"adjust_zero_padding_of_heading",
+			"pass",
+			"results for",
+			"dimension_integer_mapping",
+			"get_highest_row",
+			"default_menu",
+			"cuts_head",
+			"cuts",
+			"default_menu",
+			"cuts",
+			"cuts_config",
+			"dv_ws",
+			"cuts",
+			"disp_value_row_head",
+			"dis_value_cuts_headvalues",
+			"dis_value_values",
+			"disp_valuecuts_config_col_head",
+			"E5",
+			"B2",
+			"end_col",
+			"disp_value_row_head",
+			"dis_value_values",
+			"A2",
+			"disp_value_row_head",
+			"disp_value_col_head",
+			"disp_value_row_head",
+			"master_aggregation",
+			"first_refirst_question_codesult_type",
+			"first_question_code",
+			"result_type",
+			"dict_for_df",
+			"None",
+			"list_to_add_onto",
+			"first_result_type",
+			"value_list",
+			"value_set",
+			"cur_cut",
+			"compute net with cut_demographic = region and gender is run",
+			"Male",
+			"cc",
+			"compute_cuts_from_config",
+			"master_aggregation row_headers has six rows",
+			"a set of calculations generated with region and gender and with integer labels",
+			"values_by_column",
+			"current_index",
+			"Then same number of unique values in dimension columns exists before and after",
+			"create row and column headers is run",
+			"computations generated that include a cut by gender and a cut by region with duplicates",
+			"	context.coordinator = CalculationCoordinator()\n	context.computations_generated_1 = pd.DataFrame({'question_code':[0,1,1],'gender':['Male','Female',\"Male\"]})\n	context.computations_generated_2 = pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',\"SoDak\"]",
+			"context.results.append(context.coordinator.replace_dimensions_with_integers(context.coordinator.computations_generated_1))",
+			"(?<=Given |When | Then ).+",
+			"it returns every combination of each of the dimensions being used or not used",
+			"cuts",
+			"re-form",
+			"and",
+			"compute_aggregation",
+			"number_of_levels",
+			"one",
+			"provided",
+			"name",
+			"context.result",
+			"ConfigurationReader",
+			"dimension",
+			"Dimension",
+			"Ethnicity",
+			"has the title ethnicity",
 			"1213EYS"
 		],
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
 		],
@@ -141,23 +650,23 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "NumericOutputCalculator/features/compute_net_strong_weak_average.feature",
+					"file": "ResultsRetriever/ResultsRetriever.py",
 					"settings":
 					{
-						"buffer_size": 3667,
+						"buffer_size": 1529,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								947,
+								425
 							]
 						],
 						"settings":
@@ -168,109 +677,6 @@
 								"README",
 								"FIXME"
 							],
-							"codeintel": true,
-							"codeintel_config":
-							{
-								"JavaScript":
-								{
-									"codeintel_max_recursive_dir_depth": 2.0,
-									"codeintel_scan_files_in_project": false,
-									"javascriptExtraPaths":
-									[
-									]
-								},
-								"PHP":
-								{
-									"codeintel_max_recursive_dir_depth": 5.0,
-									"codeintel_scan_files_in_project": false,
-									"phpExtraPaths":
-									[
-									]
-								},
-								"Python":
-								{
-									"env":
-									{
-									}
-								}
-							},
-							"codeintel_enabled_languages":
-							[
-								"JavaScript",
-								"Mason",
-								"XBL",
-								"XUL",
-								"RHTML",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"XSLT",
-								"Django",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Smarty",
-								"Node.js",
-								"Tcl",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_live": true,
-							"codeintel_live_enabled_languages":
-							[
-								"JavaScript",
-								"Mason",
-								"XBL",
-								"XUL",
-								"RHTML",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"XSLT",
-								"Django",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Smarty",
-								"Node.js",
-								"Tcl",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_max_recursive_dir_depth": 10.0,
-							"codeintel_scan_exclude_dir":
-							{
-								"JavaScript":
-								[
-									"/build/",
-									"/min/"
-								]
-							},
-							"codeintel_scan_files_in_project": true,
-							"codeintel_selected_catalogs":
-							[
-								"PyWin32",
-								"jQuery",
-								"Rails"
-							],
-							"codeintel_snippets": true,
-							"codeintel_syntax_map":
-							{
-								"Python Django": "Python"
-							},
-							"codeintel_tooltips": "popup",
 							"csslint_options":
 							{
 								"adjoining-classes": "warning",
@@ -332,7 +738,6 @@
 							[
 							],
 							"pyflakes_ignore_import_*": true,
-							"sublime_auto_complete": true,
 							"sublimelinter": true,
 							"sublimelinter_delay": 2.0,
 							"sublimelinter_disable":
@@ -355,7 +760,7 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Cucumber/Cucumber Plain Text Feature.tmLanguage",
+							"syntax": "Packages/Python/Python.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
@@ -366,18 +771,18 @@
 				},
 				{
 					"buffer": 1,
-					"file": "NumericOutputCalculator/features/steps/basic_computations.py",
+					"file": "database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
 					"settings":
 					{
-						"buffer_size": 2619,
+						"buffer_size": 4232,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								4214,
+								4214
 							]
 						],
 						"settings":
@@ -388,7 +793,6 @@
 								"README",
 								"FIXME"
 							],
-							"auto_name": "from behave",
 							"codeintel": true,
 							"codeintel_config":
 							{
@@ -576,9 +980,226 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 804.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "execution_demonstration.py",
+					"settings":
+					{
+						"buffer_size": 1212,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								478,
+								478
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublime_auto_complete": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -587,19 +1208,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "NumericOutputCalculator/NumericOutputCalculator.py",
+					"buffer": 3,
+					"file": "database/mdis_db_migration/db_connect_string.txt",
 					"settings":
 					{
-						"buffer_size": 3315,
+						"buffer_size": 53,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								53,
+								53
 							]
 						],
 						"settings":
@@ -797,11 +1418,10 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 248.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -855,6 +1475,50 @@
 		"selected_items":
 		[
 			[
+				"num",
+				"NumericOutputCalculator/NumericOutputCalculator.py"
+			],
+			[
+				"numer",
+				"NumericOutputCalculator/NumericOutputCalculator.py"
+			],
+			[
+				"calc",
+				"CalculationCoordinator/CalculationCoordinator.py"
+			],
+			[
+				"calc_ste",
+				"CalculationCoordinator/features/steps/calcuation_coordinator_steps.py"
+			],
+			[
+				"con",
+				"ConfigurationReader/ConfigurationReader.py"
+			],
+			[
+				"exc",
+				"CalculationCoordinator/test/excel_writer_test.py"
+			],
+			[
+				"conre",
+				"ConfigurationReader/ConfigurationReader.py"
+			],
+			[
+				"calccoo.py",
+				"CalculationCoordinator/CalculationCoordinator.py"
+			],
+			[
+				"config/ste",
+				"ConfigurationReader/features/steps/load_cut_definitions_steps.py"
+			],
+			[
+				"conf/ste",
+				"ConfigurationReader/features/steps/for_excel_steps.py"
+			],
+			[
+				"tod",
+				"developmet.TODO"
+			],
+			[
 				"nu",
 				"NumericOutputCalculator/NumericOutputCalculator.py"
 			],
@@ -869,10 +1533,6 @@
 			[
 				"com",
 				"NumericOutputCalculator/features/compute_net_strong_weak_average.feature"
-			],
-			[
-				"con",
-				"config.yaml"
 			],
 			[
 				"par",
@@ -897,6 +1557,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 150.0,
+	"side_bar_width": 315.0,
 	"status_bar_visible": true
 }
