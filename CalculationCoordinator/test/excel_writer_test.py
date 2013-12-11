@@ -31,7 +31,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		coordinator.config = config_reader
 
 		config_reader.all_dimensions = mock.MagicMock(return_value = [ConfigurationReader.Dimension(title="Gender")])
-		coordinator.get_integer_string_mapping = mock.MagicMock(return_value= {'integer_strings':['0','1'],'labels':['male','female']})
+		coordinator.get_integer_string_mapping = mock.MagicMock(return_value= {'integer_strings':['1','2'],'labels':['male','female']})
 
 		coordinator.dimension_integer_mapping = {'values': self.mapping_values,'integers':self.mapping_integers}
 		coordinator.excel_dashboard_file = 'test_file.xlsx'
@@ -59,11 +59,12 @@ class WriteExcelTestCase(unittest.TestCase):
 	def test_writing_menu_translations(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
 		assert ws.cell(row=0,column=5).value == "Gender"
-		assert ws.cell(row=1,column=5).value == "male"
-		assert ws.cell(row=2,column=5).value == "female"
+		assert ws.cell(row=1,column=5).value == "Gender Not Used"
+		assert ws.cell(row=2,column=5).value == "male"
+		assert ws.cell(row=3,column=5).value == "female"
 		assert ws.cell(row=1,column=6).value == 0
 		assert ws.cell(row=2,column=6).value == 1
-
+		assert ws.cell(row=3,column=6).value == 2
 
 	def test_write_master_as_excel(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'DisplayValues')
@@ -77,7 +78,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		range_names = [r.name for r in wb.get_named_ranges()]
 		self.assertTrue( 'disp_value_row_head' in range_names)
 		self.assertTrue( 'disp_value_col_head' in range_names)
-		self.assertTrue( 'dis_value_values' in range_names)
+		self.assertTrue( 'disp_value_values' in range_names)
 		self.assertEqual( wb.get_named_range('disp_value_row_head').destinations[0][1],'$A$2:$A$3')
 		self.assertEqual( wb.get_named_range('disp_value_col_head').destinations[0][1],'$B$1:$C$1')
 		self.assertEqual( wb.get_named_range('disp_value_values').destinations[0][1],'$B$2:$C$3')
