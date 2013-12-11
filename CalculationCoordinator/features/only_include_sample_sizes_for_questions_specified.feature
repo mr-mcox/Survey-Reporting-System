@@ -1,3 +1,4 @@
+Feature: Only include sample sizes for for questions specified
 Scenario: Only include sample sizes for questions specified
 	Given net formatted values
 		| respondent_id | question_code | response |
@@ -15,7 +16,7 @@ Scenario: Only include sample sizes for questions specified
 		| 2             | Atlanta | Male   |
 		| 3             | SoDak   | Male   |
 		| 4             | SoDak   | Female |
-	Given a config reader that requests national cuts and show_sample_size_for_questions for question_code "q1"
+	Given a config reader that requests national cuts and show_sample_size_for_questions for question_code "q1" and default result_types of "net" and "sample_size"
 	When compute_cuts_from_config is run
-	Then there there is a sample size entry for questions_code "q1"
-	Then there there is not a sample size entry for questions_code "q2"
+	Then there there is a sample size entry for question_code "q1"
+	Then there there is not a sample size entry for question_code "q2"

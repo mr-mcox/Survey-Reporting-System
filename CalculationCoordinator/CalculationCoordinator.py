@@ -39,10 +39,7 @@ class CalculationCoordinator(object):
 			orig_cuts = [orig_cuts]
 		cuts = [cut for cut in orig_cuts if cut != None]
 
-		calcs = list()
-		for result_type in self.result_types:
-			calcs.append(calculator.compute_aggregation(result_type=result_type,cut_demographic=cuts,**kwargs))
-		calculations = pd.concat(calcs)
+		calculations = calculator.compute_aggregation(result_type=self.result_types,cut_demographic=cuts,**kwargs)
 
 		if self.ensure_combination_for_every_set_of_demographics:
 			calculations = self.modify_for_combinations_of_demographics(df=calculations,cuts=cuts)
@@ -132,7 +129,7 @@ class CalculationCoordinator(object):
 		return df
 
 	def get_integer_string_mapping(self, dimension):
-		assert dimension in self.labels_for_cut_dimensions
+		assert dimension in self.labels_for_cut_dimensions, "Dimension " + dimension + " not present"
 		mapping_as_dict = self.labels_for_cut_dimensions[dimension]
 		sorted_labels = sorted(mapping_as_dict.keys())
 		return {'integer_strings':[mapping_as_dict[label] for label in sorted_labels],'labels':sorted_labels}
@@ -159,9 +156,18 @@ class CalculationCoordinator(object):
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		all_aggregations = list()
 		logging.debug("All cuts are " + str(self.config.cuts_to_be_created()))
+		if 'result_types' in self.config.config:
+			self.result_types = self.config.config['result_types']
 		for cut_set in self.config.cuts_to_be_created():
 			# logging.debug("Cut set is " + str(cut_set))
 			df = self.compute_aggregation(cut_demographic=cut_set)
+			#Remove samples sizes for questions that don't need them
+			assert 'question_code' in df.columns
+			questions_to_show_sample_size = df.question_code.unique().tolist()
+			if 'show_sample_size_for_questions' in self.config.config:
+				questions_to_show_sample_size = self.config.config['show_sample_size_for_questions']
+			df = df.ix[(df.result_type != 'sample_size') | df.question_code.isin(questions_to_show_sample_size),:]
+
 			df = self.replace_dimensions_with_integers(df)
 			df = self.create_row_column_headers(df,cuts=cut_set)
 			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
