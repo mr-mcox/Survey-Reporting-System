@@ -72,3 +72,11 @@ def step(context):
 @when('compute sample size is run')
 def step(context):
     context.result = context.numeric_output_calculator.compute_sample_size_results()
+
+@when('when compute_aggregation is run with net and strong')
+def step(context):
+    context.result = context.numeric_output_calculator.compute_aggregation(result_type=['net','strong'])
+
+@then('there is a result_type column that include both net and strong')
+def step(context):
+    assert set(context.result['result_type'].unique()) == {'net','strong'}

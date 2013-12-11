@@ -101,3 +101,15 @@ Scenario: When cut is created, it should include the type of result
 			| 2             |                     |
 	When compute net is run
 	Then there is a result_type column where all rows have value of net
+
+Scenario: When multiple result types are specified, output has all of them
+	Given net formatted values
+			| question_code | net_formatted_value |
+			| 1             | 0                   |
+			| 1             | 1                   |
+			| 1             | 1                   |
+			| 1             | 0                   |
+			| 2             | -1                  |
+			| 2             |                     |
+	When when compute_aggregation is run with net and strong
+	Then there is a result_type column that include both net and strong

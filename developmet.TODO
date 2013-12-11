@@ -1,8 +1,8 @@
 To implement:
  ✔ Create sample_size type of calculation @done (13-12-11 09:35)
- ☐ Sample_size is only calculated for certain questions
- ☐ Only compute cuts for certain questions if they are identified in the config
  ☐ Refactor numeric calculator so that it will output multiple result types simultaneously if specified
+ ☐ Sample_size is only output for certain questions identified in the config
+ ☐ Only compute cuts for certain questions if they are identified in the config
    
 
 Eventually:
