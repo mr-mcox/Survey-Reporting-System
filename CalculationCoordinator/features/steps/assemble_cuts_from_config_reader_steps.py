@@ -47,3 +47,26 @@ def step(context):
 	question_code_map = dict(zip(mapping['labels'],mapping['integer_strings']))
 	label_to_probe_for = str(question_code_map['q2']) + ";" + result_type_map['sample_size']
 	assert label_to_probe_for not in context.result['column_heading'].unique().tolist()
+
+@given('a config reader that requests national cuts only requests cut for "q2"')
+def step(context):
+	config_reader = ConfigurationReader.ConfigurationReader()
+	config_reader.cuts_to_be_created = mock.MagicMock(return_value = [[None,None,None]])
+	config_reader.config = {'show_questions':['q2']}
+	context.coordinator.config = config_reader
+	context.config_reader = config_reader
+
+@then('there there is a net entry for question_code "q2"')
+def step(context):
+	mapping = context.coordinator.get_integer_string_mapping('result_type')
+	result_type_map = dict(zip(mapping['labels'],mapping['integer_strings']))
+	mapping = context.coordinator.get_integer_string_mapping('question_code')
+	question_code_map = dict(zip(mapping['labels'],mapping['integer_strings']))
+	label_to_probe_for = str(question_code_map['q2']) + ";" + result_type_map['net']
+	assert label_to_probe_for in context.result['column_heading'].unique().tolist()
+
+@then('there there not is a net entry for question_code "q1"')
+def step(context):
+	mapping = context.coordinator.get_integer_string_mapping('question_code')
+	question_code_map = dict(zip(mapping['labels'],mapping['integer_strings']))
+	assert 'q1' not in question_code_map.keys()
