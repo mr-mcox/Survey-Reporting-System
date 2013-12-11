@@ -68,3 +68,7 @@ def step(context):
     assert 'result_type' in context.result.columns
     assert len(context.result['result_type'].unique()) == 1
     assert context.result.result_type.iloc[0] == 'net'
+
+@when('compute sample size is run')
+def step(context):
+    context.result = context.numeric_output_calculator.compute_sample_size_results()

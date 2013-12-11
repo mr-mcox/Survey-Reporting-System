@@ -1,9 +1,8 @@
 To implement:
- ✔ Copy sheets to an existing WB @done (13-12-02 15:07)
- ✔ Use excel template specified in config @done (13-12-02 15:26)
- ✔ Overwrite existing named ranges @done (13-12-02 15:39)
- ✔ Export not included label with blank string by default @done (13-12-10 20:49)
- ✔ Turn off not included label in dimension when desired @done (13-12-11 08:51)
+ ✔ Create sample_size type of calculation @done (13-12-11 09:35)
+ ☐ Sample_size is only calculated for certain questions
+ ☐ Only compute cuts for certain questions if they are identified in the config
+ ☐ Refactor numeric calculator so that it will output multiple result types simultaneously if specified
    
 
 Eventually:
@@ -28,6 +27,11 @@ Risks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Copy sheets to an existing WB @done (13-12-02 15:07) @project(To implement)
+ ✔ Use excel template specified in config @done (13-12-02 15:26) @project(To implement)
+ ✔ Overwrite existing named ranges @done (13-12-02 15:39) @project(To implement)
+ ✔ Export not included label with blank string by default @done (13-12-10 20:49) @project(To implement)
+ ✔ Turn off not included label in dimension when desired @done (13-12-11 08:51) @project(To implement)
  ✔ Configuration reader returns the dimensions to be used for each cut, with order being important @done (13-11-19 15:33) @project(To implement)
  ✔ Refactor tuple for CalculationCoordinator so that type of calculations can be determined from key @done (13-11-19 17:26) @project(To implement)
  ✔ When multiple dimensions are passed for cutting, aggregations are based on all of those columns @done (13-11-19 17:32) @project(To implement)

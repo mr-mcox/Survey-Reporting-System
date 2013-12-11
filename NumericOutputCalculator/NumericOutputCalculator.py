@@ -57,7 +57,11 @@ class NumericOutputCalculator(object):
 			nfv.net_formatted_value = nfv.net_formatted_value * -1
 			aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 		if result_type == 'raw_average':
+			assert 'response' in self.responses.columns
 			aggregation_calulation = self.responses.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()
+		if result_type == 'sample_size':
+			assert 'response' in self.responses.columns
+			aggregation_calulation = self.responses.ix[self.responses.response.notnull(),:].groupby(cut_groupings).aggregate(len).rename(columns={'response':'aggregation_value'}).reset_index()
 
 		aggregation_calulation['result_type'] = result_type
 		return_columns = cut_groupings + ['aggregation_value','result_type']
@@ -76,3 +80,6 @@ class NumericOutputCalculator(object):
 
 	def compute_average_results(self,**kwargs):
 		return self.compute_aggregation(result_type='raw_average',**kwargs)
+
+	def compute_sample_size_results(self,**kwargs):
+		return self.compute_aggregation(result_type='sample_size',**kwargs)
