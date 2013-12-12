@@ -33,6 +33,7 @@ class NumericOutputCalculator(object):
 			assert cut_demographic in self.demographic_data.columns
 
 		nfv = self.responses.copy()
+		raw_fv = self.responses.copy()
 		if not self.demographic_data.empty:
 			if cut_demographic != []:
 				assert 'respondent_id' in nfv, "Expected respondent_id column in responses"
@@ -49,6 +50,8 @@ class NumericOutputCalculator(object):
 
 		aggregation_calulations_list = list()
 		for result_type in result_types:
+			logging.debug("Computing aggregation for result type "+ result_type + " and cuts "+ str(cut_groupings))
+			# logging.debug("Responses columns are " + str(nfv))
 			assert result_type in {'net','strong','weak','raw_average','sample_size'}
 			aggregation_calulation = pd.DataFrame()
 			if result_type == 'net':
@@ -61,11 +64,11 @@ class NumericOutputCalculator(object):
 				nfv.net_formatted_value = nfv.net_formatted_value * -1
 				aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 			if result_type == 'raw_average':
-				assert 'response' in self.responses.columns
-				aggregation_calulation = self.responses.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()
+				assert 'response' in nfv.columns
+				aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()
 			if result_type == 'sample_size':
-				assert 'response' in self.responses.columns
-				aggregation_calulation = self.responses.ix[self.responses.response.notnull(),:].groupby(cut_groupings).aggregate(len).rename(columns={'response':'aggregation_value'}).reset_index()
+				assert 'response' in nfv.columns
+				aggregation_calulation = nfv.ix[nfv.response.notnull(),:].groupby(cut_groupings).aggregate(len).rename(columns={'response':'aggregation_value'}).reset_index()
 
 			aggregation_calulation['result_type'] = result_type
 			aggregation_calulations_list.append(aggregation_calulation)
