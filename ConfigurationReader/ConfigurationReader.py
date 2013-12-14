@@ -1,5 +1,5 @@
 from bitstring import BitArray
-import yaml
+import pyyaml
 import logging
 
 class ConfigurationReader(object):

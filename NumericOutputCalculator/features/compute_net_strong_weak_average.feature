@@ -113,3 +113,27 @@ Scenario: When multiple result types are specified, output has all of them
 			| 2             |                     |
 	When when compute_aggregation is run with net and strong
 	Then there is a result_type column that include both net and strong
+
+Scenario: When net formatted values are provided for a question, output strong_count by question
+	Given net formatted values
+		| question_code | net_formatted_value |
+		| 1             | 0                   |
+		| 1             | 1                   |
+		| 1             | 1                   |
+		| 1             | 0                   |
+		| 1             | -1                  |
+		| 1             |                     |
+	When compute strong_count is run
+	Then the display_value for question_code 1 is 2
+
+Scenario: When net formatted values are provided for a question, output weak_count by question
+	Given net formatted values
+		| question_code | net_formatted_value |
+		| 1             | 0                   |
+		| 1             | 1                   |
+		| 1             | 1                   |
+		| 1             | 0                   |
+		| 1             | -1                  |
+		| 1             |                     |
+	When compute weak_count is run
+	Then the display_value for question_code 1 is 1

@@ -80,3 +80,12 @@ def step(context):
 @then('there is a result_type column that include both net and strong')
 def step(context):
     assert set(context.result['result_type'].unique()) == {'net','strong'}
+
+
+@when('compute strong_count is run')
+def step(context):
+    context.result = context.numeric_output_calculator.compute_aggregation(result_type=['strong_count'])
+
+@when('compute weak_count is run')
+def step(context):
+    context.result = context.numeric_output_calculator.compute_aggregation(result_type=['weak_count'])

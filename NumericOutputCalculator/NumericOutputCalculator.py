@@ -52,17 +52,24 @@ class NumericOutputCalculator(object):
 		for result_type in result_types:
 			logging.debug("Computing aggregation for result type "+ result_type + " and cuts "+ str(cut_groupings))
 			# logging.debug("Responses columns are " + str(nfv))
-			assert result_type in {'net','strong','weak','raw_average','sample_size'}
+			assert result_type in {'net','strong','weak','raw_average','sample_size','strong_count','weak_count'}, "No calculation defined for result_type " + result_type
 			aggregation_calulation = pd.DataFrame()
 			if result_type == 'net':
 				aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 			if result_type == 'strong':
 				nfv.ix[nfv.net_formatted_value.notnull() & (nfv.net_formatted_value != 1),'net_formatted_value'] = 0
 				aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+			if result_type == 'strong_count':
+				nfv.ix[nfv.net_formatted_value.notnull() & (nfv.net_formatted_value != 1),'net_formatted_value'] = 0
+				aggregation_calulation = nfv.groupby(cut_groupings).sum().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 			if result_type == 'weak':
 				nfv.ix[nfv.net_formatted_value.notnull() & (nfv.net_formatted_value != -1),'net_formatted_value'] = 0
 				nfv.net_formatted_value = nfv.net_formatted_value * -1
 				aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+			if result_type == 'weak_count':
+				nfv.ix[nfv.net_formatted_value.notnull() & (nfv.net_formatted_value != -1),'net_formatted_value'] = 0
+				nfv.net_formatted_value = nfv.net_formatted_value * -1
+				aggregation_calulation = nfv.groupby(cut_groupings).sum().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 			if result_type == 'raw_average':
 				assert 'response' in nfv.columns
 				aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()
