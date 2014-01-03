@@ -1,8 +1,8 @@
 To implement:
-
-Eventually:
-  ☐ Compute net_statistical_significance calls compute aggregation with strong_count, weak_count, sample_size for primary cuts and cuts with level one removed
+  ✔ Compute net_statistical_significance calls compute aggregation with strong_count, weak_count, sample_size for primary cuts and cuts with level one removed @done (14-01-03 15:55)
   ☐ Compute net_statistical_significance outputs reasonable calls for significance
+  ☐ Output labels for statistical significance on seperate tab
+Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
 Refactor:
   ☐ Survey is indentified on questions table and not on results table

@@ -7,7 +7,6 @@ class NumericOutputCalculator(object):
 	def __init__(self, **kwargs):		
 		responses = pd.DataFrame(kwargs.pop('responses',dict())).convert_objects(convert_numeric=True)
 		assert not responses.empty
-
 		if 'net_formatted_value' not in responses.columns or responses['net_formatted_value'].notnull().sum() == 0:
 			map_7pt_SA_to_net = {8:None,7:-1,6:-1,5:-1,4:-1,3:0,2:1,1:1}
 			responses['net_formatted_value'] = responses.response.map(map_7pt_SA_to_net)
@@ -97,3 +96,11 @@ class NumericOutputCalculator(object):
 
 	def compute_sample_size_results(self,**kwargs):
 		return self.compute_aggregation(result_type='sample_size',**kwargs)
+
+	def bootstrap_net_significance(self,**kwargs):
+		cuts = kwargs.pop('cuts',None)
+		assert cuts is not None
+		assert type(cuts) == list
+		assert len(cuts) >= 1, "Cannot make statistical significance comparison with no dimensions"
+		self.significance_base_results = self.compute_aggregation(cut_demographic=cuts,result_type=["sample_size","strong_count","weak_count"])
+		self.significance_comparison_results = self.compute_aggregation(cut_demographic=cuts[1:],result_type=["sample_size","strong_count","weak_count"])
