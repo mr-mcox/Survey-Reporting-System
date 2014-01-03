@@ -48,6 +48,7 @@ class WriteExcelTestCase(unittest.TestCase):
 			})
 		coordinator.compute_cuts_from_config = mock.MagicMock(return_value=master_aggregation)
 		coordinator.export_to_excel()
+		self.coordinator = coordinator
 
 	def test_writing_cut_config(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
@@ -123,6 +124,9 @@ class WriteExcelTestCase(unittest.TestCase):
 	def test_template_sheets_untouched(self):
 		wb = load_workbook(filename = r'test_file.xlsx')
 		self.assertTrue('ExistingData' in wb.get_sheet_names())
+
+	def test_ensure_combination_for_every_set_of_demographics_is_true(self):
+		self.assertTrue(self.coordinator.ensure_combination_for_every_set_of_demographics)
 
 
 

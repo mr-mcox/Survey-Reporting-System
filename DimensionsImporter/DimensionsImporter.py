@@ -5,9 +5,9 @@ class DimensionsImporter(object):
 	def __init__(self, **kwargs):
 		input_file = kwargs.pop('flat_file', None)
 		if input_file != None:
-			self.demographic_data = pd.read_excel(input_file,'Sheet1')
+			self.demographic_data = pd.read_excel(input_file,'Sheet1').fillna("")
 		else:
-			self.demographic_data = pd.DataFrame()
+			self.demographic_data = pd.DataFrame().fillna("")
 
 	def demographic_data():
 		doc = "The demographic_data property."

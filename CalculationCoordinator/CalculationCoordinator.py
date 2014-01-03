@@ -12,6 +12,8 @@ class CalculationCoordinator(object):
 	def __init__(self, **kwargs):
 		self.results = kwargs.pop('results',None)
 		self.demographic_data = kwargs.pop('demographic_data',None)
+		if self.demographic_data is not None:
+			self.demographic_data = self.demographic_data.set_index('respondent_id').applymap(str).fillna("Missing").reset_index()
 		self.config = kwargs.pop('config',None)
 		self.computations_generated = dict()
 		self.result_types = kwargs.pop('result_types',['net'])
@@ -41,7 +43,8 @@ class CalculationCoordinator(object):
 
 		calculations = calculator.compute_aggregation(result_type=self.result_types,cut_demographic=cuts,**kwargs)
 
-		if self.ensure_combination_for_every_set_of_demographics:
+		if self.ensure_combination_for_every_set_of_demographics and len(cuts) > 0:
+			logging.debug("Cuts passing to modify " + str(cuts))
 			calculations = self.modify_for_combinations_of_demographics(df=calculations,cuts=cuts)
 
 		aggregation_key = tuple(cuts)
@@ -50,12 +53,21 @@ class CalculationCoordinator(object):
 		return calculations
 
 	def modify_for_combinations_of_demographics(self, df, cuts):
-
+		df = df.reset_index()
+		# logging.debug("Starting df is " + str(df.head()))
+		# logging.debug("Starting df row is " + str(df.reset_index().ix[0,:]))
 		first_result_type = df.ix[0,'result_type']
+		# logging.debug("First result type is " + df.ix[0,'result_type'])
 		first_question_code = df.ix[0,'question_code']
+		if hasattr(self,'default_question'):
+			first_question_code = self.default_question
+		if hasattr(self,'default_result_type'):
+			first_result_type = self.default_result_type
 
 		#Initialize with first list
-		assert cuts[0] in self.demographic_data
+		assert len(cuts) > 0
+		# logging.debug("Cuts are " + str(cuts))
+		assert cuts[0] in self.demographic_data, cuts[0] + " not found in demographic_data"
 		master_list_of_demographics = [ [item] for item in self.demographic_data[cuts[0]].unique().tolist()]
 
 		#Create list of combinations to look for
@@ -76,16 +88,17 @@ class CalculationCoordinator(object):
 		for value_set in master_list_of_demographics:
 			if df_with_cut_index.index.isin([tuple(value_set)]).sum()== 0:
 				dict_for_df = dict()
-				for i in range(len(cuts)):
-					dict_for_df[cuts[i]] = [value_set[i]]
 				dict_for_df['result_type'] = [first_result_type]
+				# logging.debug("First question code is " + first_question_code )
 				dict_for_df['question_code'] = [first_question_code]
 				new_row = pd.DataFrame(dict_for_df)
+				# logging.debug("New row before adding cuts:\n" + str(new_row))
+				for i in range(len(cuts)):
+					new_row[cuts[i]] = value_set[i]
+				logging.debug("New row after adding cuts:\n" + str(new_row))
 
 				df = pd.concat([df,new_row])
 		return df
-
-
 
 	def replace_dimensions_with_integers(self, df = None):
 
@@ -111,6 +124,7 @@ class CalculationCoordinator(object):
 		for column in df.columns:
 			if column != 'aggregation_value':
 				value_map = {key : value for (key, value) in integer_strings_by_column[column].items()}
+				# logging.debug("Mapping values for column " + column + "\n" + str(value_map))
 				df[column] = df[column].map(value_map)
 
 		#Create mapping to be able to convert back
@@ -155,14 +169,20 @@ class CalculationCoordinator(object):
 		assert self.config != None
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		all_aggregations = list()
-		logging.debug("All cuts are " + str(self.config.cuts_to_be_created()))
+		# logging.debug("All cuts are " + str(self.config.cuts_to_be_created()))
+		#Set default question as not doing that seems to cause issues
+		if 'show_questions' in self.config.config:
+			self.default_question = self.config.config['show_questions'][0]
 		if 'result_types' in self.config.config:
 			self.result_types = self.config.config['result_types']
+			self.default_result_type = self.result_types[0]
 		for cut_set in self.config.cuts_to_be_created():
 			# logging.debug("Cut set is " + str(cut_set))
 			df = self.compute_aggregation(cut_demographic=cut_set)
 			#Remove samples sizes for questions that don't need them
 			assert 'question_code' in df.columns
+			logging.debug("question_code dtype is " + str(df.question_code.dtype))
+			logging.debug("question_codes are " + str(df.question_code))
 			questions_to_show_sample_size = df.question_code.unique().tolist()
 			if 'show_sample_size_for_questions' in self.config.config:
 				questions_to_show_sample_size = self.config.config['show_sample_size_for_questions']
@@ -186,12 +206,15 @@ class CalculationCoordinator(object):
 	def export_to_excel(self):
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		assert 'excel_template_file' in self.config.config
+		self.ensure_combination_for_every_set_of_demographics = True
 		filename = self.config.config['excel_template_file']
 		output_df = self.compute_cuts_from_config().set_index(['row_heading','column_heading'])
 		# logging.debug("Snapshot of master table " + str(output_df.head()))
 		if not output_df.index.is_unique:
 			df = output_df.reset_index()
-			logging.warning("Duplicate headers found including: " + str(df.ix[df.duplicated(cols=['row_heading','column_heading']),:]))
+			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+		output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
 		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
 		output_series.unstack().to_excel('display_values.xlsx', sheet_name='DisplayValues')
 
