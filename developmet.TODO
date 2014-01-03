@@ -1,12 +1,13 @@
 To implement:
    ✔ Write test that does cuts for average and/or sample size, as that appears broken @done (13-12-13 20:57)
    ✔ Numeric computation includes strong_count and weak_count computations @done (13-12-13 21:10)
-   ☐ Compute net_statistical_significance calls compute aggregation with strong_count, weak_count, sample_size for primary cuts and cuts with level one removed
-   ☐ Compute net_statistical_significance outputs reasonable calls for significance
-   ☐ Calculation coordinator creates transformed version of output with renamed columns
+   ☐ Write test that demonstrates missing dimension value combination bug
+   ☐ Write code that fixes missing dimension value combination bu
 
 Eventually:
-  ☐ System can be run from any folder with config file in current working directory
+  ☐ Compute net_statistical_significance calls compute aggregation with strong_count, weak_count, sample_size for primary cuts and cuts with level one removed
+  ☐ Compute net_statistical_significance outputs reasonable calls for significance
+  ☐ Calculation coordinator creates transformed version of output with renamed columns
 Refactor:
   ☐ Survey is indentified on questions table and not on results table
   ☐ Convert keys for CalculationCorinator to set to avoid order issues
