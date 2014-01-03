@@ -1,8 +1,4 @@
 To implement:
-   ✔ Write test that does cuts for average and/or sample size, as that appears broken @done (13-12-13 20:57)
-   ✔ Numeric computation includes strong_count and weak_count computations @done (13-12-13 21:10)
-   ☐ Write test that demonstrates missing dimension value combination bug
-   ☐ Write code that fixes missing dimension value combination bu
 
 Eventually:
   ☐ Compute net_statistical_significance calls compute aggregation with strong_count, weak_count, sample_size for primary cuts and cuts with level one removed
@@ -14,13 +10,10 @@ Refactor:
   ☐ Disentangle exporting to excel from compilation of results
 
 Maybe:
-  ☐ Import 1314F8W survey data automatically on migration from old DB
   ☐ Add indicies to the DB
   ☐ Add additional columns to substitute for when importing demographic data (like 'cm_pid' -> 'respondent_id')
   ☐ It appears that the table based system for getting results may be a bit too complex. Can we go OO and make it easier?
   ☐ Create end to end test and way to run behave for all sub folders
-  ☐ cuts_to_be_created should only output unique lists of cuts
-  ☐ NumericOutputCalculator will return more than one set of calculations if multiple are specified on input
   ☐ Uncomment class assertions in CalcCoordinator if they don't trip unnecessarily once system is run from other folders
   ☐ Use optimized reader for copying sheets via http://pythonhosted.org/openpyxl/optimized.html
 
@@ -28,6 +21,11 @@ Risks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Write test that does cuts for average and/or sample size, as that appears broken @done (13-12-13 20:57) @project(To implement)
+ ✔ Numeric computation includes strong_count and weak_count computations @done (13-12-13 21:10) @project(To implement)
+ ✔ Write test that demonstrates missing dimension value combination bug @done (14-01-03 13:40) @project(To implement)
+ ✔ Write code that fixes missing dimension value combination bu @done (14-01-03 13:40) @project(To implement)
+ ✔ Import 1314F8W survey data automatically on migration from old DB @done (14-01-03 13:40) @project(Maybe)
  ✔ Only compute cuts for certain questions if they are identified in the config @done (13-12-11 13:43) @project(To implement)
  ✔ Sample_size is only output for certain questions identified in the config @done (13-12-11 13:33) @project(To implement)
  ✔ Refactor numeric calculator so that it will output multiple result types simultaneously if specified @done (13-12-11 10:06) @project(To implement)

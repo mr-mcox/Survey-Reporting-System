@@ -111,6 +111,13 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertEqual( wb.get_named_range('default_mapping').destinations[0][1],'$E$2:$F$101')
 		self.assertEqual( wb.get_named_range('default_menu_start').destinations[0][1],'$E$2')
 		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$F$1:$M$1')
+		
+	def test_zero_string_label(self):
+		wb = load_workbook(filename = r'test_file.xlsx')
+		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
+		range_names = [r.name for r in wb.get_named_ranges()]
+		self.assertTrue( 'zero_string' in range_names)
+		self.assertEqual( str(ws.cell(wb.get_named_range('zero_string').destinations[0][1] ).value), '0' )
 
 	def test_question_code_mapping_provided(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')

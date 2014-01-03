@@ -282,6 +282,12 @@ class CalculationCoordinator(object):
 		wb.create_named_range('default_menu_start',ws,self.rc_to_range(row=1,col=col_for_default_menu))
 		wb.create_named_range('cuts_head',ws,self.rc_to_range(row=0,col=col_for_default_menu + 1,
 																width=range_width-col_for_default_menu,height=1))
+
+		#Add zero string value
+		next_column_to_use = ws.get_highest_column()
+		ws.cell(row=0,column=next_column_to_use).value = self.zero_integer_string
+		wb.create_named_range('zero_string',ws,self.rc_to_range(row=0,col=next_column_to_use))
+
 		wb.save(filename)
 
 	def adjust_zero_padding_of_heading(self, input_heading):
