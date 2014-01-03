@@ -1,6 +1,8 @@
 To implement:
   ✔ Compute net_statistical_significance calls compute aggregation with strong_count, weak_count, sample_size for primary cuts and cuts with level one removed @done (14-01-03 15:55)
-  ☐ Compute net_statistical_significance outputs reasonable calls for significance
+  ✔ Create master table of counts that can be used to compute bootstrapped significance for each row @done (14-01-03 17:58)
+  ✔ Check that table works when there is just one level of cut @done (14-01-03 17:58)
+  ☐ Compute net_statistical_significance outputs reasonable calls for significance from master table
   ☐ Output labels for statistical significance on seperate tab
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns

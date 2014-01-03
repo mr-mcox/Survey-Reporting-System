@@ -49,32 +49,33 @@ class NumericOutputCalculator(object):
 
 		aggregation_calulations_list = list()
 		for result_type in result_types:
+			nfv_copy = nfv.copy()
 			logging.debug("Computing aggregation for result type "+ result_type + " and cuts "+ str(cut_groupings))
 			# logging.debug("Responses columns are " + str(nfv))
 			assert result_type in {'net','strong','weak','raw_average','sample_size','strong_count','weak_count'}, "No calculation defined for result_type " + result_type
 			aggregation_calulation = pd.DataFrame()
 			if result_type == 'net':
-				aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 			if result_type == 'strong':
-				nfv.ix[nfv.net_formatted_value.notnull() & (nfv.net_formatted_value != 1),'net_formatted_value'] = 0
-				aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != 1),'net_formatted_value'] = 0
+				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 			if result_type == 'strong_count':
-				nfv.ix[nfv.net_formatted_value.notnull() & (nfv.net_formatted_value != 1),'net_formatted_value'] = 0
-				aggregation_calulation = nfv.groupby(cut_groupings).sum().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != 1),'net_formatted_value'] = 0
+				aggregation_calulation = nfv_copy.groupby(cut_groupings).sum().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 			if result_type == 'weak':
-				nfv.ix[nfv.net_formatted_value.notnull() & (nfv.net_formatted_value != -1),'net_formatted_value'] = 0
-				nfv.net_formatted_value = nfv.net_formatted_value * -1
-				aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != -1),'net_formatted_value'] = 0
+				nfv_copy.net_formatted_value = nfv_copy.net_formatted_value * -1
+				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 			if result_type == 'weak_count':
-				nfv.ix[nfv.net_formatted_value.notnull() & (nfv.net_formatted_value != -1),'net_formatted_value'] = 0
-				nfv.net_formatted_value = nfv.net_formatted_value * -1
-				aggregation_calulation = nfv.groupby(cut_groupings).sum().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != -1),'net_formatted_value'] = 0
+				nfv_copy.net_formatted_value = nfv_copy.net_formatted_value * -1
+				aggregation_calulation = nfv_copy.groupby(cut_groupings).sum().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 			if result_type == 'raw_average':
-				assert 'response' in nfv.columns
-				aggregation_calulation = nfv.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()
+				assert 'response' in nfv_copy.columns
+				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()
 			if result_type == 'sample_size':
-				assert 'response' in nfv.columns
-				aggregation_calulation = nfv.ix[nfv.response.notnull(),:].groupby(cut_groupings).aggregate(len).rename(columns={'response':'aggregation_value'}).reset_index()
+				assert 'response' in nfv_copy.columns
+				aggregation_calulation = nfv_copy.ix[nfv_copy.response.notnull(),:].groupby(cut_groupings).aggregate(len).rename(columns={'response':'aggregation_value'}).reset_index()
 
 			aggregation_calulation['result_type'] = result_type
 			aggregation_calulations_list.append(aggregation_calulation)
@@ -97,10 +98,28 @@ class NumericOutputCalculator(object):
 	def compute_sample_size_results(self,**kwargs):
 		return self.compute_aggregation(result_type='sample_size',**kwargs)
 
-	def bootstrap_net_significance(self,**kwargs):
+	def aggregations_for_net_significance(self,**kwargs):
 		cuts = kwargs.pop('cuts',None)
 		assert cuts is not None
 		assert type(cuts) == list
 		assert len(cuts) >= 1, "Cannot make statistical significance comparison with no dimensions"
-		self.significance_base_results = self.compute_aggregation(cut_demographic=cuts,result_type=["sample_size","strong_count","weak_count"])
-		self.significance_comparison_results = self.compute_aggregation(cut_demographic=cuts[1:],result_type=["sample_size","strong_count","weak_count"])
+		comparison_cuts = cuts[1:]
+
+		base_results = self.compute_aggregation(cut_demographic=cuts,result_type=["sample_size","strong_count","weak_count"])
+		comparison_results = self.compute_aggregation(cut_demographic=comparison_cuts,result_type=["sample_size","strong_count","weak_count"])
+		return (cuts, comparison_cuts,base_results,comparison_results)
+
+
+	def bootstrap_net_significance(self,**kwargs):
+		cuts = kwargs.pop('cuts',None)
+		
+		cuts, comparison_cuts, base_results, comparison_results = self.aggregations_for_net_significance(cuts=cuts)
+		base_results = base_results.set_index(cuts + ['question_code','result_type'])
+		base_results = pd.Series(base_results['aggregation_value'],index = base_results.index).unstack()
+		comparison_results = comparison_results.set_index(comparison_cuts  + ['question_code','result_type'])
+		comparison_results = pd.Series(comparison_results['aggregation_value'],index = comparison_results.index).unstack()
+		print(comparison_results)
+		comparison_results = comparison_results.rename(columns={'sample_size':'comp_sample_size',
+																'strong_count':'comp_strong_count',
+																'weak_count':'comp_weak_count'})
+		self.counts_for_significance = base_results.reset_index().set_index(comparison_cuts + ['question_code']).join(comparison_results).reset_index().set_index(cuts + ['question_code'])
