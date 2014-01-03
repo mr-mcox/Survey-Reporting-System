@@ -16,9 +16,9 @@ result_types:
     - sample_size
 dimensions:
     region:
-        not_included_label: National
+        all_together_label: National
     corps:
-        not_included_label: Both
+        all_together_label: Both
 show_sample_size_for_questions:
     - CLI1
 show_questions:

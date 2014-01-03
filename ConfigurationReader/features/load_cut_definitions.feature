@@ -40,23 +40,18 @@ Feature: Determine the cuts desired from a configuration file
 		When a new dimension is created that has the title "Grade"
 		Then all_dimensions has dimensions titled "Ethnicity" and "Grade"
 
-	Scenario: When a dimension is created, by default it should have a not included label
-		Given basic set of cut and dimensions in config file
-		When a new dimension is created that has the title "Ethnicity"
-		Then the dimension has a not included label of "Ethnicity Not Used"
-
 	Scenario: Add zero fill when number of levels is less than number of dimensions
 		Given input yaml that has one one dimension
 		Given that that config has 3 levels by default
 		When cuts_to_be_created is called
 		Then it returns the cuts in the yaml and an empty cut with two blanks at the end of the list
 
+	Scenario: When a dimension is created, by default it should not have a not included label
+		Given basic set of cut and dimensions in config file
+		When a new dimension is created that has the title "Ethnicity"
+		Then the dimension has a not included label of None
+
 	Scenario: If a not included label is specified, use that in instead
 		Given basic set of cut and dimensions in config file with a not included label for ethnicity of "Lack of Ethnicity"
 		When a new dimension is created that has the title "Ethnicity"
 		Then the dimension has a not included label of "Lack of Ethnicity"
-
-	Scenario: If don't include not included label is specified in dimension, use a none value
-		Given a set of cuts and dimensions with the Ethnicity dimensions having a "display_not_included_label" value of "No"
-		When a new dimension is created that has the title "Ethnicity"
-		Then the dimension has a not included label of None

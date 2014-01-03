@@ -117,13 +117,13 @@ def step(context):
 
 @then('the dimension has a not included label of "{value}"')
 def step(context,value):
-	print(context.result.not_included_label)
-	assert context.result.not_included_label == value
+	print(context.result.all_together_label)
+	assert context.result.all_together_label == value
 
 @then('the dimension has a not included label of None')
 def step(context):
-	print(context.result.not_included_label)
-	assert context.result.not_included_label is None
+	print(context.result.all_together_label)
+	assert context.result.all_together_label is None
 
 @given('that that config has 3 levels by default')
 def step(context):
@@ -147,10 +147,10 @@ def step(context):
 	'Region':{'dimensions':['Region']}
 	},
 	'dimensions':
-	{'Ethnicity':{'not_included_label':"Lack of Ethnicity"}}
+	{'Ethnicity':{'all_together_label':"Lack of Ethnicity"}}
 	}
 
-@given('a set of cuts and dimensions with the Ethnicity dimensions having a "display_not_included_label" value of "No"')
+@given('a set of cuts and dimensions with the Ethnicity dimensions having a "display_all_together_label" value of "No"')
 def step(context):
 	context.reader = ConfigurationReader()
 	context.reader.config = {'cuts':{
@@ -158,5 +158,5 @@ def step(context):
 	'Region':{'dimensions':['Region']}
 	},
 	'dimensions':
-	{'Ethnicity':{'display_not_included_label': "No"}}
+	{'Ethnicity':{'display_all_together_label': "No"}}
 	}

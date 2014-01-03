@@ -99,9 +99,7 @@ class Dimension(object):
 	def __init__(self,**kwargs):
 		self.config = kwargs.pop('config',None)
 		self.title = kwargs.pop('title',None)
-		self.not_included_label = str(self.title) + " Not Used"
+		self.all_together_label = None
 		if self.config is not None:
-			if 'display_not_included_label' in self.config and self.config['display_not_included_label'] == 'No':
-				self.not_included_label = None
-			if 'not_included_label' in self.config:
-				self.not_included_label = self.config['not_included_label']
+			if 'all_together_label' in self.config:
+				self.all_together_label = self.config['all_together_label']

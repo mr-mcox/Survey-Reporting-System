@@ -30,11 +30,11 @@ class WriteExcelTestCase(unittest.TestCase):
 		config_reader.cuts_for_excel_menu = mock.MagicMock(return_value = self.cuts_for_excel_menu_results)
 		coordinator.config = config_reader
 
-		dimension_with_no_not_included_label = ConfigurationReader.Dimension(title="GenderB")
-		dimension_with_no_not_included_label.not_included_label = None
+		dimension_with_all_together_label = ConfigurationReader.Dimension(title="GenderB")
+		dimension_with_all_together_label.all_together_label = "Gender Not Used"
 		config_reader.all_dimensions = mock.MagicMock(return_value = [
 																		ConfigurationReader.Dimension(title="Gender"),
-																		dimension_with_no_not_included_label,
+																		dimension_with_all_together_label,
 																		])
 		coordinator.get_integer_string_mapping = mock.MagicMock(return_value= {'integer_strings':['1','2'],'labels':['male','female']})
 
@@ -65,20 +65,21 @@ class WriteExcelTestCase(unittest.TestCase):
 	def test_writing_menu_translations(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
 		assert ws.cell(row=0,column=5).value == "Gender"
-		assert ws.cell(row=1,column=5).value == "Gender Not Used"
-		assert ws.cell(row=2,column=5).value == "male"
-		assert ws.cell(row=3,column=5).value == "female"
-		assert ws.cell(row=1,column=6).value == 0
-		assert ws.cell(row=2,column=6).value == 1
-		assert ws.cell(row=3,column=6).value == 2
+		assert ws.cell(row=1,column=5).value == "male"
+		assert ws.cell(row=2,column=5).value == "female"
+		assert ws.cell(row=1,column=6).value == 1
+		assert ws.cell(row=2,column=6).value == 2
 
-	def test_writing_menu_for_no_not_included_label(self):
+
+	def test_writing_menu_for_no_all_together_label(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
 		assert ws.cell(row=0,column=7).value == "GenderB"
-		assert ws.cell(row=1,column=7).value == "male"
-		assert ws.cell(row=2,column=7).value == "female"
-		assert ws.cell(row=1,column=8).value == 1
-		assert ws.cell(row=2,column=8).value == 2
+		assert ws.cell(row=1,column=7).value == "Gender Not Used"
+		assert ws.cell(row=2,column=7).value == "male"
+		assert ws.cell(row=3,column=7).value == "female"
+		assert ws.cell(row=1,column=8).value == 0
+		assert ws.cell(row=2,column=8).value == 1
+		assert ws.cell(row=3,column=8).value == 2
 
 	def test_write_master_as_excel(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'DisplayValues')
