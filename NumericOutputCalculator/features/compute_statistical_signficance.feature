@@ -14,12 +14,12 @@ Feature: Compute statistical significance via bootstrapping
 
 	Scenario: Generate table of counts to be used for computation
 		Given raw 7pt questions results
-				| respondent_id | question_code | response  |
-				| 1             | 1             | 1         |
-				| 2             | 1             | 3         |
-				| 3             | 1             | 7         |
-				| 4             | 1             | 1         |
-				| 5             | 1             | 7         |
+				| respondent_id | question_code | response |
+				| 1             | 1             | 1        |
+				| 2             | 1             | 3        |
+				| 3             | 1             | 7        |
+				| 4             | 1             | 1        |
+				| 5             | 1             | 7        |
 		Given demographic data
 			| respondent_id | region  | gender |
 			| 1             | Atlanta | Female |
@@ -33,12 +33,12 @@ Feature: Compute statistical significance via bootstrapping
 
 	Scenario: Generate table of counts to be used for computation even when there is only one cut
 		Given raw 7pt questions results
-				| respondent_id | question_code | response  |
-				| 1             | 1             | 1         |
-				| 2             | 1             | 7         |
-				| 3             | 1             | 7         |
-				| 4             | 1             | 1         |
-				| 5             | 1             | 7         |
+				| respondent_id | question_code | response |
+				| 1             | 1             | 1        |
+				| 2             | 1             | 7        |
+				| 3             | 1             | 7        |
+				| 4             | 1             | 1        |
+				| 5             | 1             | 7        |
 		Given demographic data
 			| respondent_id | region  | gender |
 			| 1             | Atlanta | Female |
@@ -49,3 +49,14 @@ Feature: Compute statistical significance via bootstrapping
 		When bootstrap_net_significance is called for cut ["region"]
 		Then count for region "SoDak" and column "weak_count" is 2
 		Then count for region "SoDak" and column "comp_weak_count" is 3
+
+	Scenario: When provided a frequency table, return a series of reasonable significance values
+		Given statistical significance frequency table for cut region and gender
+			| region  | gender | sample_size | strong_count | weak_count | comp_sample_size | comp_strong_count | comp_weak_count | question_code |
+			| Atlanta | Male   | 100         | 70           | 10         | 200              | 100               | 20              | 1             |
+			| Atlanta | Female | 100         | 30           | 10         | 200              | 100               | 20              | 1             |
+			| SoDak   | Male   | 3           | 2            | 0          | 15               | 12                | 3               | 1             |
+		When bootstrap_result_from_frequency_table is run
+		Then aggregation_value for region "Atlanta" and gender "Male" is "H"
+		Then aggregation_value for region "Atlanta" and gender "Female" is "L"
+		Then aggregation_value for region "SoDak" and gender "Male" is "S"

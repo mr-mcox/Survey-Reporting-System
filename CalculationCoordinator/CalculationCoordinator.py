@@ -52,6 +52,25 @@ class CalculationCoordinator(object):
 		self.computations_generated[aggregation_key] = calculations
 		return calculations
 
+	def compute_significance(self,**kwargs):
+		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=self.results,demographic_data=self.demographic_data)
+		assert type(self.result_types) == list
+		orig_cuts = kwargs.pop('cut_demographic',None)
+		if type(orig_cuts) != list:
+			orig_cuts = [orig_cuts]
+		cuts = [cut for cut in orig_cuts if cut != None]
+
+		calculations = calculator.bootstrap_net_significance(cuts=cuts,**kwargs).reset_index()
+
+		if self.ensure_combination_for_every_set_of_demographics and len(cuts) > 0:
+			logging.debug("Cuts passing to modify " + str(cuts))
+			calculations = self.modify_for_combinations_of_demographics(df=calculations,cuts=cuts)
+
+		aggregation_key = tuple(cuts)
+
+		# self.computations_generated[aggregation_key] = calculations
+		return calculations
+
 	def modify_for_combinations_of_demographics(self, df, cuts):
 		df = df.reset_index()
 		# logging.debug("Starting df is " + str(df.head()))
@@ -203,11 +222,43 @@ class CalculationCoordinator(object):
 		assert len(return_table.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(return_table.column_heading.unique())
 		return return_table.drop_duplicates()
 
+	def compute_significance_from_config(self):
+		assert self.config != None
+		all_aggregations = list()
+		#Set default question as not doing that seems to cause issues
+		if 'show_questions' in self.config.config:
+			self.default_question = self.config.config['show_questions'][0]
+		self.default_result_type = 'significance_value'
+
+		for cut_set in self.config.cuts_to_be_created():
+			df = self.compute_aggregation(cut_demographic=cut_set)
+			#Remove samples sizes for questions that don't need them
+			assert 'question_code' in df.columns
+			# logging.debug("question_code dtype is " + str(df.question_code.dtype))
+			# logging.debug("question_codes are " + str(df.question_code))
+
+			#Remove questions that aren't specified
+			questions_to_show = df.question_code.unique().tolist()
+			if 'show_questions' in self.config.config:
+				questions_to_show = self.config.config['show_questions']
+			df = df.ix[df.question_code.isin(questions_to_show),:]
+			df = self.replace_dimensions_with_integers(df)
+			df = self.create_row_column_headers(df,cuts=cut_set)
+			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
+		return_table = pd.concat(all_aggregations)
+		return_table.row_heading = return_table.row_heading.map(self.adjust_zero_padding_of_heading)
+		return_table.column_heading = return_table.column_heading.map(self.adjust_zero_padding_of_heading)
+		assert len(return_table.row_heading.apply(len).unique()) == 1, "Not all row headings have the same length\n" + str(return_table.row_heading.unique())
+		assert len(return_table.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(return_table.column_heading.unique())
+		return return_table.drop_duplicates()
+
 	def export_to_excel(self):
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		assert 'excel_template_file' in self.config.config
 		self.ensure_combination_for_every_set_of_demographics = True
 		filename = self.config.config['excel_template_file']
+
+		#Output display values
 		output_df = self.compute_cuts_from_config().set_index(['row_heading','column_heading'])
 		# logging.debug("Snapshot of master table " + str(output_df.head()))
 		if not output_df.index.is_unique:
@@ -220,6 +271,20 @@ class CalculationCoordinator(object):
 
 		self.copy_sheet_to_workbook('display_values.xlsx','DisplayValues',filename)
 		os.remove('display_values.xlsx')
+
+		#Output significance values
+		output_df = self.compute_significance_from_config().set_index(['row_heading','column_heading'])
+		# logging.debug("Snapshot of master table " + str(output_df.head()))
+		if not output_df.index.is_unique:
+			df = output_df.reset_index()
+			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+		output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
+		output_series.unstack().to_excel('significance_values.xlsx', sheet_name='SignificanceValues')
+
+		self.copy_sheet_to_workbook('significance_values.xlsx','SignificanceValues',filename)
+		os.remove('significance_values.xlsx')
 
 		wb = load_workbook(filename)
 

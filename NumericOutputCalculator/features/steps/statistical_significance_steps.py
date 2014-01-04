@@ -1,6 +1,7 @@
 from behave import *
 from NumericOutputCalculator import NumericOutputCalculator
 from unittest.mock import MagicMock
+import pandas as pd
 
 def import_table_data(table):
     table_data = {header : [] for header in table.headings}
@@ -63,3 +64,17 @@ def step(context):
 def step(context,column,count):
 	result = context.numeric_output_calculator.counts_for_significance.loc[('SoDak',1),column]
 	assert result == int(count), "Count should be " + count + " but is " + str(result)
+
+@given('statistical significance frequency table for cut region and gender')
+def step(context):
+	responses = {'respondent_id':[0,1],'net_formatted_value':[-1,0]}
+	context.calc = NumericOutputCalculator(responses=responses)
+	context.freq_table = pd.DataFrame(import_table_data(context.table)).set_index(['question_code','region','gender'])
+
+@when('bootstrap_result_from_frequency_table is run')
+def step(context):
+	context.result = context.calc.bootstrap_result_from_frequency_table(context.freq_table)
+
+@then('aggregation_value for region "{region}" and gender "{gender}" is "{result}"')
+def step(context,region,gender,result):
+	assert context.result.loc[(1,region, gender),'aggregation_value'] == result

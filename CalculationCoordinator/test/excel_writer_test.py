@@ -47,6 +47,13 @@ class WriteExcelTestCase(unittest.TestCase):
 				'aggregation_value': [0.5,0.5,0.5,0.5]
 			})
 		coordinator.compute_cuts_from_config = mock.MagicMock(return_value=master_aggregation)
+
+		master_siginificance = pd.DataFrame({
+				'row_heading':['0','0','1','1'],
+				'column_heading': ['2.3','2.4','2.3','2.4'],
+				'aggregation_value': ['H','','','S']
+		})
+		coordinator.compute_significance_from_config = mock.MagicMock(return_value=master_siginificance)
 		coordinator.export_to_excel()
 		self.coordinator = coordinator
 
@@ -83,6 +90,13 @@ class WriteExcelTestCase(unittest.TestCase):
 
 	def test_write_master_as_excel(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'DisplayValues')
+		column_headings = [str(ws.cell(row=0,column=i+1).value) for i in range(ws.get_highest_column()-1)]
+		self.assertEqual(set(column_headings), {'2.3','2.4'}) 
+		row_headings = [str(ws.cell(row=i+1,column=0).value) for i in range(ws.get_highest_row()-1)]
+		self.assertEqual(set(row_headings), {'0','1'})
+
+	def test_write_significance_values(self):
+		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'SignificanceValues')
 		column_headings = [str(ws.cell(row=0,column=i+1).value) for i in range(ws.get_highest_column()-1)]
 		self.assertEqual(set(column_headings), {'2.3','2.4'}) 
 		row_headings = [str(ws.cell(row=i+1,column=0).value) for i in range(ws.get_highest_row()-1)]
