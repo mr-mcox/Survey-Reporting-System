@@ -6,6 +6,7 @@ from openpyxl import load_workbook, cell
 import copy
 import logging
 import os
+import gc
 
 class CalculationCoordinator(object):
 	"""docstring for CalculationCoordinator"""
@@ -195,7 +196,8 @@ class CalculationCoordinator(object):
 		if 'result_types' in self.config.config:
 			self.result_types = self.config.config['result_types']
 			self.default_result_type = self.result_types[0]
-		for cut_set in self.config.cuts_to_be_created():
+		cut_sets = self.config.cuts_to_be_created()
+		for i, cut_set in enumerate(cut_sets):
 			# logging.debug("Cut set is " + str(cut_set))
 			df = self.compute_aggregation(cut_demographic=cut_set)
 			#Remove samples sizes for questions that don't need them
@@ -215,6 +217,8 @@ class CalculationCoordinator(object):
 			df = self.replace_dimensions_with_integers(df)
 			df = self.create_row_column_headers(df,cuts=cut_set)
 			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
+			gc.collect()
+			print("\rCompleted {0:.0f} % of basic computations".format(i/len(cut_sets)*100),end=" ")
 		return_table = pd.concat(all_aggregations)
 		return_table.row_heading = return_table.row_heading.map(self.adjust_zero_padding_of_heading)
 		return_table.column_heading = return_table.column_heading.map(self.adjust_zero_padding_of_heading)
@@ -230,8 +234,9 @@ class CalculationCoordinator(object):
 			self.default_question = self.config.config['show_questions'][0]
 		self.default_result_type = 'significance_value'
 
-		for cut_set in self.config.cuts_to_be_created():
-			df = self.compute_aggregation(cut_demographic=cut_set)
+		cut_sets = self.config.cuts_to_be_created()
+		for i, cut_set in enumerate(cut_sets):
+			df = self.compute_significance(cut_demographic=cut_set)
 			#Remove samples sizes for questions that don't need them
 			assert 'question_code' in df.columns
 			# logging.debug("question_code dtype is " + str(df.question_code.dtype))
@@ -245,6 +250,8 @@ class CalculationCoordinator(object):
 			df = self.replace_dimensions_with_integers(df)
 			df = self.create_row_column_headers(df,cuts=cut_set)
 			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
+			gc.collect()
+			print("\rCompleted {0:.0f} % of significance computations".format(i/len(cut_sets)*100),end=" ")
 		return_table = pd.concat(all_aggregations)
 		return_table.row_heading = return_table.row_heading.map(self.adjust_zero_padding_of_heading)
 		return_table.column_heading = return_table.column_heading.map(self.adjust_zero_padding_of_heading)

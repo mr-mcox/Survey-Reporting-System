@@ -1,7 +1,7 @@
 import pandas as pd
 import logging
 import numpy as np
-# import pdb
+import pdb
 
 class NumericOutputCalculator(object):
 
@@ -113,13 +113,18 @@ class NumericOutputCalculator(object):
 
 	def bootstrap_net_significance(self,**kwargs):
 		cuts = kwargs.pop('cuts',None)
+
+		if len(cuts) == 0:
+			blank_df = pd.DataFrame({'question_code':self.responses.question_code.unique().tolist()})
+			blank_df['aggregation_value'] = ''
+			blank_df['result_type'] = 'significance_value'
+			return blank_df
 		
 		cuts, comparison_cuts, base_results, comparison_results = self.aggregations_for_net_significance(cuts=cuts)
 		base_results = base_results.set_index(cuts + ['question_code','result_type'])
 		base_results = pd.Series(base_results['aggregation_value'],index = base_results.index).unstack()
 		comparison_results = comparison_results.set_index(comparison_cuts  + ['question_code','result_type'])
 		comparison_results = pd.Series(comparison_results['aggregation_value'],index = comparison_results.index).unstack()
-		print(comparison_results)
 		comparison_results = comparison_results.rename(columns={'sample_size':'comp_sample_size',
 																'strong_count':'comp_strong_count',
 																'weak_count':'comp_weak_count'})
@@ -134,32 +139,35 @@ class NumericOutputCalculator(object):
 		df['aggregation_value'] = ''
 		df['result_type'] = 'significance_value'
 		for index_item in df.index:
-			if df.loc[index_item,'sample_size'] < 5:
-				df.loc[index_item,'aggregation_value'] = 'S'
-				continue
-			pop_1_sample_size = df.loc[index_item,'comp_sample_size'] - df.loc[index_item,'sample_size']
+			try:
+				if df.ix[index_item,'sample_size'] < 5:
+					df.ix[index_item,'aggregation_value'] = 'S'
+					continue
+			except:
+				pdb.set_trace()
+			pop_1_sample_size = df.ix[index_item,'comp_sample_size'] - df.ix[index_item,'sample_size']
 
 			if pop_1_sample_size == 0:#Meaning that subset is identical to the comparison
 				continue
-			pop_1_strong_count = df.loc[index_item,'comp_strong_count'] - df.loc[index_item,'strong_count']
-			pop_1_weak_count = df.loc[index_item,'comp_weak_count'] - df.loc[index_item,'weak_count']
+			pop_1_strong_count = df.ix[index_item,'comp_strong_count'] - df.ix[index_item,'strong_count']
+			pop_1_weak_count = df.ix[index_item,'comp_weak_count'] - df.ix[index_item,'weak_count']
 
-			pop_2_sample_size = df.loc[index_item,'sample_size']
-			pop_2_strong_count = df.loc[index_item,'strong_count']
-			pop_2_weak_count = df.loc[index_item,'weak_count']
+			pop_2_sample_size = df.ix[index_item,'sample_size']
+			pop_2_strong_count = df.ix[index_item,'strong_count']
+			pop_2_weak_count = df.ix[index_item,'weak_count']
 
 			#Create arrays of strong counts
 			pop_1_rand_strong_counts = []
 
 			if pop_1_strong_count == pop_1_sample_size or pop_1_strong_count == 0:
-				pop_1_rand_strong_counts = rep(pop_1_strong_count,bootstrap_samples)
+				pop_1_rand_strong_counts = [pop_1_strong_count for i in range(bootstrap_samples)]
 			else:
 				pop_1_rand_strong_counts = np.random.binomial(pop_1_sample_size,pop_1_strong_count/pop_1_sample_size,bootstrap_samples)
 
 			pop_2_rand_strong_counts = []
 
 			if pop_2_strong_count == pop_2_sample_size or pop_2_strong_count == 0:
-				pop_2_rand_strong_counts = rep(pop_2_strong_count,bootstrap_samples)
+				pop_2_rand_strong_counts = [pop_2_strong_count for i in range(bootstrap_samples)]
 			else:
 				pop_2_rand_strong_counts = np.random.binomial(pop_2_sample_size,pop_2_strong_count/pop_2_sample_size,bootstrap_samples)
 
@@ -205,8 +213,8 @@ class NumericOutputCalculator(object):
 			pop_2_greater_percent = bs.pop_2_greater.mean()
 
 			if pop_2_greater_percent > 0.975:
-				df.loc[index_item,'aggregation_value'] = 'H'
+				df.ix[index_item,'aggregation_value'] = 'H'
 			if pop_2_greater_percent < 0.025:
-				df.loc[index_item,'aggregation_value'] = 'L'
+				df.ix[index_item,'aggregation_value'] = 'L'
 
 		return pd.DataFrame(df,columns =['aggregation_value','result_type'])
