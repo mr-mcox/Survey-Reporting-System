@@ -7,7 +7,7 @@ import logging
 
 logging.basicConfig(filename='debug.log',level=logging.DEBUG)
 
-config = ConfigurationReader.ConfigurationReader(config_file='small_demonstration_yaml.yaml')
+config = ConfigurationReader.ConfigurationReader(config_file='demonstration_yaml.yaml')
 
 #Read connection info
 # connect_info_file = open('db_connect_string.txt')

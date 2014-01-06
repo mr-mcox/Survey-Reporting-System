@@ -112,6 +112,18 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertEqual( wb.get_named_range('disp_value_col_head').destinations[0][1],'$B$1:$C$1')
 		self.assertEqual( wb.get_named_range('disp_value_values').destinations[0][1],'$B$2:$C$3')
 
+
+	def test_named_ranges_on_significance_values(self):
+		wb = load_workbook(filename = r'test_file.xlsx')
+		range_names = [r.name for r in wb.get_named_ranges()]
+		self.assertTrue( 'sig_value_row_head' in range_names)
+		self.assertTrue( 'sig_value_col_head' in range_names)
+		self.assertTrue( 'sig_value_values' in range_names)
+		self.assertEqual( wb.get_named_range('sig_value_row_head').destinations[0][1],'$A$2:$A$3')
+		self.assertEqual( wb.get_named_range('sig_value_col_head').destinations[0][1],'$B$1:$C$1')
+		self.assertEqual( wb.get_named_range('sig_value_values').destinations[0][1],'$B$2:$C$3')
+
+
 	def test_named_ranges_on_lookup_tab(self):
 		wb = load_workbook(filename = r'test_file.xlsx')
 		range_names = [r.name for r in wb.get_named_ranges()]

@@ -307,6 +307,14 @@ class CalculationCoordinator(object):
 		wb.create_named_range('disp_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
 		wb.create_named_range('disp_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
 
+		#Add ranges for significance_values tab
+		dv_ws = wb.get_sheet_by_name('SignificanceValues')
+		range_width = dv_ws.get_highest_column() -1
+		range_height = dv_ws.get_highest_row() - 1
+		wb.create_named_range('sig_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
+		wb.create_named_range('sig_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
+		wb.create_named_range('sig_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
+
 		if 'Lookups' in wb.get_sheet_names():
 			ws_to_del = wb.get_sheet_by_name('Lookups')
 			wb.remove_sheet(ws_to_del)
