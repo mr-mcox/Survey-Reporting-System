@@ -1,9 +1,8 @@
 To implement:
-  ✔ Compute net_statistical_significance calls compute aggregation with strong_count, weak_count, sample_size for primary cuts and cuts with level one removed @done (14-01-03 15:55)
-  ✔ Create master table of counts that can be used to compute bootstrapped significance for each row @done (14-01-03 17:58)
-  ✔ Check that table works when there is just one level of cut @done (14-01-03 17:58)
-  ☐ Compute net_statistical_significance outputs reasonable calls for significance from master table
-  ☐ Output labels for statistical significance on seperate tab
+ ✔ Add confidential column to schema @done (14-01-08 10:18)
+ ☐ Add confidential column to migration
+ ☐ Remove confidential results after calculating display values
+ ☐ Remove confidential results after calculating statistical significance
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
 Refactor:
@@ -23,11 +22,16 @@ Risks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
- ✔ Write test that does cuts for average and/or sample size, as that appears broken @done (13-12-13 20:57) @project(To implement)
- ✔ Numeric computation includes strong_count and weak_count computations @done (13-12-13 21:10) @project(To implement)
+ ✔ Output labels for statistical significance on seperate tab @done (14-01-08 10:05) @project(To implement)
+ ✔ Compute net_statistical_significance outputs reasonable calls for significance from master table @done (14-01-08 10:05) @project(To implement)
+ ✔ Create master table of counts that can be used to compute bootstrapped significance for each row @done (14-01-03 17:58) @project(To implement)
+ ✔ Check that table works when there is just one level of cut @done (14-01-03 17:58) @project(To implement)
+ ✔ Compute net_statistical_significance calls compute aggregation with strong_count, weak_count, sample_size for primary cuts and cuts with level one removed @done (14-01-03 15:55) @project(To implement)
  ✔ Write test that demonstrates missing dimension value combination bug @done (14-01-03 13:40) @project(To implement)
  ✔ Write code that fixes missing dimension value combination bu @done (14-01-03 13:40) @project(To implement)
  ✔ Import 1314F8W survey data automatically on migration from old DB @done (14-01-03 13:40) @project(Maybe)
+ ✔ Numeric computation includes strong_count and weak_count computations @done (13-12-13 21:10) @project(To implement)
+ ✔ Write test that does cuts for average and/or sample size, as that appears broken @done (13-12-13 20:57) @project(To implement)
  ✔ Only compute cuts for certain questions if they are identified in the config @done (13-12-11 13:43) @project(To implement)
  ✔ Sample_size is only output for certain questions identified in the config @done (13-12-11 13:33) @project(To implement)
  ✔ Refactor numeric calculator so that it will output multiple result types simultaneously if specified @done (13-12-11 10:06) @project(To implement)

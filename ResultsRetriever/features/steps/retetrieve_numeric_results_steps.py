@@ -31,7 +31,8 @@ def step(context):
 	questions = Table('questions',metadata,
 					Column('id', Integer, primary_key=True),
 					Column('survey_id', Integer),
-					Column('question_code', String(20)))
+					Column('question_code', String(20)),
+					Column('is_confidential', Integer))
 	metadata.create_all(engine)
 
 	conn = engine.connect()
@@ -65,6 +66,6 @@ def step(context):
 def step(context):
 	context.db.execute(context.questions_table.insert(),table_for_db(context.table))
 
-@then('one of the columns returned is question_code')
-def step(context):
-	assert 'question_code' in context.results['column_headings']
+@then('one of the columns returned is {column}')
+def step(context, column):
+	assert column in context.results['column_headings']
