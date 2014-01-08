@@ -26,6 +26,10 @@ class NumericOutputCalculator(object):
 		else:
 			result_types = [result_type]
 
+		#Add sample size if it's not one of the cuts already
+		if 'is_confidential' in self.responses.columns and 'sample_size' not in result_types:
+			result_types.append('sample_size')
+
 		if type(cut_demographic) == list:
 			for cut in cut_demographic:
 				if cut != []:
@@ -76,13 +80,23 @@ class NumericOutputCalculator(object):
 				assert 'response' in nfv_copy.columns
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()
 			if result_type == 'sample_size':
-				assert 'response' in nfv_copy.columns
-				aggregation_calulation = nfv_copy.ix[nfv_copy.response.notnull(),:].groupby(cut_groupings).aggregate(len).rename(columns={'response':'aggregation_value'}).reset_index()
+				aggregation_calulation = nfv_copy.ix[nfv_copy.net_formatted_value.notnull(),:].groupby(cut_groupings).aggregate(len).rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 
 			aggregation_calulation['result_type'] = result_type
 			aggregation_calulations_list.append(aggregation_calulation)
+
+
+		all_results = pd.concat(aggregation_calulations_list)
+		#Determine which questions have fewer than 5 respondents and are confidential
+		if 'is_confidential' in all_results.columns:
+			less_than_5_sample_size = all_results.ix[(all_results.result_type=='sample_size') & (all_results.aggregation_value < 5),'question_code'].tolist()
+			confidential_questions = self.responses.ix[self.responses.is_confidential==1,'question_code'].unique().tolist()
+			questions_to_remove_responses = list(set(less_than_5_sample_size) & set(confidential_questions))
+			all_results.ix[all_results.question_code.isin(questions_to_remove_responses),'aggregation_value'] = np.nan
+
+		#Return just required columns
 		return_columns = cut_groupings + ['aggregation_value','result_type']
-		return pd.DataFrame(pd.concat(aggregation_calulations_list),columns=return_columns)
+		return pd.DataFrame(all_results,columns=return_columns)
 
 
 	def compute_net_results(self,**kwargs):
