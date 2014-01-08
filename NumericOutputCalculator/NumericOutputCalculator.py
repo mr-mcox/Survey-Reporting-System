@@ -89,10 +89,13 @@ class NumericOutputCalculator(object):
 		all_results = pd.concat(aggregation_calulations_list)
 		#Determine which questions have fewer than 5 respondents and are confidential
 		if 'is_confidential' in all_results.columns:
-			less_than_5_sample_size = all_results.ix[(all_results.result_type=='sample_size') & (all_results.aggregation_value < 5),'question_code'].tolist()
-			confidential_questions = self.responses.ix[self.responses.is_confidential==1,'question_code'].unique().tolist()
-			questions_to_remove_responses = list(set(less_than_5_sample_size) & set(confidential_questions))
-			all_results.ix[all_results.question_code.isin(questions_to_remove_responses) & (all_results.result_type != 'sample_size'),'aggregation_value'] = np.nan
+			all_results = all_results.set_index(cut_groupings)
+			nfv = nfv.set_index(cut_groupings)
+			less_than_5_sample_size_index = all_results.ix[(all_results.result_type=='sample_size') & (all_results.aggregation_value < 5)].index
+			confidential_questions = nfv.ix[nfv.is_confidential==1].index
+			# all_results.ix[all_results.index.isin(less_than_5_sample_size_index) & all_results.index.isin(confidential_questions) & (all_results.result_type != 'sample_size'),'aggregation_value'] = np.nan
+			all_results.ix[all_results.index.isin(less_than_5_sample_size_index) & all_results.index.isin(confidential_questions) & (all_results.result_type != 'sample_size'),'aggregation_value'] = np.nan
+			all_results = all_results.reset_index()
 
 		#Return just required columns
 		return_columns = cut_groupings + ['aggregation_value','result_type']

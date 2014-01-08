@@ -12,9 +12,9 @@ Feature: Remove results when the question is confidential and there are fewere t
 			| 3             | -1                  | 0               |
 			| 3             | 0                   | 0               |
 		When compute net is run
-		Then the "net" display_value for question_code 1 is 0
-		Then the "net" display_value for question_code 2 is blank
-		Then the "net" display_value for question_code 3 is -0.5
+		Then the "net" display_value for question_code "1" is 0
+		Then the "net" display_value for question_code "2" is blank
+		Then the "net" display_value for question_code "3" is -0.5
 
 	Scenario: Retain sample sizes for confidential questions
 		Given net formatted values
@@ -29,4 +29,28 @@ Feature: Remove results when the question is confidential and there are fewere t
 			| 3             | -1                  | 0               |
 			| 3             | 0                   | 0               |
 		When compute sample size is run
-		Then the "sample_size" display_value for question_code 2 is 2
+		Then the "sample_size" display_value for question_code "2" is 2
+
+
+	Scenario: Remove display values for fewer than 5 when only one dimension of a cut would be affected
+		Given net formatted values
+			| question_code | net_formatted_value | is_confidential | respondent_id |
+			| 1             | 0                   | 1               | 1             |
+			| 1             | 1                   | 1               | 2             |
+			| 1             | -1                  | 1               | 3             |
+			| 1             | 0                   | 1               | 4             |
+			| 1             | 0                   | 1               | 5             |
+			| 1             | -1                  | 1               | 6             |
+			| 1             | 0                   | 1               | 7             |
+		Given demographic data
+			| respondent_id | region  |
+			| 1             | Atlanta |
+			| 2             | Atlanta |
+			| 3             | Atlanta |
+			| 4             | Atlanta |
+			| 5             | Atlanta |
+			| 6             | SoDak   |
+			| 7             | SoDak   |
+		When compute net with cut_demographic = region is run
+		Then the regional "net" display_value for question_code "1" and region "Atlanta" is 0
+		Then the regional "net" display_value for question_code "1" and region "SoDak" is blank

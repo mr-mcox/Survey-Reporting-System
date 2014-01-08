@@ -1,8 +1,8 @@
 To implement:
- ✔ Add confidential column to schema @done (14-01-08 10:18)
- ✔ Add confidential column to migration @done (14-01-08 11:54)
- ✔ Remove confidential results after calculating display values @done (14-01-08 13:19)
- ✔ Remove confidential results after calculating statistical significance @done (14-01-08 13:33)
+ ☐ Create dynamic dimension field
+ ☐ Output third column that shows associated dimension
+ ☐ Only add blank rows for dynamic dimensions if parent dimension is included
+ ☐ Update template to use dynamic dimensions
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
 Refactor:
@@ -22,6 +22,10 @@ Risks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Remove confidential results after calculating statistical significance @done (14-01-08 13:33) @project(To implement)
+ ✔ Remove confidential results after calculating display values @done (14-01-08 13:19) @project(To implement)
+ ✔ Add confidential column to migration @done (14-01-08 11:54) @project(To implement)
+ ✔ Add confidential column to schema @done (14-01-08 10:18) @project(To implement)
  ✔ Output labels for statistical significance on seperate tab @done (14-01-08 10:05) @project(To implement)
  ✔ Compute net_statistical_significance outputs reasonable calls for significance from master table @done (14-01-08 10:05) @project(To implement)
  ✔ Create master table of counts that can be used to compute bootstrapped significance for each row @done (14-01-03 17:58) @project(To implement)

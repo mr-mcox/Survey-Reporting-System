@@ -35,7 +35,7 @@ def step(context,question_code,value):
         else:
             assert context.result.set_index('question_code').loc[int(question_code),'aggregation_value'] == float(value)
 
-@then('the "{column}" display_value for question_code {question_code} is {value}')
+@then('the "{column}" display_value for question_code "{question_code}" is {value}')
 def step(context,column,question_code,value):
     if value == 'blank':
         print( context.result )
@@ -45,6 +45,17 @@ def step(context,column,question_code,value):
             assert context.result.set_index(['question_code','result_type']).loc[(float(question_code),column)] == float(value)
         else:
             assert context.result.set_index(['question_code','result_type']).loc[(float(question_code),column)] == float(value)
+
+@then('the regional "{column}" display_value for question_code "{question_code}" and region "{region}" is {value}')
+def step(context,column,question_code,region, value):
+    if value == 'blank':
+        print( context.result )
+        assert np.isnan( context.result.set_index(['question_code','result_type','region']).loc[(float(question_code),column,region)] )
+    else:
+        if 'net_formatted_value' in context.result.columns:
+            assert context.result.set_index(['question_code','result_type','region']).loc[(float(question_code),column,region)] == float(value)
+        else:
+            assert context.result.set_index(['question_code','result_type','region']).loc[(float(question_code),column,region)] == float(value)
 
 @when('compute strong is run')
 def step(context):
