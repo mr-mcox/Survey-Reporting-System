@@ -92,7 +92,7 @@ class NumericOutputCalculator(object):
 			less_than_5_sample_size = all_results.ix[(all_results.result_type=='sample_size') & (all_results.aggregation_value < 5),'question_code'].tolist()
 			confidential_questions = self.responses.ix[self.responses.is_confidential==1,'question_code'].unique().tolist()
 			questions_to_remove_responses = list(set(less_than_5_sample_size) & set(confidential_questions))
-			all_results.ix[all_results.question_code.isin(questions_to_remove_responses),'aggregation_value'] = np.nan
+			all_results.ix[all_results.question_code.isin(questions_to_remove_responses) & (all_results.result_type != 'sample_size'),'aggregation_value'] = np.nan
 
 		#Return just required columns
 		return_columns = cut_groupings + ['aggregation_value','result_type']

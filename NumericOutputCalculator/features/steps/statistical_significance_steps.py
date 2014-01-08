@@ -2,6 +2,7 @@ from behave import *
 from NumericOutputCalculator import NumericOutputCalculator
 from unittest.mock import MagicMock
 import pandas as pd
+import numpy as np
 
 def import_table_data(table):
     table_data = {header : [] for header in table.headings}
@@ -78,3 +79,8 @@ def step(context):
 @then('aggregation_value for region "{region}" and gender "{gender}" is "{result}"')
 def step(context,region,gender,result):
 	assert context.result.loc[(1,region, gender),'aggregation_value'] == result
+
+@then('aggregation_value for region "{region}" and gender "{gender}" is blank')
+def step(context,region,gender):
+	print(context.result.loc[(1,region, gender),'aggregation_value'])
+	assert context.result.loc[(1,region, gender),'aggregation_value'] == ''
