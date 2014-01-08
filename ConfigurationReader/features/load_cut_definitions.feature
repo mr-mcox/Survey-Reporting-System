@@ -55,3 +55,13 @@ Feature: Determine the cuts desired from a configuration file
 		Given basic set of cut and dimensions in config file with a not included label for ethnicity of "Lack of Ethnicity"
 		When a new dimension is created that has the title "Ethnicity"
 		Then the dimension has a not included label of "Lack of Ethnicity"
+
+	Scenario: By default, assume that a dimension has a dimension_type of "static"
+		Given basic set of cut and dimensions in config file
+		When a new dimension is created that has the title "Ethnicity"
+		Then the dimension has dimension_type of "static"
+
+	Scenario: If dynamic_parent_dimension is provided than the dimension should have a dimension_type of "dynamic"
+		Given basic set of cut and dimensions in config file with a dynamic_parent_dimension for Ethnicity dimension of "Region"
+		When a new dimension is created that has the title "Ethnicity"
+		Then the dimension has dimension_type of "dynamic" 
