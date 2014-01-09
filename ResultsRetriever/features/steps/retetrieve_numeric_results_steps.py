@@ -32,7 +32,8 @@ def step(context):
 					Column('id', Integer, primary_key=True),
 					Column('survey_id', Integer),
 					Column('question_code', String(20)),
-					Column('is_confidential', Integer))
+					Column('is_confidential', Integer),
+					Column('question_type', String(20)),)
 	metadata.create_all(engine)
 
 	conn = engine.connect()

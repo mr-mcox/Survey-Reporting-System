@@ -22,11 +22,12 @@ class ResultsRetriever(object):
 					Column('id', Integer, primary_key=True),
 					Column('survey_id', Integer),
 					Column('question_code', String(20)),
-					Column('is_confidential', Integer))
+					Column('is_confidential', Integer),
+					Column('question_type', String(20)),)
 		if survey_code != None:
-			select_results = select([results, questions.c.question_code,questions.c.is_confidential]).select_from(results.join(questions).join(select([surveys],use_labels=True).where(surveys.c.survey_code == survey_code).alias('sq')))
+			select_results = select([results, questions.c.question_code,questions.c.is_confidential,questions.c.question_type]).select_from(results.join(questions).join(select([surveys],use_labels=True).where(surveys.c.survey_code == survey_code).alias('sq')))
 		else:
-			select_results = select([results, questions.c.question_code,questions.c.is_confidential]).select_from(results.join(questions)).where(results.c.survey_id == survey_id)
+			select_results = select([results, questions.c.question_code,questions.c.is_confidential,questions.c.question_type]).select_from(results.join(questions)).where(results.c.survey_id == survey_id)
 
 		logging.debug('retrieve_results_for_one_survey query:\n' + str(select_results))
 		results = self.db_connection.execute(select_results)
