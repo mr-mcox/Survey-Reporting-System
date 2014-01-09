@@ -103,6 +103,27 @@ class CalculationCoordinator(object):
 				value_set_for_cut += list_to_add_onto
 			master_list_of_demographics = value_set_for_cut
 
+		#Convert list to tuples
+		master_list_of_demographics = {tuple(value_set) for value_set in master_list_of_demographics}
+
+		#Remove all rows where dynamic dimension pairs don't exist
+		if self.config is not None:
+				all_dimensions = {dimension.title: dimension for dimension in self.config.all_dimensions()}
+				position_of_cut = {cut: i for i, cut in enumerate(cuts)}
+				for cur_cut in position_of_cut.keys():
+					if cur_cut in all_dimensions and all_dimensions[cur_cut].dimension_type == 'dynamic' and all_dimensions[cur_cut].dynamic_parent_dimension in cuts:
+						parent_dimension = all_dimensions[cur_cut].dynamic_parent_dimension
+						position_of_parent = position_of_cut[parent_dimension]
+						position_of_child = position_of_cut[cur_cut]
+						df_for_dynamic = df.copy().set_index([parent_dimension,cur_cut])
+						value_sets_to_remove = set()
+						for value_set in master_list_of_demographics:
+							dimension_combo_to_check_for = (value_set[position_of_parent],value_set[position_of_child])
+							if df_for_dynamic.index.isin(dimension_combo_to_check_for).sum() == 0:
+								value_sets_to_remove.add(value_set)
+						for value_set in value_sets_to_remove:
+							master_list_of_demographics.remove(value_set)
+
 		#Add new rows where necessary
 		df_with_cut_index = df.copy().set_index(cuts)
 		for value_set in master_list_of_demographics:
@@ -392,10 +413,7 @@ class CalculationCoordinator(object):
 
 	def adjust_zero_padding_of_heading(self, input_heading):
 		values = input_heading.split(";")
-		try:
-			value_strings = [self.format_string.format(int(value)) for value in values]
-		except:
-			print(values)
+		value_strings = [self.format_string.format(int(value)) for value in values]
 		return ";".join(value_strings)
 
 	def rc_to_range(self,row,col,**kwargs):

@@ -5,7 +5,9 @@ import re
 import os
 from openpyxl import load_workbook
 from openpyxl import Workbook
+from unittest import mock
 from CalculationCoordinator import CalculationCoordinator
+from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
 
 def import_table_data(table):
 	table_data = {header : [] for header in table.headings}
@@ -228,6 +230,16 @@ def step(context):
 	res = context.result.set_index(['region','gender'])
 	assert res.index.isin([('SoDak','Female')]).sum() > 0
 
+@then('there is not a row with SoDak and Female')
+def step(context):
+	res = context.result.set_index(['region','gender'])
+	assert res.index.isin([('SoDak','Female')]).sum() == 0
+
+@then('there is a row with 2013 and Female')
+def step(context):
+	res = context.result.set_index(['corps','gender'])
+	assert res.index.isin([(2013.0,'Female')]).sum() > 0
+
 @given('ensure_combination_for_every_set_of_demographics is True')
 def step(context):
 	context.coordinator.ensure_combination_for_every_set_of_demographics = True
@@ -244,3 +256,19 @@ def step(context,heading):
 @then('the return value is "{expected_value}"')
 def step(context,expected_value):
 	assert context.result == expected_value
+
+@given('the gender ethnicity is "dynamic" with "dynamic_parent_dimension" of "region"')
+def step(context):
+	dimension_with_dynamic_type = ConfigurationReader.Dimension(title="gender")
+	dimension_with_dynamic_type.dimension_type = "dynamic"
+	dimension_with_dynamic_type.dynamic_parent_dimension = "region"
+	context.coordinator.config = ConfigurationReader.ConfigurationReader()
+	context.coordinator.config.all_dimensions = mock.MagicMock(return_value = [
+																		ConfigurationReader.Dimension(title="region"),
+																		ConfigurationReader.Dimension(title="corps"),
+																		dimension_with_dynamic_type,
+																		])
+@when('compute net with cut_demographic = corps and gender is run')
+def step(context):
+	context.coordinator.result_types =['net']
+	context.result = context.coordinator.compute_aggregation(cut_demographic=['corps','gender'])

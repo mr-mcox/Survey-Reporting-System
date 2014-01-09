@@ -181,9 +181,6 @@ class WriteExcelTestCase(unittest.TestCase):
 	def test_ensure_combination_for_every_set_of_demographics_is_true(self):
 		self.assertTrue(self.coordinator.ensure_combination_for_every_set_of_demographics)
 
-
-
-
 	def tearDown(self):
 		try:
 			pass

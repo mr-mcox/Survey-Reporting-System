@@ -1,7 +1,7 @@
 To implement:
  ✔ Create dynamic dimension field @done (14-01-08 16:51)
  ✔ Output third column that shows associated dimension @done (14-01-08 18:12)
- ☐ Only add blank rows for dynamic dimensions if parent dimension is included
+ ✔ Only add blank rows for dynamic dimensions if parent dimension is included @done (14-01-09 13:22)
  ☐ Update template to use dynamic dimensions
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
