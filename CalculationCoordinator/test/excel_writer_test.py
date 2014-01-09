@@ -32,9 +32,14 @@ class WriteExcelTestCase(unittest.TestCase):
 
 		dimension_with_all_together_label = ConfigurationReader.Dimension(title="GenderB")
 		dimension_with_all_together_label.all_together_label = "Gender Not Used"
+		dimension_with_dynamic_type = ConfigurationReader.Dimension(title="GenderC")
+		dimension_with_dynamic_type.dimension_type = "dynamic"
+		dimension_with_dynamic_type.dynamic_parent_dimension = "region"
+
 		config_reader.all_dimensions = mock.MagicMock(return_value = [
 																		ConfigurationReader.Dimension(title="Gender"),
 																		dimension_with_all_together_label,
+																		dimension_with_dynamic_type,
 																		])
 		coordinator.get_integer_string_mapping = mock.MagicMock(return_value= {'integer_strings':['1','2'],'labels':['male','female']})
 
@@ -53,6 +58,9 @@ class WriteExcelTestCase(unittest.TestCase):
 				'column_heading': ['2.3','2.4','2.3','2.4'],
 				'aggregation_value': ['H','','','S']
 		})
+
+		#Set up demographics for dynamic columns
+		coordinator.demographic_data = pd.DataFrame({'respondent_id':[1,2,3],'region':['Atlanta','Atlanta','SoDak'],'GenderC':['male','female','female']})
 		coordinator.compute_significance_from_config = mock.MagicMock(return_value=master_siginificance)
 		coordinator.export_to_excel()
 		self.coordinator = coordinator
@@ -88,6 +96,19 @@ class WriteExcelTestCase(unittest.TestCase):
 		assert ws.cell(row=2,column=8).value == 1
 		assert ws.cell(row=3,column=8).value == 2
 
+	def test_writing_menu_for_dynamic_dimension(self):
+		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
+		assert ws.cell(row=0,column=9).value == "GenderC"
+		assert ws.cell(row=1,column=9).value == "female"
+		assert ws.cell(row=2,column=9).value == "male"
+		assert ws.cell(row=3,column=9).value == "female"
+		assert ws.cell(row=1,column=10).value == 2
+		assert ws.cell(row=2,column=10).value == 1
+		assert ws.cell(row=3,column=10).value == 2
+		assert ws.cell(row=1,column=11).value == "Atlanta"
+		assert ws.cell(row=2,column=11).value == "Atlanta"
+		assert ws.cell(row=3,column=11).value == "SoDak"
+
 	def test_write_master_as_excel(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'DisplayValues')
 		column_headings = [str(ws.cell(row=0,column=i+1).value) for i in range(ws.get_highest_column()-1)]
@@ -112,7 +133,6 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertEqual( wb.get_named_range('disp_value_col_head').destinations[0][1],'$B$1:$C$1')
 		self.assertEqual( wb.get_named_range('disp_value_values').destinations[0][1],'$B$2:$C$3')
 
-
 	def test_named_ranges_on_significance_values(self):
 		wb = load_workbook(filename = r'test_file.xlsx')
 		range_names = [r.name for r in wb.get_named_ranges()]
@@ -122,7 +142,6 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertEqual( wb.get_named_range('sig_value_row_head').destinations[0][1],'$A$2:$A$3')
 		self.assertEqual( wb.get_named_range('sig_value_col_head').destinations[0][1],'$B$1:$C$1')
 		self.assertEqual( wb.get_named_range('sig_value_values').destinations[0][1],'$B$2:$C$3')
-
 
 	def test_named_ranges_on_lookup_tab(self):
 		wb = load_workbook(filename = r'test_file.xlsx')
@@ -136,7 +155,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertEqual( wb.get_named_range('default_menu').destinations[0][1],'$E$2:$E$101')
 		self.assertEqual( wb.get_named_range('default_mapping').destinations[0][1],'$E$2:$F$101')
 		self.assertEqual( wb.get_named_range('default_menu_start').destinations[0][1],'$E$2')
-		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$F$1:$M$1')
+		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$F$1:$P$1')
 		
 	def test_zero_string_label(self):
 		wb = load_workbook(filename = r'test_file.xlsx')
