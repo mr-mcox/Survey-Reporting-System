@@ -36,10 +36,11 @@ class ConfigurationReader(object):
 
 	def cuts_for_excel_menu(self):
 		cut_list = list()
+		all_dimensions = {dimension.title: dimension for dimension in self.all_dimensions()}
 		for cut_name, cut in self.cuts.items():
 			assert type(cut) == Cut
 			dimension_titles = [dimension.title for dimension in cut.dimensions]
-			cut_list.append([cut.title, 'static'] + dimension_titles)
+			cut_list.append([cut.title, all_dimensions[dimension_titles[0]].dimension_type] + dimension_titles)
 		return cut_list
 
 	def create_dimension(self, title):
@@ -106,3 +107,4 @@ class Dimension(object):
 				self.all_together_label = self.config['all_together_label']
 			if 'dynamic_parent_dimension' in self.config:
 				self.dimension_type = "dynamic"
+				self.dynamic_parent_dimension = self.config['dynamic_parent_dimension']

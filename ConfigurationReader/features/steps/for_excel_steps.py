@@ -7,7 +7,12 @@ def step(context):
 	context.reader.config = {'cuts':{
 							'Grade': {'dimensions':['Grade','Region','Corps']},
 							'Region':{'dimensions':['Region','Corps']}
-							}}
+							},
+							'dimensions':
+							{'Grade':{'all_together_label':"Lack of Ethnicity"},
+							'Region':{'all_together_label':"Lack of Ethnicity"},
+							'Corps':{'all_together_label':"Lack of Ethnicity"}}}
+	context.reader.cuts
 
 @when('cuts_for_excel_menu is run')
 def step(context):
