@@ -137,3 +137,48 @@ Scenario: When net formatted values are provided for a question, output weak_cou
 		| 1             |                     |
 	When compute weak_count is run
 	Then the display_value for question_code 1 is 1
+
+Scenario: Compute net formatted values accurately for a variety of question types
+	Given raw 7pt questions results
+		| person_id | response | question_type  |
+		| 1         | 7        | 7pt_1=SA       |
+		| 2         | 3        | 7pt_1=SA       |
+		| 3         | 1        | 7pt_1=SA       |
+		| 4         | 8        | 7pt_1=SA       |
+		| 5         | 10       | 10pt_NPS_1=SA  |
+		| 6         | 4        | 10pt_NPS_1=SA  |
+		| 7         | 1        | 10pt_NPS_1=SA  |
+		| 8         | 11       | 10pt_NPS_1=SA  |
+		| 9         | 1        | 7pt_7=SA       |
+		| 10        | 5        | 7pt_7=SA       |
+		| 11        | 7        | 7pt_7=SA       |
+		| 12        | 8        | 7pt_7=SA       |
+		| 13        | 11       | 11pt_NPS_1=SA  |
+		| 14        | 4        | 11pt_NPS_1=SA  |
+		| 15        | 1        | 11pt_NPS_1=SA  |
+		| 16        | 12       | 11pt_NPS_1=SA  |
+		| 17        | 1        | 10pt_NPS_10=SA |
+		| 18        | 7        | 10pt_NPS_10=SA |
+		| 19        | 10       | 10pt_NPS_10=SA |
+		| 20        | 11       | 10pt_NPS_10=SA |
+	When NumericOutputCalculator is initialized
+	Then net formatted value for person_id 1 is -1
+	Then net formatted value for person_id 2 is 0
+	Then net formatted value for person_id 3 is 1
+	Then net formatted value for person_id 4 is blank
+	Then net formatted value for person_id 5 is -1
+	Then net formatted value for person_id 6 is 0
+	Then net formatted value for person_id 7 is 1
+	Then net formatted value for person_id 8 is blank
+	Then net formatted value for person_id 9 is -1
+	Then net formatted value for person_id 10 is 0
+	Then net formatted value for person_id 11 is 1
+	Then net formatted value for person_id 12 is blank
+	Then net formatted value for person_id 13 is -1
+	Then net formatted value for person_id 14 is 0
+	Then net formatted value for person_id 15 is 1
+	Then net formatted value for person_id 16 is blank
+	Then net formatted value for person_id 17 is -1
+	Then net formatted value for person_id 18 is 0
+	Then net formatted value for person_id 19 is 1
+	Then net formatted value for person_id 20 is blank

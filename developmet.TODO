@@ -1,7 +1,7 @@
 To implement:
  ✔ Add question_type to model @done (14-01-09 16:47)
  ✔ Add question_type to migration script @done (14-01-09 17:22)
- ☐ Modify net values generation for list of question types
+ ✔ Modify net values generation for list of question types @done (14-01-09 17:50)
  ☐ Modify raw values for list of question types
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
