@@ -359,7 +359,7 @@ class CalculationCoordinator(object):
 		next_column_to_use = ws.get_highest_column()
 		dimension_titles = [dimension.title for dimension in self.config.all_dimensions()]
 		all_together_label_for_title = {dimension.title: dimension.all_together_label for dimension in self.config.all_dimensions()}
-		dynamic_dimension_parent = {dimension.title: dimension.dynamic_parent_dimension for dimension in self.config.all_dimensions() if dimension.dimension_type=='dynamic'}
+		dynamic_parent_dimension = {dimension.title: dimension.dynamic_parent_dimension for dimension in self.config.all_dimensions() if dimension.dimension_type=='dynamic'}
 		dimension_titles.append('question_code')
 		dimension_titles.append('result_type')
 		for dimension_title in dimension_titles:
@@ -367,13 +367,13 @@ class CalculationCoordinator(object):
 
 			ws.cell(row=0, column = next_column_to_use).value = dimension_title
 			row_offset = 1
-			if dimension_title in dynamic_dimension_parent:
+			if dimension_title in dynamic_parent_dimension:
 				if dimension_title in all_together_label_for_title and all_together_label_for_title[dimension_title] is not None:
 					ws.cell(row=row_offset, column = next_column_to_use).value = all_together_label_for_title[dimension_title]
 					ws.cell(row=row_offset, column = next_column_to_use + 1 ).value = self.zero_integer_string
 					row_offset = 2
 				assert self.demographic_data is not None
-				parent_dimension = dynamic_dimension_parent[dimension_title]
+				parent_dimension = dynamic_parent_dimension[dimension_title]
 				assert parent_dimension in self.demographic_data.columns
 				assert dimension_title in self.demographic_data.columns
 				dimension_mapping = pd.DataFrame(self.demographic_data,columns=[parent_dimension,dimension_title]).drop_duplicates().sort(columns=[parent_dimension,dimension_title])

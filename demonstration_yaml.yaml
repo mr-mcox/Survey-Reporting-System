@@ -8,6 +8,11 @@ cuts:
             - ethnicity
             - region
             - corps
+    Sub Region:
+        dimensions:
+            - sub_region
+            - region
+            - corps
 excel_template_file: SRS.dashboard.template.xlsx
 result_types:
     - net
@@ -19,6 +24,8 @@ dimensions:
         all_together_label: National
     corps:
         all_together_label: Both
+    sub_region:
+        dynamic_parent_dimension: region
 show_sample_size_for_questions:
     - CLI1
 show_questions:
