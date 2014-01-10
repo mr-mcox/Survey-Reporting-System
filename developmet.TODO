@@ -1,6 +1,6 @@
 To implement:
- ☐ Configuration sets is_composite False by default and True if composite_dimensions exists
- ☐ Configuration checks that composite_dimensions exist in config
+ ✔ Configuration sets is_composite False by default and True if composite_dimensions exists @done (14-01-10 08:54)
+ ✔ Configuration checks that composite_dimensions exist in config @done (14-01-10 08:57)
  ☐ When creating menu for composite dimension, it's just a concatenation of component dimensions
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
