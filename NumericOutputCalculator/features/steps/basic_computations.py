@@ -115,3 +115,12 @@ def step(context):
 @when('compute weak_count is run')
 def step(context):
     context.result = context.numeric_output_calculator.compute_aggregation(result_type=['weak_count'])
+
+@then('the response value for person_id {person_id} is {value}')
+def step(context, person_id, value):
+    nfv = context.numeric_output_calculator.responses
+    value_column = 'response'
+    if value == 'blank':
+        assert np.isnan(nfv.set_index('person_id').loc[int(person_id),value_column])
+    else:
+        assert nfv.set_index('person_id').loc[int(person_id),value_column] == int(value)
