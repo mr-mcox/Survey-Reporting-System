@@ -51,10 +51,10 @@ class ConfigurationReader(object):
 			new_dimension = Dimension(title=title, config = dimension_config)
 			self._all_dimensions[title] = new_dimension
 
-			#Check that composite dimensions are present in config
+			#Create dimension if it doesn't already exist
 			if new_dimension.is_composite:
 				for dimension in new_dimension.composite_dimensions:
-					assert dimension in self.config['dimensions']
+					self.create_dimension(dimension)
 			return new_dimension
 		else:
 			return self._all_dimensions[title]

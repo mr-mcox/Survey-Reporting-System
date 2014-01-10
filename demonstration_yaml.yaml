@@ -5,7 +5,7 @@ cuts:
             - corps
     Ethnicity:
         dimensions:
-            - ethnicity
+            - ethnicity_poc
             - region
             - corps
     Sub Region:
@@ -26,6 +26,10 @@ dimensions:
         all_together_label: Both
     sub_region:
         dynamic_parent_dimension: region
+    ethnicity_poc:
+        composite_dimensions:
+            - ethnicity
+            - poc
 show_sample_size_for_questions:
     - CLI1
 show_questions:

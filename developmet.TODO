@@ -1,7 +1,4 @@
 To implement:
- ✔ Configuration sets is_composite False by default and True if composite_dimensions exists @done (14-01-10 08:54)
- ✔ Configuration checks that composite_dimensions exist in config @done (14-01-10 08:57)
- ✔ When creating menu for composite dimension, it's just a concatenation of component dimensions @done (14-01-10 15:11)
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
 Refactor:
@@ -21,6 +18,9 @@ Risks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ When creating menu for composite dimension, it's just a concatenation of component dimensions @done (14-01-10 15:11) @project(To implement)
+ ✔ Configuration checks that composite_dimensions exist in config @done (14-01-10 08:57) @project(To implement)
+ ✔ Configuration sets is_composite False by default and True if composite_dimensions exists @done (14-01-10 08:54) @project(To implement)
  ✔ Modify raw values for list of question types @done (14-01-09 18:02) @project(To implement)
  ✔ Modify net values generation for list of question types @done (14-01-09 17:50) @project(To implement)
  ✔ Add question_type to migration script @done (14-01-09 17:22) @project(To implement)
