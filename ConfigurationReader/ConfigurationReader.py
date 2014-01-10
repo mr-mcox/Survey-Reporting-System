@@ -102,9 +102,13 @@ class Dimension(object):
 		self.title = kwargs.pop('title',None)
 		self.all_together_label = None
 		self.dimension_type = "static"
+		self.is_composite = False
 		if self.config is not None:
 			if 'all_together_label' in self.config:
 				self.all_together_label = self.config['all_together_label']
 			if 'dynamic_parent_dimension' in self.config:
 				self.dimension_type = "dynamic"
 				self.dynamic_parent_dimension = self.config['dynamic_parent_dimension']
+			if 'composite_dimensions' in self.config:
+				self.is_composite = True
+				self.composite_dimensions = self.config['composite_dimensions']

@@ -1,8 +1,7 @@
 To implement:
- ✔ Add question_type to model @done (14-01-09 16:47)
- ✔ Add question_type to migration script @done (14-01-09 17:22)
- ✔ Modify net values generation for list of question types @done (14-01-09 17:50)
- ✔ Modify raw values for list of question types @done (14-01-09 18:02)
+ ☐ Configuration sets is_composite False by default and True if composite_dimensions exists
+ ☐ Configuration checks that composite_dimensions exist in config
+ ☐ When creating menu for composite dimension, it's just a concatenation of component dimensions
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
 Refactor:
@@ -22,6 +21,10 @@ Risks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Modify raw values for list of question types @done (14-01-09 18:02) @project(To implement)
+ ✔ Modify net values generation for list of question types @done (14-01-09 17:50) @project(To implement)
+ ✔ Add question_type to migration script @done (14-01-09 17:22) @project(To implement)
+ ✔ Add question_type to model @done (14-01-09 16:47) @project(To implement)
  ✔ Update template to use dynamic dimensions @done (14-01-09 16:06) @project(To implement)
  ✔ Only add blank rows for dynamic dimensions if parent dimension is included @done (14-01-09 13:22) @project(To implement)
  ✔ Output third column that shows associated dimension @done (14-01-08 18:12) @project(To implement)

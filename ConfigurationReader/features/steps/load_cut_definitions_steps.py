@@ -175,3 +175,24 @@ def step(context):
 	'dimensions':
 	{'Ethnicity':{'dynamic_parent_dimension':"Region"}}
 	}
+
+@then('the dimension is_composite flag is False')
+def step(context):
+	assert context.result.is_composite == False
+
+
+@given('basic set of cut and dimensions in config file with composite dimension for Ethnicity')
+def step(context):
+	context.reader = ConfigurationReader()
+	context.reader.config = {'cuts':{
+	'Ethnicity': {'dimensions':['Ethnicity']},
+	'Region':{'dimensions':['Region']}
+	},
+	'dimensions':
+	{'Ethnicity':{'composite_dimensions':["Ethnicity","LIB"]},
+	'LIB':{}}
+	}
+
+@then('the dimension is_composite flag is True')
+def step(context):
+	assert context.result.is_composite == True
