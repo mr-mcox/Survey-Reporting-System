@@ -1,5 +1,6 @@
 from behave import *
 from ConfigurationReader import ConfigurationReader, Cut, Dimension
+from unittest import mock
 
 
 @given('input yaml that has one one dimension')
@@ -24,7 +25,7 @@ def step(context):
 		for cut in context.cuts:
 			if cut == yaml_cut:
 				cuts_match = True
-		assert cuts_match
+		assert cuts_match, "Cuts don't match and are " + str(context.cuts)
 
 @given('input yaml that has three dimensions')
 def step(context):
@@ -196,3 +197,35 @@ def step(context):
 @then('the dimension is_composite flag is True')
 def step(context):
 	assert context.result.is_composite == True
+
+@given('input yaml that has a composite dimension of "Ethnicity_POC" that includes "ethnicity" and "poc" components')
+def step(context):
+	context.reader = ConfigurationReader()
+	context.reader.config = {'cuts':{
+	'Ethnicity_POC': {'dimensions':['ethnicity_poc','region','corps']},
+	},
+	'dimensions':{'ethnicity_poc':{'composite_dimensions':['ethnicity','poc']}}
+	}
+
+@then('it returns cuts with ethnicity and poc')
+def step(context):
+	cuts_in_the_yaml = [
+						['ethnicity','region','corps'],
+						[None,'region','corps'],
+						['ethnicity',None,'corps'],
+						['ethnicity','region',None],
+						[None,None,'corps'],
+						[None,'region',None],
+						['ethnicity',None,None],
+						[None,None,None],
+						['poc','region','corps'],
+						['poc',None,'corps'],
+						['poc','region',None],
+						['poc',None,None],
+						]
+	for yaml_cut in cuts_in_the_yaml:
+		cuts_match = False
+		for cut in context.cuts:
+			if cut == yaml_cut:
+				cuts_match = True
+		assert cuts_match

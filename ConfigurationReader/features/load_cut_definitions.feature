@@ -75,3 +75,8 @@ Feature: Determine the cuts desired from a configuration file
 		Given basic set of cut and dimensions in config file with composite dimension for Ethnicity
 		When a new dimension is created that has the title "Ethnicity"
 		Then the dimension is_composite flag is True
+
+	Scenario: When a composite dimension is involved, create cuts based on each of the components
+		Given input yaml that has a composite dimension of "Ethnicity_POC" that includes "ethnicity" and "poc" components
+		When cuts_to_be_created is called
+		Then it returns cuts with ethnicity and poc

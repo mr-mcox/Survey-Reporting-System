@@ -1,6 +1,7 @@
 from bitstring import BitArray
 import yaml
 import logging
+import copy
 
 class ConfigurationReader(object):
 	"""docstring for ConfigurationReader"""
@@ -24,14 +25,27 @@ class ConfigurationReader(object):
 			number_of_levels = len(cut.dimensions)
 			zero_fill = [None for x in range(self.default_number_of_levels - number_of_levels )]
 			for i in range(2**number_of_levels):
-				levels_for_this = []
+				levels_for_this_variation = []
+				list_of_levels_for_this_variation = [levels_for_this_variation]
 				bit_mask = BitArray(uint=i,length=number_of_levels)
 				for j, bit in enumerate(bit_mask):
 					if bit == True:
-						levels_for_this.append(cut.dimensions[j].title)
+						if self.get_dimension_by_title(cut.dimensions[j].title).is_composite:
+							base_levels = copy.deepcopy(list_of_levels_for_this_variation)
+							list_of_levels_for_this_variation = []
+							for dimension in self.get_dimension_by_title(cut.dimensions[j].title).composite_dimensions:
+								base_levels_copy = copy.deepcopy(base_levels)
+								for item in base_levels_copy:
+									item.append(dimension)
+								list_of_levels_for_this_variation = list_of_levels_for_this_variation + base_levels_copy
+						else:
+							for item in list_of_levels_for_this_variation:
+								item.append(cut.dimensions[j].title)
 					else:
-						levels_for_this.append(None)
-				all_cut_fields.append(levels_for_this + zero_fill)
+						for item in list_of_levels_for_this_variation:
+							item.append(None)
+				for item in list_of_levels_for_this_variation:
+					all_cut_fields.append(item + zero_fill)
 		return all_cut_fields
 
 	def cuts_for_excel_menu(self):
@@ -62,6 +76,10 @@ class ConfigurationReader(object):
 	def all_dimensions(self):
 		"""Returns a list of all dimnsions used by this ConfigurationReader"""
 		return [dimension for key, dimension in self._all_dimensions.items()]
+
+	def get_dimension_by_title(self,dimension):
+		assert dimension in self._all_dimensions, "Dimension " + dimension + " is asked for but doesn't exit yet"
+		return self._all_dimensions[dimension]
 
 	def cuts():
 		doc = "The cuts property."

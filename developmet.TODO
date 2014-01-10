@@ -1,4 +1,5 @@
 To implement:
+ ✔ When creating cuts that create composite dimensions, create new set of cuts for each one of composite dimensions @done (14-01-10 16:19)
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
 Refactor:

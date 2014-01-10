@@ -58,7 +58,7 @@ class NumericOutputCalculator(object):
 		if type(cut_demographic) == list:
 			for cut in cut_demographic:
 				if cut != []:
-					assert cut in self.demographic_data.columns
+					assert cut in self.demographic_data.columns, "Expected " + cut + " to be a header in demographics, but it isn't there"
 		elif cut_demographic != None:
 			assert cut_demographic in self.demographic_data.columns
 
