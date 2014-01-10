@@ -357,13 +357,22 @@ class CalculationCoordinator(object):
 
 		#Add dimension menus
 		next_column_to_use = ws.get_highest_column()
+		#TODO: Perhaps having a function call directly from config would be better than these structures?
+		all_dimensions = {dimension.title: dimension for dimension in self.config.all_dimensions()}
 		dimension_titles = [dimension.title for dimension in self.config.all_dimensions()]
 		all_together_label_for_title = {dimension.title: dimension.all_together_label for dimension in self.config.all_dimensions()}
 		dynamic_parent_dimension = {dimension.title: dimension.dynamic_parent_dimension for dimension in self.config.all_dimensions() if dimension.dimension_type=='dynamic'}
 		dimension_titles.append('question_code')
 		dimension_titles.append('result_type')
 		for dimension_title in dimension_titles:
-			mapping = self.get_integer_string_mapping(dimension_title)
+			mapping = {'labels':[],'integer_strings':[]}
+			if dimension_title in all_dimensions and all_dimensions[dimension_title].is_composite:
+				for component_dimension_title in all_dimensions[dimension_title].composite_dimensions:
+					new_mapping = self.get_integer_string_mapping(component_dimension_title)
+					mapping['labels'] = mapping['labels'] + new_mapping['labels']
+					mapping['integer_strings'] = mapping['integer_strings'] + new_mapping['integer_strings']
+			else:
+				mapping = self.get_integer_string_mapping(dimension_title)
 
 			ws.cell(row=0, column = next_column_to_use).value = dimension_title
 			row_offset = 1
