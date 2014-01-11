@@ -44,6 +44,7 @@ class NumericOutputCalculator(object):
 	def compute_aggregation(self,**kwargs):
 		cut_demographic = kwargs.pop('cut_demographic', None)
 		result_type = kwargs.pop('result_type',None)
+		composite_questions = kwargs.pop('composite_questions',None)
 		assert result_type != None
 		result_types = list()
 		if type(result_type) == list:
@@ -71,12 +72,14 @@ class NumericOutputCalculator(object):
 				nfv = nfv.set_index('respondent_id').join(self.demographic_data.set_index('respondent_id').loc[:,cut_demographic], how = 'outer')
 
 		cut_groupings = ['question_code']
+		cut_demographic_list = []
 		if cut_demographic != None:
 			assert type(cut_demographic) == str or type(cut_demographic) == list
-			if type(cut_demographic) == list:
-				cut_groupings = cut_groupings + cut_demographic
+			if type(cut_demographic) == str:
+				cut_demographic_list = [cut_demographic]
 			else:
-				cut_groupings.append(cut_demographic)
+				cut_demographic_list = cut_demographic
+			cut_groupings = cut_groupings + cut_demographic_list
 
 		aggregation_calulations_list = list()
 		for result_type in result_types:
@@ -87,26 +90,32 @@ class NumericOutputCalculator(object):
 			aggregation_calulation = pd.DataFrame()
 			if result_type == 'net':
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+				aggregation_calulation = self.add_composite_question_calculation(composite_questions,aggregation_calulation,cut_demographic_list)
 			if result_type == 'strong':
 				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != 1),'net_formatted_value'] = 0
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+				aggregation_calulation = self.add_composite_question_calculation(composite_questions,aggregation_calulation,cut_demographic_list)
 			if result_type == 'strong_count':
 				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != 1),'net_formatted_value'] = 0
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).sum().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+				aggregation_calulation = self.add_composite_question_calculation(composite_questions,aggregation_calulation,cut_demographic_list)
 			if result_type == 'weak':
 				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != -1),'net_formatted_value'] = 0
 				nfv_copy.net_formatted_value = nfv_copy.net_formatted_value * -1
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+				aggregation_calulation = self.add_composite_question_calculation(composite_questions,aggregation_calulation,cut_demographic_list)
 			if result_type == 'weak_count':
 				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != -1),'net_formatted_value'] = 0
 				nfv_copy.net_formatted_value = nfv_copy.net_formatted_value * -1
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).sum().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+				aggregation_calulation = self.add_composite_question_calculation(composite_questions,aggregation_calulation,cut_demographic_list)
 			if result_type == 'raw_average':
 				assert 'response' in nfv_copy.columns
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()
+				aggregation_calulation = self.add_composite_question_calculation(composite_questions,aggregation_calulation,cut_demographic_list)
 			if result_type == 'sample_size':
 				aggregation_calulation = nfv_copy.ix[nfv_copy.net_formatted_value.notnull(),:].groupby(cut_groupings).aggregate(len).rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
-
+				aggregation_calulation = self.add_composite_question_calculation(composite_questions,aggregation_calulation,cut_demographic_list)
 			aggregation_calulation['result_type'] = result_type
 			aggregation_calulations_list.append(aggregation_calulation)
 
@@ -125,6 +134,20 @@ class NumericOutputCalculator(object):
 		#Return just required columns
 		return_columns = cut_groupings + ['aggregation_value','result_type']
 		return pd.DataFrame(all_results,columns=return_columns)
+
+	def add_composite_question_calculation(self,composite_questions,aggregation_calulation,cut_demographic_list):
+		if composite_questions is not None:
+			for question, components in composite_questions.items():
+				composite_computation = pd.DataFrame()
+				if len(cut_demographic_list) == 0:
+					print("Rows selected\n" + str(aggregation_calulation.ix[aggregation_calulation.question_code.isin(components)]))
+					composite_output = aggregation_calulation.ix[aggregation_calulation.question_code.isin(components)].mean()['aggregation_value']
+					aggregation_calulation = pd.concat([aggregation_calulation,pd.DataFrame({'question_code':[question],'aggregation_value':[composite_output]})])
+				else:
+					composite_computation = aggregation_calulation.ix[aggregation_calulation.question_code.isin(components)].groupby(cut_demographic_list).mean().reset_index()
+					composite_computation['question_code'] = question
+					aggregation_calulation = pd.concat([aggregation_calulation,composite_computation])
+		return aggregation_calulation
 
 
 	def compute_net_results(self,**kwargs):

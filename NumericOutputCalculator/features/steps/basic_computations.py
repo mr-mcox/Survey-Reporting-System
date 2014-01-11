@@ -124,3 +124,26 @@ def step(context, person_id, value):
         assert np.isnan(nfv.set_index('person_id').loc[int(person_id),value_column])
     else:
         assert nfv.set_index('person_id').loc[int(person_id),value_column] == int(value)
+
+@then('the display_value for string based question_code {question_code} is {value}')
+def step(context,question_code,value):
+    if value == 'blank':
+        print( context.result )
+        assert np.isnan( context.result.set_index('question_code').loc[question_code,'aggregation_value'] )
+    else:
+        if 'net_formatted_value' in context.result.columns:
+            assert context.result.set_index('question_code').loc[question_code,'aggregation_value'] == float(value)
+        else:
+            assert context.result.set_index('question_code').loc[question_code,'aggregation_value'] == float(value)
+
+@then('the regional display_value for string based question_code {question_code} and region "Atlanta" is {value}')
+def step(context,question_code,value):
+    assert context.result.set_index(['question_code','region']).iloc[-2]['aggregation_value'] == float(value)
+
+@when('compute net is run with composite of NQ is q1 and q2 and region cut')
+def step(context):
+    context.result = context.numeric_output_calculator.compute_net_results(cut_demographic = 'region', composite_questions = {'NQ':['q1','q2']})
+
+@when('compute {result_type} is run with composite of NQ is q1 and q2')
+def step(context,result_type):
+    context.result = context.numeric_output_calculator.compute_aggregation(result_type=[result_type],composite_questions = {'NQ':['q1','q2']})
