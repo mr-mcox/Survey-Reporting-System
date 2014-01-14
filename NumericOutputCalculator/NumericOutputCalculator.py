@@ -166,21 +166,30 @@ class NumericOutputCalculator(object):
 		assert len(cuts) >= 1, "Cannot make statistical significance comparison with no dimensions"
 		comparison_cuts = cuts[1:]
 
-		base_results = self.compute_aggregation(cut_demographic=cuts,result_type=["sample_size","strong_count","weak_count"])
-		comparison_results = self.compute_aggregation(cut_demographic=comparison_cuts,result_type=["sample_size","strong_count","weak_count"])
+		base_results = self.compute_aggregation(cut_demographic=cuts,result_type=["sample_size","strong_count","weak_count"],**kwargs)
+		comparison_results = self.compute_aggregation(cut_demographic=comparison_cuts,result_type=["sample_size","strong_count","weak_count"],**kwargs)
 		return (cuts, comparison_cuts,base_results,comparison_results)
 
 
 	def bootstrap_net_significance(self,**kwargs):
 		cuts = kwargs.pop('cuts',None)
+		no_stat_significance_computation = kwargs.pop('no_stat_significance_computation',False)
 
 		if len(cuts) == 0:
 			blank_df = pd.DataFrame({'question_code':self.responses.question_code.unique().tolist()})
 			blank_df['aggregation_value'] = ''
 			blank_df['result_type'] = 'significance_value'
 			return blank_df
+
+		cuts, comparison_cuts, base_results, comparison_results = self.aggregations_for_net_significance(cuts=cuts,**kwargs)
+
+		if no_stat_significance_computation:
+			df_with_no_results = self.compute_aggregation(cut_demographic=cuts,result_type='sample_size',**kwargs)
+			df_with_no_results['result_type'] = 'significance_value'
+			df_with_no_results['aggregation_value'] = ''
+			df_with_no_results.set_index(cuts+['question_code'])
+			return df_with_no_results
 		
-		cuts, comparison_cuts, base_results, comparison_results = self.aggregations_for_net_significance(cuts=cuts)
 		base_results = base_results.set_index(cuts + ['question_code','result_type'])
 		base_results = pd.Series(base_results['aggregation_value'],index = base_results.index).unstack()
 		comparison_results = comparison_results.set_index(comparison_cuts  + ['question_code','result_type'])

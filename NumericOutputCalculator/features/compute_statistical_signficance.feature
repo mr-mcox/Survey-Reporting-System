@@ -60,3 +60,21 @@ Feature: Compute statistical significance via bootstrapping
 		Then aggregation_value for region "Atlanta" and gender "Male" is "H"
 		Then aggregation_value for region "Atlanta" and gender "Female" is "L"
 		Then aggregation_value for region "SoDak" and gender "Male" is "S"
+
+	Scenario: When no_stat_signficance_computation flag is set, don't return anything
+		Given raw 7pt questions results
+				| respondent_id | question_code | response |
+				| 1             | q1             | 1        |
+				| 2             | q1             | 3        |
+				| 3             | q1             | 7        |
+				| 4             | q1             | 1        |
+				| 5             | q1             | 7        |
+		Given demographic data
+			| respondent_id | region  | gender |
+			| 1             | Atlanta | Female |
+			| 2             | Atlanta | Female |
+			| 3             | SoDak   | Male   |
+			| 4             | SoDak   | Male   |
+			| 5             | SoDak   | Female |
+		When bootstrap_net_significance is called for cut ["gender","region"] with no_stat_significance_computation = True
+		Then statistical significance aggregation_value for region "Atlanta" and gender "Female" is blank

@@ -2,6 +2,7 @@ from behave import *
 from unittest import mock
 from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
 from CalculationCoordinator import CalculationCoordinator
+import pandas as pd
 
 @given('a config reader that returns ["region","gender"] and ["region",None]')
 def step(context):
@@ -70,3 +71,24 @@ def step(context):
 	mapping = context.coordinator.get_integer_string_mapping('question_code')
 	question_code_map = dict(zip(mapping['labels'],mapping['integer_strings']))
 	assert 'q1' not in question_code_map.keys()
+
+@given('a config reader that returns ["region","gender"] and ["region",None] and the no_stat_significance_computation flag set')
+def step(context):
+	config_reader = ConfigurationReader.ConfigurationReader()
+	config_reader.cuts_to_be_created = mock.MagicMock(return_value = [["region","gender"], ["region",None]])
+	config_reader.config = {'no_stat_significance_computation':'True'}
+	context.coordinator.config = config_reader
+	context.config_reader = config_reader
+	context.coordinator.compute_significance = mock.MagicMock(return_value=pd.DataFrame({'question_code':[],'result_type':[]}))
+	context.coordinator.replace_dimensions_with_integers = mock.MagicMock(return_value=pd.DataFrame({'row_heading':['0'],'column_heading':['0'],'aggregation_value':['0']}))
+	context.coordinator.create_row_column_headers = mock.MagicMock(return_value=pd.DataFrame({'row_heading':['0'],'column_heading':['0'],'aggregation_value':['0']}))
+	context.coordinator.adjust_zero_padding_of_heading = {'0':'0'}
+
+
+@then('bootstrap_net_significance is called with no_stat_significance_computation = True')
+def step(context):
+	context.coordinator.compute_significance.assert_any_call(no_stat_significance_computation=True, cut_demographic=['region', None])
+
+@when('compute_significance_from_config is run')
+def step(context):
+	context.result = context.coordinator.compute_significance_from_config()

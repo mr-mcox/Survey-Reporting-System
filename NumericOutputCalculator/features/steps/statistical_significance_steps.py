@@ -82,5 +82,13 @@ def step(context,region,gender,result):
 
 @then('aggregation_value for region "{region}" and gender "{gender}" is blank')
 def step(context,region,gender):
-	print(context.result.loc[(1,region, gender),'aggregation_value'])
 	assert context.result.loc[(1,region, gender),'aggregation_value'] == ''
+
+@when('bootstrap_net_significance is called for cut ["gender","region"] with no_stat_significance_computation = True')
+def step(context):
+	context.result = context.numeric_output_calculator.bootstrap_net_significance(cuts=['gender','region'],no_stat_significance_computation=True)
+
+@then('statistical significance aggregation_value for region "{region}" and gender "{gender}" is blank')
+def step(context,region,gender):
+	# print(context.result.loc[(1,region, gender),'aggregation_value'])
+	assert context.result.iloc[0]['aggregation_value'] == ''

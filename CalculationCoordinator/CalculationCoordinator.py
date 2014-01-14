@@ -220,7 +220,12 @@ class CalculationCoordinator(object):
 		cut_sets = self.config.cuts_to_be_created()
 		for i, cut_set in enumerate(cut_sets):
 			# logging.debug("Cut set is " + str(cut_set))
-			df = self.compute_aggregation(cut_demographic=cut_set)
+			df = pd.DataFrame()
+			if 'composite_questions' in self.config.config:
+				df = self.compute_aggregation(cut_demographic=cut_set,composite_questions=self.config.config['composite_questions'])
+			else:
+				df = self.compute_aggregation(cut_demographic=cut_set)
+
 			#Remove samples sizes for questions that don't need them
 			assert 'question_code' in df.columns
 			logging.debug("question_code dtype is " + str(df.question_code.dtype))
@@ -255,9 +260,17 @@ class CalculationCoordinator(object):
 			self.default_question = self.config.config['show_questions'][0]
 		self.default_result_type = 'significance_value'
 
+		no_stat_significance_computation = False
+		if 'no_stat_significance_computation' in self.config.config:
+			 no_stat_significance_computation = True
+
 		cut_sets = self.config.cuts_to_be_created()
 		for i, cut_set in enumerate(cut_sets):
-			df = self.compute_significance(cut_demographic=cut_set)
+			df = pd.DataFrame()
+			if 'composite_questions' in self.config.config:
+				df = self.compute_significance(cut_demographic=cut_set,composite_questions=self.config.config['composite_questions'],no_stat_significance_computation=no_stat_significance_computation)
+			else:
+				df = self.compute_significance(cut_demographic=cut_set, no_stat_significance_computation=no_stat_significance_computation)			
 			#Remove samples sizes for questions that don't need them
 			assert 'question_code' in df.columns
 			# logging.debug("question_code dtype is " + str(df.question_code.dtype))
