@@ -1,5 +1,7 @@
 To implement:
  ✔ When creating cuts that create composite dimensions, create new set of cuts for each one of composite dimensions @done (14-01-10 16:19)
+ ✔ Dimension returns value order if one is specified in config, otherwise None @done (14-01-15 19:25)
+ ☐ If order of values in dimensions is specified, use those values
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
 Refactor:

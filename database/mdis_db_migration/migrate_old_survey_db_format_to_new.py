@@ -48,27 +48,16 @@ engine_2 = create_engine(connect_info)
 conn_2 = engine_2.connect()
 
 #Remove foreign key constraints
-insp = reflection.Inspector.from_engine(engine_2)
-foreign_keys_on_results_table = insp.get_foreign_keys('results')
-ctx = MigrationContext.configure(conn_2)
-alembic_op = Operations(ctx)
-for fk in foreign_keys_on_results_table:
-	alembic_op.drop_constraint(fk['name'],'results')
-# survey_id_fk = ForeignKeyConstraint(columns=[results.c.survey_id], refcolumns=[surveys.c.id])
-# question_id_fk = ForeignKeyConstraint(columns=[results.c.question_id], refcolumns=[questions.c.id])
-
-
-# alembic_op.drop_constraint(survey_id_fk)
-# alembic_op.drop_constraint(question_id_fk)
-# print ("Drop Statement: " + DropConstraint(survey_id_fk))
-# conn_2.execute(DropConstraint(survey_id_fk))
-# conn_2.execute(DropConstraint(question_id_fk))
-# survey_id_fk.drop()
-# question_id_fk.drop()
+# insp = reflection.Inspector.from_engine(engine_2)
+# foreign_keys_on_results_table = insp.get_foreign_keys('results')
+# ctx = MigrationContext.configure(conn_2)
+# alembic_op = Operations(ctx)
+# for fk in foreign_keys_on_results_table:
+# 	alembic_op.drop_constraint(fk['name'],'results')
 
 #Import from local DB
-nr_results = conn_1.execute(select([numerical_responses]).where(numerical_responses.c.survey == '1314F8W'))
-ssq_results = conn_1.execute(select([survey_specific_questions]).where(survey_specific_questions.c.survey == '1314F8W'))
+nr_results = conn_1.execute(select([numerical_responses],numerical_responses.c.survey.in_(['1314MYS'])))
+ssq_results = conn_1.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(['1314MYS'])))
 
 responses = pd.DataFrame(nr_results.fetchall())
 responses.columns = nr_results.keys()
@@ -91,8 +80,8 @@ surveys_for_db = pd.DataFrame({'id':survey_ids,'survey_code':survey_codes})
 questions_list = question_table.survey_specific_qid.unique().tolist()
 question_map = dict(zip(questions_list,range(len(questions_list))))
 
-question_table['question_id'] = question_table.survey_specific_qid.map(question_map)
-question_table['survey_id'] = question_table.survey.map(survey_map)
+question_table['question_id'] = question_table.survey_specific_qid.map(question_map) + 1
+question_table['survey_id'] = question_table.survey.map(survey_map) + 1
 question_table = question_table.rename(columns={'master_qid':'question_code','question_id':'id','confidential':'is_confidential'})
 questions_for_db = pd.DataFrame(question_table,columns=['id','survey_id','question_code','is_confidential','question_type'])
 
@@ -141,8 +130,20 @@ def convert_types_for_db(values):
 	return new_values
 
 print("Inserting new results")
-conn_2.execute(surveys.insert(),df_to_dict_array(surveys_for_db))
-conn_2.execute(questions.insert(),df_to_dict_array(questions_for_db))
+try:
+	conn_2.execute(surveys.insert(),df_to_dict_array(surveys_for_db))
+except:
+	pdb.set_trace()
+
+question_rows = df_to_dict_array(questions_for_db)
+for i, row in enumerate(question_rows):
+	# print("Adding row " + str(row))
+	conn_2.execute(questions.insert(),row)
+# try:
+# 	conn_2.execute(questions.insert(),df_to_dict_array(questions_for_db))
+# except:
+# 	pdb.set_trace()
+
 conn_2.execute(results.insert(),df_to_dict_array(results_for_db))
 # result_rows = df_to_dict_array(results_for_db)
 # num_rows = len(result_rows)
@@ -152,11 +153,6 @@ conn_2.execute(results.insert(),df_to_dict_array(results_for_db))
 # 	print("\rInserting result " + str(i) + " of " + str(num_rows), end = " " )
 
 #Add foreign keys back
-for fk in foreign_keys_on_results_table:
-	alembic_op.create_foreign_key(fk['name'],'results',fk['referred_table'],fk['constrained_columns'],fk['referred_columns'])
-# alembic_op.add_constraint(survey_id_fk)
-# alembic_op.add_constraint(question_id_fk)
-# conn_2.execute(AddConstraint(survey_id_fk))
-# conn_2.execute(AddConstraint(question_id_fk))
-
+# for fk in foreign_keys_on_results_table:
+# 	alembic_op.create_foreign_key(fk['name'],'results',fk['referred_table'],fk['constrained_columns'],fk['referred_columns'])
 

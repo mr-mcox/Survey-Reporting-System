@@ -80,3 +80,13 @@ Feature: Determine the cuts desired from a configuration file
 		Given input yaml that has a composite dimension of "Ethnicity_POC" that includes "ethnicity" and "poc" components
 		When cuts_to_be_created is called
 		Then it returns cuts with ethnicity and poc
+
+	Scenario: value_order by default returns None
+		Given basic set of cut and dimensions in config file with composite dimension for Ethnicity
+		When a new dimension is created that has the title "Ethnicity"
+		Then the dimension value_order is None
+
+	Scenario: value_order by default returns None
+		Given basic set of cut and dimensions in config file with an Ethnicity dimension that has value order of "B" "A"
+		When a new dimension is created that has the title "Ethnicity"
+		Then the dimension value_order is ["B", "A"]

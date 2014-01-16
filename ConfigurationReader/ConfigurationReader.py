@@ -126,6 +126,7 @@ class Dimension(object):
 		self.all_together_label = None
 		self.dimension_type = "static"
 		self.is_composite = False
+		self.value_order = None
 		if self.config is not None:
 			if 'all_together_label' in self.config:
 				self.all_together_label = self.config['all_together_label']
@@ -135,3 +136,7 @@ class Dimension(object):
 			if 'composite_dimensions' in self.config:
 				self.is_composite = True
 				self.composite_dimensions = self.config['composite_dimensions']
+			if 'value_order' in self.config:
+				assert type(self.config['value_order']) is list
+				self.value_order = self.config['value_order']
+				self.value_order

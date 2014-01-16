@@ -229,3 +229,21 @@ def step(context):
 			if cut == yaml_cut:
 				cuts_match = True
 		assert cuts_match
+
+@then('the dimension value_order is None')
+def step(context):
+	assert context.result.value_order is None
+
+@given('basic set of cut and dimensions in config file with an Ethnicity dimension that has value order of "B" "A"')
+def step(context):
+	context.reader = ConfigurationReader()
+	context.reader.config = {'cuts':{
+	'Ethnicity': {'dimensions':['Ethnicity']},
+	'Region':{'dimensions':['Region']}
+	},
+	'dimensions':
+	{'Ethnicity':{'value_order':["B","A"]}}}
+
+@then('the dimension value_order is ["B", "A"]')
+def step(context):
+	assert context.result.value_order ==['B','A']
