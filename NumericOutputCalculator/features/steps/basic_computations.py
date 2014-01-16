@@ -147,3 +147,8 @@ def step(context):
 @when('compute {result_type} is run with composite of NQ is q1 and q2')
 def step(context,result_type):
     context.result = context.numeric_output_calculator.compute_aggregation(result_type=[result_type],composite_questions = {'NQ':['q1','q2']})
+
+@then('display_value for question_code 1 and result_type "{result_type}" is {value}')
+def step(context,result_type,value):
+    print("\n" + str(context.result.set_index(['question_code','result_type'])))
+    assert context.result.set_index(['question_code','result_type']).ix[(1.0,result_type),'aggregation_value'] == float(value)

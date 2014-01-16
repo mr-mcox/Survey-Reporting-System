@@ -113,8 +113,18 @@ class NumericOutputCalculator(object):
 			aggregation_calulation['result_type'] = result_type
 			aggregation_calulations_list.append(aggregation_calulation)
 
+		#Add categorical responses
+		categorical_calculation = pd.DataFrame()
+		if 'question_type' in nfv.columns:
+			question_types = nfv.question_type.unique()
+			if 'Categorical_response' in question_types or 'Ordered_response' in question_types:
+				categorical_calculation = nfv.ix[nfv.question_type.isin(['Categorical_response','Ordered_response'])].groupby(cut_groupings + ['response']).aggregate(len).reset_index().rename(columns={'question_type':'aggregation_value','response':'result_type'})
+				categorical_calculation_samp_size = categorical_calculation.groupby('question_code').sum().rename(columns={'aggregation_value':'sample_size'})['sample_size']
+				categorical_calculation = categorical_calculation.set_index('question_code').join(categorical_calculation_samp_size).reset_index()
+				categorical_calculation.aggregation_value = categorical_calculation.aggregation_value / categorical_calculation.sample_size
+				categorical_calculation.result_type = categorical_calculation.result_type.astype(int).astype(str)
 
-		all_results = pd.concat(aggregation_calulations_list)
+		all_results = pd.concat(aggregation_calulations_list + [categorical_calculation])
 		#Determine which questions have fewer than 5 respondents and are confidential
 		if 'is_confidential' in all_results.columns:
 			all_results = all_results.set_index(cut_groupings)
