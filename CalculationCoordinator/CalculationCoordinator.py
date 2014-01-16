@@ -389,6 +389,7 @@ class CalculationCoordinator(object):
 
 			ws.cell(row=0, column = next_column_to_use).value = dimension_title
 			row_offset = 1
+			integer_mapping = dict(zip(mapping['labels'],mapping['integer_strings']))
 			if dimension_title in dynamic_parent_dimension:
 				if dimension_title in all_together_label_for_title and all_together_label_for_title[dimension_title] is not None:
 					ws.cell(row=row_offset, column = next_column_to_use).value = all_together_label_for_title[dimension_title]
@@ -399,7 +400,6 @@ class CalculationCoordinator(object):
 				assert parent_dimension in self.demographic_data.columns
 				assert dimension_title in self.demographic_data.columns
 				dimension_mapping = pd.DataFrame(self.demographic_data,columns=[parent_dimension,dimension_title]).drop_duplicates().sort(columns=[parent_dimension,dimension_title])
-				integer_mapping = dict(zip(mapping['labels'],mapping['integer_strings']))
 				i = 0
 				for index, row_items in dimension_mapping.iterrows():
 					ws.cell(row=i+row_offset, column = next_column_to_use).value = row_items[dimension_title]
@@ -412,9 +412,15 @@ class CalculationCoordinator(object):
 					ws.cell(row=row_offset, column = next_column_to_use).value = all_together_label_for_title[dimension_title]
 					ws.cell(row=row_offset, column = next_column_to_use + 1 ).value = self.zero_integer_string
 					row_offset = 2
-				for i in range(len(mapping['integer_strings'])):
-					ws.cell(row=i+row_offset, column = next_column_to_use).value = mapping['labels'][i]
-					ws.cell(row=i+row_offset, column = next_column_to_use+1).value = str(mapping['integer_strings'][i])
+				labels_for_menu = mapping['labels']
+				if dimension_title in all_dimensions and type(all_dimensions[dimension_title].value_order) is list:
+					labels_for_menu = all_dimensions[dimension_title].value_order
+				i = 0
+				for label in labels_for_menu:
+					if label in integer_mapping:
+						ws.cell(row=i+row_offset, column = next_column_to_use).value = label
+						ws.cell(row=i+row_offset, column = next_column_to_use+1).value = str(integer_mapping[label])
+					i += 1
 				next_column_to_use += 2
 
 		#Add ranges for dimension menus
