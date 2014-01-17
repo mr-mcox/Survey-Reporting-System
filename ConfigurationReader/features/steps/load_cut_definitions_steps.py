@@ -247,3 +247,41 @@ def step(context):
 @then('the dimension value_order is ["B", "A"]')
 def step(context):
 	assert context.result.value_order ==['B','A']
+
+@given('input yaml that has two cuts with overlapping dimensions')
+def step(context):
+	context.reader = ConfigurationReader()
+	context.reader.config = {'cuts':{
+	'Ethnicity': {'dimensions':['ethnicity','region','corps']},
+	'Grade': {'dimensions':['grade','region','corps']},
+	}
+	}
+
+@then('it returns all combinations of cuts')
+def step(context):
+	print(context.cuts)
+	cuts_in_the_yaml = [
+						['ethnicity','region','corps'],
+						[None,'region','corps'],
+						['ethnicity',None,'corps'],
+						['ethnicity','region',None],
+						[None,None,'corps'],
+						[None,'region',None],
+						['ethnicity',None,None],
+						[None,None,None],
+						['grade','region','corps'],
+						['grade',None,'corps'],
+						['grade','region',None],
+						['grade',None,None],
+						]
+	for yaml_cut in cuts_in_the_yaml:
+		cuts_match = False
+		for cut in context.cuts:
+			if cut == yaml_cut:
+				cuts_match = True
+		assert cuts_match
+
+@then('it returns the minimal number of cuts')
+def step(context):
+	print(context.cuts)
+	assert len(context.cuts) == 12

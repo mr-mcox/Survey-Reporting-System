@@ -46,6 +46,10 @@ class ConfigurationReader(object):
 							item.append(None)
 				for item in list_of_levels_for_this_variation:
 					all_cut_fields.append(item + zero_fill)
+
+		#Trim down to just the necessary cuts
+		all_cut_fields = {tuple(cut) for cut in all_cut_fields}
+		all_cut_fields = [list(cut) for cut in all_cut_fields]
 		return all_cut_fields
 
 	def cuts_for_excel_menu(self):

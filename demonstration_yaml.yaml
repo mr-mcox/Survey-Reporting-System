@@ -1,3 +1,4 @@
+no_stat_significance_computation: True
 cuts:
     Region:
         dimensions:

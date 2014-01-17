@@ -206,6 +206,7 @@ class CalculationCoordinator(object):
 				items_in_order.append(str(row[column]))
 		return ";".join(items_in_order)
 
+	# @profile
 	def compute_cuts_from_config(self):
 		assert self.config != None
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
@@ -220,6 +221,7 @@ class CalculationCoordinator(object):
 		cut_sets = self.config.cuts_to_be_created()
 		for i, cut_set in enumerate(cut_sets):
 			# logging.debug("Cut set is " + str(cut_set))
+			print("\rCompleted {0:.0f} % of basic computations. Currently working on {1}".format(i/len(cut_sets)*100,str(cut_sets)),end=" ")
 			df = pd.DataFrame()
 			if 'composite_questions' in self.config.config:
 				df = self.compute_aggregation(cut_demographic=cut_set,composite_questions=self.config.config['composite_questions'])
@@ -244,7 +246,6 @@ class CalculationCoordinator(object):
 			df = self.create_row_column_headers(df,cuts=cut_set)
 			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
 			gc.collect()
-			print("\rCompleted {0:.0f} % of basic computations".format(i/len(cut_sets)*100),end=" ")
 		return_table = pd.concat(all_aggregations)
 		return_table.row_heading = return_table.row_heading.map(self.adjust_zero_padding_of_heading)
 		return_table.column_heading = return_table.column_heading.map(self.adjust_zero_padding_of_heading)

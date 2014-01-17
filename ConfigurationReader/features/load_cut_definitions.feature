@@ -90,3 +90,9 @@ Feature: Determine the cuts desired from a configuration file
 		Given basic set of cut and dimensions in config file with an Ethnicity dimension that has value order of "B" "A"
 		When a new dimension is created that has the title "Ethnicity"
 		Then the dimension value_order is ["B", "A"]
+
+	Scenario: When multiple dimensions are indicated, the full set of combination is the minimal number of cuts used
+		Given input yaml that has two cuts with overlapping dimensions
+		When cuts_to_be_created is called
+		Then it returns all combinations of cuts
+		Then it returns the minimal number of cuts
