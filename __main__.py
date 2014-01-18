@@ -5,7 +5,7 @@ from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
 from SurveyReportingSystem.ResultsRetriever import ResultsRetriever
 import logging
 
-logging.basicConfig(filename='debug.log',level=logging.DEBUG)
+logging.basicConfig(filename='debug.log',level=logging.WARNING)
 
 config = ConfigurationReader.ConfigurationReader(config_file='config.yaml')
 

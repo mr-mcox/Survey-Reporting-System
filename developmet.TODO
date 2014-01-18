@@ -2,6 +2,7 @@ To implement:
  ✔ When creating cuts that create composite dimensions, create new set of cuts for each one of composite dimensions @done (14-01-10 16:19)
  ✔ Dimension returns value order if one is specified in config, otherwise None @done (14-01-15 19:25)
  ✔ If order of values in dimensions is specified, use those values @done (14-01-15 19:55)
+ ✔ Refactor modify_for_combinations_of_demographics so that it creates a blank DF and fills that in with results rather than adding individual rows @done (14-01-17 18:19)
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
 Refactor:

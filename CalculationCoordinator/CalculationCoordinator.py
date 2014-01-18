@@ -34,6 +34,7 @@ class CalculationCoordinator(object):
 		assert aggregation_key in self.computations_generated
 		return self.computations_generated[aggregation_key]
 
+	# @profile
 	def compute_aggregation(self,**kwargs):
 		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=self.results,demographic_data=self.demographic_data)
 		assert type(self.result_types) == list
@@ -72,6 +73,7 @@ class CalculationCoordinator(object):
 		# self.computations_generated[aggregation_key] = calculations
 		return calculations
 
+	# @profile
 	def modify_for_combinations_of_demographics(self, df, cuts):
 		df = df.reset_index()
 		# logging.debug("Starting df is " + str(df.head()))
@@ -125,21 +127,32 @@ class CalculationCoordinator(object):
 							master_list_of_demographics.remove(value_set)
 
 		#Add new rows where necessary
-		df_with_cut_index = df.copy().set_index(cuts)
-		for value_set in master_list_of_demographics:
-			if df_with_cut_index.index.isin([tuple(value_set)]).sum()== 0:
-				dict_for_df = dict()
-				dict_for_df['result_type'] = [first_result_type]
-				# logging.debug("First question code is " + first_question_code )
-				dict_for_df['question_code'] = [first_question_code]
-				new_row = pd.DataFrame(dict_for_df)
-				# logging.debug("New row before adding cuts:\n" + str(new_row))
-				for i in range(len(cuts)):
-					new_row[cuts[i]] = value_set[i]
-				logging.debug("New row after adding cuts:\n" + str(new_row))
+		# df_with_cut_index = df.copy().set_index(cuts)
+		all_value_sets = pd.DataFrame(list(master_list_of_demographics))
+		if len(master_list_of_demographics) == 0:
+			return df
+		else:
+			all_value_sets.columns = cuts
+			# all_value_sets['result_type'] = first_result_type
+			# all_value_sets['question_code'] = first_question_code
+			all_value_sets = all_value_sets.set_index(cuts)
+			df_with_additional_rows = df.set_index(cuts).join(all_value_sets,how="outer")
+			df_with_additional_rows.result_type.fillna(first_result_type,inplace=True)
+			df_with_additional_rows.question_code.fillna(first_question_code,inplace=True)
+			# for value_set in master_list_of_demographics:
+			# 	if df_with_cut_index.index.isin([tuple(value_set)]).sum()== 0:
+			# 		dict_for_df = dict()
+			# 		dict_for_df['result_type'] = [first_result_type]
+			# 		# logging.debug("First question code is " + first_question_code )
+			# 		dict_for_df['question_code'] = [first_question_code]
+			# 		new_row = pd.DataFrame(dict_for_df)
+			# 		# logging.debug("New row before adding cuts:\n" + str(new_row))
+			# 		for i in range(len(cuts)):
+			# 			new_row[cuts[i]] = value_set[i]
+			# 		# logging.debug("New row after adding cuts:\n" + str(new_row))
 
-				df = pd.concat([df,new_row])
-		return df
+			# 		df = pd.concat([df,new_row])
+			return df_with_additional_rows.reset_index()
 
 	def replace_dimensions_with_integers(self, df = None):
 
@@ -221,7 +234,7 @@ class CalculationCoordinator(object):
 		cut_sets = self.config.cuts_to_be_created()
 		for i, cut_set in enumerate(cut_sets):
 			# logging.debug("Cut set is " + str(cut_set))
-			print("\rCompleted {0:.0f} % of basic computations. Currently working on {1}".format(i/len(cut_sets)*100,str(cut_sets)),end=" ")
+			print("\rCompleted {0:.0f} % of basic computations. Currently working on {1}".format(i/len(cut_sets)*100,str(cut_set)),end=" ")
 			df = pd.DataFrame()
 			if 'composite_questions' in self.config.config:
 				df = self.compute_aggregation(cut_demographic=cut_set,composite_questions=self.config.config['composite_questions'])

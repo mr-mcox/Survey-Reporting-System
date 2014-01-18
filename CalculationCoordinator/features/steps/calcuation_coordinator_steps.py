@@ -228,6 +228,7 @@ def step(context):
 @then('there is a row with SoDak and Female')
 def step(context):
 	res = context.result.set_index(['region','gender'])
+	print(res)
 	assert res.index.isin([('SoDak','Female')]).sum() > 0
 
 @then('there is not a row with SoDak and Female')
