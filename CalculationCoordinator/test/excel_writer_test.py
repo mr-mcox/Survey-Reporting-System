@@ -27,7 +27,8 @@ class WriteExcelTestCase(unittest.TestCase):
 		config_reader = ConfigurationReader.ConfigurationReader()
 		config_reader.config['excel_template_file'] = 'test_file.xlsx'
 		self.cuts_for_excel_menu_results = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None']]
-		config_reader.cuts_for_excel_menu = mock.MagicMock(return_value = self.cuts_for_excel_menu_results)
+		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_results,'historical':[['Region', 'static', 'Region', 'Corps','None']]}
+		config_reader.cuts_for_excel_menu = mock.MagicMock(side_effect= lambda **arg: return_for_cuts_for_excel_menu[arg['menu']])
 		coordinator.config = config_reader
 
 		dimension_with_all_together_label = ConfigurationReader.Dimension(title="GenderB")
@@ -101,35 +102,35 @@ class WriteExcelTestCase(unittest.TestCase):
 
 	def test_writing_menu_translations(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
-		assert ws.cell(row=0,column=5).value == "Gender"
-		assert ws.cell(row=1,column=5).value == "male"
-		assert ws.cell(row=2,column=5).value == "female"
-		assert ws.cell(row=1,column=6).value == 1
-		assert ws.cell(row=2,column=6).value == 2
+		assert ws.cell(row=0,column=6).value == "Gender"
+		assert ws.cell(row=1,column=6).value == "male"
+		assert ws.cell(row=2,column=6).value == "female"
+		assert ws.cell(row=1,column=7).value == 1
+		assert ws.cell(row=2,column=7).value == 2
 
 
 	def test_writing_menu_for_no_all_together_label(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
-		assert ws.cell(row=0,column=7).value == "GenderB"
-		assert ws.cell(row=1,column=7).value == "Gender Not Used"
-		assert ws.cell(row=2,column=7).value == "male"
-		assert ws.cell(row=3,column=7).value == "female"
-		assert ws.cell(row=1,column=8).value == 0
-		assert ws.cell(row=2,column=8).value == 1
-		assert ws.cell(row=3,column=8).value == 2
+		assert ws.cell(row=0,column=8).value == "GenderB"
+		assert ws.cell(row=1,column=8).value == "Gender Not Used"
+		assert ws.cell(row=2,column=8).value == "male"
+		assert ws.cell(row=3,column=8).value == "female"
+		assert ws.cell(row=1,column=9).value == 0
+		assert ws.cell(row=2,column=9).value == 1
+		assert ws.cell(row=3,column=9).value == 2
 
 	def test_writing_menu_for_dynamic_dimension(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
-		assert ws.cell(row=0,column=9).value == "GenderC"
-		assert ws.cell(row=1,column=9).value == "female"
-		assert ws.cell(row=2,column=9).value == "male"
-		assert ws.cell(row=3,column=9).value == "female"
-		assert ws.cell(row=1,column=10).value == 2
-		assert ws.cell(row=2,column=10).value == 1
-		assert ws.cell(row=3,column=10).value == 2
-		assert ws.cell(row=1,column=11).value == "Atlanta"
-		assert ws.cell(row=2,column=11).value == "Atlanta"
-		assert ws.cell(row=3,column=11).value == "SoDak"
+		assert ws.cell(row=0,column=10).value == "GenderC"
+		assert ws.cell(row=1,column=10).value == "female"
+		assert ws.cell(row=2,column=10).value == "male"
+		assert ws.cell(row=3,column=10).value == "female"
+		assert ws.cell(row=1,column=11).value == 2
+		assert ws.cell(row=2,column=11).value == 1
+		assert ws.cell(row=3,column=11).value == 2
+		assert ws.cell(row=1,column=12).value == "Atlanta"
+		assert ws.cell(row=2,column=12).value == "Atlanta"
+		assert ws.cell(row=3,column=12).value == "SoDak"
 
 	def test_write_master_as_excel(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'DisplayValues')
@@ -199,7 +200,6 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertEqual( wb.get_named_range('hist_sig_value_col_head').destinations[0][1],'$B$1:$C$1')
 		self.assertEqual( wb.get_named_range('hist_sig_value_values').destinations[0][1],'$B$2:$C$3')
 
-
 	def test_named_ranges_on_lookup_tab(self):
 		wb = load_workbook(filename = r'test_file.xlsx')
 		range_names = [r.name for r in wb.get_named_ranges()]
@@ -207,25 +207,26 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertTrue( 'cuts_config' in range_names)
 		self.assertTrue( 'default_menu' in range_names)
 		self.assertTrue( 'cuts_head' in range_names)
-		self.assertEqual( wb.get_named_range('cuts').destinations[0][1],'$A$1:$A$2')
+		self.assertEqual( wb.get_named_range('cuts').destinations[0][1],'$F$1:$F$2')
+		self.assertEqual( wb.get_named_range('cuts_historical').destinations[0][1],'$F$3:$F$3')
 		self.assertEqual( wb.get_named_range('cuts_config').destinations[0][1],'$A$1:$E$2')
-		self.assertEqual( wb.get_named_range('default_menu').destinations[0][1],'$E$2:$E$101')
-		self.assertEqual( wb.get_named_range('default_mapping').destinations[0][1],'$E$2:$F$101')
-		self.assertEqual( wb.get_named_range('default_menu_start').destinations[0][1],'$E$2')
-		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$F$1:$T$1')
+		self.assertEqual( wb.get_named_range('default_menu').destinations[0][1],'$F$2:$F$101')
+		self.assertEqual( wb.get_named_range('default_mapping').destinations[0][1],'$F$2:$G$101')
+		self.assertEqual( wb.get_named_range('default_menu_start').destinations[0][1],'$F$2')
+		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$G$1:$U$1')
 
 	def test_composite_dimensions(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
-		assert ws.cell(row=0,column=12).value == "Gender_LIB"
-		assert ws.cell(row=1,column=12).value == "male"
-		assert ws.cell(row=2,column=12).value == "female"
-		assert ws.cell(row=3,column=12).value == "lib"
+		assert ws.cell(row=0,column=13).value == "Gender_LIB"
+		assert ws.cell(row=1,column=13).value == "male"
+		assert ws.cell(row=2,column=13).value == "female"
+		assert ws.cell(row=3,column=13).value == "lib"
 
 	def test_value_order_dimension(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
-		assert ws.cell(row=0,column=14).value == "ValueOrderDimension"
-		assert ws.cell(row=1,column=14).value == "B"
-		assert ws.cell(row=2,column=14).value == "A"
+		assert ws.cell(row=0,column=15).value == "ValueOrderDimension"
+		assert ws.cell(row=1,column=15).value == "B"
+		assert ws.cell(row=2,column=15).value == "A"
 		
 	def test_zero_string_label(self):
 		wb = load_workbook(filename = r'test_file.xlsx')

@@ -447,7 +447,7 @@ class CalculationCoordinator(object):
 
 		ws = wb.create_sheet()
 		ws.title = 'Lookups'
-		cuts_menus = self.config.cuts_for_excel_menu()
+		cuts_menus = self.config.cuts_for_excel_menu(menu=None)
 		max_menu_length = max([len(menu) for menu in cuts_menus])
 		for menu_i, cut_menu in enumerate(cuts_menus):
 			for col_i, item in enumerate(cut_menu):
@@ -457,8 +457,20 @@ class CalculationCoordinator(object):
 		#Added ranges for cut menu
 		range_width = ws.get_highest_column() - 1
 		range_height = ws.get_highest_row() -1 
-		wb.create_named_range('cuts',ws,self.rc_to_range(row=0,col=0,width=1,height=range_height + 1))
 		wb.create_named_range('cuts_config',ws,self.rc_to_range(row=0,col=0,width=range_width + 1,height=range_height + 1))
+
+		highest_column = ws.get_highest_column()
+		for menu_i, cut_menu in enumerate(cuts_menus):
+			ws.cell(row=menu_i, column = highest_column).value = cut_menu[0]
+		wb.create_named_range('cuts',ws,self.rc_to_range(row=0,col=highest_column,width=1,height=range_height + 1))
+
+		#Add historical cut menu
+		menu_start = ws.get_highest_row()
+		menu = self.config.cuts_for_excel_menu(menu='historical')
+		menu_length = len(menu)
+		for menu_i, cut_menu in enumerate(menu):
+			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu[0]
+		wb.create_named_range('cuts_historical',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
 		#Add dimension menus
 		next_column_to_use = ws.get_highest_column()
@@ -516,7 +528,7 @@ class CalculationCoordinator(object):
 				next_column_to_use += 2
 
 		#Add ranges for dimension menus
-		col_for_default_menu = range_width
+		col_for_default_menu = range_width + 1
 		range_width = ws.get_highest_column() -1
 		wb.create_named_range('default_menu',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=1,height=100))
 		wb.create_named_range('default_mapping',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=2,height=100))

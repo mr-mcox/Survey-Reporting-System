@@ -58,10 +58,13 @@ class ConfigurationReader(object):
 		all_cut_fields = [list(cut) for cut in all_cut_fields]
 		return all_cut_fields
 
-	def cuts_for_excel_menu(self):
+	def cuts_for_excel_menu(self,**kwargs):
 		cut_list = list()
+		menu = kwargs.pop('menu',None)
 		all_dimensions = {dimension.title: dimension for dimension in self.all_dimensions()}
 		for cut_name, cut in self.cuts.items():
+			if menu is not None and ('cut_menus' not in cut.config_data or menu not in cut.config_data['cut_menus']):
+				continue
 			assert type(cut) == Cut
 			dimension_titles = [dimension.title for dimension in cut.dimensions]
 			cut_list.append([cut.title, all_dimensions[dimension_titles[0]].dimension_type] + dimension_titles)
