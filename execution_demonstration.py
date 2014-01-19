@@ -20,7 +20,7 @@ config = ConfigurationReader.ConfigurationReader(config_file='small_demonstratio
 # db = conn
 # retriever = ResultsRetriever.ResultsRetriever(db_connection=db)
 # print("Starting to retrieve results")
-# results = retriever.retrieve_results_for_one_survey(survey_code='1314MYS')
+# results = retriever.retrieve_results_for_survey(survey_code='1314MYS')
 # results_df = pd.DataFrame(results['rows'])
 # results_df.columns = results['column_headings']
 

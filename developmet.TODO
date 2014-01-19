@@ -1,6 +1,6 @@
 To implement:
  ✔ If both demographics and results have survey code, join on survey code @done (14-01-19 12:38)
- ☐ Pull results for multiple surveys
+ ✔ Pull results for multiple surveys @done (14-01-19 13:05)
  ☐ Flag for cuts to create that adds survey code to all cuts
  ☐ Flag for historical on cuts to create only includes those cuts marked to be on historical menu
  ☐ Copy of create from config that does historical stuff (include new input of results and demographics)
@@ -9,6 +9,7 @@ To implement:
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
 Refactor:
+  ☐ Numeric calculator nfv only uses required columns
   ☐ Survey is indentified on questions table and not on results table
   ☐ Convert keys for CalculationCorinator to set to avoid order issues
   ☐ Disentangle exporting to excel from compilation of results

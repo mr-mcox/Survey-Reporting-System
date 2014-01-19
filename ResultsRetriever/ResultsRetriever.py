@@ -6,9 +6,11 @@ class ResultsRetriever(object):
 	def __init__(self, **kwargs):
 		self.db_connection = kwargs.pop('db_connection',None)
 
-	def retrieve_results_for_one_survey(self,**kwargs):
+	def retrieve_results_for_survey(self,**kwargs):
 		survey_id = kwargs.pop('survey_id',None)
 		survey_code = kwargs.pop('survey_code',None)
+		if not type(survey_code) is list:
+			survey_code = [survey_code]
 		metadata = MetaData()
 		results = Table('results',metadata,
 					Column('respondent_id', Integer),
@@ -24,11 +26,11 @@ class ResultsRetriever(object):
 					Column('question_code', String(20)),
 					Column('is_confidential', Integer),
 					Column('question_type', String(20)),)
-		if survey_code != None:
-			select_results = select([results, questions.c.question_code,questions.c.is_confidential,questions.c.question_type]).select_from(results.join(questions).join(select([surveys],use_labels=True).where(surveys.c.survey_code == survey_code).alias('sq')))
+		if survey_code != [None]:
+			select_results = select([results, questions.c.question_code,questions.c.is_confidential,questions.c.question_type]).select_from(results.join(questions).join(select([surveys],use_labels=True).where(surveys.c.survey_code.in_(survey_code)).alias('sq')))
 		else:
 			select_results = select([results, questions.c.question_code,questions.c.is_confidential,questions.c.question_type]).select_from(results.join(questions)).where(results.c.survey_id == survey_id)
 
-		logging.debug('retrieve_results_for_one_survey query:\n' + str(select_results))
+		logging.debug('retrieve_results_for_survey query:\n' + str(select_results))
 		results = self.db_connection.execute(select_results)
 		return 	{'rows':results.fetchall(),'column_headings':results.keys()}

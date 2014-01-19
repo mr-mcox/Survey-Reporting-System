@@ -49,11 +49,11 @@ def step(context):
 
 @when('retrieve results for survey_id 1 is run')
 def step(context):
-	context.results = ResultsRetriever(db_connection=context.db).retrieve_results_for_one_survey(survey_id=1)
+	context.results = ResultsRetriever(db_connection=context.db).retrieve_results_for_survey(survey_id=1)
 
-@then('there are 8 rows returned')
-def step(context):
-	assert len(context.results['rows'])==8
+@then('there are {number} rows returned')
+def step(context,number):
+	assert len(context.results['rows'])==int(number)
 
 @given('a survey table with this data')
 def step(context):
@@ -61,7 +61,7 @@ def step(context):
 
 @when('retrieve results for survey_code 1314F8W is run')
 def step(context):
-	context.results = ResultsRetriever(db_connection=context.db).retrieve_results_for_one_survey(survey_code="1314F8W")
+	context.results = ResultsRetriever(db_connection=context.db).retrieve_results_for_survey(survey_code="1314F8W")
 
 @given('a question table with this data')
 def step(context):
@@ -70,3 +70,7 @@ def step(context):
 @then('one of the columns returned is {column}')
 def step(context, column):
 	assert column in context.results['column_headings']
+
+@when('retrieve results for multiple surveys with survey_code 1314F8W and 1314MYS is run')
+def step(context):
+	context.results = ResultsRetriever(db_connection=context.db).retrieve_results_for_survey(survey_code=["1314F8W","1314MYS"])
