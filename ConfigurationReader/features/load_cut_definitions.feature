@@ -98,6 +98,11 @@ Feature: Determine the cuts desired from a configuration file
 		Then it returns the minimal number of cuts
 
 	Scenario: When a for_historical flag is set, add survey_code to all cuts 
-		Given input yaml that has one one dimension
+		Given input yaml that has two dimensions, only one of which is historical
 		When cuts_to_be_created is called with a for_historical flag
 		Then each cut includes the survey_code dimension
+
+	Scenario: When a for_historical flag is set, only return cuts that are listed as being in historical menu
+		Given input yaml that has two dimensions, only one of which is historical
+		When cuts_to_be_created is called with a for_historical flag
+		Then the cuts only include historical cut

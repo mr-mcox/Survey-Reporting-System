@@ -294,4 +294,26 @@ def step(context):
 @then('each cut includes the survey_code dimension')
 def step(context):
 	for cut in context.cuts:
-		assert 'survey_code' in cut 
+		assert 'survey_code' in cut
+
+@given('input yaml that has two dimensions, only one of which is historical')
+def step(context):
+	context.reader = ConfigurationReader()
+	context.reader.config = {'cuts':{
+	'Ethnicity': {'dimensions':['ethnicity']},
+	'Region':{'dimensions':['region'],'cut_menus':['historical']}
+	}
+	}
+
+@then('the cuts only include historical cut')
+def step(context):
+	cuts_in_the_yaml = [
+						['survey_code', 'region',None,None],
+						['survey_code',None,None,None]
+						]
+	for yaml_cut in cuts_in_the_yaml:
+		cuts_match = False
+		for cut in context.cuts:
+			if cut == yaml_cut:
+				cuts_match = True
+		assert cuts_match

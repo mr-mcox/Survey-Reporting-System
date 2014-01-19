@@ -25,6 +25,9 @@ class ConfigurationReader(object):
 			assert type(cut.dimensions) == list
 			number_of_levels = len(cut.dimensions)
 			zero_fill = [None for x in range(self.default_number_of_levels - number_of_levels )]
+			if for_historical:
+				if 'cut_menus' not in cut.config_data or 'historical' not in cut.config_data['cut_menus']:
+					continue
 			for i in range(2**number_of_levels):
 				levels_for_this_variation = []
 				if for_historical:
@@ -110,6 +113,7 @@ class ConfigurationReader(object):
 class Cut(object):
 	def __init__(self, **kwargs):
 		config_data = kwargs.pop('config_data',None)
+		self.config_data = config_data
 		self.title = kwargs.pop('title',None)
 		self.dimensions = list()
 		config_object = kwargs.pop('config_object', None)
