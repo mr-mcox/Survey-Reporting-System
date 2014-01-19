@@ -96,3 +96,8 @@ Feature: Determine the cuts desired from a configuration file
 		When cuts_to_be_created is called
 		Then it returns all combinations of cuts
 		Then it returns the minimal number of cuts
+
+	Scenario: When a for_historical flag is set, add survey_code to all cuts 
+		Given input yaml that has one one dimension
+		When cuts_to_be_created is called with a for_historical flag
+		Then each cut includes the survey_code dimension

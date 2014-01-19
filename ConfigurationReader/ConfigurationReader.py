@@ -14,7 +14,8 @@ class ConfigurationReader(object):
 			stream = open(self.config_file,'r')
 			self.config = yaml.load(stream)
 
-	def cuts_to_be_created(self):
+	def cuts_to_be_created(self,**kwargs):
+		for_historical = kwargs.pop('for_historical',False)
 		all_cut_fields = []
 		config = self.config
 		assert 'cuts' in self.config
@@ -26,6 +27,8 @@ class ConfigurationReader(object):
 			zero_fill = [None for x in range(self.default_number_of_levels - number_of_levels )]
 			for i in range(2**number_of_levels):
 				levels_for_this_variation = []
+				if for_historical:
+					levels_for_this_variation.append('survey_code')
 				list_of_levels_for_this_variation = [levels_for_this_variation]
 				bit_mask = BitArray(uint=i,length=number_of_levels)
 				for j, bit in enumerate(bit_mask):

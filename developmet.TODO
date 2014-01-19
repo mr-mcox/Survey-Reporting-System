@@ -1,7 +1,8 @@
 To implement:
  ✔ If both demographics and results have survey code, join on survey code @done (14-01-19 12:38)
  ✔ Pull results for multiple surveys @done (14-01-19 13:05)
- ☐ Flag for cuts to create that adds survey code to all cuts
+ ✔ Flag for cuts to create that adds survey code to all cuts @done (14-01-19 13:14)
+ ☐ Include survey_code in result output
  ☐ Flag for historical on cuts to create only includes those cuts marked to be on historical menu
  ☐ Copy of create from config that does historical stuff (include new input of results and demographics)
  ☐ Menu item on cuts create seperate menu for each config

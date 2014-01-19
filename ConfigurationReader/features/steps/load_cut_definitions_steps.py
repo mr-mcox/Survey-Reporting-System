@@ -285,3 +285,13 @@ def step(context):
 def step(context):
 	print(context.cuts)
 	assert len(context.cuts) == 12
+
+
+@when('cuts_to_be_created is called with a for_historical flag')
+def step(context):
+	context.cuts = context.reader.cuts_to_be_created(for_historical=True)
+
+@then('each cut includes the survey_code dimension')
+def step(context):
+	for cut in context.cuts:
+		assert 'survey_code' in cut 
