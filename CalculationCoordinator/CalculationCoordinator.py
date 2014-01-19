@@ -348,6 +348,9 @@ class CalculationCoordinator(object):
 		assert 'excel_template_file' in self.config.config
 		self.ensure_combination_for_every_set_of_demographics = True
 		filename = self.config.config['excel_template_file']
+		compute_historical = False
+		if self.hist_results is not None and self.hist_demographic_data is not None:
+			compute_historical = True
 
 		#Output display values
 		output_df = self.compute_cuts_from_config().set_index(['row_heading','column_heading'])
@@ -377,31 +380,32 @@ class CalculationCoordinator(object):
 		self.copy_sheet_to_workbook('significance_values.xlsx','SignificanceValues',filename)
 		os.remove('significance_values.xlsx')
 
-		#Output hist display values
-		output_df = self.compute_cuts_from_config(for_historical=True).set_index(['row_heading','column_heading'])
-		if not output_df.index.is_unique:
-			df = output_df.reset_index()
-			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
-			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-		output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
-		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
-		output_series.unstack().to_excel('display_values.xlsx', sheet_name='HistDisplayValues')
+		if compute_historical:
+			#Output hist display values
+			output_df = self.compute_cuts_from_config(for_historical=True).set_index(['row_heading','column_heading'])
+			if not output_df.index.is_unique:
+				df = output_df.reset_index()
+				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+				logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+			output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+			output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
+			output_series.unstack().to_excel('display_values.xlsx', sheet_name='HistDisplayValues')
 
-		self.copy_sheet_to_workbook('display_values.xlsx','HistDisplayValues',filename)
-		os.remove('display_values.xlsx')
+			self.copy_sheet_to_workbook('display_values.xlsx','HistDisplayValues',filename)
+			os.remove('display_values.xlsx')
 
-		#Output hist significance values
-		output_df = self.compute_significance_from_config(for_historical=True).set_index(['row_heading','column_heading'])
-		if not output_df.index.is_unique:
-			df = output_df.reset_index()
-			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
-			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-		output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
-		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
-		output_series.unstack().to_excel('significance_values.xlsx', sheet_name='HistSignificanceValues')
+			#Output hist significance values
+			output_df = self.compute_significance_from_config(for_historical=True).set_index(['row_heading','column_heading'])
+			if not output_df.index.is_unique:
+				df = output_df.reset_index()
+				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+				logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+			output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+			output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
+			output_series.unstack().to_excel('significance_values.xlsx', sheet_name='HistSignificanceValues')
 
-		self.copy_sheet_to_workbook('significance_values.xlsx','HistSignificanceValues',filename)
-		os.remove('significance_values.xlsx')
+			self.copy_sheet_to_workbook('significance_values.xlsx','HistSignificanceValues',filename)
+			os.remove('significance_values.xlsx')
 
 		wb = load_workbook(filename)
 
@@ -425,21 +429,22 @@ class CalculationCoordinator(object):
 		wb.create_named_range('sig_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
 		wb.create_named_range('sig_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
 
-		#Add ranges for display_values tab
-		dv_ws = wb.get_sheet_by_name('HistDisplayValues')
-		range_width = dv_ws.get_highest_column() -1
-		range_height = dv_ws.get_highest_row() - 1
-		wb.create_named_range('hist_disp_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
-		wb.create_named_range('hist_disp_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
-		wb.create_named_range('hist_disp_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
+		if compute_historical:
+			#Add ranges for display_values tab
+			dv_ws = wb.get_sheet_by_name('HistDisplayValues')
+			range_width = dv_ws.get_highest_column() -1
+			range_height = dv_ws.get_highest_row() - 1
+			wb.create_named_range('hist_disp_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
+			wb.create_named_range('hist_disp_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
+			wb.create_named_range('hist_disp_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
 
-		#Add ranges for significance_values tab
-		dv_ws = wb.get_sheet_by_name('HistSignificanceValues')
-		range_width = dv_ws.get_highest_column() -1
-		range_height = dv_ws.get_highest_row() - 1
-		wb.create_named_range('hist_sig_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
-		wb.create_named_range('hist_sig_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
-		wb.create_named_range('hist_sig_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
+			#Add ranges for significance_values tab
+			dv_ws = wb.get_sheet_by_name('HistSignificanceValues')
+			range_width = dv_ws.get_highest_column() -1
+			range_height = dv_ws.get_highest_row() - 1
+			wb.create_named_range('hist_sig_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
+			wb.create_named_range('hist_sig_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
+			wb.create_named_range('hist_sig_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
 
 		if 'Lookups' in wb.get_sheet_names():
 			ws_to_del = wb.get_sheet_by_name('Lookups')

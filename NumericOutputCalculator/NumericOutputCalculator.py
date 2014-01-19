@@ -97,16 +97,17 @@ class NumericOutputCalculator(object):
 				cut_demographic_list = cut_demographic
 			cut_groupings = cut_groupings + cut_demographic_list
 
-		# columns_to_keep = cut_groupings
+		columns_to_keep = copy.deepcopy(cut_groupings)
 		nfv = self.results_with_dimensions.copy()
-		# if 'net_formatted_value' in nfv.columns:
-		# 	columns_to_keep.append('net_formatted_value')
-		# if 'response' in nfv.columns:
-		# 	columns_to_keep.append('response')
-		if not self.demographic_data.empty and cut_demographic != []:
-			# nfv = nfv.loc[:,columns_to_keep]
-			#TODO - refactor so the above passes tests
-			pass
+		if 'net_formatted_value' in nfv.columns:
+			columns_to_keep.append('net_formatted_value')
+		if 'response' in nfv.columns:
+			columns_to_keep.append('response')
+		if 'is_confidential' in nfv.columns:
+			columns_to_keep.append('is_confidential')
+		if 'question_type' in nfv.columns:
+			columns_to_keep.append('question_type')
+		nfv = nfv.loc[:,columns_to_keep]
 
 		aggregation_calulations_list = list()
 		for result_type in result_types:
@@ -115,7 +116,6 @@ class NumericOutputCalculator(object):
 			# logging.debug("Responses columns are " + str(nfv))
 			assert result_type in {'net','strong','weak','raw_average','sample_size','strong_count','weak_count'}, "No calculation defined for result_type " + result_type
 			aggregation_calulation = pd.DataFrame()
-			print(nfv_copy)
 			if result_type == 'net':
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 			if result_type == 'strong':

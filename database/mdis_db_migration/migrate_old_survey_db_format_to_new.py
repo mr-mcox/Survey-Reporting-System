@@ -56,8 +56,8 @@ conn_2 = engine_2.connect()
 # 	alembic_op.drop_constraint(fk['name'],'results')
 
 #Import from local DB
-nr_results = conn_1.execute(select([numerical_responses],numerical_responses.c.survey.in_(['1314MYS'])))
-ssq_results = conn_1.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(['1314MYS'])))
+nr_results = conn_1.execute(select([numerical_responses],numerical_responses.c.survey.in_(['1314MYS','1314F8W'])))
+ssq_results = conn_1.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(['1314MYS','1314F8W'])))
 
 responses = pd.DataFrame(nr_results.fetchall())
 responses.columns = nr_results.keys()

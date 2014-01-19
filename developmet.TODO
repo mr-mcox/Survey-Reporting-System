@@ -10,7 +10,7 @@ To implement:
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
 Refactor:
-  ☐ Numeric calculator nfv only uses required columns
+  ✔ Numeric calculator nfv only uses required columns @done (14-01-19 16:21)
   ☐ Combine compute_cuts_from_config and compute_sig_from_config
   ☐ Survey is indentified on questions table and not on results table
   ☐ Convert keys for CalculationCorinator to set to avoid order issues
