@@ -40,7 +40,26 @@ class NumericOutputCalculator(object):
 		assert responses.net_formatted_value.notnull().sum() > 0
 		self.responses = responses
 		self.demographic_data = kwargs.pop('demographic_data',pd.DataFrame())
+		self._results_with_dimensions = pd.DataFrame()
 
+	def results_with_dimensions():
+		doc = "The results_with_dimensions property."
+		def fget(self):
+			if self._results_with_dimensions.empty:
+				if not self.demographic_data.empty:
+					if 'survey_code' in self.demographic_data.columns and 'survey_code' in self.responses.columns:
+						self._results_with_dimensions = self.responses.set_index(['respondent_id','survey_code']).join(self.demographic_data.set_index(['respondent_id','survey_code']), how = 'outer').reset_index()
+					else:
+						self._results_with_dimensions = self.responses.set_index('respondent_id').join(self.demographic_data.set_index('respondent_id'), how = 'outer').reset_index()
+			return self._results_with_dimensions
+		def fset(self, value):
+			self._results_with_dimensions = value
+		def fdel(self):
+			del self._results_with_dimensions
+		return locals()
+	results_with_dimensions = property(**results_with_dimensions())
+
+	# @profile
 	def compute_aggregation(self,**kwargs):
 		cut_demographic = kwargs.pop('cut_demographic', None)
 		result_type = kwargs.pop('result_type',None)

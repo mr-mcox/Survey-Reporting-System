@@ -18,7 +18,8 @@ def import_table_data(table):
 
 @given('net formatted values')
 def step(context):
-	context.numeric_output_calculator = NumericOutputCalculator(responses=import_table_data(context.table))
+    context.results = import_table_data(context.table)
+    context.numeric_output_calculator = NumericOutputCalculator(responses=context.results)
 
 @when('compute net is run')
 def step(context):
@@ -152,3 +153,14 @@ def step(context,result_type):
 def step(context,result_type,value):
     print("\n" + str(context.result.set_index(['question_code','result_type'])))
     assert context.result.set_index(['question_code','result_type']).ix[(1.0,result_type),'aggregation_value'] == float(value)
+
+@then('results_with_dimensions has region of "{region}" for respondent_id 1 and survey_code "{survey_code}"')
+def step(context,region,survey_code):
+    print(context.numeric_output_calculator.results_with_dimensions)
+    print(context.numeric_output_calculator.demographic_data)
+    print(context.numeric_output_calculator.responses)
+    assert context.numeric_output_calculator.results_with_dimensions.set_index(['respondent_id','survey_code']).ix[(1,survey_code),'region'] == region
+
+@when('NumericOutputCalculator is initialized with results and demographic_data')
+def step(context):
+    context.numeric_output_calculator = NumericOutputCalculator(responses=context.results,demographic_data=context.demographic_data)
