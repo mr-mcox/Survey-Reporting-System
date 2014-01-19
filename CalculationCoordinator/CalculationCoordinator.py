@@ -15,6 +15,10 @@ class CalculationCoordinator(object):
 		self.demographic_data = kwargs.pop('demographic_data',None)
 		if self.demographic_data is not None:
 			self.demographic_data = self.demographic_data.set_index('respondent_id').applymap(str).fillna("Missing").reset_index()
+		self.hist_results = kwargs.pop('hist_results',None)
+		self.hist_demographic_data = kwargs.pop('hist_demographic_data',None)
+		if self.hist_demographic_data is not None:
+			self.hist_demographic_data = self.hist_demographic_data.set_index('respondent_id').applymap(str).fillna("Missing").reset_index()
 		self.config = kwargs.pop('config',None)
 		self.computations_generated = dict()
 		self.result_types = kwargs.pop('result_types',['net'])
@@ -36,7 +40,9 @@ class CalculationCoordinator(object):
 
 	# @profile
 	def compute_aggregation(self,**kwargs):
-		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=self.results,demographic_data=self.demographic_data)
+		responses = kwargs.pop('responses',self.results)
+		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
+		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
 		assert type(self.result_types) == list
 		orig_cuts = kwargs.pop('cut_demographic',None)
 		if type(orig_cuts) != list:
@@ -55,7 +61,9 @@ class CalculationCoordinator(object):
 		return calculations
 
 	def compute_significance(self,**kwargs):
-		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=self.results,demographic_data=self.demographic_data)
+		responses = kwargs.pop('responses',self.results)
+		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
+		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
 		assert type(self.result_types) == list
 		orig_cuts = kwargs.pop('cut_demographic',None)
 		if type(orig_cuts) != list:
@@ -220,8 +228,9 @@ class CalculationCoordinator(object):
 		return ";".join(items_in_order)
 
 	# @profile
-	def compute_cuts_from_config(self):
+	def compute_cuts_from_config(self,**kwargs):
 		assert self.config != None
+		for_historical = kwargs.pop('for_historical',False)
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		all_aggregations = list()
 		# logging.debug("All cuts are " + str(self.config.cuts_to_be_created()))
@@ -231,15 +240,27 @@ class CalculationCoordinator(object):
 		if 'result_types' in self.config.config:
 			self.result_types = self.config.config['result_types']
 			self.default_result_type = self.result_types[0]
-		cut_sets = self.config.cuts_to_be_created()
+		cut_sets = self.config.cuts_to_be_created(for_historical=for_historical)
+		responses = self.results
+		demographic_data = self.demographic_data
+		if for_historical:
+			responses = self.hist_results
+			demographic_data = self.hist_demographic_data
 		for i, cut_set in enumerate(cut_sets):
 			# logging.debug("Cut set is " + str(cut_set))
 			print("\rCompleted {0:.0f} % of basic computations. Currently working on {1}".format(i/len(cut_sets)*100,str(cut_set)),end=" ")
 			df = pd.DataFrame()
 			if 'composite_questions' in self.config.config:
-				df = self.compute_aggregation(cut_demographic=cut_set,composite_questions=self.config.config['composite_questions'])
+				df = self.compute_aggregation(cut_demographic=cut_set,
+												composite_questions=self.config.config['composite_questions'],
+												responses = responses,
+												demographic_data = demographic_data,
+												)
 			else:
-				df = self.compute_aggregation(cut_demographic=cut_set)
+				df = self.compute_aggregation(cut_demographic=cut_set,
+												responses = responses,
+												demographic_data = demographic_data,
+												)
 
 			#Remove samples sizes for questions that don't need them
 			assert 'question_code' in df.columns
@@ -266,8 +287,9 @@ class CalculationCoordinator(object):
 		assert len(return_table.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(return_table.column_heading.unique())
 		return return_table.drop_duplicates()
 
-	def compute_significance_from_config(self):
+	def compute_significance_from_config(self,**kwargs):
 		assert self.config != None
+		for_historical = kwargs.pop('for_historical',False)
 		all_aggregations = list()
 		#Set default question as not doing that seems to cause issues
 		if 'show_questions' in self.config.config:
@@ -278,13 +300,27 @@ class CalculationCoordinator(object):
 		if 'no_stat_significance_computation' in self.config.config:
 			 no_stat_significance_computation = True
 
-		cut_sets = self.config.cuts_to_be_created()
+		cut_sets = self.config.cuts_to_be_created(for_historical=for_historical)
+		responses = self.results
+		demographic_data = self.demographic_data
+		if for_historical:
+			responses = self.hist_results
+			demographic_data = self.hist_demographic_data
 		for i, cut_set in enumerate(cut_sets):
 			df = pd.DataFrame()
 			if 'composite_questions' in self.config.config:
-				df = self.compute_significance(cut_demographic=cut_set,composite_questions=self.config.config['composite_questions'],no_stat_significance_computation=no_stat_significance_computation)
+				df = self.compute_significance(cut_demographic=cut_set,
+											composite_questions=self.config.config['composite_questions'],
+											no_stat_significance_computation=no_stat_significance_computation,
+											responses = responses,
+											demographic_data = demographic_data,
+											)
 			else:
-				df = self.compute_significance(cut_demographic=cut_set, no_stat_significance_computation=no_stat_significance_computation)			
+				df = self.compute_significance(cut_demographic=cut_set, 
+												no_stat_significance_computation=no_stat_significance_computation,
+												responses = responses,
+												demographic_data = demographic_data,
+												)			
 			#Remove samples sizes for questions that don't need them
 			assert 'question_code' in df.columns
 			# logging.debug("question_code dtype is " + str(df.question_code.dtype))
@@ -341,6 +377,32 @@ class CalculationCoordinator(object):
 		self.copy_sheet_to_workbook('significance_values.xlsx','SignificanceValues',filename)
 		os.remove('significance_values.xlsx')
 
+		#Output hist display values
+		output_df = self.compute_cuts_from_config(for_historical=True).set_index(['row_heading','column_heading'])
+		if not output_df.index.is_unique:
+			df = output_df.reset_index()
+			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+		output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
+		output_series.unstack().to_excel('display_values.xlsx', sheet_name='HistDisplayValues')
+
+		self.copy_sheet_to_workbook('display_values.xlsx','HistDisplayValues',filename)
+		os.remove('display_values.xlsx')
+
+		#Output hist significance values
+		output_df = self.compute_significance_from_config(for_historical=True).set_index(['row_heading','column_heading'])
+		if not output_df.index.is_unique:
+			df = output_df.reset_index()
+			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+		output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
+		output_series.unstack().to_excel('significance_values.xlsx', sheet_name='HistSignificanceValues')
+
+		self.copy_sheet_to_workbook('significance_values.xlsx','HistSignificanceValues',filename)
+		os.remove('significance_values.xlsx')
+
 		wb = load_workbook(filename)
 
 		#Remove existing named ranges
@@ -362,6 +424,22 @@ class CalculationCoordinator(object):
 		wb.create_named_range('sig_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
 		wb.create_named_range('sig_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
 		wb.create_named_range('sig_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
+
+		#Add ranges for display_values tab
+		dv_ws = wb.get_sheet_by_name('HistDisplayValues')
+		range_width = dv_ws.get_highest_column() -1
+		range_height = dv_ws.get_highest_row() - 1
+		wb.create_named_range('hist_disp_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
+		wb.create_named_range('hist_disp_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
+		wb.create_named_range('hist_disp_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
+
+		#Add ranges for significance_values tab
+		dv_ws = wb.get_sheet_by_name('HistSignificanceValues')
+		range_width = dv_ws.get_highest_column() -1
+		range_height = dv_ws.get_highest_row() - 1
+		wb.create_named_range('hist_sig_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
+		wb.create_named_range('hist_sig_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
+		wb.create_named_range('hist_sig_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
 
 		if 'Lookups' in wb.get_sheet_names():
 			ws_to_del = wb.get_sheet_by_name('Lookups')
