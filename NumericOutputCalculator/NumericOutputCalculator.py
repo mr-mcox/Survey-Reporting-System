@@ -3,6 +3,7 @@ import logging
 import numpy as np
 import pdb
 from scipy.stats import poisson, skellam
+import copy
 
 class NumericOutputCalculator(object):
 
@@ -45,13 +46,17 @@ class NumericOutputCalculator(object):
 	def results_with_dimensions():
 		doc = "The results_with_dimensions property."
 		def fget(self):
-			if self._results_with_dimensions.empty:
-				if not self.demographic_data.empty:
+			if self.demographic_data.empty:
+				return self.responses
+			else:
+				if self._results_with_dimensions.empty:
+					assert 'respondent_id' in self.responses, "Expected respondent_id column in responses"
+					assert 'respondent_id' in self.demographic_data, "Expected respondent_id column in demographic_data"
 					if 'survey_code' in self.demographic_data.columns and 'survey_code' in self.responses.columns:
 						self._results_with_dimensions = self.responses.set_index(['respondent_id','survey_code']).join(self.demographic_data.set_index(['respondent_id','survey_code']), how = 'outer').reset_index()
 					else:
 						self._results_with_dimensions = self.responses.set_index('respondent_id').join(self.demographic_data.set_index('respondent_id'), how = 'outer').reset_index()
-			return self._results_with_dimensions
+				return self._results_with_dimensions
 		def fset(self, value):
 			self._results_with_dimensions = value
 		def fdel(self):
@@ -82,14 +87,6 @@ class NumericOutputCalculator(object):
 		elif cut_demographic != None:
 			assert cut_demographic in self.demographic_data.columns
 
-		nfv = self.responses.copy()
-		raw_fv = self.responses.copy()
-		if not self.demographic_data.empty:
-			if cut_demographic != []:
-				assert 'respondent_id' in nfv, "Expected respondent_id column in responses"
-				assert 'respondent_id' in self.demographic_data, "Expected respondent_id column in demographic_data"
-				nfv = nfv.set_index('respondent_id').join(self.demographic_data.set_index('respondent_id').loc[:,cut_demographic], how = 'outer')
-
 		cut_groupings = ['question_code']
 		cut_demographic_list = []
 		if cut_demographic != None:
@@ -100,6 +97,17 @@ class NumericOutputCalculator(object):
 				cut_demographic_list = cut_demographic
 			cut_groupings = cut_groupings + cut_demographic_list
 
+		# columns_to_keep = cut_groupings
+		nfv = self.results_with_dimensions.copy()
+		# if 'net_formatted_value' in nfv.columns:
+		# 	columns_to_keep.append('net_formatted_value')
+		# if 'response' in nfv.columns:
+		# 	columns_to_keep.append('response')
+		if not self.demographic_data.empty and cut_demographic != []:
+			# nfv = nfv.loc[:,columns_to_keep]
+			#TODO - refactor so the above passes tests
+			pass
+
 		aggregation_calulations_list = list()
 		for result_type in result_types:
 			nfv_copy = nfv.copy()
@@ -107,6 +115,7 @@ class NumericOutputCalculator(object):
 			# logging.debug("Responses columns are " + str(nfv))
 			assert result_type in {'net','strong','weak','raw_average','sample_size','strong_count','weak_count'}, "No calculation defined for result_type " + result_type
 			aggregation_calulation = pd.DataFrame()
+			print(nfv_copy)
 			if result_type == 'net':
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
 			if result_type == 'strong':
