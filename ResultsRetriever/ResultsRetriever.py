@@ -27,7 +27,11 @@ class ResultsRetriever(object):
 					Column('is_confidential', Integer),
 					Column('question_type', String(20)),)
 		if survey_code != [None]:
-			select_results = select([results, questions.c.question_code,questions.c.is_confidential,questions.c.question_type]).select_from(results.join(questions).join(select([surveys],use_labels=True).where(surveys.c.survey_code.in_(survey_code)).alias('sq')))
+			sq = (select([surveys],use_labels=True).where(surveys.c.survey_code.in_(survey_code))).alias('sq')
+			if len(survey_code) > 1:
+				select_results = select([results, questions.c.question_code,questions.c.is_confidential,questions.c.question_type, questions.c.question_code,sq.c.surveys_survey_code.label('survey_code')]).select_from(results.join(questions).join(sq))
+			else:
+				select_results = select([results, questions.c.question_code,questions.c.is_confidential,questions.c.question_type]).select_from(results.join(questions).join(select([surveys],use_labels=True).where(surveys.c.survey_code.in_(survey_code)).alias('sq')))
 		else:
 			select_results = select([results, questions.c.question_code,questions.c.is_confidential,questions.c.question_type]).select_from(results.join(questions)).where(results.c.survey_id == survey_id)
 

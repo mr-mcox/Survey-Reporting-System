@@ -1,6 +1,7 @@
 from behave import *
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, create_engine
 from ResultsRetriever import ResultsRetriever
+import pandas as pd
 
 def table_for_db(table):
 	db_formatted_table = list()
