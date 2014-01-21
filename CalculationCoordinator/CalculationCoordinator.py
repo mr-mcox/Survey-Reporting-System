@@ -60,6 +60,7 @@ class CalculationCoordinator(object):
 		self.computations_generated[aggregation_key] = calculations
 		return calculations
 
+	# @profile
 	def compute_significance(self,**kwargs):
 		responses = kwargs.pop('responses',self.results)
 		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
@@ -289,6 +290,7 @@ class CalculationCoordinator(object):
 		assert len(return_table.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(return_table.column_heading.unique())
 		return return_table.drop_duplicates()
 
+	# @profile
 	def compute_significance_from_config(self,**kwargs):
 		assert self.config != None
 		for_historical = kwargs.pop('for_historical',False)

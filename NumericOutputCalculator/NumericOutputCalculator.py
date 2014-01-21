@@ -215,6 +215,7 @@ class NumericOutputCalculator(object):
 		return (cuts, comparison_cuts,base_results,comparison_results)
 
 
+	# @profile
 	def bootstrap_net_significance(self,**kwargs):
 		cuts = kwargs.pop('cuts',None)
 		no_stat_significance_computation = kwargs.pop('no_stat_significance_computation',False)
@@ -244,6 +245,7 @@ class NumericOutputCalculator(object):
 		self.counts_for_significance = base_results.reset_index().set_index(comparison_cuts + ['question_code']).join(comparison_results).reset_index().set_index(cuts + ['question_code'])
 		return self.bootstrap_result_from_frequency_table(self.counts_for_significance)
 
+	@profile
 	def bootstrap_result_from_frequency_table(self,freq_table,**kwargs):
 		assert type(freq_table) == pd.DataFrame
 		df = freq_table

@@ -3,11 +3,6 @@ cuts:
         dimensions:
             - region
             - corps
-    Ethnicity:
-        dimensions:
-            - ethnicity
-            - region
-            - corps
 excel_template_file: SRS.dashboard.template.xlsx
 result_types:
     - net
