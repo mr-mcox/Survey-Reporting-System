@@ -64,7 +64,7 @@ class NumericOutputCalculator(object):
 		return locals()
 	results_with_dimensions = property(**results_with_dimensions())
 
-	@profile
+	# @profile
 	def compute_aggregation(self,**kwargs):
 		cut_demographic = kwargs.pop('cut_demographic', None)
 		result_type = kwargs.pop('result_type',None)

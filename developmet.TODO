@@ -10,7 +10,7 @@ To implement:
  ✔ Export survey code column @done (14-01-21 10:55)
  ✔ Investigate why survey results only exported for MYS @done (14-01-21 10:29)
  ✔ Determine why composite isn't working @done (14-01-21 10:48)
- ☐ Optimize statistical significance computations
+ ✔ Optimize statistical significance computations @done (14-01-21 13:15)
  ☐ Blank demographic includes blank menu
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
