@@ -245,7 +245,7 @@ class NumericOutputCalculator(object):
 		self.counts_for_significance = base_results.reset_index().set_index(comparison_cuts + ['question_code']).join(comparison_results).reset_index().set_index(cuts + ['question_code'])
 		return self.bootstrap_result_from_frequency_table(self.counts_for_significance)
 
-	@profile
+	# @profile
 	def bootstrap_result_from_frequency_table(self,freq_table,**kwargs):
 		assert type(freq_table) == pd.DataFrame
 		df = freq_table
@@ -253,91 +253,98 @@ class NumericOutputCalculator(object):
 		assert {'sample_size','strong_count','weak_count','comp_sample_size','comp_strong_count','comp_weak_count'} <= set(df.columns)
 		df['aggregation_value'] = ''
 		df['result_type'] = 'significance_value'
-		for index_item in df.index:
-			if df.ix[index_item,'sample_size'] < 5:
-				df.ix[index_item,'aggregation_value'] = 'S'
-				continue
-			pop_1_sample_size = df.ix[index_item,'comp_sample_size'] - df.ix[index_item,'sample_size']
+		df.ix[df.sample_size < 5,'aggregation_value'] = 'S'
+		df['pop_1_sample_size'] = df.comp_sample_size - df.sample_size
+		df['pop_1_strong_count'] = df.comp_strong_count - df.strong_count
+		df['pop_1_weak_count'] = df.comp_weak_count - df.weak_count
+		df['pop_2_sample_size'] = df.sample_size
+		df['pop_2_strong_count'] = df.strong_count
+		df['pop_2_weak_count'] = df.weak_count
+		df.ix[df.pop_1_sample_size == 0,'aggregation_value'] = 'N'#Meaning that subset is identical to the comparison
 
-			if pop_1_sample_size == 0:#Meaning that subset is identical to the comparison
-				continue
-			pop_1_strong_count = df.ix[index_item,'comp_strong_count'] - df.ix[index_item,'strong_count']
-			pop_1_weak_count = df.ix[index_item,'comp_weak_count'] - df.ix[index_item,'weak_count']
+		df_no_agg_value = df.ix[df.aggregation_value == '',:]
+		df_no_agg_value['sum_of_count_distributions'] = pd.DataFrame(poisson.ppf(0.75,df_no_agg_value.pop_2_strong_count), index = df_no_agg_value.index) + pd.DataFrame(poisson.ppf(0.75,df_no_agg_value.pop_2_weak_count), index = df_no_agg_value.index)
+		df_no_agg_value['use_skellam'] = 0
+		df_no_agg_value.ix[df_no_agg_value.sum_of_count_distributions < (df_no_agg_value.pop_2_sample_size * 1.1),'use_skellam'] = 1
 
-			pop_2_sample_size = df.ix[index_item,'sample_size']
-			pop_2_strong_count = df.ix[index_item,'strong_count']
-			pop_2_weak_count = df.ix[index_item,'weak_count']
+		df_skellam = df_no_agg_value.ix[df_no_agg_value.use_skellam==1]
+		df_skellam['mu1'] = (df_skellam.pop_1_strong_count / df_skellam.pop_1_sample_size) * df_skellam.pop_2_sample_size
+		df_skellam['mu2'] = (df_skellam.pop_1_weak_count / df_skellam.pop_1_sample_size) * df_skellam.pop_2_sample_size
+		df_skellam['obs'] = df_skellam.pop_2_strong_count - df_skellam.pop_2_weak_count
+		df_skellam['p'] = pd.DataFrame(skellam.cdf(df_skellam.obs, df_skellam.mu1, df_skellam.mu2), index=df_skellam.index)
+		df_skellam.ix[df_skellam.p > 0.975,'aggregation_value'] = 'H'
+		df_skellam.ix[df_skellam.p < 0.025,'aggregation_value'] = 'L'
 
-			sum_of_count_distributions = poisson.ppf(0.75,pop_2_strong_count)+poisson.ppf(0.75,pop_2_weak_count)
-			if sum_of_count_distributions < pop_2_sample_size * 1.1:#Reasonable cutoff based on simulations
-				#Skellam modeled significance
-				h0_net_count_interval = skellam.interval(0.95,(pop_1_strong_count / pop_1_sample_size) * pop_2_sample_size, (pop_1_weak_count / pop_1_sample_size) * pop_2_sample_size)
-				actual_net_count_interval = pop_2_strong_count - pop_2_weak_count
-				if actual_net_count_interval < h0_net_count_interval[0]:
-					df.ix[index_item,'aggregation_value'] = 'L'
-				elif actual_net_count_interval > h0_net_count_interval[1]:
-					df.ix[index_item,'aggregation_value'] = 'H'
+		df_bootstrap = df_no_agg_value.ix[df_no_agg_value.use_skellam==0]
+		for index_item in df_bootstrap.index:
+			pop_1_sample_size = df_bootstrap.ix[index_item,'pop_1_sample_size']
+
+			pop_1_strong_count = df_bootstrap.ix[index_item,'pop_1_strong_count']
+			pop_1_weak_count = df_bootstrap.ix[index_item,'pop_1_weak_count']
+
+			pop_2_sample_size = df_bootstrap.ix[index_item,'sample_size']
+			pop_2_strong_count = df_bootstrap.ix[index_item,'strong_count']
+			pop_2_weak_count = df_bootstrap.ix[index_item,'weak_count']
+
+			#Create arrays of strong counts
+			pop_1_rand_strong_counts = []
+
+			if pop_1_strong_count == pop_1_sample_size or pop_1_strong_count == 0:
+				pop_1_rand_strong_counts = [pop_1_strong_count for i in range(bootstrap_samples)]
 			else:
+				pop_1_rand_strong_counts = np.random.binomial(pop_1_sample_size,pop_1_strong_count/pop_1_sample_size,bootstrap_samples)
 
-				#Create arrays of strong counts
-				pop_1_rand_strong_counts = []
+			pop_2_rand_strong_counts = []
 
-				if pop_1_strong_count == pop_1_sample_size or pop_1_strong_count == 0:
-					pop_1_rand_strong_counts = [pop_1_strong_count for i in range(bootstrap_samples)]
+			if pop_2_strong_count == pop_2_sample_size or pop_2_strong_count == 0:
+				pop_2_rand_strong_counts = [pop_2_strong_count for i in range(bootstrap_samples)]
+			else:
+				pop_2_rand_strong_counts = np.random.binomial(pop_2_sample_size,pop_2_strong_count/pop_2_sample_size,bootstrap_samples)
+
+			#Generate leftover weak percents
+			pop_1_leftover_weak_p = 0
+			if pop_1_sample_size > pop_1_strong_count:
+				pop_1_leftover_weak_p = pop_1_weak_count / ( pop_1_sample_size - pop_1_strong_count )
+
+			pop_2_leftover_weak_p = 0
+			if pop_2_sample_size > pop_2_strong_count:
+				pop_2_leftover_weak_p = pop_2_weak_count / ( pop_2_sample_size - pop_2_strong_count )
+
+			#Generate weak and net values for each population
+			pop_1_rand_weak_counts = []
+
+			for pop_1_rand_strong in pop_1_rand_strong_counts:
+				if pop_1_leftover_weak_p == 0 or pop_1_leftover_weak_p == 1 or pop_1_sample_size == pop_1_rand_strong:
+					pop_1_rand_weak_counts.append(pop_1_sample_size - pop_1_rand_strong)
 				else:
-					pop_1_rand_strong_counts = np.random.binomial(pop_1_sample_size,pop_1_strong_count/pop_1_sample_size,bootstrap_samples)
+					pop_1_rand_weak_counts.append(np.random.binomial(pop_1_sample_size - pop_1_rand_strong,pop_1_leftover_weak_p,1))
 
-				pop_2_rand_strong_counts = []
+			pop_2_rand_weak_counts = []
 
-				if pop_2_strong_count == pop_2_sample_size or pop_2_strong_count == 0:
-					pop_2_rand_strong_counts = [pop_2_strong_count for i in range(bootstrap_samples)]
+			for pop_2_rand_strong in pop_2_rand_strong_counts:
+				if pop_2_leftover_weak_p == 0 or pop_2_leftover_weak_p == 1 or pop_2_sample_size == pop_2_rand_strong:
+					pop_2_rand_weak_counts.append(pop_2_sample_size - pop_2_rand_strong)
 				else:
-					pop_2_rand_strong_counts = np.random.binomial(pop_2_sample_size,pop_2_strong_count/pop_2_sample_size,bootstrap_samples)
+					pop_2_rand_weak_counts.append(np.random.binomial(pop_2_sample_size - pop_2_rand_strong,pop_2_leftover_weak_p,1))
 
-				#Generate leftover weak percents
-				pop_1_leftover_weak_p = 0
-				if pop_1_sample_size > pop_1_strong_count:
-					pop_1_leftover_weak_p = pop_1_weak_count / ( pop_1_sample_size - pop_1_strong_count )
+			#Assemble nets
+			bs = pd.DataFrame({
+				'pop_1_strong':pop_1_rand_strong_counts,
+				'pop_1_weak':pop_1_rand_weak_counts,
+				'pop_2_strong':pop_2_rand_strong_counts,
+				'pop_2_weak':pop_2_rand_weak_counts})
 
-				pop_2_leftover_weak_p = 0
-				if pop_2_sample_size > pop_2_strong_count:
-					pop_2_leftover_weak_p = pop_2_weak_count / ( pop_2_sample_size - pop_2_strong_count )
+			bs['pop_1_net'] = (bs.pop_1_strong - bs.pop_1_weak) / pop_1_sample_size
+			bs['pop_2_net'] = (bs.pop_2_strong - bs.pop_2_weak) / pop_2_sample_size
 
-				#Generate weak and net values for each population
-				pop_1_rand_weak_counts = []
+			#Determine greater percents
+			bs['pop_2_greater'] = 0
+			bs.ix[bs.pop_1_net < bs.pop_2_net,'pop_2_greater'] = 1
+			pop_2_greater_percent = bs.pop_2_greater.mean()
 
-				for pop_1_rand_strong in pop_1_rand_strong_counts:
-					if pop_1_leftover_weak_p == 0 or pop_1_leftover_weak_p == 1 or pop_1_sample_size == pop_1_rand_strong:
-						pop_1_rand_weak_counts.append(pop_1_sample_size - pop_1_rand_strong)
-					else:
-						pop_1_rand_weak_counts.append(np.random.binomial(pop_1_sample_size - pop_1_rand_strong,pop_1_leftover_weak_p,1))
-
-				pop_2_rand_weak_counts = []
-
-				for pop_2_rand_strong in pop_2_rand_strong_counts:
-					if pop_2_leftover_weak_p == 0 or pop_2_leftover_weak_p == 1 or pop_2_sample_size == pop_2_rand_strong:
-						pop_2_rand_weak_counts.append(pop_2_sample_size - pop_2_rand_strong)
-					else:
-						pop_2_rand_weak_counts.append(np.random.binomial(pop_2_sample_size - pop_2_rand_strong,pop_2_leftover_weak_p,1))
-
-				#Assemble nets
-				bs = pd.DataFrame({
-					'pop_1_strong':pop_1_rand_strong_counts,
-					'pop_1_weak':pop_1_rand_weak_counts,
-					'pop_2_strong':pop_2_rand_strong_counts,
-					'pop_2_weak':pop_2_rand_weak_counts})
-
-				bs['pop_1_net'] = (bs.pop_1_strong - bs.pop_1_weak) / pop_1_sample_size
-				bs['pop_2_net'] = (bs.pop_2_strong - bs.pop_2_weak) / pop_2_sample_size
-
-				#Determine greater percents
-				bs['pop_2_greater'] = 0
-				bs.ix[bs.pop_1_net < bs.pop_2_net,'pop_2_greater'] = 1
-				pop_2_greater_percent = bs.pop_2_greater.mean()
-
-				if pop_2_greater_percent > 0.975:
-					df.ix[index_item,'aggregation_value'] = 'H'
-				if pop_2_greater_percent < 0.025:
-					df.ix[index_item,'aggregation_value'] = 'L'
-
-		return pd.DataFrame(df,columns =['aggregation_value','result_type'])
+			if pop_2_greater_percent > 0.975:
+				df_bootstrap.ix[index_item,'aggregation_value'] = 'H'
+			if pop_2_greater_percent < 0.025:
+				df_bootstrap.ix[index_item,'aggregation_value'] = 'L'
+		df = pd.concat([df.ix[df.sample_size < 5,['aggregation_value','result_type']],df_skellam.ix[:,['aggregation_value','result_type']],df_bootstrap.ix[:,['aggregation_value','result_type']]])
+		return df

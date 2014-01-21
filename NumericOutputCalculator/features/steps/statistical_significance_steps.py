@@ -78,7 +78,8 @@ def step(context):
 
 @then('aggregation_value for region "{region}" and gender "{gender}" is "{result}"')
 def step(context,region,gender,result):
-	assert context.result.loc[(1,region, gender),'aggregation_value'] == result
+	# print(context.result)
+	assert context.result.ix[(1,region, gender),'aggregation_value'] == result
 
 @then('aggregation_value for region "{region}" and gender "{gender}" is blank')
 def step(context,region,gender):
