@@ -11,10 +11,10 @@ class NumericOutputCalculator(object):
 		responses = pd.DataFrame(kwargs.pop('responses',dict())).convert_objects(convert_numeric=True)
 		assert not responses.empty
 		if 'net_formatted_value' not in responses.columns or responses['net_formatted_value'].notnull().sum() == 0:
-			responses['net_formatted_value'] = None
+			responses['net_formatted_value'] = np.nan
 			if 'question_type' in responses.columns:
 				#Map NFVs
-				map_7pt_SA_to_net = {8:None,7:-1,6:-1,5:-1,4:-1,3:0,2:1,1:1}
+				map_7pt_SA_to_net = {7:-1,6:-1,5:-1,4:-1,3:0,2:1,1:1}
 				responses.ix[responses.question_type == '7pt_1=SA','net_formatted_value'] = responses.ix[responses.question_type == '7pt_1=SA','response'].map(map_7pt_SA_to_net)
 				map_10pt_SA_to_net = {10:-1,9:-1,8:-1,7:-1,6:-1,5:-1,4:0,3:0,2:1,1:1}
 				responses.ix[responses.question_type == '10pt_NPS_1=SA','net_formatted_value'] = responses.ix[responses.question_type == '10pt_NPS_1=SA','response'].map(map_10pt_SA_to_net)
@@ -108,6 +108,7 @@ class NumericOutputCalculator(object):
 		if 'question_type' in nfv.columns:
 			columns_to_keep.append('question_type')
 		nfv = nfv.loc[:,columns_to_keep]
+		logging.debug("Results with dimensions for cut_demographic " + str(cut_demographic) + " are\n" + str(nfv.head()))
 
 		aggregation_calulations_list = list()
 		for result_type in result_types:
@@ -118,6 +119,7 @@ class NumericOutputCalculator(object):
 			aggregation_calulation = pd.DataFrame()
 			if result_type == 'net':
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
+				logging.debug("Net results are\n" + str(aggregation_calulation.head()))
 			if result_type == 'strong':
 				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != 1),'net_formatted_value'] = 0
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
@@ -165,6 +167,7 @@ class NumericOutputCalculator(object):
 
 		#Return just required columns
 		return_columns = cut_groupings + ['aggregation_value','result_type']
+		logging.debug("Data returned is\n" + str(pd.DataFrame(all_results,columns=return_columns).head()))
 		return pd.DataFrame(all_results,columns=return_columns)
 
 	def add_composite_question_calculation(self,composite_questions,aggregation_calulation,cut_demographic_list):
@@ -172,7 +175,7 @@ class NumericOutputCalculator(object):
 			for question, components in composite_questions.items():
 				composite_computation = pd.DataFrame()
 				if len(cut_demographic_list) == 0:
-					print("Rows selected\n" + str(aggregation_calulation.ix[aggregation_calulation.question_code.isin(components)]))
+					assert 'aggregation_value' in aggregation_calulation.columns, "Missing aggregation_value " + str(aggregation_calulation)
 					composite_output = aggregation_calulation.ix[aggregation_calulation.question_code.isin(components)].mean()['aggregation_value']
 					aggregation_calulation = pd.concat([aggregation_calulation,pd.DataFrame({'question_code':[question],'aggregation_value':[composite_output]})])
 				else:
@@ -203,6 +206,8 @@ class NumericOutputCalculator(object):
 		assert type(cuts) == list
 		assert len(cuts) >= 1, "Cannot make statistical significance comparison with no dimensions"
 		comparison_cuts = cuts[1:]
+		if cuts[0] == 'survey_code':
+			comparison_cuts = ['survey_code'] + cuts[2:]
 
 		base_results = self.compute_aggregation(cut_demographic=cuts,result_type=["sample_size","strong_count","weak_count"],**kwargs)
 		comparison_results = self.compute_aggregation(cut_demographic=comparison_cuts,result_type=["sample_size","strong_count","weak_count"],**kwargs)

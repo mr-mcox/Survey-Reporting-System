@@ -4,8 +4,9 @@ from SurveyReportingSystem.CalculationCoordinator import CalculationCoordinator
 from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
 from SurveyReportingSystem.ResultsRetriever import ResultsRetriever
 import logging
+import os
 
-logging.basicConfig(filename='debug.log',level=logging.WARNING)
+logging.basicConfig(filename='debug.log',level=logging.DEBUG)
 
 config = ConfigurationReader.ConfigurationReader(config_file='config.yaml')
 
@@ -27,8 +28,18 @@ config = ConfigurationReader.ConfigurationReader(config_file='config.yaml')
 # results_df.to_csv('results.csv')
 results_df = pd.read_csv('results.csv')
 
-print("Starting calculations")
-calc = CalculationCoordinator.CalculationCoordinator(results=results_df,
-													demographic_data=pd.read_excel('demographics.xlsx',sheetname="Sheet1"),
-													config = config)
+
+if os.path.exists('hist_demographics.xlsx') and os.path.exists('hist_results.csv'):
+	hist_results_df = pd.read_csv('hist_results.csv')
+	print("Starting calculations with historical data")
+	calc = CalculationCoordinator.CalculationCoordinator(results=results_df,
+														demographic_data=pd.read_excel('demographics.xlsx',sheetname="Sheet1"),
+														hist_results=hist_results_df,
+														hist_demographic_data=pd.read_excel('hist_demographics.xlsx',sheetname="Sheet1"),
+														config = config)
+else:
+	print("Starting calculations")
+	calc = CalculationCoordinator.CalculationCoordinator(results=results_df,
+														demographic_data=pd.read_excel('demographics.xlsx',sheetname="Sheet1"),
+														config = config)
 calc.export_to_excel()

@@ -53,7 +53,7 @@ class CalculationCoordinator(object):
 
 		if self.ensure_combination_for_every_set_of_demographics and len(cuts) > 0:
 			logging.debug("Cuts passing to modify " + str(cuts))
-			calculations = self.modify_for_combinations_of_demographics(df=calculations,cuts=cuts)
+			calculations = self.modify_for_combinations_of_demographics(df=calculations,cuts=cuts,demographic_data=demographic_data)
 
 		aggregation_key = tuple(cuts)
 
@@ -74,7 +74,7 @@ class CalculationCoordinator(object):
 
 		if self.ensure_combination_for_every_set_of_demographics and len(cuts) > 0:
 			logging.debug("Cuts passing to modify " + str(cuts))
-			calculations = self.modify_for_combinations_of_demographics(df=calculations,cuts=cuts)
+			calculations = self.modify_for_combinations_of_demographics(df=calculations,cuts=cuts,demographic_data=demographic_data)
 
 		aggregation_key = tuple(cuts)
 
@@ -82,10 +82,11 @@ class CalculationCoordinator(object):
 		return calculations
 
 	# @profile
-	def modify_for_combinations_of_demographics(self, df, cuts):
+	def modify_for_combinations_of_demographics(self, df, cuts,**kwargs):
 		df = df.reset_index()
 		# logging.debug("Starting df is " + str(df.head()))
 		# logging.debug("Starting df row is " + str(df.reset_index().ix[0,:]))
+		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
 		first_result_type = df.ix[0,'result_type']
 		# logging.debug("First result type is " + df.ix[0,'result_type'])
 		first_question_code = df.ix[0,'question_code']
@@ -97,14 +98,14 @@ class CalculationCoordinator(object):
 		#Initialize with first list
 		assert len(cuts) > 0
 		# logging.debug("Cuts are " + str(cuts))
-		assert cuts[0] in self.demographic_data, cuts[0] + " not found in demographic_data"
-		master_list_of_demographics = [ [item] for item in self.demographic_data[cuts[0]].unique().tolist()]
+		assert cuts[0] in demographic_data, cuts[0] + " not found in demographic_data"
+		master_list_of_demographics = [ [item] for item in demographic_data[cuts[0]].unique().tolist()]
 
 		#Create list of combinations to look for
 		for i in range(len(cuts) - 1):
 			cur_cut = cuts[i+1]
-			assert cur_cut in self.demographic_data
-			cur_cut_values = self.demographic_data[cur_cut].unique().tolist()
+			assert cur_cut in demographic_data
+			cur_cut_values = demographic_data[cur_cut].unique().tolist()
 			value_set_for_cut = list()
 			for value in cur_cut_values:
 				list_to_add_onto = copy.deepcopy(master_list_of_demographics)
@@ -241,6 +242,7 @@ class CalculationCoordinator(object):
 			self.result_types = self.config.config['result_types']
 			self.default_result_type = self.result_types[0]
 		cut_sets = self.config.cuts_to_be_created(for_historical=for_historical)
+		logging.debug("Cut sets for regular cuts are " + str(cut_sets))
 		responses = self.results
 		demographic_data = self.demographic_data
 		if for_historical:
@@ -264,8 +266,8 @@ class CalculationCoordinator(object):
 
 			#Remove samples sizes for questions that don't need them
 			assert 'question_code' in df.columns
-			logging.debug("question_code dtype is " + str(df.question_code.dtype))
-			logging.debug("question_codes are " + str(df.question_code))
+			# logging.debug("question_code dtype is " + str(df.question_code.dtype))
+			# logging.debug("question_codes are " + str(df.question_code))
 			questions_to_show_sample_size = df.question_code.unique().tolist()
 			if 'show_sample_size_for_questions' in self.config.config:
 				questions_to_show_sample_size = self.config.config['show_sample_size_for_questions']
@@ -301,6 +303,7 @@ class CalculationCoordinator(object):
 			 no_stat_significance_computation = True
 
 		cut_sets = self.config.cuts_to_be_created(for_historical=for_historical)
+		logging.debug("Cut sets for significance are " + str(cut_sets))
 		responses = self.results
 		demographic_data = self.demographic_data
 		if for_historical:
@@ -308,6 +311,7 @@ class CalculationCoordinator(object):
 			demographic_data = self.hist_demographic_data
 		for i, cut_set in enumerate(cut_sets):
 			df = pd.DataFrame()
+			print("\rCompleted {0:.0f} % of significance computations. Currently working on {1}".format(i/len(cut_sets)*100,str(cut_set)),end=" ")
 			if 'composite_questions' in self.config.config:
 				df = self.compute_significance(cut_demographic=cut_set,
 											composite_questions=self.config.config['composite_questions'],
@@ -335,7 +339,6 @@ class CalculationCoordinator(object):
 			df = self.create_row_column_headers(df,cuts=cut_set)
 			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
 			gc.collect()
-			print("\rCompleted {0:.0f} % of significance computations".format(i/len(cut_sets)*100),end=" ")
 		return_table = pd.concat(all_aggregations)
 		return_table.row_heading = return_table.row_heading.map(self.adjust_zero_padding_of_heading)
 		return_table.column_heading = return_table.column_heading.map(self.adjust_zero_padding_of_heading)
