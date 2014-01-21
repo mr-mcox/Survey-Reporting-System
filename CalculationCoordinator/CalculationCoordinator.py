@@ -42,7 +42,7 @@ class CalculationCoordinator(object):
 	def compute_aggregation(self,**kwargs):
 		responses = kwargs.pop('responses',self.results)
 		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
-		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
+		calculator = kwargs.pop('calculator',NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data))
 		assert type(self.result_types) == list
 		orig_cuts = kwargs.pop('cut_demographic',None)
 		if type(orig_cuts) != list:
@@ -64,7 +64,7 @@ class CalculationCoordinator(object):
 	def compute_significance(self,**kwargs):
 		responses = kwargs.pop('responses',self.results)
 		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
-		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
+		calculator = kwargs.pop('calculator',NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data))
 		assert type(self.result_types) == list
 		orig_cuts = kwargs.pop('cut_demographic',None)
 		if type(orig_cuts) != list:
@@ -249,6 +249,7 @@ class CalculationCoordinator(object):
 		if for_historical:
 			responses = self.hist_results
 			demographic_data = self.hist_demographic_data
+		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
 		for i, cut_set in enumerate(cut_sets):
 			# logging.debug("Cut set is " + str(cut_set))
 			print("\rCompleted {0:.0f} % of basic computations. Currently working on {1}".format(i/len(cut_sets)*100,str(cut_set)),end=" ")
@@ -256,13 +257,11 @@ class CalculationCoordinator(object):
 			if 'composite_questions' in self.config.config:
 				df = self.compute_aggregation(cut_demographic=cut_set,
 												composite_questions=self.config.config['composite_questions'],
-												responses = responses,
-												demographic_data = demographic_data,
+												calculator=calculator,
 												)
 			else:
 				df = self.compute_aggregation(cut_demographic=cut_set,
-												responses = responses,
-												demographic_data = demographic_data,
+												calculator=calculator,
 												)
 
 			#Remove samples sizes for questions that don't need them
@@ -311,6 +310,7 @@ class CalculationCoordinator(object):
 		if for_historical:
 			responses = self.hist_results
 			demographic_data = self.hist_demographic_data
+		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
 		for i, cut_set in enumerate(cut_sets):
 			df = pd.DataFrame()
 			print("\rCompleted {0:.0f} % of significance computations. Currently working on {1}".format(i/len(cut_sets)*100,str(cut_set)),end=" ")
@@ -318,14 +318,12 @@ class CalculationCoordinator(object):
 				df = self.compute_significance(cut_demographic=cut_set,
 											composite_questions=self.config.config['composite_questions'],
 											no_stat_significance_computation=no_stat_significance_computation,
-											responses = responses,
-											demographic_data = demographic_data,
+											calculator = calculator,
 											)
 			else:
 				df = self.compute_significance(cut_demographic=cut_set, 
 												no_stat_significance_computation=no_stat_significance_computation,
-												responses = responses,
-												demographic_data = demographic_data,
+												calculator = calculator,
 												)			
 			#Remove samples sizes for questions that don't need them
 			assert 'question_code' in df.columns

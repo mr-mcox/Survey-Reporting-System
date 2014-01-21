@@ -64,7 +64,7 @@ class NumericOutputCalculator(object):
 		return locals()
 	results_with_dimensions = property(**results_with_dimensions())
 
-	# @profile
+	@profile
 	def compute_aggregation(self,**kwargs):
 		cut_demographic = kwargs.pop('cut_demographic', None)
 		result_type = kwargs.pop('result_type',None)
@@ -98,16 +98,17 @@ class NumericOutputCalculator(object):
 			cut_groupings = cut_groupings + cut_demographic_list
 
 		columns_to_keep = copy.deepcopy(cut_groupings)
-		nfv = self.results_with_dimensions.copy()
-		if 'net_formatted_value' in nfv.columns:
+		# nfv = self.results_with_dimensions.copy()
+		results_columns = self.results_with_dimensions.columns
+		if 'net_formatted_value' in results_columns:
 			columns_to_keep.append('net_formatted_value')
-		if 'response' in nfv.columns:
+		if 'response' in results_columns:
 			columns_to_keep.append('response')
-		if 'is_confidential' in nfv.columns:
+		if 'is_confidential' in results_columns:
 			columns_to_keep.append('is_confidential')
-		if 'question_type' in nfv.columns:
+		if 'question_type' in results_columns:
 			columns_to_keep.append('question_type')
-		nfv = nfv.loc[:,columns_to_keep]
+		nfv = self.results_with_dimensions.loc[:,columns_to_keep]
 		# logging.debug("Results with dimensions for cut_demographic " + str(cut_demographic) + " are\n" + str(nfv.head()))
 
 		aggregation_calulations_list = list()
