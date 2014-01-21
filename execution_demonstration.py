@@ -5,7 +5,7 @@ from ConfigurationReader import ConfigurationReader
 from ResultsRetriever import ResultsRetriever
 import logging
 
-logging.basicConfig(filename='debug.log',level=logging.WARNING)
+logging.basicConfig(filename='debug.log',level=logging.DEBUG)
 
 config = ConfigurationReader.ConfigurationReader(config_file='small_demonstration_yaml.yaml')
 

@@ -171,7 +171,7 @@ class NumericOutputCalculator(object):
 		return pd.DataFrame(all_results,columns=return_columns)
 
 	def add_composite_question_calculation(self,composite_questions,aggregation_calulation,cut_demographic_list):
-		logging.debug("Adding composite questions for " + str(composite_questions))
+		# logging.debug("Adding composite questions for " + str(composite_questions))
 		if composite_questions is not None:
 			for question, components in composite_questions.items():
 				composite_computation = pd.DataFrame()
@@ -346,5 +346,8 @@ class NumericOutputCalculator(object):
 				df_bootstrap.ix[index_item,'aggregation_value'] = 'H'
 			if pop_2_greater_percent < 0.025:
 				df_bootstrap.ix[index_item,'aggregation_value'] = 'L'
-		df = pd.concat([df.ix[df.sample_size < 5,['aggregation_value','result_type']],df_skellam.ix[:,['aggregation_value','result_type']],df_bootstrap.ix[:,['aggregation_value','result_type']]])
-		return df
+		# logging.debug("df_small is\n" + str(df.ix[df.sample_size < 5,:]))
+		df_small = pd.DataFrame(df.ix[df.sample_size < 5,:],columns=['aggregation_value','result_type'])
+		df_skellam = pd.DataFrame(df_skellam,columns=['aggregation_value','result_type'])
+		df_bootstrap = pd.DataFrame(df_bootstrap,columns=['aggregation_value','result_type'])
+		return pd.concat([df_small,df_skellam,df_bootstrap])
