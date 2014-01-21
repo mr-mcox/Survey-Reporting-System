@@ -108,18 +108,18 @@ class NumericOutputCalculator(object):
 		if 'question_type' in nfv.columns:
 			columns_to_keep.append('question_type')
 		nfv = nfv.loc[:,columns_to_keep]
-		logging.debug("Results with dimensions for cut_demographic " + str(cut_demographic) + " are\n" + str(nfv.head()))
+		# logging.debug("Results with dimensions for cut_demographic " + str(cut_demographic) + " are\n" + str(nfv.head()))
 
 		aggregation_calulations_list = list()
 		for result_type in result_types:
 			nfv_copy = nfv.copy()
-			logging.debug("Computing aggregation for result type "+ result_type + " and cuts "+ str(cut_groupings))
+			# logging.debug("Computing aggregation for result type "+ result_type + " and cuts "+ str(cut_groupings))
 			# logging.debug("Responses columns are " + str(nfv))
 			assert result_type in {'net','strong','weak','raw_average','sample_size','strong_count','weak_count'}, "No calculation defined for result_type " + result_type
 			aggregation_calulation = pd.DataFrame()
 			if result_type == 'net':
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
-				logging.debug("Net results are\n" + str(aggregation_calulation.head()))
+				# logging.debug("Net results are\n" + str(aggregation_calulation.head()))
 			if result_type == 'strong':
 				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != 1),'net_formatted_value'] = 0
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
@@ -167,10 +167,11 @@ class NumericOutputCalculator(object):
 
 		#Return just required columns
 		return_columns = cut_groupings + ['aggregation_value','result_type']
-		logging.debug("Data returned is\n" + str(pd.DataFrame(all_results,columns=return_columns).head()))
+		# logging.debug("Data returned is\n" + str(pd.DataFrame(all_results,columns=return_columns).head()))
 		return pd.DataFrame(all_results,columns=return_columns)
 
 	def add_composite_question_calculation(self,composite_questions,aggregation_calulation,cut_demographic_list):
+		logging.debug("Adding composite questions for " + str(composite_questions))
 		if composite_questions is not None:
 			for question, components in composite_questions.items():
 				composite_computation = pd.DataFrame()

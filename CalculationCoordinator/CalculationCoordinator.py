@@ -489,6 +489,8 @@ class CalculationCoordinator(object):
 		dynamic_parent_dimension = {dimension.title: dimension.dynamic_parent_dimension for dimension in self.config.all_dimensions() if dimension.dimension_type=='dynamic'}
 		dimension_titles.append('question_code')
 		dimension_titles.append('result_type')
+		if compute_historical:
+			dimension_titles.append('survey_code')
 		for dimension_title in dimension_titles:
 			mapping = {'labels':[],'integer_strings':[]}
 			if dimension_title in all_dimensions and all_dimensions[dimension_title].is_composite:
