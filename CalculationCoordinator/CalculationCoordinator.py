@@ -66,6 +66,7 @@ class CalculationCoordinator(object):
 
 		gc.collect()
 		self.computations_generated[aggregation_key] = calculations
+		assert 'level_0' not in calculations.columns
 		return calculations
 
 	# @profile
@@ -89,12 +90,18 @@ class CalculationCoordinator(object):
 		aggregation_key = tuple(cuts)
 
 		gc.collect()
+		assert 'level_0' not in calculations.columns
 		# self.computations_generated[aggregation_key] = calculations
 		return calculations
 
 	# @profile
 	def modify_for_combinations_of_demographics(self, df, cuts,**kwargs):
-		df = df.reset_index()
+		assert 'level_0' not in df.columns
+		# logging.debug("Index name is " + str(df.index.name))
+		# logging.debug("Sampling of df:\n"+str(df.head()))
+		# # df = df.reset_index()
+		# logging.debug("Sampling of df after reset:\n"+str(df.head()))
+		# assert 'level_0' not in df.columns
 		# logging.debug("Starting df is " + str(df.head()))
 		# logging.debug("Starting df row is " + str(df.reset_index().ix[0,:]))
 		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
@@ -175,6 +182,7 @@ class CalculationCoordinator(object):
 			return df_with_additional_rows.reset_index()
 
 	def replace_dimensions_with_integers(self, df = None):
+		assert 'level_0' not in df.columns
 
 		values_by_column = self.integers_for_cut_dimensions
 		#Collect all values by column
@@ -573,6 +581,7 @@ class CalculationCoordinator(object):
 					row_offset = 2
 				labels_for_menu = mapping['labels']
 				if dimension_title in all_dimensions and type(all_dimensions[dimension_title].value_order) is list:
+					logging.debug("Writing value order for " + dimension_title)
 					labels_for_menu = all_dimensions[dimension_title].value_order
 				i = 0
 				for label in labels_for_menu:

@@ -141,7 +141,9 @@ class Dimension(object):
 		self.dimension_type = "static"
 		self.is_composite = False
 		self.value_order = None
+		logging.debug("Creating dimension " + self.title)
 		if self.config is not None:
+			logging.debug("config is " + str(self.config))
 			if 'all_together_label' in self.config:
 				self.all_together_label = self.config['all_together_label']
 			if 'dynamic_parent_dimension' in self.config:
@@ -153,4 +155,5 @@ class Dimension(object):
 			if 'value_order' in self.config:
 				assert type(self.config['value_order']) is list
 				self.value_order = self.config['value_order']
+				logging.debug("value_order for " + self.title + " is " + str(self.value_order))
 				self.value_order
