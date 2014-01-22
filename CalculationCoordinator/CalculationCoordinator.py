@@ -196,10 +196,16 @@ class CalculationCoordinator(object):
 
 		#Map values to column
 		for column in df.columns:
-			if column != 'aggregation_value':
-				value_map = {key : value for (key, value) in integer_strings_by_column[column].items()}
+			if column != 'aggregation_value' and column != 'index':
+				value_list = [value for (key, value) in integer_strings_by_column[column].items()]
+				key_list = [key for (key, value) in integer_strings_by_column[column].items()]
+				value_map = pd.Series(value_list,index=key_list)
+				assert value_map.index.is_unique, "Duplicate values for column " + column + " include\n" + str(value_map.groupby(level=0).filter(lambda x: len(x) > 1))
 				# logging.debug("Mapping values for column " + column + "\n" + str(value_map))
-				df[column] = df[column].map(value_map)
+				# logging.debug("Here's the column\n"+str(df.loc[:,column].head()))
+				# logging.debug("Here's the value map\n"+str(value_map))
+				# logging.debug("Here's the return\n"+str(df.loc[:,column].map(value_map).head()))
+				df.loc[:,column] = df.loc[:,column].map(value_map)
 
 		#Create mapping to be able to convert back
 		mapping = dict()
