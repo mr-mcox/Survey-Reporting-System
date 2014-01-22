@@ -29,6 +29,9 @@ class CalculationCoordinator(object):
 		self.max_integer_used_for_integer_string = 1
 		self.zero_integer_string = '0'
 		self.ensure_combination_for_every_set_of_demographics = False
+		self.integer_string_length = math.floor(math.log(self.max_integer_used_for_integer_string,10) + 1 )
+		self.format_string = "{0:0" + str(self.integer_string_length) + "d}"
+		self.zero_integer_string = self.format_string.format(0)
 
 		self.compute_historical = False
 		if self.hist_results is not None and self.hist_demographic_data is not None:
@@ -364,8 +367,8 @@ class CalculationCoordinator(object):
 			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
 			gc.collect()
 		return_table = pd.concat(all_aggregations)
-		return_table.row_heading = return_table.row_heading.map(self.adjust_zero_padding_of_heading)
-		return_table.column_heading = return_table.column_heading.map(self.adjust_zero_padding_of_heading)
+		# return_table.row_heading = return_table.row_heading.map(self.adjust_zero_padding_of_heading)
+		# return_table.column_heading = return_table.column_heading.map(self.adjust_zero_padding_of_heading)
 		assert len(return_table.row_heading.apply(len).unique()) == 1, "Not all row headings have the same length\n" + str(return_table.row_heading.unique())
 		assert len(return_table.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(return_table.column_heading.unique())
 		return return_table.drop_duplicates()
@@ -384,9 +387,44 @@ class CalculationCoordinator(object):
 			df = output_df.reset_index()
 			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
 			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-		output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+		df_dv = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False)
 		gc.collect()
-		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
+		
+		#Output significance values
+		output_df = self.compute_significance_from_config().set_index(['row_heading','column_heading'])
+		# logging.debug("Snapshot of master table " + str(output_df.head()))
+		if not output_df.index.is_unique:
+			df = output_df.reset_index()
+			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+		df_sig = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False)
+		gc.collect()
+
+		if compute_historical:
+			#Output hist display values
+			output_df = self.compute_cuts_from_config(for_historical=True).set_index(['row_heading','column_heading'])
+			if not output_df.index.is_unique:
+				df = output_df.reset_index()
+				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+				logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+			df_dv_hist = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False)
+			gc.collect()
+			
+			#Output hist significance values
+			output_df = self.compute_significance_from_config(for_historical=True).set_index(['row_heading','column_heading'])
+			if not output_df.index.is_unique:
+				df = output_df.reset_index()
+				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+				logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+			df_sig_hist = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False)
+			gc.collect()
+
+		#Adjust headings and output
+		df_dv.row_heading = df_dv.row_heading.map(self.adjust_zero_padding_of_heading)
+		df_dv.column_heading = df_dv.column_heading.map(self.adjust_zero_padding_of_heading)
+		df_dv = df_dv.set_index(['row_heading','column_heading'])
+		gc.collect()
+		output_series = pd.Series(df_dv['aggregation_value'],index = df_dv.index)
 		gc.collect()
 		print("\nUnstacking values for output")
 		unstacked_values = output_series.unstack()
@@ -399,16 +437,11 @@ class CalculationCoordinator(object):
 		gc.collect()
 		os.remove('display_values.csv')
 
-		#Output significance values
-		output_df = self.compute_significance_from_config().set_index(['row_heading','column_heading'])
-		# logging.debug("Snapshot of master table " + str(output_df.head()))
-		if not output_df.index.is_unique:
-			df = output_df.reset_index()
-			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
-			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-		output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+		df_sig.row_heading = df_sig.row_heading.map(self.adjust_zero_padding_of_heading)
+		df_sig.column_heading = df_sig.column_heading.map(self.adjust_zero_padding_of_heading)
+		df_sig = df_sig.set_index(['row_heading','column_heading'])
 		gc.collect()
-		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
+		output_series = pd.Series(df_sig['aggregation_value'],index = df_sig.index)
 		gc.collect()
 		print("\nUnstacking values for output")
 		unstacked_values = output_series.unstack()
@@ -422,15 +455,11 @@ class CalculationCoordinator(object):
 		os.remove('significance_values.csv')
 
 		if compute_historical:
-			#Output hist display values
-			output_df = self.compute_cuts_from_config(for_historical=True).set_index(['row_heading','column_heading'])
-			if not output_df.index.is_unique:
-				df = output_df.reset_index()
-				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
-				logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-			output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+			df_dv_hist.row_heading = df_dv_hist.row_heading.map(self.adjust_zero_padding_of_heading)
+			df_dv_hist.column_heading = df_dv_hist.column_heading.map(self.adjust_zero_padding_of_heading)
+			df_dv_hist = df_dv_hist.set_index(['row_heading','column_heading'])
 			gc.collect()
-			output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
+			output_series = pd.Series(df_dv_hist['aggregation_value'],index = df_dv_hist.index)
 			gc.collect()
 			print("\nUnstacking values for output")
 			unstacked_values = output_series.unstack()
@@ -442,15 +471,12 @@ class CalculationCoordinator(object):
 			self.copy_sheet_to_workbook('display_values.csv','HistDisplayValues',filename)
 			gc.collect()
 			os.remove('display_values.csv')
-			#Output hist significance values
-			output_df = self.compute_significance_from_config(for_historical=True).set_index(['row_heading','column_heading'])
-			if not output_df.index.is_unique:
-				df = output_df.reset_index()
-				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
-				logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-			output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+
+			df_sig_hist.row_heading = df_sig_hist.row_heading.map(self.adjust_zero_padding_of_heading)
+			df_sig_hist.column_heading = df_sig_hist.column_heading.map(self.adjust_zero_padding_of_heading)
+			df_sig_hist = df_sig_hist.set_index(['row_heading','column_heading'])
 			gc.collect()
-			output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
+			output_series = pd.Series(df_sig_hist['aggregation_value'],index = df_sig_hist.index)
 			gc.collect()
 			print("\nUnstacking values for output")
 			unstacked_values = output_series.unstack()
@@ -462,6 +488,8 @@ class CalculationCoordinator(object):
 			self.copy_sheet_to_workbook('significance_values.csv','HistSignificanceValues',filename)
 			gc.collect()
 			os.remove('significance_values.csv')
+
+
 
 		wb = load_workbook(filename)
 
@@ -641,7 +669,7 @@ class CalculationCoordinator(object):
 				reader = csv.reader(f)
 				for r,row in enumerate(reader):
 					dest_ws.append(row)
-					if r % 5000 == 0:
+					if r % 500 == 0:
 						print("\r" + str(r) + " rows written", end= ' ')
 						dest_wb.save(dest_wb_name)
 						gc.collect()
