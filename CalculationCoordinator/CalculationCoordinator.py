@@ -630,8 +630,13 @@ class CalculationCoordinator(object):
 		if is_csv_file:
 			with open(src_wb_name) as f:
 				reader = csv.reader(f)
-				for row in reader:
+				for r,row in enumerate(reader):
 					dest_ws.append(row)
+					if r % 5000 == 0:
+						print("\r" + str(r) + " rows written", end= ' ')
+						dest_wb.save(dest_wb_name)
+						gc.collect()
+
 		else:
 			src_wb = load_workbook(src_wb_name)
 			assert src_ws_name in src_wb.get_sheet_names()
