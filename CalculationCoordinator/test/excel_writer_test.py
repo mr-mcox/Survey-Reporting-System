@@ -17,6 +17,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		ws.title = "ExistingData"
 		wb.save('test_file.xlsx')
 		coordinator = CalculationCoordinator()
+		coordinator.compute_historical = True
 		self.mapping_values = ['dos','uno','tres']
 		self.mapping_integers = ['2','1','3']
 		self.mapping_dict = dict(zip(self.mapping_integers,self.mapping_values))
@@ -63,7 +64,8 @@ class WriteExcelTestCase(unittest.TestCase):
 												'question_code':generic_gender_return,
 												'result_type':generic_gender_return,
 												'LIB': lib_return,
-												'ValueOrderDimension':value_order_return,}
+												'ValueOrderDimension':value_order_return,
+												'survey_code':generic_gender_return,}
 		coordinator.get_integer_string_mapping = mock.MagicMock(side_effect= lambda arg: return_for_get_integer_string_mapping[arg])
 
 		coordinator.dimension_integer_mapping = {'values': self.mapping_values,'integers':self.mapping_integers}
@@ -213,7 +215,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertEqual( wb.get_named_range('default_menu').destinations[0][1],'$F$2:$F$101')
 		self.assertEqual( wb.get_named_range('default_mapping').destinations[0][1],'$F$2:$G$101')
 		self.assertEqual( wb.get_named_range('default_menu_start').destinations[0][1],'$F$2')
-		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$G$1:$U$1')
+		self.assertEqual( wb.get_named_range('cuts_head').destinations[0][1],'$G$1:$W$1')
 
 	def test_composite_dimensions(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')

@@ -7,6 +7,8 @@ import copy
 import logging
 import os
 import gc
+import re
+import csv
 
 class CalculationCoordinator(object):
 	"""docstring for CalculationCoordinator"""
@@ -27,6 +29,10 @@ class CalculationCoordinator(object):
 		self.max_integer_used_for_integer_string = 1
 		self.zero_integer_string = '0'
 		self.ensure_combination_for_every_set_of_demographics = False
+
+		self.compute_historical = False
+		if self.hist_results is not None and self.hist_demographic_data is not None:
+			self.compute_historical = True
 
 	def get_aggregation(self,**kwargs):
 		cuts = kwargs.pop('cuts',None)
@@ -50,6 +56,7 @@ class CalculationCoordinator(object):
 		cuts = [cut for cut in orig_cuts if cut != None]
 
 		calculations = calculator.compute_aggregation(result_type=self.result_types,cut_demographic=cuts,**kwargs)
+		gc.collect()
 
 		if self.ensure_combination_for_every_set_of_demographics and len(cuts) > 0:
 			logging.debug("Cuts passing to modify " + str(cuts))
@@ -57,6 +64,7 @@ class CalculationCoordinator(object):
 
 		aggregation_key = tuple(cuts)
 
+		gc.collect()
 		self.computations_generated[aggregation_key] = calculations
 		return calculations
 
@@ -72,6 +80,7 @@ class CalculationCoordinator(object):
 		cuts = [cut for cut in orig_cuts if cut != None]
 
 		calculations = calculator.bootstrap_net_significance(cuts=cuts,**kwargs).reset_index()
+		gc.collect()
 
 		if self.ensure_combination_for_every_set_of_demographics and len(cuts) > 0:
 			logging.debug("Cuts passing to modify " + str(cuts))
@@ -79,6 +88,7 @@ class CalculationCoordinator(object):
 
 		aggregation_key = tuple(cuts)
 
+		gc.collect()
 		# self.computations_generated[aggregation_key] = calculations
 		return calculations
 
@@ -351,10 +361,8 @@ class CalculationCoordinator(object):
 		assert 'excel_template_file' in self.config.config
 		self.ensure_combination_for_every_set_of_demographics = True
 		filename = self.config.config['excel_template_file']
-		compute_historical = False
-		if self.hist_results is not None and self.hist_demographic_data is not None:
-			compute_historical = True
-
+		
+		compute_historical = self.compute_historical
 		#Output display values
 		output_df = self.compute_cuts_from_config().set_index(['row_heading','column_heading'])
 		# logging.debug("Snapshot of master table " + str(output_df.head()))
@@ -363,11 +371,19 @@ class CalculationCoordinator(object):
 			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
 			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
 		output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+		gc.collect()
 		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
-		output_series.unstack().to_excel('display_values.xlsx', sheet_name='DisplayValues')
-
-		self.copy_sheet_to_workbook('display_values.xlsx','DisplayValues',filename)
-		os.remove('display_values.xlsx')
+		gc.collect()
+		print("\nUnstacking values for output")
+		unstacked_values = output_series.unstack()
+		gc.collect()
+		print("Exporting display values to csv")
+		unstacked_values.to_csv('display_values.csv')
+		gc.collect()
+		print("Copying data from csv to excel workbook")
+		self.copy_sheet_to_workbook('display_values.csv','DisplayValues',filename)
+		gc.collect()
+		os.remove('display_values.csv')
 
 		#Output significance values
 		output_df = self.compute_significance_from_config().set_index(['row_heading','column_heading'])
@@ -377,11 +393,19 @@ class CalculationCoordinator(object):
 			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
 			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
 		output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+		gc.collect()
 		output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
-		output_series.unstack().to_excel('significance_values.xlsx', sheet_name='SignificanceValues')
-
-		self.copy_sheet_to_workbook('significance_values.xlsx','SignificanceValues',filename)
-		os.remove('significance_values.xlsx')
+		gc.collect()
+		print("\nUnstacking values for output")
+		unstacked_values = output_series.unstack()
+		gc.collect()
+		print("Exporting significance values to csv")
+		unstacked_values.to_csv('significance_values.csv')
+		gc.collect()
+		print("Copying data from csv to excel workbook")
+		self.copy_sheet_to_workbook('significance_values.csv','SignificanceValues',filename)
+		gc.collect()
+		os.remove('significance_values.csv')
 
 		if compute_historical:
 			#Output hist display values
@@ -391,12 +415,19 @@ class CalculationCoordinator(object):
 				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
 				logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
 			output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+			gc.collect()
 			output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
-			output_series.unstack().to_excel('display_values.xlsx', sheet_name='HistDisplayValues')
-
-			self.copy_sheet_to_workbook('display_values.xlsx','HistDisplayValues',filename)
-			os.remove('display_values.xlsx')
-
+			gc.collect()
+			print("\nUnstacking values for output")
+			unstacked_values = output_series.unstack()
+			gc.collect()
+			print("Exporting historical display values to csv")
+			unstacked_values.to_csv('display_values.csv')
+			gc.collect()
+			print("Copying data from csv to excel workbook")
+			self.copy_sheet_to_workbook('display_values.csv','HistDisplayValues',filename)
+			gc.collect()
+			os.remove('display_values.csv')
 			#Output hist significance values
 			output_df = self.compute_significance_from_config(for_historical=True).set_index(['row_heading','column_heading'])
 			if not output_df.index.is_unique:
@@ -404,11 +435,19 @@ class CalculationCoordinator(object):
 				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
 				logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
 			output_df = output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).set_index(['row_heading','column_heading'])
+			gc.collect()
 			output_series = pd.Series(output_df['aggregation_value'],index = output_df.index)
-			output_series.unstack().to_excel('significance_values.xlsx', sheet_name='HistSignificanceValues')
-
-			self.copy_sheet_to_workbook('significance_values.xlsx','HistSignificanceValues',filename)
-			os.remove('significance_values.xlsx')
+			gc.collect()
+			print("\nUnstacking values for output")
+			unstacked_values = output_series.unstack()
+			gc.collect()
+			print("Exporting historical significance values to csv")
+			unstacked_values.to_csv('significance_values.csv')
+			gc.collect()
+			print("Copying data from csv to excel workbook")
+			self.copy_sheet_to_workbook('significance_values.csv','HistSignificanceValues',filename)
+			gc.collect()
+			os.remove('significance_values.csv')
 
 		wb = load_workbook(filename)
 
@@ -570,11 +609,10 @@ class CalculationCoordinator(object):
 			return start_cell + ":" + end_cell
 
 	def copy_sheet_to_workbook(self,src_wb_name,src_ws_name,dest_wb_name):
-		src_wb = load_workbook(src_wb_name)
-		assert src_ws_name in src_wb.get_sheet_names()
-		src_ws = src_wb.get_sheet_by_name(src_ws_name)
-
 		dest_wb = load_workbook(dest_wb_name)
+		is_csv_file = False
+		if re.search('.csv$', src_wb_name) is not None:
+			is_csv_file = True
 
 		if src_ws_name in dest_wb.get_sheet_names():
 			ws_to_del = dest_wb.get_sheet_by_name(src_ws_name)
@@ -583,8 +621,18 @@ class CalculationCoordinator(object):
 		dest_ws = dest_wb.create_sheet()
 		dest_ws.title = src_ws_name
 
-		for i in range(src_ws.get_highest_column()):
-			for j in range(src_ws.get_highest_row()):
-				dest_ws.cell(row=j,column=i).value = src_ws.cell(row=j,column=i).value
+		if is_csv_file:
+			with open(src_wb_name) as f:
+				reader = csv.reader(f)
+				for row in reader:
+					dest_ws.append(row)
+		else:
+			src_wb = load_workbook(src_wb_name)
+			assert src_ws_name in src_wb.get_sheet_names()
+			src_ws = src_wb.get_sheet_by_name(src_ws_name)
+
+			for i in range(src_ws.get_highest_column()):
+				for j in range(src_ws.get_highest_row()):
+					dest_ws.cell(row=j,column=i).value = src_ws.cell(row=j,column=i).value
 
 		dest_wb.save(dest_wb_name)

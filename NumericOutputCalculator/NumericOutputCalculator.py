@@ -4,6 +4,7 @@ import numpy as np
 import pdb
 from scipy.stats import poisson, skellam
 import copy
+import gc
 
 class NumericOutputCalculator(object):
 
@@ -169,6 +170,7 @@ class NumericOutputCalculator(object):
 		#Return just required columns
 		return_columns = cut_groupings + ['aggregation_value','result_type']
 		# logging.debug("Data returned is\n" + str(pd.DataFrame(all_results,columns=return_columns).head()))
+		gc.collect()
 		return pd.DataFrame(all_results,columns=return_columns)
 
 	def add_composite_question_calculation(self,composite_questions,aggregation_calulation,cut_demographic_list):
@@ -264,9 +266,19 @@ class NumericOutputCalculator(object):
 		df.ix[df.pop_1_sample_size == 0,'aggregation_value'] = 'N'#Meaning that subset is identical to the comparison
 
 		df_no_agg_value = df.ix[df.aggregation_value == '',:]
-		df_no_agg_value['sum_of_count_distributions'] = pd.DataFrame(poisson.ppf(0.75,df_no_agg_value.pop_2_strong_count), index = df_no_agg_value.index) + pd.DataFrame(poisson.ppf(0.75,df_no_agg_value.pop_2_weak_count), index = df_no_agg_value.index)
+		dist_1 = pd.DataFrame(poisson.ppf(0.75,df_no_agg_value.pop_2_strong_count), index = df_no_agg_value.index)
+		dist_2 = pd.DataFrame(poisson.ppf(0.75,df_no_agg_value.pop_2_weak_count), index = df_no_agg_value.index)
+		# print("df is\n"+ str(df))
+		# print(df_no_agg_value.pop_2_strong_count)
+		# print(dist_1)
+		# print(dist_2)
 		df_no_agg_value['use_skellam'] = 0
-		df_no_agg_value.ix[df_no_agg_value.sum_of_count_distributions < (df_no_agg_value.pop_2_sample_size * 1.1),'use_skellam'] = 1
+		if len(dist_1.index) > 0:
+			df_no_agg_value['sum_of_count_distributions'] =  dist_1 + dist_2
+			df_no_agg_value.ix[df_no_agg_value.sum_of_count_distributions < (df_no_agg_value.pop_2_sample_size * 1.1),'use_skellam'] = 1
+		else:
+			df_small = pd.DataFrame(df.ix[df.sample_size < 5,:],columns=['aggregation_value','result_type'])
+			return df_small
 
 		df_skellam = df_no_agg_value.ix[df_no_agg_value.use_skellam==1]
 		df_skellam['mu1'] = (df_skellam.pop_1_strong_count / df_skellam.pop_1_sample_size) * df_skellam.pop_2_sample_size

@@ -29,34 +29,35 @@ def step(context):
 def step(context,question_code,value):
     if value == 'blank':
         print( context.result )
-        assert np.isnan( context.result.set_index('question_code').loc[int(question_code),'aggregation_value'] )
+        assert np.isnan( context.result.set_index('question_code').ix[int(question_code),'aggregation_value'] )
     else:
         if 'net_formatted_value' in context.result.columns:
-            assert context.result.set_index('question_code').loc[int(question_code),'aggregation_value'] == float(value)
+            assert context.result.set_index('question_code').ix[int(question_code),'aggregation_value'] == float(value)
         else:
-            assert context.result.set_index('question_code').loc[int(question_code),'aggregation_value'] == float(value)
+            assert context.result.set_index('question_code').ix[int(question_code),'aggregation_value'] == float(value)
 
 @then('the "{column}" display_value for question_code "{question_code}" is {value}')
 def step(context,column,question_code,value):
     if value == 'blank':
         print( context.result )
-        assert np.isnan( context.result.set_index(['question_code','result_type']).loc[(float(question_code),column)] )
+        assert np.isnan( context.result.set_index(['question_code','result_type']).ix[(float(question_code),column)].get('aggregation_value') )
     else:
         if 'net_formatted_value' in context.result.columns:
-            assert context.result.set_index(['question_code','result_type']).loc[(float(question_code),column)] == float(value)
+            assert context.result.set_index(['question_code','result_type']).ix[(float(question_code),column)].get('aggregation_value') == float(value)
         else:
-            assert context.result.set_index(['question_code','result_type']).loc[(float(question_code),column)] == float(value)
+            assert context.result.set_index(['question_code','result_type']).ix[(float(question_code),column)].get('aggregation_value') == float(value)
 
 @then('the regional "{column}" display_value for question_code "{question_code}" and region "{region}" is {value}')
 def step(context,column,question_code,region, value):
     if value == 'blank':
         print( context.result )
-        assert np.isnan( context.result.set_index(['question_code','result_type','region']).loc[(float(question_code),column,region)] )
+        assert np.isnan( context.result.set_index(['question_code','result_type','region']).ix[(float(question_code),column,region)].get('aggregation_value') )
     else:
         if 'net_formatted_value' in context.result.columns:
-            assert context.result.set_index(['question_code','result_type','region']).loc[(float(question_code),column,region)] == float(value)
+            assert context.result.set_index(['question_code','result_type','region']).ix[(float(question_code),column,region)].get('aggregation_value') == float(value)
         else:
-            assert context.result.set_index(['question_code','result_type','region']).loc[(float(question_code),column,region)] == float(value)
+            print(context.result.set_index(['question_code','result_type','region']).ix[(float(question_code),column,region)])
+            assert context.result.set_index(['question_code','result_type','region']).ix[(float(question_code),column,region)].get('aggregation_value') == float(value)
 
 @when('compute strong is run')
 def step(context):
