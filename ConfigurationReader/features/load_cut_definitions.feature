@@ -106,3 +106,14 @@ Feature: Determine the cuts desired from a configuration file
 		Given input yaml that has two dimensions, only one of which is historical
 		When cuts_to_be_created is called with a for_historical flag
 		Then the cuts only include historical cut
+
+	Scenario: Configuration reader always has a default dimension that has an all_together label
+		Given basic set of cut and dimensions in config file
+		When a new dimension is created that has the title "Ethnicity"
+		Then all_dimensions has a dimesion that matches the default dimension title
+		Then the default dimension has an all_together label that matches the default
+
+	Scenario: When cuts have fewer than default number of levels, fill out with the default dimension
+		Given yaml with cut that has two dimensions but default level is 3
+		When cuts_for_excel_menu is run
+		Then the result has the default dimension in the last place

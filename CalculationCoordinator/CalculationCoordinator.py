@@ -234,6 +234,8 @@ class CalculationCoordinator(object):
 		return df
 
 	def get_integer_string_mapping(self, dimension):
+		if dimension == self.config.default_dimension_title:
+			return {'integer_strings':[],'labels':[]}
 		assert dimension in self.labels_for_cut_dimensions, "Dimension " + dimension + " not present"
 		mapping_as_dict = self.labels_for_cut_dimensions[dimension]
 		sorted_labels = sorted(mapping_as_dict.keys())

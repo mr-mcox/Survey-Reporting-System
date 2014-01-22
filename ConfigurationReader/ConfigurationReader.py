@@ -13,6 +13,10 @@ class ConfigurationReader(object):
 		if self.config_file != None:
 			stream = open(self.config_file,'r')
 			self.config = yaml.load(stream)
+		#Create default dimension
+		self.default_dimension_title = "Choose Not Used from menu below"
+		self.default_dimension_all_together_label = "Not Used"
+		self.create_dimension(self.default_dimension_title,dimension_config={'all_together_label':self.default_dimension_all_together_label})
 
 	def cuts_to_be_created(self,**kwargs):
 		for_historical = kwargs.pop('for_historical',False)
@@ -67,12 +71,15 @@ class ConfigurationReader(object):
 				continue
 			assert type(cut) == Cut
 			dimension_titles = [dimension.title for dimension in cut.dimensions]
+			number_of_levels = len(dimension_titles)
+			if number_of_levels < self.default_number_of_levels:
+				dimension_titles = dimension_titles + [self.default_dimension_title for i in range(self.default_number_of_levels - number_of_levels)]
 			cut_list.append([cut.title, all_dimensions[dimension_titles[0]].dimension_type] + dimension_titles)
 		return cut_list
 
-	def create_dimension(self, title):
+	def create_dimension(self, title, **kwargs):
 		if title not in self._all_dimensions:
-			dimension_config = None
+			dimension_config = kwargs.pop('dimension_config',None)
 			if 'dimensions' in self.config and title in self.config['dimensions']:
 				dimension_config = self.config['dimensions'][title]
 			new_dimension = Dimension(title=title, config = dimension_config)

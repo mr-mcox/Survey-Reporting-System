@@ -62,6 +62,7 @@ def step(context):
 	'Region':{'dimensions':['region']}
 	}
 	}
+	
 
 @when('cuts from the config are accessed')
 def step(context):
@@ -114,7 +115,7 @@ def step(context):
 @then('all_dimensions has dimensions titled "Ethnicity" and "Grade"')
 def step(context):
 	dimension_titles = [dimension.title for dimension in context.reader.all_dimensions()]
-	assert set(dimension_titles) == {'Ethnicity','Grade'}
+	assert set(dimension_titles) >={'Ethnicity','Grade'}
 
 @then('the dimension has a not included label of "{value}"')
 def step(context,value):
@@ -317,3 +318,33 @@ def step(context):
 			if cut == yaml_cut:
 				cuts_match = True
 		assert cuts_match
+
+@then('all_dimensions has a dimesion that matches the default dimension title')
+def step(context):
+	assert context.reader.default_dimension_title in context.reader._all_dimensions
+
+@then('the default dimension has an all_together label that matches the default')
+def step(context):
+	assert context.reader._all_dimensions[context.reader.default_dimension_title].all_together_label == context.reader.default_dimension_all_together_label
+
+@given('yaml with cut that has two dimensions but default level is 3')
+def step(context):
+	context.reader = ConfigurationReader()
+	context.reader.config = {'cuts':{
+	'Region': {'dimensions':['region','corps']},
+	}
+	}
+	context.reader.default_number_of_levels = 3
+	context.reader.cuts
+
+@then('the result has the default dimension in the last place')
+def step(context):
+	expected_results = [['Region', 'static', 'region', 'corps',context.reader.default_dimension_title]]
+	print(context.result)
+	assert len(context.result) == 1
+	for res in expected_results:
+		match = False
+		for res2 in context.result:
+			if res == res2:
+				match = True
+		assert match == True
