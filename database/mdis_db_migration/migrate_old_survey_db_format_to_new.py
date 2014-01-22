@@ -71,17 +71,17 @@ question_table.columns = ssq_results.keys()
 
 #Create survey table data
 survey_codes = question_table.survey.unique().tolist()
-survey_map = dict(zip(survey_codes,range(len(survey_codes))))
+survey_map = dict(zip(survey_codes,[i + 1 for i in range(len(survey_codes))]))
 survey_ids = [survey_map[survey_name] for survey_name in survey_codes]
 
 surveys_for_db = pd.DataFrame({'id':survey_ids,'survey_code':survey_codes})
 
 #Create question table data
 questions_list = question_table.survey_specific_qid.unique().tolist()
-question_map = dict(zip(questions_list,range(len(questions_list))))
+question_map = dict(zip(questions_list,[i + 1 for i in range(len(questions_list))]))
 
-question_table['question_id'] = question_table.survey_specific_qid.map(question_map) + 1
-question_table['survey_id'] = question_table.survey.map(survey_map) + 1
+question_table['question_id'] = question_table.survey_specific_qid.map(question_map)
+question_table['survey_id'] = question_table.survey.map(survey_map)
 question_table = question_table.rename(columns={'master_qid':'question_code','question_id':'id','confidential':'is_confidential'})
 questions_for_db = pd.DataFrame(question_table,columns=['id','survey_id','question_code','is_confidential','question_type'])
 
@@ -93,7 +93,7 @@ questions_for_db.ix[questions_for_db.question_type == '7pt_NCS_7=SA','question_t
 
 #Map survey id and question id onto survey responses
 responses['question_id'] = responses.survey_specific_qid.map(question_map)
-responses['survey_id'] = responses.survey.map(survey_map)
+responses['survey_id'] = responses.survey.map(survey_map) 
 responses = responses.rename(columns={'cm_pid':'respondent_id'})
 
 #Create results table
