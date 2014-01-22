@@ -369,8 +369,8 @@ class CalculationCoordinator(object):
 		return_table = pd.concat(all_aggregations)
 		# return_table.row_heading = return_table.row_heading.map(self.adjust_zero_padding_of_heading)
 		# return_table.column_heading = return_table.column_heading.map(self.adjust_zero_padding_of_heading)
-		assert len(return_table.row_heading.apply(len).unique()) == 1, "Not all row headings have the same length\n" + str(return_table.row_heading.unique())
-		assert len(return_table.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(return_table.column_heading.unique())
+		# assert len(return_table.row_heading.apply(len).unique()) == 1, "Not all row headings have the same length\n" + str(return_table.row_heading.unique())
+		# assert len(return_table.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(return_table.column_heading.unique())
 		return return_table.drop_duplicates()
 
 	def export_to_excel(self):
@@ -422,6 +422,11 @@ class CalculationCoordinator(object):
 		#Adjust headings and output
 		df_dv.row_heading = df_dv.row_heading.map(self.adjust_zero_padding_of_heading)
 		df_dv.column_heading = df_dv.column_heading.map(self.adjust_zero_padding_of_heading)
+		#Determine length of heading so we can ensure that it is consistent
+		assert len(df_dv.row_heading.apply(len).unique()) == 1, "Not all row headings have the same length\n" + str(df_dv.row_heading.unique())
+		assert len(df_dv.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(df_dv.column_heading.unique())
+		row_heading_length = df_dv.row_heading.apply(len).get(0)
+		column_heading_length = df_dv.column_heading.apply(len).get(0)
 		df_dv = df_dv.set_index(['row_heading','column_heading'])
 		gc.collect()
 		output_series = pd.Series(df_dv['aggregation_value'],index = df_dv.index)
@@ -439,6 +444,8 @@ class CalculationCoordinator(object):
 
 		df_sig.row_heading = df_sig.row_heading.map(self.adjust_zero_padding_of_heading)
 		df_sig.column_heading = df_sig.column_heading.map(self.adjust_zero_padding_of_heading)
+		assert (df_sig.row_heading.apply(len) == row_heading_length).all(), "Not all row headings have the same length\n" + str(df_sig.row_heading.unique())
+		assert (df_sig.column_heading.apply(len) == column_heading_length).all(), "Not all column headings have the same length\n" + str(df_sig.column_heading.unique())
 		df_sig = df_sig.set_index(['row_heading','column_heading'])
 		gc.collect()
 		output_series = pd.Series(df_sig['aggregation_value'],index = df_sig.index)
@@ -457,6 +464,8 @@ class CalculationCoordinator(object):
 		if compute_historical:
 			df_dv_hist.row_heading = df_dv_hist.row_heading.map(self.adjust_zero_padding_of_heading)
 			df_dv_hist.column_heading = df_dv_hist.column_heading.map(self.adjust_zero_padding_of_heading)
+			assert (df_dv_hist.row_heading.apply(len) == row_heading_length).all(), "Not all row headings have the same length\n" + str(df_dv_hist.row_heading.unique())
+			assert (df_dv_hist.column_heading.apply(len) == column_heading_length).all(), "Not all column headings have the same length\n" + str(df_dv_hist.column_heading.unique())
 			df_dv_hist = df_dv_hist.set_index(['row_heading','column_heading'])
 			gc.collect()
 			output_series = pd.Series(df_dv_hist['aggregation_value'],index = df_dv_hist.index)
@@ -474,6 +483,8 @@ class CalculationCoordinator(object):
 
 			df_sig_hist.row_heading = df_sig_hist.row_heading.map(self.adjust_zero_padding_of_heading)
 			df_sig_hist.column_heading = df_sig_hist.column_heading.map(self.adjust_zero_padding_of_heading)
+			assert (df_sig_hist.row_heading.apply(len) == row_heading_length).all(), "Not all row headings have the same length\n" + str(df_sig_hist.row_heading.unique())
+			assert (df_sig_hist.column_heading.apply(len) == column_heading_length).all(), "Not all column headings have the same length\n" + str(df_sig_hist.column_heading.unique())
 			df_sig_hist = df_sig_hist.set_index(['row_heading','column_heading'])
 			gc.collect()
 			output_series = pd.Series(df_sig_hist['aggregation_value'],index = df_sig_hist.index)
