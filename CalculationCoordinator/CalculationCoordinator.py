@@ -234,7 +234,7 @@ class CalculationCoordinator(object):
 		return df
 
 	def get_integer_string_mapping(self, dimension):
-		if dimension == self.config.default_dimension_title:
+		if self.config is not None and dimension == self.config.default_dimension_title:
 			return {'integer_strings':[],'labels':[]}
 		assert dimension in self.labels_for_cut_dimensions, "Dimension " + dimension + " not present"
 		mapping_as_dict = self.labels_for_cut_dimensions[dimension]
@@ -262,6 +262,10 @@ class CalculationCoordinator(object):
 	def compute_cuts_from_config(self,**kwargs):
 		assert self.config != None
 		for_historical = kwargs.pop('for_historical',False)
+		#Remove results for questions not used
+		self.results = self.remove_questions_not_used(self.results)
+		self.hist_results = self.remove_questions_not_used(self.hist_results)
+
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		all_aggregations = list()
 		# logging.debug("All cuts are " + str(self.config.cuts_to_be_created()))
@@ -301,12 +305,7 @@ class CalculationCoordinator(object):
 			if 'show_sample_size_for_questions' in self.config.config:
 				questions_to_show_sample_size = self.config.config['show_sample_size_for_questions']
 			df = df.ix[(df.result_type != 'sample_size') | df.question_code.isin(questions_to_show_sample_size),:]
-
-			#Remove questions that aren't specified
-			questions_to_show = df.question_code.unique().tolist()
-			if 'show_questions' in self.config.config:
-				questions_to_show = self.config.config['show_questions']
-			df = df.ix[df.question_code.isin(questions_to_show),:]
+			
 			df = self.replace_dimensions_with_integers(df)
 			df = self.create_row_column_headers(df,cuts=cut_set)
 			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
@@ -317,6 +316,15 @@ class CalculationCoordinator(object):
 		assert len(return_table.row_heading.apply(len).unique()) == 1, "Not all row headings have the same length\n" + str(return_table.row_heading.unique())
 		assert len(return_table.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(return_table.column_heading.unique())
 		return return_table.drop_duplicates()
+
+	def remove_questions_not_used(self,df):
+		if type(df) != pd.DataFrame or'question_code' not in df.columns:
+			return df
+		questions_to_show = df.question_code.unique().tolist()
+		if 'show_questions' in self.config.config:
+			questions_to_show = self.config.config['show_questions']
+		df = df.ix[df.question_code.isin(questions_to_show),:]
+		return df
 
 	# @profile
 	def compute_significance_from_config(self,**kwargs):

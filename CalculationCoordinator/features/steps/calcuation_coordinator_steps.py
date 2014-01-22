@@ -26,7 +26,7 @@ def import_table_data(table):
 @given('net formatted values')
 def step(context):
 	context.coordinator = CalculationCoordinator()
-	context.coordinator.results = import_table_data(context.table)
+	context.coordinator.results = pd.DataFrame(import_table_data(context.table))
 
 @given('demographic data')
 def step(context):
