@@ -15,7 +15,7 @@ To implement:
  ✔ Create manner of rolling up results that doesn't cause memory to explode @done (14-01-22 10:04)
  ✔ Blank demographic includes blank menu @done (14-01-22 12:23)
  ✔ Create default order for menu @done (14-01-23 07:47)
- ☐ Additional cuts menus
+ ✔ Additional cuts menus @done (14-01-23 07:47)
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
   ☐ Fix chained 

@@ -43,6 +43,7 @@ class NumericOutputCalculator(object):
 		self.responses = responses
 		self.demographic_data = kwargs.pop('demographic_data',pd.DataFrame())
 		self._results_with_dimensions = pd.DataFrame()
+		# self.question_types_to_compute_significance_for = {'7pt_1=SA','10pt_NPS_1=SA','7pt_7=SA','11pt_NPS_1=SA','10pt_NPS_10=SA'}
 
 	def results_with_dimensions():
 		doc = "The results_with_dimensions property."
@@ -237,14 +238,17 @@ class NumericOutputCalculator(object):
 			df_with_no_results['aggregation_value'] = ''
 			df_with_no_results.set_index(cuts+['question_code'])
 			return df_with_no_results
-		
+		base_results = base_results.ix[base_results['result_type'].isin(["sample_size","strong_count","weak_count"])]
 		base_results = base_results.set_index(cuts + ['question_code','result_type'])
 		base_results = pd.Series(base_results['aggregation_value'],index = base_results.index).unstack()
+		comparison_results = comparison_results.ix[comparison_results['result_type'].isin(["sample_size","strong_count","weak_count"])]
 		comparison_results = comparison_results.set_index(comparison_cuts  + ['question_code','result_type'])
 		comparison_results = pd.Series(comparison_results['aggregation_value'],index = comparison_results.index).unstack()
 		comparison_results = comparison_results.rename(columns={'sample_size':'comp_sample_size',
 																'strong_count':'comp_strong_count',
 																'weak_count':'comp_weak_count'})
+		# logging.debug('Base results are\n' + str(base_results.head()))
+		# logging.debug('comparison_results are\n' + str(comparison_results.head()))
 		self.counts_for_significance = base_results.reset_index().set_index(comparison_cuts + ['question_code']).join(comparison_results).reset_index().set_index(cuts + ['question_code'])
 		return self.bootstrap_result_from_frequency_table(self.counts_for_significance)
 
@@ -273,20 +277,22 @@ class NumericOutputCalculator(object):
 		# print(dist_1)
 		# print(dist_2)
 		df_no_agg_value['use_skellam'] = 0
+		df_small = pd.DataFrame(df.ix[df.sample_size < 5,:],columns=['aggregation_value','result_type'])
 		if len(dist_1.index) > 0:
 			df_no_agg_value['sum_of_count_distributions'] =  dist_1 + dist_2
 			df_no_agg_value.ix[df_no_agg_value.sum_of_count_distributions < (df_no_agg_value.pop_2_sample_size * 1.1),'use_skellam'] = 1
 		else:
-			df_small = pd.DataFrame(df.ix[df.sample_size < 5,:],columns=['aggregation_value','result_type'])
 			return df_small
 
 		df_skellam = df_no_agg_value.ix[df_no_agg_value.use_skellam==1]
-		df_skellam['mu1'] = (df_skellam.pop_1_strong_count / df_skellam.pop_1_sample_size) * df_skellam.pop_2_sample_size
-		df_skellam['mu2'] = (df_skellam.pop_1_weak_count / df_skellam.pop_1_sample_size) * df_skellam.pop_2_sample_size
-		df_skellam['obs'] = df_skellam.pop_2_strong_count - df_skellam.pop_2_weak_count
-		df_skellam['p'] = pd.DataFrame(skellam.cdf(df_skellam.obs, df_skellam.mu1, df_skellam.mu2), index=df_skellam.index)
-		df_skellam.ix[df_skellam.p > 0.975,'aggregation_value'] = 'H'
-		df_skellam.ix[df_skellam.p < 0.025,'aggregation_value'] = 'L'
+		if len(df_skellam.index) > 0:
+			df_skellam['mu1'] = (df_skellam.pop_1_strong_count / df_skellam.pop_1_sample_size) * df_skellam.pop_2_sample_size
+			df_skellam['mu2'] = (df_skellam.pop_1_weak_count / df_skellam.pop_1_sample_size) * df_skellam.pop_2_sample_size
+			df_skellam['obs'] = df_skellam.pop_2_strong_count - df_skellam.pop_2_weak_count
+			logging.debug('df_skellam is\n' + str(df_skellam.head()))
+			df_skellam['p'] = pd.DataFrame(skellam.cdf(df_skellam.obs, df_skellam.mu1, df_skellam.mu2), index=df_skellam.index)
+			df_skellam.ix[df_skellam.p > 0.975,'aggregation_value'] = 'H'
+			df_skellam.ix[df_skellam.p < 0.025,'aggregation_value'] = 'L'
 
 		df_bootstrap = df_no_agg_value.ix[df_no_agg_value.use_skellam==0]
 		for index_item in df_bootstrap.index:

@@ -644,6 +644,8 @@ class CalculationCoordinator(object):
 				if dimension_title in all_dimensions and type(all_dimensions[dimension_title].value_order) is list:
 					logging.debug("Writing value order for " + dimension_title)
 					labels_for_menu = all_dimensions[dimension_title].value_order
+				logging.debug("Labels for menu is " + str(labels_for_menu))
+				logging.debug("Integer map for menu is " + str(integer_mapping))
 				i = 0
 				for label in labels_for_menu:
 					if label in integer_mapping:
@@ -667,6 +669,7 @@ class CalculationCoordinator(object):
 		wb.create_named_range('zero_string',ws,self.rc_to_range(row=0,col=next_column_to_use))
 
 		wb.save(filename)
+		print("\nExported dashboard")
 
 	def cut_menu_order(self, cuts_menus):
 		#Determine default menu order
@@ -676,8 +679,10 @@ class CalculationCoordinator(object):
 		cut_menus_order = {cut_menu[0]: 0 for cut_menu in cuts_menus}
 		if 'cut_menu_order' in self.config.config:
 			default_order_by_menu = {menu_title: order for (order, menu_title) in enumerate(self.config.config['cut_menu_order'])}
+			logging.debug('Default order by menu is ' + str(default_order_by_menu))
 			cut_menus_order = {cut_menu: self.menu_order(cut_menu, default_order_by_menu) for cut_menu in cut_menus_order}
 		sorted_cut_menus = sorted(cut_menus_order,key=lambda cut: cut_menus_order[cut])
+		logging.debug('Sorted menu is ' + str(sorted_cut_menus))
 		return sorted_cut_menus
 
 	def menu_order(self, menu_item, default_menu_order):
