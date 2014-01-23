@@ -27,8 +27,9 @@ class WriteExcelTestCase(unittest.TestCase):
 										}
 		config_reader = ConfigurationReader.ConfigurationReader()
 		config_reader.config['excel_template_file'] = 'test_file.xlsx'
-		self.cuts_for_excel_menu_results = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None']]
-		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_results,'historical':[['Region', 'static', 'Region', 'Corps','None']]}
+		config_reader.config['cut_menu_order'] = ['Region','Subject','Grade']
+		self.cuts_for_excel_menu_results = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None'],['Gender', 'static', 'Gender', 'Region', 'Corps']]
+		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_results,'historical':[['Region', 'static', 'Region', 'Corps','None']],'cuts_2':[],'cuts_3':[]}
 		config_reader.cuts_for_excel_menu = mock.MagicMock(side_effect= lambda **arg: return_for_cuts_for_excel_menu[arg['menu']])
 		coordinator.config = config_reader
 
@@ -101,6 +102,12 @@ class WriteExcelTestCase(unittest.TestCase):
 			print(row_values)
 			print(expected_row)
 			self.assertTrue(row_matches_expected)
+
+	def test_cut_menu_order(self):
+		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
+		assert ws.cell(row=0,column=5).value == "Region"
+		assert ws.cell(row=1,column=5).value == "Grade"
+		assert ws.cell(row=2,column=5).value == "Gender"
 
 	def test_writing_menu_translations(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
@@ -209,9 +216,9 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertTrue( 'cuts_config' in range_names)
 		self.assertTrue( 'default_menu' in range_names)
 		self.assertTrue( 'cuts_head' in range_names)
-		self.assertEqual( wb.get_named_range('cuts').destinations[0][1],'$F$1:$F$2')
-		self.assertEqual( wb.get_named_range('cuts_historical').destinations[0][1],'$F$3:$F$3')
-		self.assertEqual( wb.get_named_range('cuts_config').destinations[0][1],'$A$1:$E$2')
+		self.assertEqual( wb.get_named_range('cuts').destinations[0][1],'$F$1:$F$3')
+		self.assertEqual( wb.get_named_range('cuts_historical').destinations[0][1],'$F$4:$F$4')
+		self.assertEqual( wb.get_named_range('cuts_config').destinations[0][1],'$A$1:$E$3')
 		self.assertEqual( wb.get_named_range('default_menu').destinations[0][1],'$F$2:$F$101')
 		self.assertEqual( wb.get_named_range('default_mapping').destinations[0][1],'$F$2:$G$101')
 		self.assertEqual( wb.get_named_range('default_menu_start').destinations[0][1],'$F$2')

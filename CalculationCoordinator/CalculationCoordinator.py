@@ -510,8 +510,6 @@ class CalculationCoordinator(object):
 			gc.collect()
 			os.remove('significance_values.csv')
 
-
-
 		wb = load_workbook(filename)
 
 		#Remove existing named ranges
@@ -568,19 +566,33 @@ class CalculationCoordinator(object):
 		range_width = ws.get_highest_column() - 1
 		range_height = ws.get_highest_row() -1 
 		wb.create_named_range('cuts_config',ws,self.rc_to_range(row=0,col=0,width=range_width + 1,height=range_height + 1))
-
+		
 		highest_column = ws.get_highest_column()
-		for menu_i, cut_menu in enumerate(cuts_menus):
-			ws.cell(row=menu_i, column = highest_column).value = cut_menu[0]
+		for menu_i, cut_menu in enumerate(self.cut_menu_order(cuts_menus)):
+			ws.cell(row=menu_i, column = highest_column).value = cut_menu
 		wb.create_named_range('cuts',ws,self.rc_to_range(row=0,col=highest_column,width=1,height=range_height + 1))
 
 		#Add historical cut menu
 		menu_start = ws.get_highest_row()
 		menu = self.config.cuts_for_excel_menu(menu='historical')
 		menu_length = len(menu)
-		for menu_i, cut_menu in enumerate(menu):
+		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
 			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu[0]
 		wb.create_named_range('cuts_historical',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
+
+		#Add cut menu 2 and 3
+		menu_start = ws.get_highest_row()
+		menu = self.config.cuts_for_excel_menu(menu='cuts_2')
+		menu_length = len(menu)
+		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
+			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu[0]
+		wb.create_named_range('cuts_2',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
+		menu_start = ws.get_highest_row()
+		menu = self.config.cuts_for_excel_menu(menu='cuts_3')
+		menu_length = len(menu)
+		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
+			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu[0]
+		wb.create_named_range('cuts_3',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
 		#Add dimension menus
 		next_column_to_use = ws.get_highest_column()
@@ -655,6 +667,25 @@ class CalculationCoordinator(object):
 		wb.create_named_range('zero_string',ws,self.rc_to_range(row=0,col=next_column_to_use))
 
 		wb.save(filename)
+
+	def cut_menu_order(self, cuts_menus):
+		#Determine default menu order
+		if len(cuts_menus) == 0:
+			return cuts_menus
+		default_order_by_menu = {}
+		cut_menus_order = {cut_menu[0]: 0 for cut_menu in cuts_menus}
+		if 'cut_menu_order' in self.config.config:
+			default_order_by_menu = {menu_title: order for (order, menu_title) in enumerate(self.config.config['cut_menu_order'])}
+			cut_menus_order = {cut_menu: self.menu_order(cut_menu, default_order_by_menu) for cut_menu in cut_menus_order}
+		sorted_cut_menus = sorted(cut_menus_order,key=lambda cut: cut_menus_order[cut])
+		return sorted_cut_menus
+
+	def menu_order(self, menu_item, default_menu_order):
+		end_of_menu_order = len(default_menu_order)
+		if menu_item in default_menu_order:
+			return default_menu_order[menu_item]
+		else:
+			return end_of_menu_order
 
 	def adjust_zero_padding_of_heading(self, input_heading):
 		values = input_heading.split(";")
