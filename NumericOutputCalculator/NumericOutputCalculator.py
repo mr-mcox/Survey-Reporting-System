@@ -239,10 +239,10 @@ class NumericOutputCalculator(object):
 			df_with_no_results.set_index(cuts+['question_code'])
 			return df_with_no_results
 		base_results = base_results.ix[base_results['result_type'].isin(["sample_size","strong_count","weak_count"])]
-		base_results = base_results.set_index(cuts + ['question_code','result_type'])
+		base_results = base_results.drop_duplicates(cols=cuts + ['question_code','result_type'],take_last=False).set_index(cuts + ['question_code','result_type'])
 		base_results = pd.Series(base_results['aggregation_value'],index = base_results.index).unstack()
 		comparison_results = comparison_results.ix[comparison_results['result_type'].isin(["sample_size","strong_count","weak_count"])]
-		comparison_results = comparison_results.set_index(comparison_cuts  + ['question_code','result_type'])
+		comparison_results = comparison_results.drop_duplicates(cols=comparison_cuts + ['question_code','result_type'],take_last=False).set_index(comparison_cuts  + ['question_code','result_type'])
 		comparison_results = pd.Series(comparison_results['aggregation_value'],index = comparison_results.index).unstack()
 		comparison_results = comparison_results.rename(columns={'sample_size':'comp_sample_size',
 																'strong_count':'comp_strong_count',
