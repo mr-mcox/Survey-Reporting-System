@@ -152,8 +152,8 @@ class NumericOutputCalculator(object):
 			question_types = nfv.question_type.unique()
 			if 'Categorical_response' in question_types or 'Ordered_response' in question_types:
 				categorical_calculation = nfv.ix[nfv.question_type.isin(['Categorical_response','Ordered_response'])].groupby(cut_groupings + ['response']).aggregate(len).reset_index().rename(columns={'question_type':'aggregation_value','response':'result_type'})
-				categorical_calculation_samp_size = categorical_calculation.groupby('question_code').sum().rename(columns={'aggregation_value':'sample_size'})['sample_size']
-				categorical_calculation = categorical_calculation.set_index('question_code').join(categorical_calculation_samp_size).reset_index()
+				categorical_calculation_samp_size = categorical_calculation.groupby(cut_groupings).sum().rename(columns={'aggregation_value':'sample_size'})['sample_size']
+				categorical_calculation = categorical_calculation.set_index(cut_groupings).join(categorical_calculation_samp_size).reset_index()
 				categorical_calculation.aggregation_value = categorical_calculation.aggregation_value / categorical_calculation.sample_size
 				categorical_calculation.result_type = categorical_calculation.result_type.astype(int).astype(str)
 
@@ -257,6 +257,12 @@ class NumericOutputCalculator(object):
 		assert type(freq_table) == pd.DataFrame
 		df = freq_table
 		bootstrap_samples = 5000
+		#Testing results for NCS
+		# df_test = df.copy()
+		# df_test = df_test.reset_index()
+		# logging.debug("Sample of results for NCS freq_table\n" + str(df_test.ix[df_test['question_code']=='NCS',:].head()))
+		# logging.debug("Sample of results for CSI1 freq_table\n" + str(df_test.ix[df_test['question_code']=='CSI1',:].head()))
+		#End testing results
 		assert {'sample_size','strong_count','weak_count','comp_sample_size','comp_strong_count','comp_weak_count'} <= set(df.columns)
 		df['aggregation_value'] = ''
 		df['result_type'] = 'significance_value'
@@ -289,7 +295,6 @@ class NumericOutputCalculator(object):
 			df_skellam['mu1'] = (df_skellam.pop_1_strong_count / df_skellam.pop_1_sample_size) * df_skellam.pop_2_sample_size
 			df_skellam['mu2'] = (df_skellam.pop_1_weak_count / df_skellam.pop_1_sample_size) * df_skellam.pop_2_sample_size
 			df_skellam['obs'] = df_skellam.pop_2_strong_count - df_skellam.pop_2_weak_count
-			logging.debug('df_skellam is\n' + str(df_skellam.head()))
 			df_skellam['p'] = pd.DataFrame(skellam.cdf(df_skellam.obs, df_skellam.mu1, df_skellam.mu2), index=df_skellam.index)
 			df_skellam.ix[df_skellam.p > 0.975,'aggregation_value'] = 'H'
 			df_skellam.ix[df_skellam.p < 0.025,'aggregation_value'] = 'L'

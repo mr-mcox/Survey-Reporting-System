@@ -368,10 +368,10 @@ class CalculationCoordinator(object):
 			# logging.debug("question_codes are " + str(df.question_code))
 
 			#Remove questions that aren't specified
-			questions_to_show = df.question_code.unique().tolist()
-			if 'show_questions' in self.config.config:
-				questions_to_show = self.config.config['show_questions']
-			df = df.ix[df.question_code.isin(questions_to_show),:]
+			# questions_to_show = df.question_code.unique().tolist()
+			# if 'show_questions' in self.config.config:
+			# 	questions_to_show = self.config.config['show_questions']
+			# df = df.ix[df.question_code.isin(questions_to_show),:]
 			df = self.replace_dimensions_with_integers(df)
 			df = self.create_row_column_headers(df,cuts=cut_set)
 			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
