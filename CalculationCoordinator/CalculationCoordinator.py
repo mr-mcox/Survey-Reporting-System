@@ -108,9 +108,9 @@ class CalculationCoordinator(object):
 		# logging.debug("Starting df is " + str(df.head()))
 		# logging.debug("Starting df row is " + str(df.reset_index().ix[0,:]))
 		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
-		first_result_type = df.ix[0,'result_type']
+		first_result_type = df['result_type'].iloc[0]
 		# logging.debug("First result type is " + df.ix[0,'result_type'])
-		first_question_code = df.ix[0,'question_code']
+		first_question_code = df['question_code'].iloc[0]
 		if hasattr(self,'default_question'):
 			first_question_code = self.default_question
 		if hasattr(self,'default_result_type'):
