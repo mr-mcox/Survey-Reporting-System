@@ -5,3 +5,4 @@ alembic.ini
 *.log
 test_file.xlsx
 *.csv
+test_data/

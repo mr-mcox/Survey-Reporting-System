@@ -713,6 +713,7 @@ class CalculationCoordinator(object):
 			end_cell = cell.get_column_letter(col + width) + str(row+height)
 			return start_cell + ":" + end_cell
 
+	# @profile
 	def copy_sheet_to_workbook(self,src_wb_name,src_ws_name,dest_wb_name):
 		dest_wb = load_workbook(dest_wb_name)
 		is_csv_file = False
@@ -733,7 +734,7 @@ class CalculationCoordinator(object):
 					dest_ws.append(row)
 					if r % 500 == 0:
 						print("\r" + str(r) + " rows written", end= ' ')
-						dest_wb.save(dest_wb_name)
+						# dest_wb.save(dest_wb_name)
 						gc.collect()
 
 		else:
@@ -744,5 +745,5 @@ class CalculationCoordinator(object):
 			for i in range(src_ws.get_highest_column()):
 				for j in range(src_ws.get_highest_row()):
 					dest_ws.cell(row=j,column=i).value = src_ws.cell(row=j,column=i).value
-
+		print("\nSaving file, this may take a few minutes")
 		dest_wb.save(dest_wb_name)

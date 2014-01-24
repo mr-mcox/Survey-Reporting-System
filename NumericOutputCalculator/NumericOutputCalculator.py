@@ -282,11 +282,12 @@ class NumericOutputCalculator(object):
 		# print(df_no_agg_value.pop_2_strong_count)
 		# print(dist_1)
 		# print(dist_2)
-		df_no_agg_value['use_skellam'] = 0
+		df_no_agg_value['use_skellam'] = 1#This effectively ensures that skellam is always used. Change to 0 to sometimes use bootstrap
 		df_small = pd.DataFrame(df.ix[df.sample_size < 5,:],columns=['aggregation_value','result_type'])
 		if len(dist_1.index) > 0:
-			df_no_agg_value['sum_of_count_distributions'] =  dist_1 + dist_2
-			df_no_agg_value.ix[df_no_agg_value.sum_of_count_distributions < (df_no_agg_value.pop_2_sample_size * 1.1),'use_skellam'] = 1
+			pass
+			# df_no_agg_value['sum_of_count_distributions'] =  dist_1 + dist_2
+			# df_no_agg_value.ix[df_no_agg_value.sum_of_count_distributions < (df_no_agg_value.pop_2_sample_size * 1.1),'use_skellam'] = 1
 		else:
 			return df_small
 
