@@ -62,7 +62,7 @@ class CalculationCoordinator(object):
 		gc.collect()
 
 		if self.ensure_combination_for_every_set_of_demographics and len(cuts) > 0:
-			logging.debug("Cuts passing to modify " + str(cuts))
+			# logging.debug("Cuts passing to modify " + str(cuts))
 			calculations = self.modify_for_combinations_of_demographics(df=calculations,cuts=cuts,demographic_data=demographic_data)
 
 		aggregation_key = tuple(cuts)
@@ -108,6 +108,7 @@ class CalculationCoordinator(object):
 		# logging.debug("Starting df is " + str(df.head()))
 		# logging.debug("Starting df row is " + str(df.reset_index().ix[0,:]))
 		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
+		logging.debug('Modifying cuts\n' + str(cuts) + '\ndf is \n' + str(df.head()))
 		first_result_type = df['result_type'].iloc[0]
 		# logging.debug("First result type is " + df.ix[0,'result_type'])
 		first_question_code = df['question_code'].iloc[0]

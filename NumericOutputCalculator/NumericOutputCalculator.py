@@ -257,6 +257,7 @@ class NumericOutputCalculator(object):
 		assert type(freq_table) == pd.DataFrame
 		df = freq_table
 		bootstrap_samples = 5000
+		logging.debug('freq_table is\n' + str(df.head()))
 		#Testing results for NCS
 		# df_test = df.copy()
 		# df_test = df_test.reset_index()
@@ -276,20 +277,20 @@ class NumericOutputCalculator(object):
 		df.ix[df.pop_1_sample_size == 0,'aggregation_value'] = 'N'#Meaning that subset is identical to the comparison
 
 		df_no_agg_value = df.ix[df.aggregation_value == '',:]
-		dist_1 = pd.DataFrame(poisson.ppf(0.75,df_no_agg_value.pop_2_strong_count), index = df_no_agg_value.index)
-		dist_2 = pd.DataFrame(poisson.ppf(0.75,df_no_agg_value.pop_2_weak_count), index = df_no_agg_value.index)
+		# dist_1 = pd.DataFrame(poisson.ppf(0.75,df_no_agg_value.pop_2_strong_count), index = df_no_agg_value.index)
+		# dist_2 = pd.DataFrame(poisson.ppf(0.75,df_no_agg_value.pop_2_weak_count), index = df_no_agg_value.index)
 		# print("df is\n"+ str(df))
 		# print(df_no_agg_value.pop_2_strong_count)
 		# print(dist_1)
 		# print(dist_2)
 		df_no_agg_value['use_skellam'] = 1#This effectively ensures that skellam is always used. Change to 0 to sometimes use bootstrap
-		df_small = pd.DataFrame(df.ix[df.sample_size < 5,:],columns=['aggregation_value','result_type'])
-		if len(dist_1.index) > 0:
-			pass
-			# df_no_agg_value['sum_of_count_distributions'] =  dist_1 + dist_2
-			# df_no_agg_value.ix[df_no_agg_value.sum_of_count_distributions < (df_no_agg_value.pop_2_sample_size * 1.1),'use_skellam'] = 1
-		else:
-			return df_small
+		# df_small = pd.DataFrame(df.ix[df.sample_size < 5,:],columns=['aggregation_value','result_type'])
+		# if len(dist_1.index) > 0:
+		# 	pass
+		# 	# df_no_agg_value['sum_of_count_distributions'] =  dist_1 + dist_2
+		# 	# df_no_agg_value.ix[df_no_agg_value.sum_of_count_distributions < (df_no_agg_value.pop_2_sample_size * 1.1),'use_skellam'] = 1
+		# else:
+		# 	return df_small
 
 		df_skellam = df_no_agg_value.ix[df_no_agg_value.use_skellam==1]
 		if len(df_skellam.index) > 0:
@@ -372,7 +373,8 @@ class NumericOutputCalculator(object):
 			if pop_2_greater_percent < 0.025:
 				df_bootstrap.ix[index_item,'aggregation_value'] = 'L'
 		# logging.debug("df_small is\n" + str(df.ix[df.sample_size < 5,:]))
-		df_small = pd.DataFrame(df.ix[df.sample_size < 5,:],columns=['aggregation_value','result_type'])
+		df_small = pd.DataFrame(df.ix[df['aggregation_value'].isin(['S','N']),:],columns=['aggregation_value','result_type'])
 		df_skellam = pd.DataFrame(df_skellam,columns=['aggregation_value','result_type'])
 		df_bootstrap = pd.DataFrame(df_bootstrap,columns=['aggregation_value','result_type'])
+		logging.debug('df_small is\n' + str(df_small.head()) + 'df_skellam is\n' + str(df_skellam.head()) +  'df_bootstrap is\n' + str(df_bootstrap.head()))
 		return pd.concat([df_small,df_skellam,df_bootstrap])
