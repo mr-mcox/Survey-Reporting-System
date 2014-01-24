@@ -291,10 +291,12 @@ class CalculationCoordinator(object):
 				df = self.compute_aggregation(cut_demographic=cut_set,
 												composite_questions=self.config.config['composite_questions'],
 												calculator=calculator,
+												demographic_data=demographic_data,
 												)
 			else:
 				df = self.compute_aggregation(cut_demographic=cut_set,
 												calculator=calculator,
+												demographic_data=demographic_data,
 												)
 
 			#Remove samples sizes for questions that don't need them
@@ -356,11 +358,13 @@ class CalculationCoordinator(object):
 											composite_questions=self.config.config['composite_questions'],
 											no_stat_significance_computation=no_stat_significance_computation,
 											calculator = calculator,
+											demographic_data=demographic_data,
 											)
 			else:
 				df = self.compute_significance(cut_demographic=cut_set, 
 												no_stat_significance_computation=no_stat_significance_computation,
 												calculator = calculator,
+												demographic_data=demographic_data,
 												)			
 			#Remove samples sizes for questions that don't need them
 			assert 'question_code' in df.columns
@@ -411,6 +415,7 @@ class CalculationCoordinator(object):
 		gc.collect()
 
 		if compute_historical:
+			print("\nNow working on historical calculations")
 			#Output hist display values
 			output_df = self.compute_cuts_from_config(for_historical=True).set_index(['row_heading','column_heading'])
 			if not output_df.index.is_unique:
@@ -472,10 +477,10 @@ class CalculationCoordinator(object):
 		os.remove('significance_values.csv')
 
 		if compute_historical:
-			df_dv_hist.row_heading = df_dv_hist.row_heading.map(self.adjust_zero_padding_of_heading)
-			df_dv_hist.column_heading = df_dv_hist.column_heading.map(self.adjust_zero_padding_of_heading)
-			assert (df_dv_hist.row_heading.apply(len) == row_heading_length).all(), "Not all row headings have the same length\n" + str(df_dv_hist.row_heading.unique())
-			assert (df_dv_hist.column_heading.apply(len) == column_heading_length).all(), "Not all column headings have the same length\n" + str(df_dv_hist.column_heading.unique())
+			assert len(df_dv_hist.row_heading.apply(len).unique()) == 1, "Not all row headings have the same length\n" + str(df_dv_hist.row_heading.unique())
+			assert len(df_dv_hist.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(df_dv_hist.column_heading.unique())
+			row_heading_length = df_dv_hist.row_heading.apply(len).get(0)
+			column_heading_length = df_dv_hist.column_heading.apply(len).get(0)
 			df_dv_hist = df_dv_hist.set_index(['row_heading','column_heading'])
 			gc.collect()
 			output_series = pd.Series(df_dv_hist['aggregation_value'],index = df_dv_hist.index)
