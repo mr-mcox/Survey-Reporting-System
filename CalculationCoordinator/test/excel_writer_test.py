@@ -79,6 +79,8 @@ class WriteExcelTestCase(unittest.TestCase):
 			})
 		coordinator.setup_flush_file('df_dv.csv')
 		coordinator.flush_aggregation_to_file('df_dv.csv',master_aggregation)
+		coordinator.setup_flush_file('df_dv_hist.csv')
+		coordinator.flush_aggregation_to_file('df_dv_hist.csv',master_aggregation)
 		coordinator.compute_cuts_from_config = mock.MagicMock(return_value=master_aggregation)
 
 		master_siginificance = pd.DataFrame({
@@ -86,6 +88,10 @@ class WriteExcelTestCase(unittest.TestCase):
 				'column_heading': ['2;3','2;4','2;3','2;4'],
 				'aggregation_value': ['H','','','S']
 		})
+		coordinator.setup_flush_file('df_sig.csv')
+		coordinator.flush_aggregation_to_file('df_sig.csv',master_siginificance)
+		coordinator.setup_flush_file('df_sig_hist.csv')
+		coordinator.flush_aggregation_to_file('df_sig_hist.csv',master_siginificance)
 
 		#Set up demographics for dynamic columns
 		coordinator.demographic_data = pd.DataFrame({'respondent_id':[1,2,3],'region':['Atlanta','Atlanta','SoDak'],'GenderC':['male','female','female']})

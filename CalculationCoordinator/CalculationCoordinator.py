@@ -265,7 +265,7 @@ class CalculationCoordinator(object):
 		with open(file_name,"a+") as f:
 			for r, row in df.iterrows():
 				aggregation_value = row['aggregation_value']
-				if np.isnan(aggregation_value):
+				if type(aggregation_value) is not str and np.isnan(aggregation_value):
 					aggregation_value = ''
 				f.write(str(row['row_heading'])+',' + str(row['column_heading']) + ',' + str(aggregation_value) + '\n')
 
@@ -356,6 +356,9 @@ class CalculationCoordinator(object):
 		assert self.config != None
 		for_historical = kwargs.pop('for_historical',False)
 		all_aggregations = list()
+		file_name = kwargs.pop('flush_file',None)
+		if file_name is not None:
+			self.setup_flush_file(file_name)
 		#Set default question as not doing that seems to cause issues
 		if 'show_questions' in self.config.config:
 			self.default_question = self.config.config['show_questions'][0]
@@ -401,14 +404,18 @@ class CalculationCoordinator(object):
 			# df = df.ix[df.question_code.isin(questions_to_show),:]
 			df = self.replace_dimensions_with_integers(df)
 			df = self.create_row_column_headers(df,cuts=cut_set)
-			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
+			if file_name is not None:
+				self.flush_aggregation_to_file(file_name,pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
+			else:
+				all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
 			gc.collect()
-		return_table = pd.concat(all_aggregations)
 		# return_table.row_heading = return_table.row_heading.map(self.adjust_zero_padding_of_heading)
 		# return_table.column_heading = return_table.column_heading.map(self.adjust_zero_padding_of_heading)
 		# assert len(return_table.row_heading.apply(len).unique()) == 1, "Not all row headings have the same length\n" + str(return_table.row_heading.unique())
 		# assert len(return_table.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(return_table.column_heading.unique())
-		return return_table.drop_duplicates()
+		if file_name is None:
+			return_table = pd.concat(all_aggregations)
+			return return_table.drop_duplicates()
 
 	def export_to_excel(self):
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
@@ -419,48 +426,58 @@ class CalculationCoordinator(object):
 		compute_historical = self.compute_historical
 		#Output display values
 		self.compute_cuts_from_config(flush_file='df_dv.csv')
-		output_df = pd.read_csv('df_dv.csv').set_index(['row_heading','column_heading'])
-		# logging.debug("Snapshot of master table " + str(output_df.head()))
-		if not output_df.index.is_unique:
-			df = output_df.reset_index()
-			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
-			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-		output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_dv.csv',index=False)
+		# output_df = pd.read_csv('df_dv.csv').set_index(['row_heading','column_heading'])
+		# # logging.debug("Snapshot of master table " + str(output_df.head()))
+		# if not output_df.index.is_unique:
+		# 	df = output_df.reset_index()
+		# 	duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+		# 	logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+		# output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_dv.csv',index=False)
 		gc.collect()
 		
 		#Output significance values
-		output_df = self.compute_significance_from_config().set_index(['row_heading','column_heading'])
+		self.compute_significance_from_config(flush_file='df_sig.csv')
+		# output_df = pd.read_csv('df_sig.csv').set_index(['row_heading','column_heading'])
 		# logging.debug("Snapshot of master table " + str(output_df.head()))
-		if not output_df.index.is_unique:
-			df = output_df.reset_index()
-			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
-			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-		output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_sig.csv',index=False)
+		# if not output_df.index.is_unique:
+		# 	df = output_df.reset_index()
+		# 	duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+		# 	logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+		# output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_sig.csv',index=False)
 		gc.collect()
 
 		if compute_historical:
 			print("\nNow working on historical calculations")
 			#Output hist display values
-			output_df = self.compute_cuts_from_config(for_historical=True).set_index(['row_heading','column_heading'])
-			if not output_df.index.is_unique:
-				df = output_df.reset_index()
-				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
-				logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-			output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_dv_hist.csv',index=False)
+			self.compute_cuts_from_config(for_historical=True,flush_file='df_dv_hist.csv')
+			# output_df = pd.read_csv('df_dv_hist.csv').set_index(['row_heading','column_heading'])
+			# if not output_df.index.is_unique:
+			# 	df = output_df.reset_index()
+			# 	duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+			# 	logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+			# output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_dv_hist.csv',index=False)
 			gc.collect()
 			
 			#Output hist significance values
-			output_df = self.compute_significance_from_config(for_historical=True).set_index(['row_heading','column_heading'])
-			if not output_df.index.is_unique:
-				df = output_df.reset_index()
-				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
-				logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-			output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_sig_hist.csv',index=False)
+			self.compute_significance_from_config(for_historical=True,flush_file='df_sig_hist.csv')
+			# output_df = pd.read_csv('df_sig_hist.csv').set_index(['row_heading','column_heading'])
+			# if not output_df.index.is_unique:
+			# 	df = output_df.reset_index()
+			# 	duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+			# 	logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
+			# output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_sig_hist.csv',index=False)
 			gc.collect()
 
 		#Adjust headings and output
 		df_dv = pd.read_csv('df_dv.csv')
 		os.remove('df_dv.csv')
+		#Check that there are not duplicates
+		if not df_dv.set_index(['row_heading','column_heading']).index.is_unique:
+			df = df_dv
+			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+			logging.warning("Duplicate headers found including: " + str(df_dv[df_dv.index.isin(duplicate_index_df.index)].head()))
+		df_dv = df_dv.drop_duplicates(cols=['row_heading','column_heading'],take_last=False)
+		#Adjust headings
 		df_dv.row_heading = df_dv.row_heading.astype(str)
 		df_dv.column_heading = df_dv.column_heading.astype(str)
 		df_dv.row_heading = df_dv.row_heading.map(self.adjust_zero_padding_of_heading)
@@ -487,6 +504,13 @@ class CalculationCoordinator(object):
 
 		df_sig = pd.read_csv('df_sig.csv')
 		os.remove('df_sig.csv')
+		#Check that there are not duplicates
+		if not df_sig.set_index(['row_heading','column_heading']).index.is_unique:
+			df = df_sig
+			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+			logging.warning("Duplicate headers found including: " + str(df_sig[df_sig.index.isin(duplicate_index_df.index)].head()))
+		df_sig = df_sig.drop_duplicates(cols=['row_heading','column_heading'],take_last=False)
+		#Adjust headings
 		df_sig.row_heading = df_sig.row_heading.astype(str)
 		df_sig.column_heading = df_sig.column_heading.astype(str)
 		df_sig.row_heading = df_sig.row_heading.map(self.adjust_zero_padding_of_heading)
@@ -511,6 +535,13 @@ class CalculationCoordinator(object):
 		if compute_historical:
 			df_dv_hist = pd.read_csv('df_dv_hist.csv')
 			os.remove('df_dv_hist.csv')
+			#Check that there are not duplicates
+			if not df_dv_hist.set_index(['row_heading','column_heading']).index.is_unique:
+				df = df_dv_hist
+				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+				logging.warning("Duplicate headers found including: " + str(df_dv_hist[df_dv_hist.index.isin(duplicate_index_df.index)].head()))
+			df_dv_hist = df_dv_hist.drop_duplicates(cols=['row_heading','column_heading'],take_last=False)
+			#Adjust headings
 			df_dv_hist.row_heading = df_dv_hist.row_heading.astype(str)
 			df_dv_hist.column_heading = df_dv_hist.column_heading.astype(str)
 			assert len(df_dv_hist.row_heading.apply(len).unique()) == 1, "Not all row headings have the same length\n" + str(df_dv_hist.row_heading.unique())
@@ -534,6 +565,13 @@ class CalculationCoordinator(object):
 
 			df_sig_hist = pd.read_csv('df_sig_hist.csv')
 			os.remove('df_sig_hist.csv')
+			#Check that there are not duplicates
+			if not df_sig_hist.set_index(['row_heading','column_heading']).index.is_unique:
+				df = df_sig_hist
+				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
+				logging.warning("Duplicate headers found including: " + str(df_sig_hist[df_sig_hist.index.isin(duplicate_index_df.index)].head()))
+			df_sig_hist = df_sig_hist.drop_duplicates(cols=['row_heading','column_heading'],take_last=False)
+			#Adjust headings
 			df_sig_hist.row_heading = df_sig_hist.row_heading.astype(str)
 			df_sig_hist.column_heading = df_sig_hist.column_heading.astype(str)
 			df_sig_hist.row_heading = df_sig_hist.row_heading.map(self.adjust_zero_padding_of_heading)
