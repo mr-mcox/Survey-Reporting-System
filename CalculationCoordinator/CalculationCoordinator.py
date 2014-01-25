@@ -9,6 +9,7 @@ import os
 import gc
 import re
 import csv
+import numpy as np
 
 class CalculationCoordinator(object):
 	"""docstring for CalculationCoordinator"""
@@ -259,10 +260,26 @@ class CalculationCoordinator(object):
 				items_in_order.append(str(row[column]))
 		return ";".join(items_in_order)
 
+	def flush_aggregation_to_file(self,file_name,df):
+		assert {'row_heading','column_heading','aggregation_value'} <= set(df.columns)
+		with open(file_name,"a+") as f:
+			for r, row in df.iterrows():
+				aggregation_value = row['aggregation_value']
+				if np.isnan(aggregation_value):
+					aggregation_value = ''
+				f.write(str(row['row_heading'])+',' + str(row['column_heading']) + ',' + str(aggregation_value) + '\n')
+
+	def setup_flush_file(self,file_name):
+		with open(file_name,"w") as f:
+				f.write("row_heading,column_heading,aggregation_value\n")
+
 	# @profile
 	def compute_cuts_from_config(self,**kwargs):
 		assert self.config != None
 		for_historical = kwargs.pop('for_historical',False)
+		file_name = kwargs.pop('flush_file',None)
+		if file_name is not None:
+			self.setup_flush_file(file_name)
 		#Remove results for questions not used
 		self.results = self.remove_questions_not_used(self.results)
 		self.hist_results = self.remove_questions_not_used(self.hist_results)
@@ -311,14 +328,19 @@ class CalculationCoordinator(object):
 			
 			df = self.replace_dimensions_with_integers(df)
 			df = self.create_row_column_headers(df,cuts=cut_set)
-			all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
+			if file_name is not None:
+				self.flush_aggregation_to_file(file_name,pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
+			else:
+				all_aggregations.append(pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))
 			gc.collect()
-		return_table = pd.concat(all_aggregations)
+		
 		# return_table.row_heading = return_table.row_heading.map(self.adjust_zero_padding_of_heading)
 		# return_table.column_heading = return_table.column_heading.map(self.adjust_zero_padding_of_heading)
 		# assert len(return_table.row_heading.apply(len).unique()) == 1, "Not all row headings have the same length\n" + str(return_table.row_heading.unique())
 		# assert len(return_table.column_heading.apply(len).unique()) == 1, "Not all column headings have the same length\n" + str(return_table.column_heading.unique())
-		return return_table.drop_duplicates()
+		if file_name is None:
+			return_table = pd.concat(all_aggregations)
+			return return_table.drop_duplicates()
 
 	def remove_questions_not_used(self,df):
 		if type(df) != pd.DataFrame or'question_code' not in df.columns:
@@ -396,13 +418,14 @@ class CalculationCoordinator(object):
 		
 		compute_historical = self.compute_historical
 		#Output display values
-		output_df = self.compute_cuts_from_config().set_index(['row_heading','column_heading'])
+		self.compute_cuts_from_config(flush_file='df_dv.csv')
+		output_df = pd.read_csv('df_dv.csv').set_index(['row_heading','column_heading'])
 		# logging.debug("Snapshot of master table " + str(output_df.head()))
 		if not output_df.index.is_unique:
 			df = output_df.reset_index()
 			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
 			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-		output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_dv.csv')
+		output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_dv.csv',index=False)
 		gc.collect()
 		
 		#Output significance values
@@ -412,7 +435,7 @@ class CalculationCoordinator(object):
 			df = output_df.reset_index()
 			duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
 			logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-		output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_sig.csv')
+		output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_sig.csv',index=False)
 		gc.collect()
 
 		if compute_historical:
@@ -423,7 +446,7 @@ class CalculationCoordinator(object):
 				df = output_df.reset_index()
 				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
 				logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-			output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_dv_hist.csv')
+			output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_dv_hist.csv',index=False)
 			gc.collect()
 			
 			#Output hist significance values
@@ -432,11 +455,11 @@ class CalculationCoordinator(object):
 				df = output_df.reset_index()
 				duplicate_index_df = df.ix[df.duplicated(cols=['row_heading','column_heading']),:].set_index(['row_heading','column_heading'])
 				logging.warning("Duplicate headers found including: " + str(output_df[output_df.index.isin(duplicate_index_df.index)].head()))
-			output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_sig_hist.csv')
+			output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_sig_hist.csv',index=False)
 			gc.collect()
 
 		#Adjust headings and output
-		df_dv = pd.read_csv('df_dv.csv',index_col=0)
+		df_dv = pd.read_csv('df_dv.csv')
 		os.remove('df_dv.csv')
 		df_dv.row_heading = df_dv.row_heading.astype(str)
 		df_dv.column_heading = df_dv.column_heading.astype(str)
@@ -462,7 +485,7 @@ class CalculationCoordinator(object):
 		gc.collect()
 		os.remove('display_values.csv')
 
-		df_sig = pd.read_csv('df_sig.csv',index_col=0)
+		df_sig = pd.read_csv('df_sig.csv')
 		os.remove('df_sig.csv')
 		df_sig.row_heading = df_sig.row_heading.astype(str)
 		df_sig.column_heading = df_sig.column_heading.astype(str)
@@ -486,7 +509,7 @@ class CalculationCoordinator(object):
 		os.remove('significance_values.csv')
 
 		if compute_historical:
-			df_dv_hist = pd.read_csv('df_dv_hist.csv',index_col=0)
+			df_dv_hist = pd.read_csv('df_dv_hist.csv')
 			os.remove('df_dv_hist.csv')
 			df_dv_hist.row_heading = df_dv_hist.row_heading.astype(str)
 			df_dv_hist.column_heading = df_dv_hist.column_heading.astype(str)
@@ -509,7 +532,7 @@ class CalculationCoordinator(object):
 			gc.collect()
 			os.remove('display_values.csv')
 
-			df_sig_hist = pd.read_csv('df_sig_hist.csv',index_col=0)
+			df_sig_hist = pd.read_csv('df_sig_hist.csv')
 			os.remove('df_sig_hist.csv')
 			df_sig_hist.row_heading = df_sig_hist.row_heading.astype(str)
 			df_sig_hist.column_heading = df_sig_hist.column_heading.astype(str)

@@ -77,6 +77,8 @@ class WriteExcelTestCase(unittest.TestCase):
 				'column_heading': ['2;3','2;4','2;3','2;4'],
 				'aggregation_value': [0.5,0.5,0.5,0.5]
 			})
+		coordinator.setup_flush_file('df_dv.csv')
+		coordinator.flush_aggregation_to_file('df_dv.csv',master_aggregation)
 		coordinator.compute_cuts_from_config = mock.MagicMock(return_value=master_aggregation)
 
 		master_siginificance = pd.DataFrame({
