@@ -250,7 +250,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
 		range_names = [r.name for r in wb.get_named_ranges()]
 		self.assertTrue( 'zero_string' in range_names)
-		self.assertEqual( str(ws.cell(wb.get_named_range('zero_string').destinations[0][1] ).value), '0' )
+		self.assertEqual( ws.cell(wb.get_named_range('zero_string').destinations[0][1] ).value, 0 )
 
 	def test_question_code_mapping_provided(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')

@@ -1,27 +1,13 @@
 To implement:
- ✔ If both demographics and results have survey code, join on survey code @done (14-01-19 12:38)
- ✔ Pull results for multiple surveys @done (14-01-19 13:05)
- ✔ Flag for cuts to create that adds survey code to all cuts @done (14-01-19 13:14)
- ✔ Include survey_code in result output if there is more than one survey listed @done (14-01-19 13:39)
- ✔ Flag for historical on cuts to create only includes those cuts marked to be on historical menu @done (14-01-19 13:49)
- ✔ Copy of create from config that does historical stuff (include new input of results and demographics) @done (14-01-19 14:26)
- ✔ Menu item on cuts create seperate menu for each config @done (14-01-19 15:08)
- ✔ Test and determine why there aren't outputs for historical - it appears that it removes all confidential @done (14-01-21 07:39)
- ✔ Export survey code column @done (14-01-21 10:55)
- ✔ Investigate why survey results only exported for MYS @done (14-01-21 10:29)
- ✔ Determine why composite isn't working @done (14-01-21 10:48)
- ✔ Optimize statistical significance computations @done (14-01-21 13:15)
- ✔ Fix errors caused by pandas upgrade @done (14-01-21 19:02)
- ✔ Create manner of rolling up results that doesn't cause memory to explode @done (14-01-22 10:04)
- ✔ Blank demographic includes blank menu @done (14-01-22 12:23)
- ✔ Create default order for menu @done (14-01-23 07:47)
- ✔ Additional cuts menus @done (14-01-23 07:47)
+ ✔ Verify that one can open and copy data really quickly with optimized reader @done (14-01-25 17:09)
+ ✔ Create any non-reserved sheet names present in the original data @done (14-01-25 17:29)
+ ✔ Copy data for lookups workbook @done (14-01-25 18:04)
+ ✔ Read and re-set names for lookups workbook @done (14-01-25 18:04)
+ ✔ Set range names for main sheets based on length of output @done (14-01-25 18:10)
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
   ☐ Fix chained 
 Refactor:
-  ✔ Numeric calculator nfv only uses required columns @done (14-01-19 16:21)
-  ✔ Add question specific information back to computation so that we further reduce the number of columns @done (14-01-21 10:50)
   ☐ Combine compute_cuts_from_config and compute_sig_from_config
   ☐ Survey is indentified on questions table and not on results table
   ☐ Convert keys for CalculationCorinator to set to avoid order issues
@@ -39,6 +25,25 @@ Risks:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+ ✔ Create default order for menu @done (14-01-23 07:47) @project(To implement)
+ ✔ Additional cuts menus @done (14-01-23 07:47) @project(To implement)
+ ✔ Blank demographic includes blank menu @done (14-01-22 12:23) @project(To implement)
+ ✔ Create manner of rolling up results that doesn't cause memory to explode @done (14-01-22 10:04) @project(To implement)
+ ✔ Fix errors caused by pandas upgrade @done (14-01-21 19:02) @project(To implement)
+ ✔ Optimize statistical significance computations @done (14-01-21 13:15) @project(To implement)
+ ✔ Export survey code column @done (14-01-21 10:55) @project(To implement)
+ ✔ Add question specific information back to computation so that we further reduce the number of columns @done (14-01-21 10:50) @project(Refactor)
+ ✔ Determine why composite isn't working @done (14-01-21 10:48) @project(To implement)
+ ✔ Investigate why survey results only exported for MYS @done (14-01-21 10:29) @project(To implement)
+ ✔ Test and determine why there aren't outputs for historical - it appears that it removes all confidential @done (14-01-21 07:39) @project(To implement)
+ ✔ Numeric calculator nfv only uses required columns @done (14-01-19 16:21) @project(Refactor)
+ ✔ Menu item on cuts create seperate menu for each config @done (14-01-19 15:08) @project(To implement)
+ ✔ Copy of create from config that does historical stuff (include new input of results and demographics) @done (14-01-19 14:26) @project(To implement)
+ ✔ Flag for historical on cuts to create only includes those cuts marked to be on historical menu @done (14-01-19 13:49) @project(To implement)
+ ✔ Include survey_code in result output if there is more than one survey listed @done (14-01-19 13:39) @project(To implement)
+ ✔ Flag for cuts to create that adds survey code to all cuts @done (14-01-19 13:14) @project(To implement)
+ ✔ Pull results for multiple surveys @done (14-01-19 13:05) @project(To implement)
+ ✔ If both demographics and results have survey code, join on survey code @done (14-01-19 12:38) @project(To implement)
  ✔ Refactor modify_for_combinations_of_demographics so that it creates a blank DF and fills that in with results rather than adding individual rows @done (14-01-17 18:19) @project(To implement)
  ✔ If order of values in dimensions is specified, use those values @done (14-01-15 19:55) @project(To implement)
  ✔ Dimension returns value order if one is specified in config, otherwise None @done (14-01-15 19:25) @project(To implement)

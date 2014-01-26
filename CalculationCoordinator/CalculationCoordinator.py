@@ -2,7 +2,7 @@ import pandas as pd
 from SurveyReportingSystem.NumericOutputCalculator import NumericOutputCalculator
 from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
 import math
-from openpyxl import load_workbook, cell
+from openpyxl import load_workbook, cell, Workbook
 import copy
 import logging
 import os
@@ -417,6 +417,14 @@ class CalculationCoordinator(object):
 			return_table = pd.concat(all_aggregations)
 			return return_table.drop_duplicates()
 
+	def set_up_excel_spreadsheet(self, workbook):
+		orig_wb = load_workbook(filename = 'workbook', use_iterators = True)
+		new_wb = Workbook(optimized_write = True)
+		for sheet_name in orig_wb.get_sheet_names():
+			ws = new_wb.create_sheet()
+			ws.title = sheet_name
+		return new_wb
+
 	def export_to_excel(self):
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		assert 'excel_template_file' in self.config.config
@@ -468,6 +476,15 @@ class CalculationCoordinator(object):
 			# output_df.reset_index().drop_duplicates(cols=['row_heading','column_heading'],take_last=False).to_csv('df_sig_hist.csv',index=False)
 			gc.collect()
 
+		#Set up new workbook
+		orig_wb = load_workbook(filename = filename, use_iterators = True)
+		new_wb = Workbook(optimized_write = True)
+		reserved_sheet_names = ['Lookups','DisplayValues','SignificanceValues','HistDisplayValues','HistSignificanceValues']
+		for sheet_name in orig_wb.get_sheet_names():
+			if sheet_name not in reserved_sheet_names:
+				ws = new_wb.create_sheet()
+				ws.title = sheet_name
+
 		#Adjust headings and output
 		df_dv = pd.read_csv('df_dv.csv')
 		os.remove('df_dv.csv')
@@ -498,7 +515,7 @@ class CalculationCoordinator(object):
 		unstacked_values.to_csv('display_values.csv')
 		gc.collect()
 		print("Copying data from csv to excel workbook")
-		self.copy_sheet_to_workbook('display_values.csv','DisplayValues',filename)
+		self.copy_sheet_to_optimized_workbook('display_values.csv','DisplayValues',new_wb,'disp_value')
 		gc.collect()
 		os.remove('display_values.csv')
 
@@ -528,7 +545,7 @@ class CalculationCoordinator(object):
 		unstacked_values.to_csv('significance_values.csv')
 		gc.collect()
 		print("Copying data from csv to excel workbook")
-		self.copy_sheet_to_workbook('significance_values.csv','SignificanceValues',filename)
+		self.copy_sheet_to_optimized_workbook('significance_values.csv','SignificanceValues',new_wb,'sig_value')
 		gc.collect()
 		os.remove('significance_values.csv')
 
@@ -559,7 +576,7 @@ class CalculationCoordinator(object):
 			unstacked_values.to_csv('display_values.csv')
 			gc.collect()
 			print("Copying data from csv to excel workbook")
-			self.copy_sheet_to_workbook('display_values.csv','HistDisplayValues',filename)
+			self.copy_sheet_to_optimized_workbook('display_values.csv','HistDisplayValues',new_wb,'hist_disp_value')
 			gc.collect()
 			os.remove('display_values.csv')
 
@@ -589,54 +606,58 @@ class CalculationCoordinator(object):
 			unstacked_values.to_csv('significance_values.csv')
 			gc.collect()
 			print("Copying data from csv to excel workbook")
-			self.copy_sheet_to_workbook('significance_values.csv','HistSignificanceValues',filename)
+			self.copy_sheet_to_optimized_workbook('significance_values.csv','HistSignificanceValues',new_wb,'hist_sig_value')
 			gc.collect()
 			os.remove('significance_values.csv')
 
-		wb = load_workbook(filename)
+		# wb = load_workbook(filename)
 
 		#Remove existing named ranges
-		for range_name in wb.get_named_ranges():
-			wb.remove_named_range(range_name)
+		# for range_name in wb.get_named_ranges():
+		# 	wb.remove_named_range(range_name)
 
 		#Add ranges for display_values tab
-		dv_ws = wb.get_sheet_by_name('DisplayValues')
-		range_width = dv_ws.get_highest_column() -1
-		range_height = dv_ws.get_highest_row() - 1
-		wb.create_named_range('disp_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
-		wb.create_named_range('disp_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
-		wb.create_named_range('disp_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
+		# dv_ws = wb.get_sheet_by_name('DisplayValues')
+		# range_width = dv_ws.get_highest_column() -1
+		# range_height = dv_ws.get_highest_row() - 1
+		# wb.create_named_range('disp_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
+		# wb.create_named_range('disp_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
+		# wb.create_named_range('disp_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
 
-		#Add ranges for significance_values tab
-		dv_ws = wb.get_sheet_by_name('SignificanceValues')
-		range_width = dv_ws.get_highest_column() -1
-		range_height = dv_ws.get_highest_row() - 1
-		wb.create_named_range('sig_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
-		wb.create_named_range('sig_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
-		wb.create_named_range('sig_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
+		# #Add ranges for significance_values tab
+		# dv_ws = wb.get_sheet_by_name('SignificanceValues')
+		# range_width = dv_ws.get_highest_column() -1
+		# range_height = dv_ws.get_highest_row() - 1
+		# wb.create_named_range('sig_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
+		# wb.create_named_range('sig_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
+		# wb.create_named_range('sig_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
 
-		if compute_historical:
-			#Add ranges for display_values tab
-			dv_ws = wb.get_sheet_by_name('HistDisplayValues')
-			range_width = dv_ws.get_highest_column() -1
-			range_height = dv_ws.get_highest_row() - 1
-			wb.create_named_range('hist_disp_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
-			wb.create_named_range('hist_disp_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
-			wb.create_named_range('hist_disp_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
+		# if compute_historical:
+		# 	#Add ranges for display_values tab
+		# 	dv_ws = wb.get_sheet_by_name('HistDisplayValues')
+		# 	range_width = dv_ws.get_highest_column() -1
+		# 	range_height = dv_ws.get_highest_row() - 1
+		# 	wb.create_named_range('hist_disp_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
+		# 	wb.create_named_range('hist_disp_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
+		# 	wb.create_named_range('hist_disp_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
 
-			#Add ranges for significance_values tab
-			dv_ws = wb.get_sheet_by_name('HistSignificanceValues')
-			range_width = dv_ws.get_highest_column() -1
-			range_height = dv_ws.get_highest_row() - 1
-			wb.create_named_range('hist_sig_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
-			wb.create_named_range('hist_sig_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
-			wb.create_named_range('hist_sig_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
+		# 	#Add ranges for significance_values tab
+		# 	dv_ws = wb.get_sheet_by_name('HistSignificanceValues')
+		# 	range_width = dv_ws.get_highest_column() -1
+		# 	range_height = dv_ws.get_highest_row() - 1
+		# 	wb.create_named_range('hist_sig_value_col_head',dv_ws,self.rc_to_range(row=0,col=1,width=range_width,height=1))
+		# 	wb.create_named_range('hist_sig_value_row_head',dv_ws,self.rc_to_range(row=1,col=0,width=1,height=range_height))
+		# 	wb.create_named_range('hist_sig_value_values',dv_ws,self.rc_to_range(row=1,col=1,width=range_width,height=range_height))
 
-		if 'Lookups' in wb.get_sheet_names():
-			ws_to_del = wb.get_sheet_by_name('Lookups')
-			wb.remove_sheet(ws_to_del)
+		# if 'Lookups' in wb.get_sheet_names():
+		# 	ws_to_del = wb.get_sheet_by_name('Lookups')
+		# 	wb.remove_sheet(ws_to_del)
 
-		ws = wb.create_sheet()
+		print("Adding lookups tab")
+
+		lookup_wb = Workbook()
+
+		ws = lookup_wb.create_sheet()
 		ws.title = 'Lookups'
 		cuts_menus = self.config.cuts_for_excel_menu(menu=None)
 		max_menu_length = max([len(menu) for menu in cuts_menus])
@@ -644,16 +665,15 @@ class CalculationCoordinator(object):
 			for col_i, item in enumerate(cut_menu):
 				ws.cell(row=menu_i, column = col_i).value = item
 
-
 		#Added ranges for cut menu
 		range_width = ws.get_highest_column() - 1
 		range_height = ws.get_highest_row() -1 
-		wb.create_named_range('cuts_config',ws,self.rc_to_range(row=0,col=0,width=range_width + 1,height=range_height + 1))
+		lookup_wb.create_named_range('cuts_config',ws,self.rc_to_range(row=0,col=0,width=range_width + 1,height=range_height + 1))
 		
 		highest_column = ws.get_highest_column()
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(cuts_menus)):
 			ws.cell(row=menu_i, column = highest_column).value = cut_menu
-		wb.create_named_range('cuts',ws,self.rc_to_range(row=0,col=highest_column,width=1,height=range_height + 1))
+		lookup_wb.create_named_range('cuts',ws,self.rc_to_range(row=0,col=highest_column,width=1,height=range_height + 1))
 
 		#Add historical cut menu
 		menu_start = ws.get_highest_row()
@@ -661,7 +681,7 @@ class CalculationCoordinator(object):
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
 			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu[0]
-		wb.create_named_range('cuts_historical',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
+		lookup_wb.create_named_range('cuts_historical',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
 		#Add cut menu 2 and 3
 		menu_start = ws.get_highest_row()
@@ -669,13 +689,13 @@ class CalculationCoordinator(object):
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
 			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu[0]
-		wb.create_named_range('cuts_2',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
+		lookup_wb.create_named_range('cuts_2',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 		menu_start = ws.get_highest_row()
 		menu = self.config.cuts_for_excel_menu(menu='cuts_3')
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
 			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu[0]
-		wb.create_named_range('cuts_3',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
+		lookup_wb.create_named_range('cuts_3',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
 		#Add dimension menus
 		next_column_to_use = ws.get_highest_column()
@@ -740,18 +760,36 @@ class CalculationCoordinator(object):
 		#Add ranges for dimension menus
 		col_for_default_menu = range_width + 1
 		range_width = ws.get_highest_column() -1
-		wb.create_named_range('default_menu',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=1,height=100))
-		wb.create_named_range('default_mapping',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=2,height=100))
-		wb.create_named_range('default_menu_start',ws,self.rc_to_range(row=1,col=col_for_default_menu))
-		wb.create_named_range('cuts_head',ws,self.rc_to_range(row=0,col=col_for_default_menu + 1,
+		lookup_wb.create_named_range('default_menu',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=1,height=100))
+		lookup_wb.create_named_range('default_mapping',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=2,height=100))
+		lookup_wb.create_named_range('default_menu_start',ws,self.rc_to_range(row=1,col=col_for_default_menu))
+		lookup_wb.create_named_range('cuts_head',ws,self.rc_to_range(row=0,col=col_for_default_menu + 1,
 																width=range_width-col_for_default_menu,height=1))
 
 		#Add zero string value
 		next_column_to_use = ws.get_highest_column()
 		ws.cell(row=0,column=next_column_to_use).value = self.zero_integer_string
-		wb.create_named_range('zero_string',ws,self.rc_to_range(row=0,col=next_column_to_use))
+		lookup_wb.create_named_range('zero_string',ws,self.rc_to_range(row=0,col=next_column_to_use))
 
-		wb.save(filename)
+		lookup_wb.save('Lookups.xlsx')
+		#Copy lookups to main wb
+		lookup_wb = load_workbook(filename = 'Lookups.xlsx', use_iterators = True)
+		ws_to_copy = lookup_wb.get_sheet_by_name(name='Lookups')
+		lookup_ws = new_wb.create_sheet()
+		lookup_ws.title = "Lookups"
+		for r, row in enumerate(ws_to_copy.iter_rows()):
+			lookup_ws.append([cell.internal_value for cell in row])
+			if r % 500 == 0:
+				print("\r" + str(r) + " rows for lookups written", end= ' ')
+		#Copy ranges names
+		for wb_range in lookup_wb.get_named_ranges():
+			range_name = wb_range.name
+			new_wb.create_named_range(range_name,lookup_ws,lookup_wb.get_named_range(range_name).destinations[0][1])
+
+		os.remove('Lookups.xlsx')
+		gc.collect()
+		print("Saving dashboard")
+		new_wb.save(filename)
 		print("\nExported dashboard")
 
 	def cut_menu_order(self, cuts_menus):
@@ -790,6 +828,29 @@ class CalculationCoordinator(object):
 			start_cell =  cell.get_column_letter(col + 1) + str(row+1)
 			end_cell = cell.get_column_letter(col + width) + str(row+height)
 			return start_cell + ":" + end_cell
+
+	def copy_sheet_to_optimized_workbook(self,src_data,dest_ws,wb,range_name_prefix):
+		assert re.search('.csv$', src_data) is not None
+		ws = wb.create_sheet()
+		ws.title = dest_ws
+		max_col_width = 0
+		max_row_width = 0
+		with open(src_data) as f:
+				reader = csv.reader(f)
+				for r,row in enumerate(reader):
+					#Set maximums for headers
+					max_row_width = r
+					if (len(row)-1) > max_col_width:
+						max_col_width = (len(row)-1)
+
+					#Add row
+					ws.append(row)
+					if r % 500 == 0:
+						print("\r" + str(r) + " rows written", end= ' ')
+		wb.create_named_range(range_name_prefix + '_col_head',ws,self.rc_to_range(row=0,col=1,width=max_col_width,height=1))
+		wb.create_named_range(range_name_prefix + '_row_head',ws,self.rc_to_range(row=1,col=0,width=1,height=max_row_width))
+		wb.create_named_range(range_name_prefix + '_values',ws,self.rc_to_range(row=1,col=1,width=max_col_width,height=max_row_width))
+		return wb
 
 	# @profile
 	def copy_sheet_to_workbook(self,src_wb_name,src_ws_name,dest_wb_name):
