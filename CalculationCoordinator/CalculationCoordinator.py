@@ -508,7 +508,6 @@ class CalculationCoordinator(object):
 		gc.collect()
 		output_series = pd.Series(df_dv['aggregation_value'],index = df_dv.index)
 		gc.collect()
-		print("\nUnstacking values for output")
 		unstacked_values = output_series.unstack()
 		gc.collect()
 		print("Exporting display values to csv")
@@ -538,7 +537,6 @@ class CalculationCoordinator(object):
 		gc.collect()
 		output_series = pd.Series(df_sig['aggregation_value'],index = df_sig.index)
 		gc.collect()
-		print("\nUnstacking values for output")
 		unstacked_values = output_series.unstack()
 		gc.collect()
 		print("Exporting significance values to csv")
@@ -569,7 +567,6 @@ class CalculationCoordinator(object):
 			gc.collect()
 			output_series = pd.Series(df_dv_hist['aggregation_value'],index = df_dv_hist.index)
 			gc.collect()
-			print("\nUnstacking values for output")
 			unstacked_values = output_series.unstack()
 			gc.collect()
 			print("Exporting historical display values to csv")
@@ -599,7 +596,6 @@ class CalculationCoordinator(object):
 			gc.collect()
 			output_series = pd.Series(df_sig_hist['aggregation_value'],index = df_sig_hist.index)
 			gc.collect()
-			print("\nUnstacking values for output")
 			unstacked_values = output_series.unstack()
 			gc.collect()
 			print("Exporting historical significance values to csv")
@@ -844,7 +840,7 @@ class CalculationCoordinator(object):
 						max_col_width = (len(row)-1)
 
 					#Add row
-					ws.append(row)
+					ws.append([self.float_string_conversion(item) for item in row])
 					if r % 500 == 0:
 						print("\r" + str(r) + " rows written", end= ' ')
 		wb.create_named_range(range_name_prefix + '_col_head',ws,self.rc_to_range(row=0,col=1,width=max_col_width,height=1))
@@ -886,3 +882,9 @@ class CalculationCoordinator(object):
 					dest_ws.cell(row=j,column=i).value = src_ws.cell(row=j,column=i).value
 		print("\nSaving file, this may take a few minutes")
 		dest_wb.save(dest_wb_name)
+
+	def float_string_conversion(self, string):
+		try:
+			return float(string)
+		except ValueError:
+			return string
