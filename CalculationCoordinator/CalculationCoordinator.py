@@ -10,6 +10,7 @@ import gc
 import re
 import csv
 import numpy as np
+import pdb
 
 class CalculationCoordinator(object):
 	"""docstring for CalculationCoordinator"""
@@ -706,7 +707,8 @@ class CalculationCoordinator(object):
 		#Get results for dynamic dimensions
 		responses = self.results
 		demographic_data = self.demographic_data
-		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)		
+		results_for_menu = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data).results_with_dimensions		
+		results_for_menu = results_for_menu.ix[results_for_menu.response.notnull(),:]
 		if compute_historical:
 			dimension_titles.append('survey_code')
 		for dimension_title in dimension_titles:
@@ -731,13 +733,14 @@ class CalculationCoordinator(object):
 				parent_dimension = dynamic_parent_dimension[dimension_title]
 				assert parent_dimension in self.demographic_data.columns
 				assert dimension_title in self.demographic_data.columns
-				dimension_mapping = pd.DataFrame(calculator.results_with_dimensions,columns=[parent_dimension,dimension_title]).drop_duplicates().sort(columns=[parent_dimension,dimension_title])
+				dimension_mapping = pd.DataFrame(results_for_menu,columns=[parent_dimension,dimension_title]).drop_duplicates().sort(columns=[parent_dimension,dimension_title])
 				i = 0
 				for index, row_items in dimension_mapping.iterrows():
-					ws.cell(row=i+row_offset, column = next_column_to_use).value = row_items[dimension_title]
-					ws.cell(row=i+row_offset, column = next_column_to_use+1).value = integer_mapping[row_items[dimension_title]]
-					ws.cell(row=i+row_offset, column = next_column_to_use+2).value = row_items[parent_dimension]
-					i += 1
+					if row_items[dimension_title] in integer_mapping:
+						ws.cell(row=i+row_offset, column = next_column_to_use).value = row_items[dimension_title]
+						ws.cell(row=i+row_offset, column = next_column_to_use+1).value = integer_mapping[row_items[dimension_title]]
+						ws.cell(row=i+row_offset, column = next_column_to_use+2).value = row_items[parent_dimension]
+						i += 1
 				next_column_to_use += 3
 			else:
 				if dimension_title in all_together_label_for_title and all_together_label_for_title[dimension_title] is not None:
@@ -787,7 +790,7 @@ class CalculationCoordinator(object):
 			range_name = wb_range.name
 			new_wb.create_named_range(range_name,lookup_ws,lookup_wb.get_named_range(range_name).destinations[0][1])
 
-		os.remove('Lookups.xlsx')
+		# os.remove('Lookups.xlsx')
 		gc.collect()
 		print("Saving dashboard")
 		new_wb.save(filename)
