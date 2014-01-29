@@ -46,3 +46,18 @@ Feature: When assembling dimensions, show all value combinations so that there a
 		Given the gender ethnicity is "dynamic" with "dynamic_parent_dimension" of "region"
 		When compute net with cut_demographic = corps and gender is run
 		Then there is a row with 2013 and Female
+
+	Scenario: When there is a row in the demographics file but no row in the results and the dimension is dynamic, don't include the row
+			Given net formatted values
+			| respondent_id | question_code | net_formatted_value |
+			| 1             | 1             | 1                   |
+			| 2             | 1             | 0                   |
+		Given demographic data
+			| respondent_id | region  | gender |
+			| 1             | Atlanta | Female |
+			| 2             | Atlanta | Male   |
+			| 3             | SoDak   | Female   |
+		Given ensure_combination_for_every_set_of_demographics is True
+		Given the gender ethnicity is "dynamic" with "dynamic_parent_dimension" of "region"
+		When compute net with cut_demographic = region and gender is run
+		Then there is not a row with SoDak and Female

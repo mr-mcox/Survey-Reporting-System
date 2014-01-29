@@ -702,6 +702,11 @@ class CalculationCoordinator(object):
 		dynamic_parent_dimension = {dimension.title: dimension.dynamic_parent_dimension for dimension in self.config.all_dimensions() if dimension.dimension_type=='dynamic'}
 		dimension_titles.append('question_code')
 		dimension_titles.append('result_type')
+
+		#Get results for dynamic dimensions
+		responses = self.results
+		demographic_data = self.demographic_data
+		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)		
 		if compute_historical:
 			dimension_titles.append('survey_code')
 		for dimension_title in dimension_titles:
@@ -726,7 +731,7 @@ class CalculationCoordinator(object):
 				parent_dimension = dynamic_parent_dimension[dimension_title]
 				assert parent_dimension in self.demographic_data.columns
 				assert dimension_title in self.demographic_data.columns
-				dimension_mapping = pd.DataFrame(self.demographic_data,columns=[parent_dimension,dimension_title]).drop_duplicates().sort(columns=[parent_dimension,dimension_title])
+				dimension_mapping = pd.DataFrame(calculator.results_with_dimensions,columns=[parent_dimension,dimension_title]).drop_duplicates().sort(columns=[parent_dimension,dimension_title])
 				i = 0
 				for index, row_items in dimension_mapping.iterrows():
 					ws.cell(row=i+row_offset, column = next_column_to_use).value = row_items[dimension_title]

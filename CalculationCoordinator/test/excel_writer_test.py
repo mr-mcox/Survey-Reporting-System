@@ -1,5 +1,5 @@
 import unittest
-from CalculationCoordinator import CalculationCoordinator
+from SurveyReportingSystem.CalculationCoordinator import CalculationCoordinator
 import pandas as pd
 import os, sys
 from openpyxl import load_workbook
@@ -16,7 +16,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		wb.create_named_range('disp_value_col_head',ws,'$A$1')
 		ws.title = "ExistingData"
 		wb.save('test_file.xlsx')
-		coordinator = CalculationCoordinator()
+		coordinator = CalculationCoordinator.CalculationCoordinator()
 		coordinator.compute_historical = True
 		self.mapping_values = ['dos','uno','tres']
 		self.mapping_integers = ['2','1','3']

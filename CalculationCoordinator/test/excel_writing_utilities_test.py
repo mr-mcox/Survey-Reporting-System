@@ -1,5 +1,5 @@
 import unittest
-from CalculationCoordinator import CalculationCoordinator
+from SurveyReportingSystem.CalculationCoordinator import CalculationCoordinator
 from openpyxl import load_workbook, Workbook
 import os
 
