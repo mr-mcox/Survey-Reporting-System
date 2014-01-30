@@ -4,6 +4,9 @@ To implement:
  ✔ Copy data for lookups workbook @done (14-01-25 18:04)
  ✔ Read and re-set names for lookups workbook @done (14-01-25 18:04)
  ✔ Set range names for main sheets based on length of output @done (14-01-25 18:10)
+ ☐ Historical doesn't output Culture 7. Re-export.
+ ☐ Find and fix the historical tab menu export.
+
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
   ☐ Fix chained 
