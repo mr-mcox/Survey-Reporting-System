@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"results",
+				"results_for_menu"
+			],
+			[
+				"ca",
+				"calculator"
+			],
+			[
 				"num",
 				"num_rows"
 			],
@@ -356,10 +364,84 @@
 	"buffers":
 	[
 		{
+			"file": "CalculationCoordinator/features/output_all_dimension_value_combinations.feature",
+			"settings":
+			{
+				"buffer_size": 3502,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 99 files for \"there is not a row\" (regex)\n\nUnable to open /Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem\nC:\\Users\\mcox\\Dropbox\\MDIS\\Code\\Python\\SurveyReportingSystem\\CalculationCoordinator\\features\\output_all_dimension_value_combinations.feature:\n   30  		Given the gender ethnicity is \"dynamic\" with \"dynamic_parent_dimension\" of \"region\"\n   31  		When compute net with cut_demographic = region and gender is run\n   32: 		Then there is not a row with SoDak and Female\n   33  \n   34  	Scenario: When a combination of values would not be shown for a cut because no values exist, and the dimension type is \"dynamic\" but parent dimension isn't in the cut, there should be a row \n   ..\n   61  		Given the gender ethnicity is \"dynamic\" with \"dynamic_parent_dimension\" of \"region\"\n   62  		When compute net with cut_demographic = region and gender is run\n   63: 		Then there is not a row with SoDak and Female\n\nC:\\Users\\mcox\\Dropbox\\MDIS\\Code\\Python\\SurveyReportingSystem\\CalculationCoordinator\\features\\steps\\calcuation_coordinator_steps.py:\n  232  	assert res.index.isin([('SoDak','Female')]).sum() > 0\n  233  \n  234: @then('there is not a row with SoDak and Female')\n  235  def step(context):\n  236  	res = context.result.set_index(['region','gender'])\n\n3 matches across 2 files\n",
+			"settings":
+			{
+				"buffer_size": 1298,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "CalculationCoordinator/features/steps/calcuation_coordinator_steps.py",
+			"settings":
+			{
+				"buffer_size": 10584,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "CalculationCoordinator/CalculationCoordinator.py",
+			"settings":
+			{
+				"buffer_size": 45575,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/C/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1314MYS/MYS_working_folder/config.yaml",
+			"settings":
+			{
+				"buffer_size": 9482,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "CalculationCoordinator/test/excel_writer_test.py",
+			"settings":
+			{
+				"buffer_size": 14616,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "NumericOutputCalculator/NumericOutputCalculator.py",
+			"settings":
+			{
+				"buffer_size": 22460,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "developmet.TODO",
 			"settings":
 			{
-				"buffer_size": 14008,
+				"buffer_size": 14108,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
+			"settings":
+			{
+				"buffer_size": 5939,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "test_data/execution_demonstration.py",
+			"settings":
+			{
+				"buffer_size": 2529,
 				"line_ending": "Unix"
 			}
 		}
@@ -367,7 +449,7 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 87.0,
+		"height": 35.0,
 		"selected_items":
 		[
 			[
@@ -447,7 +529,7 @@
 				"Set Syntax: JavaScript"
 			]
 		],
-		"width": 449.0
+		"width": 400.0
 	},
 	"console":
 	{
@@ -464,6 +546,8 @@
 	},
 	"file_history":
 	[
+		"/C/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writing_utilities_test.py",
+		"/C/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/developmet.TODO",
 		"/C/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/ResultsRetriever.py",
 		"/C/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/db_connect_string.txt",
 		"/C/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/execution_demonstration.py",
@@ -511,9 +595,10 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 90.0,
 		"where_history":
 		[
+			"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem,C:\\Users\\mcox\\Dropbox\\MDIS\\Code\\Python\\SurveyReportingSystem",
 			"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem"
 		]
 	},
@@ -522,6 +607,12 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Duplicate",
+			"historical",
+			"calculato",
+			"dynamic_parent_dimension",
+			"dynamic",
+			"there is not a row",
 			"value",
 			"results",
 			"src_ws_name",
@@ -630,15 +721,257 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
+					"file": "CalculationCoordinator/features/output_all_dimension_value_combinations.feature",
+					"settings":
+					{
+						"buffer_size": 3502,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3502,
+								3502
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 550.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"settings":
+					{
+						"buffer_size": 1298,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										450,
+										468
+									],
+									[
+										885,
+										903
+									],
+									[
+										1143,
+										1161
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "CalculationCoordinator/features/steps/calcuation_coordinator_steps.py",
+					"settings":
+					{
+						"buffer_size": 10584,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8861,
+								8861
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3015.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "CalculationCoordinator/CalculationCoordinator.py",
+					"settings":
+					{
+						"buffer_size": 45575,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								35673,
+								35134
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 30.0,
+						"translation.y": 10178.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1314MYS/MYS_working_folder/config.yaml",
+					"settings":
+					{
+						"buffer_size": 9482,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								126,
+								126
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "CalculationCoordinator/test/excel_writer_test.py",
+					"settings":
+					{
+						"buffer_size": 14616,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								540,
+								540
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "NumericOutputCalculator/NumericOutputCalculator.py",
+					"settings":
+					{
+						"buffer_size": 22460,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3296,
+								3319
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 430.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
 					"file": "developmet.TODO",
 					"settings":
 					{
-						"buffer_size": 14008,
+						"buffer_size": 14108,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								515,
+								515
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PlainTasks/PlainTasks.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
+					"settings":
+					{
+						"buffer_size": 5939,
 						"regions":
 						{
 						},
@@ -651,11 +984,37 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/PlainTasks/PlainTasks.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
+						"translation.y": 1173.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "test_data/execution_demonstration.py",
+					"settings":
+					{
+						"buffer_size": 2529,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1273,
+								1273
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 913.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
@@ -711,7 +1070,7 @@
 		[
 			[
 				"num",
-				"NumericOutputCalculator/NumericOutputCalculator.py"
+				"SurveyReportingSystem/NumericOutputCalculator/NumericOutputCalculator.py"
 			],
 			[
 				"numer",
@@ -792,6 +1151,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 315.0,
+	"side_bar_width": 416.0,
 	"status_bar_visible": true
 }

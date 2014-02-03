@@ -3,11 +3,19 @@ from unittest import mock
 from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
 from CalculationCoordinator import CalculationCoordinator
 import pandas as pd
+import os
 
 @given('a config reader that returns ["region","gender"] and ["region",None]')
 def step(context):
 	config_reader = ConfigurationReader.ConfigurationReader()
 	config_reader.cuts_to_be_created = mock.MagicMock(return_value = [["region","gender"], ["region",None]])
+	context.coordinator.config = config_reader
+	context.config_reader = config_reader
+
+@given('a config reader that returns ["region","gender"]')
+def step(context):
+	config_reader = ConfigurationReader.ConfigurationReader()
+	config_reader.cuts_to_be_created = mock.MagicMock(return_value = [["region","gender"]])
 	context.coordinator.config = config_reader
 	context.config_reader = config_reader
 
@@ -95,3 +103,13 @@ def step(context):
 @when('compute_significance_from_config is run')
 def step(context):
 	context.result = context.coordinator.compute_significance_from_config()
+
+@when('export_cuts_to_files is run')
+def step(context):
+	context.result = context.coordinator.export_cuts_to_files()
+
+@then('there is a csv file named "cut_1.csv" that has region and gender columns')
+def step(context):
+	result = pd.read_csv('cut_1.csv')
+	assert {'region','gender'} <= set(result.columns)
+	os.remove('cut_1.csv')

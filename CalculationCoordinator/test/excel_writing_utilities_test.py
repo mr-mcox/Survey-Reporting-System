@@ -19,7 +19,7 @@ class ExcelWritingUtilityTestCase(unittest.TestCase):
 		ws2.title = "WB2Sheet"
 		wb2.save('wb2.xlsx')
 
-		cc = CalculationCoordinator()
+		cc = CalculationCoordinator.CalculationCoordinator()
 		cc.copy_sheet_to_workbook('wb1.xlsx','WB1Sheet','wb2.xlsx')
 
 		orig_sheet = load_workbook(filename = r'wb2.xlsx').get_sheet_by_name(name = 'WB2Sheet')
@@ -34,7 +34,7 @@ class ExcelWritingUtilityTestCase(unittest.TestCase):
 		ws2.title = "WB1Sheet"
 		wb2.save('wb2.xlsx')
 
-		cc = CalculationCoordinator()
+		cc = CalculationCoordinator.CalculationCoordinator()
 		cc.copy_sheet_to_workbook('wb1.xlsx','WB1Sheet','wb2.xlsx')
 
 		test_sheet = load_workbook(filename = r'wb2.xlsx').get_sheet_by_name(name = 'WB1Sheet')

@@ -274,6 +274,40 @@ class CalculationCoordinator(object):
 		with open(file_name,"w") as f:
 				f.write("row_heading,column_heading,aggregation_value\n")
 
+	def export_cuts_to_files(self,**kwargs):
+		assert self.config != None
+		self.results = self.remove_questions_not_used(self.results)
+		self.hist_results = self.remove_questions_not_used(self.hist_results)
+		for_historical = kwargs.pop('for_historical',False)
+		cut_sets = self.config.cuts_to_be_created(for_historical=for_historical)
+
+		responses = self.results
+		demographic_data = self.demographic_data
+		if for_historical:
+			responses = self.hist_results
+			demographic_data = self.hist_demographic_data
+
+		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
+		for i, cut_set in enumerate(cut_sets):
+			print("\rCompleted {0:.0f} % of basic computations. Currently working on {1}".format(i/len(cut_sets)*100,str(cut_set)),end=" ")
+
+			df = pd.DataFrame()
+			if 'composite_questions' in self.config.config:
+				df = self.compute_aggregation(cut_demographic=cut_set,
+												composite_questions=self.config.config['composite_questions'],
+												calculator=calculator,
+												demographic_data=demographic_data,
+												)
+			else:
+				df = self.compute_aggregation(cut_demographic=cut_set,
+												calculator=calculator,
+												demographic_data=demographic_data,
+												)
+			file_name = "cut_" + str(i+1) + ".csv"
+			df.to_csv(file_name)
+			gc.collect()
+
+
 	# @profile
 	def compute_cuts_from_config(self,**kwargs):
 		assert self.config != None
@@ -764,8 +798,8 @@ class CalculationCoordinator(object):
 		#Add ranges for dimension menus
 		col_for_default_menu = range_width + 1
 		range_width = ws.get_highest_column() -1
-		lookup_wb.create_named_range('default_menu',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=1,height=100))
-		lookup_wb.create_named_range('default_mapping',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=2,height=100))
+		lookup_wb.create_named_range('default_menu',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=1,height=1000))
+		lookup_wb.create_named_range('default_mapping',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=2,height=1000))
 		lookup_wb.create_named_range('default_menu_start',ws,self.rc_to_range(row=1,col=col_for_default_menu))
 		lookup_wb.create_named_range('cuts_head',ws,self.rc_to_range(row=0,col=col_for_default_menu + 1,
 																width=range_width-col_for_default_menu,height=1))
