@@ -131,7 +131,7 @@ def step(context, person_id, value):
 def step(context,question_code,value):
     if value == 'blank':
         print( context.result )
-        assert np.isnan( context.result.set_index('question_code').loc[question_code,'aggregation_value'] )
+        assert np.isnan( context.result.set_index(['question_code','result_type']).ix[(question_code,'net'),'aggregation_value'] )
     else:
         if 'net_formatted_value' in context.result.columns:
             assert context.result.set_index('question_code').loc[question_code,'aggregation_value'] == float(value)

@@ -1,6 +1,5 @@
 Feature: Accurately compute composite questions like Net Corps Strength and Net Corps Learning
 	Scenario: Compute composite question results for strong percent
-		Scenario: When net formatted values are provided for a question, output net by question
 		Given net formatted values
 			| question_code | net_formatted_value |
 			| q1             | 0                   |
@@ -16,7 +15,6 @@ Feature: Accurately compute composite questions like Net Corps Strength and Net 
 		Then the display_value for string based question_code NQ is 0.5
 
 	Scenario: Compute composite question results for strong percent and demographics
-		Scenario: When net formatted values are provided for a question, output net by question
 		Given net formatted values
 			| question_code | net_formatted_value | respondent_id |
 			| q1             | 0                   | 1 |
@@ -37,7 +35,6 @@ Feature: Accurately compute composite questions like Net Corps Strength and Net 
 		Then the regional display_value for string based question_code NQ and region "Atlanta" is 0.25
 
 	Scenario: Compute composite question results for strong count
-		Scenario: When net formatted values are provided for a question, output net by question
 		Given net formatted values
 			| question_code | net_formatted_value |
 			| q1             | 0                   |
@@ -53,7 +50,6 @@ Feature: Accurately compute composite questions like Net Corps Strength and Net 
 		Then the display_value for string based question_code NQ is 1.5
 
 	Scenario: Compute composite question results for sample_size count
-		Scenario: When net formatted values are provided for a question, output net by question
 		Given net formatted values
 			| question_code | net_formatted_value |
 			| q1             | 0                   |
@@ -67,3 +63,19 @@ Feature: Accurately compute composite questions like Net Corps Strength and Net 
 			| q3             | 0                   |
 		When compute sample_size is run with composite of NQ is q1 and q2
 		Then the display_value for string based question_code NQ is 3
+
+	Scenario: When composite questions are confidential, composite question should be blank when survey size is small
+		Given net formatted values
+			| question_code | net_formatted_value | is_confidential |
+			| q1             | 0                   | 1 |
+			| q1             | 1                   | 1 |
+			| q1             | 1                   | 1 |
+			| q2             | 1                   | 1 |
+			| q2             | -1                  | 1 |
+			| q2             | 0                   | 1 |
+			| q3             | 0                   | 1 |
+			| q3             | -1                  | 1 |
+			| q3             | 0                   | 1 |
+		When compute net is run with composite of NQ is q1 and q2
+		Then the display_value for string based question_code NQ is blank
+

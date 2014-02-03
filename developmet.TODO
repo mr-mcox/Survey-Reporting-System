@@ -6,8 +6,8 @@ To implement:
  ✔ Set range names for main sheets based on length of output @done (14-01-25 18:10)
  ✔ Historical doesn't output Culture 7. Re-export. @done (14-02-03 14:31)
  ✔ Find and fix the historical tab menu export. @done (14-02-03 14:31)
- ☐ Fix default menu length
- ☐ Fix composite menu showing results by default
+ ✔ Fix default menu length @done (14-02-03 15:48)
+ ✔ Fix composite menu showing results by default @done (14-02-03 16:15)
 
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
