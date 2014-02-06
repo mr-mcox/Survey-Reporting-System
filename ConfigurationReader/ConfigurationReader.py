@@ -120,6 +120,28 @@ class ConfigurationReader(object):
 		return locals()
 	cuts = property(**cuts())
 
+	def add_pilot_cuts(self,pilot_rows):
+		assert type(pilot_rows) is list
+		pilot_columns = [[row[x] for row in pilot_rows] for x in range(len(pilot_rows[0]))]
+		mock_config = {'cuts':{}}
+		dimensions_to_add = dict()	
+		for col in pilot_columns:
+			pilot_name = col[0]
+			label_value = col[1]
+			demographic_column_label = pilot_name + "-" + label_value
+			mock_config['cuts'][pilot_name] = {'dimensions':[pilot_name,'region','corps']}
+			if pilot_name not in dimensions_to_add:
+				dimensions_to_add[pilot_name] = {'composite_dimensions':[]}
+			dimensions_to_add[pilot_name]['composite_dimensions'].append(demographic_column_label)
+		for dimension_title, dimension_config in dimensions_to_add.items():
+			self.create_dimension(dimension_title, dimension_config=dimension_config)
+
+		#Add to main cuts
+		cuts = self.cuts
+		for cut_title, cut in mock_config['cuts'].items():
+			cuts[cut_title] = Cut(title=cut_title,config_object=self, config_data = cut)
+		self.cuts = cuts
+
 class Cut(object):
 	def __init__(self, **kwargs):
 		config_data = kwargs.pop('config_data',None)

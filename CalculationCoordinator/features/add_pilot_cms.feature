@@ -20,3 +20,5 @@ Feature: When provided a pilot CM file, add appropriate demographics and cuts
 			|              | 3           |              |
 		Then respondent_id 1 has a value of "Target Group" on "pilot_1-Target Group"
 		Then respondent_id 2 has a value of blank on "pilot_1-Target Group"
+
+	

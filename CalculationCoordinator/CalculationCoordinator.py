@@ -933,6 +933,8 @@ class CalculationCoordinator(object):
 
 	def add_pilot_cms(self,pilot_rows):
 		assert type(pilot_rows) is list
+		if self.config is not None:
+			self.config.add_pilot_cuts(pilot_rows)
 		pilot_columns = [[row[x] for row in pilot_rows] for x in range(len(pilot_rows[0]))]
 		self.demographic_data = self.demographic_data.set_index('respondent_id')
 		for col in pilot_columns:
