@@ -930,3 +930,23 @@ class CalculationCoordinator(object):
 			return float(string)
 		except ValueError:
 			return string
+
+	def add_pilot_cms(self,pilot_rows):
+		assert type(pilot_rows) is list
+		pilot_columns = [[row[x] for row in pilot_rows] for x in range(len(pilot_rows[0]))]
+		self.demographic_data = self.demographic_data.set_index('respondent_id')
+		for col in pilot_columns:
+			pilot_name = col[0]
+			label_value = col[1]
+			ids = col[3:]
+			demographic_column_label = pilot_name + "-" + label_value
+			self.demographic_data[demographic_column_label] = None
+			for respondent_id in ids:
+				assert type(respondent_id) is str
+				if respondent_id.isdigit():
+					try:
+						print("Setting " + respondent_id + " to " + label_value) 
+						self.demographic_data.ix[float(respondent_id),demographic_column_label] = label_value
+					except:
+						logging.warning("An error was thrown while setting pilot value for CM " + str(respondent_id) + " for pilot " + pilot_name)
+		self.demographic_data = self.demographic_data.reset_index()

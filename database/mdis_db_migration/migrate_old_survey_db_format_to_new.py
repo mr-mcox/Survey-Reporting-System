@@ -56,11 +56,14 @@ conn_2 = engine_2.connect()
 # 	alembic_op.drop_constraint(fk['name'],'results')
 
 #Import from local DB
-nr_results = conn_1.execute(select([numerical_responses],numerical_responses.c.survey.in_(['1314MYS','1314F8W','1213EYS','1213MYS','1213F8W'])))
-ssq_results = conn_1.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(['1314MYS','1314F8W','1213EYS','1213MYS','1213F8W'])))
+survey_codes = ['1314MYS','1314F8W',
+				'1213EYS','1213MYS','1213F8W',
+				'1112EYS','1112MYS','1112F8W',
+				'2011Inst-EIS','2012Inst-EIS','2013Inst-EIS',
+				'2010Inst.EIS','1011EYS','1011MYS','1011R0',
+				'0910EYS','0910MYS']
 
-responses = pd.DataFrame(nr_results.fetchall())
-responses.columns = nr_results.keys()
+ssq_results = conn_1.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(survey_codes)))
 
 question_table = pd.DataFrame(ssq_results.fetchall())
 question_table.columns = ssq_results.keys()
@@ -91,14 +94,6 @@ questions_for_db.ix[questions_for_db.question_type == '7pt_Net_1=SA','question_t
 questions_for_db.ix[questions_for_db.question_type == '7pt_NCS_1=SA','question_type'] = '7pt_1=SA'
 questions_for_db.ix[questions_for_db.question_type == '7pt_NCS_7=SA','question_type'] = '7pt_7=SA'
 
-#Map survey id and question id onto survey responses
-responses['question_id'] = responses.survey_specific_qid.map(question_map)
-responses['survey_id'] = responses.survey.map(survey_map) 
-responses = responses.rename(columns={'cm_pid':'respondent_id'})
-
-#Create results table
-results_for_db = pd.DataFrame(responses,columns=['respondent_id','survey_id','question_id','response'])
-
 #Clear new tables
 conn_2.execute(results.delete())
 conn_2.execute(surveys.delete())
@@ -124,7 +119,9 @@ def convert_types_for_db(values):
 			except:
 				pass
 		if type(new_value) != str:
-			if int(new_value) == new_value:
+			if np.isnan(new_value):
+				new_value = None
+			elif int(new_value) == new_value:
 				new_value = int(new_value)
 		new_values.append(new_value)
 	return new_values
@@ -144,7 +141,23 @@ for i, row in enumerate(question_rows):
 # except:
 # 	pdb.set_trace()
 
-conn_2.execute(results.insert(),df_to_dict_array(results_for_db))
+#Fetch and modify results
+for survey in survey_codes:
+	print("Inserting results for survey " + survey)
+	nr_results = conn_1.execute(select([numerical_responses]).where(numerical_responses.c.survey == survey))
+	responses = pd.DataFrame(nr_results.fetchall())
+	responses.columns = nr_results.keys()
+
+	#Map survey id and question id onto survey responses
+	responses['question_id'] = responses.survey_specific_qid.map(question_map)
+	responses['survey_id'] = responses.survey.map(survey_map) 
+	responses = responses.rename(columns={'cm_pid':'respondent_id'})
+
+	#Create results table
+	results_for_db = pd.DataFrame(responses,columns=['respondent_id','survey_id','question_id','response'])
+
+	conn_2.execute(results.insert(),df_to_dict_array(results_for_db))
+
 # result_rows = df_to_dict_array(results_for_db)
 # num_rows = len(result_rows)
 
