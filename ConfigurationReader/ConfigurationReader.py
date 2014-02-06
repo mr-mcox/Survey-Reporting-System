@@ -131,8 +131,9 @@ class ConfigurationReader(object):
 			demographic_column_label = pilot_name + "-" + label_value
 			mock_config['cuts'][pilot_name] = {'dimensions':[pilot_name,'region','corps']}
 			if pilot_name not in dimensions_to_add:
-				dimensions_to_add[pilot_name] = {'composite_dimensions':[]}
+				dimensions_to_add[pilot_name] = {'composite_dimensions':[],'value_order':[]}
 			dimensions_to_add[pilot_name]['composite_dimensions'].append(demographic_column_label)
+			dimensions_to_add[pilot_name]['value_order'].append(label_value)
 		for dimension_title, dimension_config in dimensions_to_add.items():
 			self.create_dimension(dimension_title, dimension_config=dimension_config)
 

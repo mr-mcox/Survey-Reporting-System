@@ -21,3 +21,4 @@ Feature: When provided a pilot CM file, add appropriate demographics and cuts
 			| 1            | 1           | 2            |
 			|              | 3           |              |
 		Then there is a dimension called "pilot_1" that has composite dimensions "pilot_1-Target Group" and "pilot_1-All CMs"
+		Then there is a dimension called "pilot_1" that has value order "Target Group" and "All CMs"

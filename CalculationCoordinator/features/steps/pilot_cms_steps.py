@@ -22,4 +22,5 @@ def step(context,id,value,column):
 @then('respondent_id {id} has a value of blank on "{column}"')
 def step(context,id,column):
 	result = context.coordinator.demographic_data.set_index(['respondent_id']).ix[int(id),column]
-	assert result == None or np.isnan(result)
+	# assert np.isnan(result)
+	assert result == 'nan'

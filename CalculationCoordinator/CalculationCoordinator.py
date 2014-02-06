@@ -942,13 +942,12 @@ class CalculationCoordinator(object):
 			label_value = col[1]
 			ids = col[3:]
 			demographic_column_label = pilot_name + "-" + label_value
-			self.demographic_data[demographic_column_label] = None
+			self.demographic_data[demographic_column_label] = np.nan
 			for respondent_id in ids:
 				assert type(respondent_id) is str
 				if respondent_id.isdigit():
 					try:
-						print("Setting " + respondent_id + " to " + label_value) 
-						self.demographic_data.ix[float(respondent_id),demographic_column_label] = label_value
+						self.demographic_data.ix[int(respondent_id),demographic_column_label] = label_value
 					except:
 						logging.warning("An error was thrown while setting pilot value for CM " + str(respondent_id) + " for pilot " + pilot_name)
-		self.demographic_data = self.demographic_data.reset_index()
+		self.demographic_data = self.demographic_data.applymap(str).fillna("Missing").reset_index()

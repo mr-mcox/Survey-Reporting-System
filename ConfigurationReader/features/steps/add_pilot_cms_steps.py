@@ -24,3 +24,8 @@ def step(context):
 def step(context):
 	dimension = context.reader.get_dimension_by_title('pilot_1')
 	assert dimension.composite_dimensions == ['pilot_1-Target Group','pilot_1-All CMs']
+
+@then('there is a dimension called "pilot_1" that has value order "Target Group" and "All CMs"')
+def step(context):
+	dimension = context.reader.get_dimension_by_title('pilot_1')
+	assert dimension.value_order == ['Target Group','All CMs']

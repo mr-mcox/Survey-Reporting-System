@@ -8,7 +8,7 @@ To implement:
  ✔ Find and fix the historical tab menu export. @done (14-02-03 14:31)
  ✔ Fix default menu length @done (14-02-03 15:48)
  ✔ Fix composite menu showing results by default @done (14-02-03 16:15)
- ☐ Config is altered to create pilot cuts
+ ✔ Config is altered to create pilot cuts @done (14-02-06 07:32)
 
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
