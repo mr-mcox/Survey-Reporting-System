@@ -163,11 +163,12 @@ class NumericOutputCalculator(object):
 			all_results = all_results.set_index(cut_groupings)
 			nfv = nfv.set_index(cut_groupings)
 			less_than_5_sample_size_index = all_results.ix[(all_results.result_type=='sample_size') & (all_results.aggregation_value < 5)].index
-			confidential_questions = nfv.ix[nfv.is_confidential==1].index.tolist()
+			confidential_questions_df = pd.DataFrame(nfv.reset_index(),columns=['question_code','is_confidential'])
+			confidential_questions = confidential_questions_df.ix[confidential_questions_df.is_confidential==1,'question_code'].unique().tolist()
 			if composite_questions is not None:
 				confidential_questions = confidential_questions + [key for key in composite_questions.keys()]
-			# all_results.ix[all_results.index.isin(less_than_5_sample_size_index) & all_results.index.isin(confidential_questions) & (all_results.result_type != 'sample_size'),'aggregation_value'] = np.nan
-			all_results.ix[all_results.index.isin(less_than_5_sample_size_index) & all_results.index.isin(confidential_questions) & (all_results.result_type != 'sample_size'),'aggregation_value'] = np.nan
+			confidential_questions_index = all_results.reset_index().ix[all_results.reset_index().question_code.isin(confidential_questions)].set_index(cut_groupings).index.tolist()
+			all_results.ix[all_results.index.isin(less_than_5_sample_size_index) & all_results.index.isin(confidential_questions_index) & (all_results.result_type != 'sample_size'),'aggregation_value'] = np.nan
 			all_results = all_results.reset_index()
 
 		#Return just required columns

@@ -1,3 +1,4 @@
+@wip
 Feature: Accurately compute composite questions like Net Corps Strength and Net Corps Learning
 	Scenario: Compute composite question results for strong percent
 		Given net formatted values
@@ -79,3 +80,19 @@ Feature: Accurately compute composite questions like Net Corps Strength and Net 
 		When compute net is run with composite of NQ is q1 and q2
 		Then the display_value for string based question_code NQ is blank
 
+	Scenario: When composite questions are confidential and cut for demographics is used, composite question should be blank when survey size is small
+		Given net formatted values
+			| question_code | net_formatted_value | respondent_id | is_confidential |
+			| q1             | 0                   | 1 | 1 |
+			| q1             | 1                   | 2 | 1 |
+			| q1             | 1                   | 3 | 1 |
+			| q2             | 1                   | 1 | 1 |
+			| q2             | -1                  | 2 | 1 |
+			| q2             | 1                   | 3 | 1 |
+		Given demographic data
+			| respondent_id | region  | gender |
+			| 1             | Atlanta | Female |
+			| 2             | Atlanta | Female |
+			| 3             | SoDak   | Male   |
+		When compute net is run with composite of NQ is q1 and q2 and region cut
+		Then the regional display_value for string based question_code NQ and region "Atlanta" is blank

@@ -140,7 +140,11 @@ def step(context,question_code,value):
 
 @then('the regional display_value for string based question_code {question_code} and region "Atlanta" is {value}')
 def step(context,question_code,value):
-    assert context.result.set_index(['question_code','region']).iloc[-2]['aggregation_value'] == float(value)
+    print(context.result)
+    if value == 'blank':
+        assert np.isnan(context.result.set_index(['question_code','result_type','region']).ix[('NQ','net','Atlanta'),'aggregation_value'])
+    else:
+        assert context.result.set_index(['question_code','result_type','region']).ix[('NQ','net','Atlanta'),'aggregation_value'] == float(value)
 
 @when('compute net is run with composite of NQ is q1 and q2 and region cut')
 def step(context):
