@@ -1,4 +1,3 @@
-@wip
 Feature: When provided a pilot CM file, add appropriate demographics and cuts
 	Scenario: Given a set of pilot ids, create appropriate config cuts
 		Given basic static cuts

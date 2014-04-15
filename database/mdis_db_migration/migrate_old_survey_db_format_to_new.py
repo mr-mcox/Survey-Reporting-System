@@ -61,8 +61,9 @@ survey_codes = ['1314MYS','1314F8W',
 				'1112EYS','1112MYS','1112F8W',
 				'2011Inst-EIS','2012Inst-EIS','2013Inst-EIS',
 				'2010Inst.EIS','1011EYS','1011MYS','1011R0',
-				'0910EYS','0910MYS']
-
+				'0910EYS','0910MYS','2009Inst.EIS',
+				'0809EYS','0809MYS']
+				
 ssq_results = conn_1.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(survey_codes)))
 
 question_table = pd.DataFrame(ssq_results.fetchall())
@@ -107,6 +108,7 @@ def df_to_dict_array(df):
 		list_of_rows.append(dict(zip(columns,convert_types_for_db(row))))
 	return list_of_rows
 
+#Some basic conversion of types needs to occur for the database library to be ok with it
 def convert_types_for_db(values):
 	new_values = list()
 	for value in values:

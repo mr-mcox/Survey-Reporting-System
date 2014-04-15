@@ -1,4 +1,3 @@
-@wip
 Feature: When provided a pilot CM file, add appropriate demographics and cuts
 	Scenario: Given a set of pilot CMs, add labels to the demograhpic table
 		Given net formatted values

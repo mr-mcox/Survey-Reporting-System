@@ -1,4 +1,3 @@
-@wip
 Feature: Accurately compute composite questions like Net Corps Strength and Net Corps Learning
 	Scenario: Compute composite question results for strong percent
 		Given net formatted values
