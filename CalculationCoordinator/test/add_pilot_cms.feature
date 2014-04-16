@@ -5,7 +5,7 @@ Feature: When provided a pilot CM file, add appropriate demographics and cuts
 			| 1             | 1             | 1                   |
 			| 2             | 1             | 0                   |
 			| 3             | 1             | -1                  |
-		Given demographic data
+		Given demographic data passed to coordinator
 			| respondent_id | region  | gender |
 			| 1             | Atlanta | Female |
 			| 2             | Atlanta | Female |
