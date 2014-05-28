@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, select, create_engine, ForeignKeyConstraint
+from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, select, create_engine, ForeignKeyConstraint, func
 from sqlalchemy.engine import reflection
 import numpy as np
 from alembic.migration import MigrationContext
@@ -56,13 +56,7 @@ conn_2 = engine_2.connect()
 # 	alembic_op.drop_constraint(fk['name'],'results')
 
 #Import from local DB
-survey_codes = ['1314MYS','1314F8W',
-				'1213EYS','1213MYS','1213F8W',
-				'1112EYS','1112MYS','1112F8W',
-				'2011Inst-EIS','2012Inst-EIS','2013Inst-EIS',
-				'2010Inst.EIS','1011EYS','1011MYS','1011R0',
-				'0910EYS','0910MYS','2009Inst.EIS',
-				'0809EYS','0809MYS']
+survey_codes = ['1314EYS']
 				
 ssq_results = conn_1.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(survey_codes)))
 
@@ -75,14 +69,20 @@ question_table.columns = ssq_results.keys()
 
 #Create survey table data
 survey_codes = question_table.survey.unique().tolist()
-survey_map = dict(zip(survey_codes,[i + 1 for i in range(len(survey_codes))]))
+max_current_survey_id = conn_2.execute(select([func.max(surveys.c.id)])).scalar()
+if max_current_survey_id is None:
+	max_current_survey_id = 0
+survey_map = dict(zip(survey_codes,[i + max_current_survey_id + 1 for i in range(len(survey_codes))]))
 survey_ids = [survey_map[survey_name] for survey_name in survey_codes]
 
 surveys_for_db = pd.DataFrame({'id':survey_ids,'survey_code':survey_codes})
 
 #Create question table data
 questions_list = question_table.survey_specific_qid.unique().tolist()
-question_map = dict(zip(questions_list,[i + 1 for i in range(len(questions_list))]))
+max_current_question_id = conn_2.execute(select([func.max(questions.c.id)])).scalar()
+if max_current_question_id is None:
+	max_current_question_id = 0
+question_map = dict(zip(questions_list,[i + max_current_question_id + 1 for i in range(len(questions_list))]))
 
 question_table['question_id'] = question_table.survey_specific_qid.map(question_map)
 question_table['survey_id'] = question_table.survey.map(survey_map)
@@ -95,10 +95,12 @@ questions_for_db.ix[questions_for_db.question_type == '7pt_Net_1=SA','question_t
 questions_for_db.ix[questions_for_db.question_type == '7pt_NCS_1=SA','question_type'] = '7pt_1=SA'
 questions_for_db.ix[questions_for_db.question_type == '7pt_NCS_7=SA','question_type'] = '7pt_7=SA'
 
-#Clear new tables
-conn_2.execute(results.delete())
-conn_2.execute(surveys.delete())
-conn_2.execute(questions.delete())
+#Delete data for surveys that already exist
+for code in survey_codes:
+	survey_id = conn_2.execute(select([surveys.c.id]).where(surveys.c.survey_code==code)).scalar()
+	conn_2.execute(results.delete().where(results.c.survey_id==survey_id))
+	conn_2.execute(surveys.delete().where(surveys.c.id==survey_id))
+	conn_2.execute(questions.delete().where(questions.c.survey_id==survey_id))
 
 #Insert in new db
 def df_to_dict_array(df):
