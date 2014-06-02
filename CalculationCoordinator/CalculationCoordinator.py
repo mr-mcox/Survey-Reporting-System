@@ -817,7 +817,7 @@ class CalculationCoordinator(object):
 		lookup_ws.title = "Lookups"
 		for r, row in enumerate(ws_to_copy.iter_rows()):
 			lookup_ws.append([cell.internal_value for cell in row])
-			if r % 500 == 0:
+			if r % 500 == 0 and r > 0:
 				print("\r" + str(r) + " rows for lookups written", end= ' ')
 		#Copy ranges names
 		for wb_range in lookup_wb.get_named_ranges():
@@ -883,7 +883,7 @@ class CalculationCoordinator(object):
 
 					#Add row
 					ws.append([self.float_string_conversion(item) for item in row])
-					if r % 500 == 0:
+					if r % 500 == 0 and r > 0:
 						print("\r" + str(r) + " rows written", end= ' ')
 		wb.create_named_range(range_name_prefix + '_col_head',ws,self.rc_to_range(row=0,col=1,width=max_col_width,height=1))
 		wb.create_named_range(range_name_prefix + '_row_head',ws,self.rc_to_range(row=1,col=0,width=1,height=max_row_width))
@@ -909,7 +909,7 @@ class CalculationCoordinator(object):
 				reader = csv.reader(f)
 				for r,row in enumerate(reader):
 					dest_ws.append(row)
-					if r % 500 == 0:
+					if r % 500 == 0 and r > 0:
 						print("\r" + str(r) + " rows written", end= ' ')
 						# dest_wb.save(dest_wb_name)
 						gc.collect()

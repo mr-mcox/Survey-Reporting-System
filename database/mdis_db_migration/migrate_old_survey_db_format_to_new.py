@@ -5,6 +5,7 @@ import numpy as np
 from alembic.migration import MigrationContext
 from alembic.operations import Operations
 import pdb
+import sys
 
 
 #Connect to local DB
@@ -56,7 +57,7 @@ conn_2 = engine_2.connect()
 # 	alembic_op.drop_constraint(fk['name'],'results')
 
 #Import from local DB
-survey_codes = ['1314EYS']
+survey_codes = sys.argv[1:]
 				
 ssq_results = conn_1.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(survey_codes)))
 
@@ -66,6 +67,13 @@ question_table.columns = ssq_results.keys()
 #Read data
 # responses = pd.read_csv('numerical_responses.csv')
 # question_table = pd.read_csv('survey_specific_questions.csv')
+# 
+#Delete data for surveys that already exist
+for code in survey_codes:
+	survey_id = conn_2.execute(select([surveys.c.id]).where(surveys.c.survey_code==code)).scalar()
+	conn_2.execute(results.delete().where(results.c.survey_id==survey_id))
+	conn_2.execute(surveys.delete().where(surveys.c.id==survey_id))
+	conn_2.execute(questions.delete().where(questions.c.survey_id==survey_id))
 
 #Create survey table data
 survey_codes = question_table.survey.unique().tolist()
@@ -94,13 +102,6 @@ questions_for_db = pd.DataFrame(question_table,columns=['id','survey_id','questi
 questions_for_db.ix[questions_for_db.question_type == '7pt_Net_1=SA','question_type'] = '7pt_1=SA'
 questions_for_db.ix[questions_for_db.question_type == '7pt_NCS_1=SA','question_type'] = '7pt_1=SA'
 questions_for_db.ix[questions_for_db.question_type == '7pt_NCS_7=SA','question_type'] = '7pt_7=SA'
-
-#Delete data for surveys that already exist
-for code in survey_codes:
-	survey_id = conn_2.execute(select([surveys.c.id]).where(surveys.c.survey_code==code)).scalar()
-	conn_2.execute(results.delete().where(results.c.survey_id==survey_id))
-	conn_2.execute(surveys.delete().where(surveys.c.id==survey_id))
-	conn_2.execute(questions.delete().where(questions.c.survey_id==survey_id))
 
 #Insert in new db
 def df_to_dict_array(df):
