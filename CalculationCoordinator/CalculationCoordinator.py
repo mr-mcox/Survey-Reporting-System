@@ -950,4 +950,9 @@ class CalculationCoordinator(object):
 						self.demographic_data.ix[int(respondent_id),demographic_column_label] = label_value
 					except:
 						logging.warning("An error was thrown while setting pilot value for CM " + str(respondent_id) + " for pilot " + pilot_name)
+				elif re.match('[\d\.]+',respondent_id) is not None:
+					try:
+						self.demographic_data.ix[int(float(respondent_id)),demographic_column_label] = label_value
+					except:
+						logging.warning("An error was thrown while setting pilot value for CM " + str(respondent_id) + " for pilot " + pilot_name)
 		self.demographic_data = self.demographic_data.applymap(str).fillna("Missing").reset_index()

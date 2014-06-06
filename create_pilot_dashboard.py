@@ -6,6 +6,7 @@ from SurveyReportingSystem.ResultsRetriever import ResultsRetriever
 import logging
 import os
 import csv
+import pdb
 
 logging.basicConfig(filename='debug.log',level=logging.WARNING)
 
@@ -41,4 +42,5 @@ with open('pilot_cms.csv') as f:
 	for row in reader:
 		pilot_cms_rows.append([item for item in row])
 calc.add_pilot_cms(pilot_cms_rows)
+calc.config.add_pilot_cuts(pilot_cms_rows)
 calc.export_to_excel()

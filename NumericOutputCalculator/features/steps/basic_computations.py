@@ -1,6 +1,7 @@
 from behave import *
 import numpy as np
 from NumericOutputCalculator import NumericOutputCalculator
+import pdb
 
 def import_table_data(table):
     table_data = {header : [] for header in table.headings}
@@ -156,8 +157,13 @@ def step(context,result_type):
 
 @then('display_value for question_code 1 and result_type "{result_type}" is {value}')
 def step(context,result_type,value):
-    print("\n" + str(context.result.set_index(['question_code','result_type'])))
-    assert context.result.set_index(['question_code','result_type']).ix[(1.0,result_type),'aggregation_value'] == float(value)
+    # print("\n" + str(context.result.set_index(['question_code','result_type'])))
+    if value == 'blank':
+        print("The result:")
+        print(context.result.set_index(['question_code','result_type']).ix[(1.0,result_type),'aggregation_value'])
+        assert np.isnan(context.result.set_index(['question_code','result_type']).ix[(1.0,result_type),'aggregation_value'])
+    else:
+        assert context.result.set_index(['question_code','result_type']).ix[(1.0,result_type),'aggregation_value'] == float(value)
 
 @then('results_with_dimensions has region of "{region}" for respondent_id 1 and survey_code "{survey_code}"')
 def step(context,region,survey_code):

@@ -148,16 +148,21 @@ class NumericOutputCalculator(object):
 
 		#Add categorical responses
 		categorical_calculation = pd.DataFrame()
+		cat_display_samp_size = pd.DataFrame()
 		if 'question_type' in nfv.columns:
 			question_types = nfv.question_type.unique()
 			if 'Categorical_response' in question_types or 'Ordered_response' in question_types:
 				categorical_calculation = nfv.ix[nfv.question_type.isin(['Categorical_response','Ordered_response'])].groupby(cut_groupings + ['response']).aggregate(len).reset_index().rename(columns={'question_type':'aggregation_value','response':'result_type'})
 				categorical_calculation_samp_size = categorical_calculation.groupby(cut_groupings).sum().rename(columns={'aggregation_value':'sample_size'})['sample_size']
+				cat_display_samp_size = categorical_calculation.groupby(cut_groupings).sum().rename(columns={'aggregation_value':'aggregation_value'})['aggregation_value']
+				cat_display_samp_size = pd.DataFrame(cat_display_samp_size)
+				cat_display_samp_size['result_type'] = 'sample_size'
+				cat_display_samp_size = cat_display_samp_size.reset_index()
 				categorical_calculation = categorical_calculation.set_index(cut_groupings).join(categorical_calculation_samp_size).reset_index()
 				categorical_calculation.aggregation_value = categorical_calculation.aggregation_value / categorical_calculation.sample_size
 				categorical_calculation.result_type = categorical_calculation.result_type.astype(int).astype(str)
 
-		all_results = pd.concat(aggregation_calulations_list + [categorical_calculation])
+		all_results = pd.concat(aggregation_calulations_list + [categorical_calculation, cat_display_samp_size])
 		#Determine which questions have fewer than 5 respondents and are confidential
 		if 'is_confidential' in all_results.columns:
 			all_results = all_results.set_index(cut_groupings)
