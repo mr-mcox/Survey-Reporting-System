@@ -763,10 +763,10 @@ class CalculationCoordinator(object):
 					ws.cell(row=row_offset, column = next_column_to_use).value = all_together_label_for_title[dimension_title]
 					ws.cell(row=row_offset, column = next_column_to_use + 1 ).value = self.zero_integer_string
 					row_offset = 2
-				assert self.demographic_data is not None
+				assert self.demographic_data is not None, "demographic data not none in dimension " + dimension_title
 				parent_dimension = dynamic_parent_dimension[dimension_title]
-				assert parent_dimension in self.demographic_data.columns
-				assert dimension_title in self.demographic_data.columns
+				assert parent_dimension in self.demographic_data.columns, parent_dimension + " not found in demographic data and is needed for dimension " + dimension_title
+				assert dimension_title in self.demographic_data.columns, "Missing dimension " + dimension_title + " in demographic file"
 				dimension_mapping = pd.DataFrame(results_for_menu,columns=[parent_dimension,dimension_title]).drop_duplicates().sort(columns=[parent_dimension,dimension_title])
 				i = 0
 				for index, row_items in dimension_mapping.iterrows():
