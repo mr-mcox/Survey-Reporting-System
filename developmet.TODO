@@ -9,6 +9,7 @@ To implement:
  ✔ Fix default menu length @done (14-02-03 15:48)
  ✔ Fix composite menu showing results by default @done (14-02-03 16:15)
  ✔ Config is altered to create pilot cuts @done (14-02-06 07:32)
+   Investigate whether its possible to export a "N" when it should show an "S" for small sample size
 
 Eventually:
   ☐ Calculation coordinator creates transformed version of output with renamed columns
