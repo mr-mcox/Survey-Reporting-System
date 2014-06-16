@@ -728,6 +728,21 @@ class CalculationCoordinator(object):
 			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
 		lookup_wb.create_named_range('cuts_3',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
+		menu_start = ws.get_highest_row()
+		menu = self.config.cuts_for_excel_menu(menu='cuts_4')
+		menu_length = len(menu)
+		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
+			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
+		lookup_wb.create_named_range('cuts_4',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
+
+		menu_start = ws.get_highest_row()
+		menu = self.config.cuts_for_excel_menu(menu='cuts_5')
+		menu_length = len(menu)
+		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
+			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
+		lookup_wb.create_named_range('cuts_5',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
+
+
 		#Add dimension menus
 		next_column_to_use = ws.get_highest_column()
 		#TODO: Perhaps having a function call directly from config would be better than these structures?
