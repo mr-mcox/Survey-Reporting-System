@@ -23,7 +23,10 @@ survey_specific_questions = Table('survey_specific_questions',metadata,
 							Column('confidential',Integer),
 							Column('question_type',String)
 							)
-engine_1 = create_engine('mysql+oursql://mcox:fa1c0n@localhost/mdis_survey_database')
+connect_info_file = open(sys.argv[1])
+connect_info = connect_info_file.readline()
+connect_info_file.close()
+engine_1 = create_engine(connect_info)
 conn_1 = engine_1.connect()
 
 #Connecting to new db
@@ -42,7 +45,7 @@ questions = Table('questions',metadata,
 			Column('is_confidential', Integer),
 			Column('question_type', String(20)),)
 
-connect_info_file = open('db_connect_string.txt')
+connect_info_file = open(sys.argv[2])
 connect_info = connect_info_file.readline()
 connect_info_file.close()
 engine_2 = create_engine(connect_info)
@@ -57,7 +60,7 @@ conn_2 = engine_2.connect()
 # 	alembic_op.drop_constraint(fk['name'],'results')
 
 #Import from local DB
-survey_codes = sys.argv[1:]
+survey_codes = sys.argv[3:]
 				
 ssq_results = conn_1.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(survey_codes)))
 
