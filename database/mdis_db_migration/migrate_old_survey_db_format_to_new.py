@@ -23,8 +23,8 @@ survey_specific_questions = Table('survey_specific_questions',metadata,
 							Column('confidential',Integer),
 							Column('question_type',String)
 							)
-connect_info_file = open(sys.argv[1]).strip()
-connect_info = connect_info_file.readline()
+connect_info_file = open(sys.argv[1])
+connect_info = connect_info_file.readline().strip()
 connect_info_file.close()
 engine_1 = create_engine(connect_info)
 conn_1 = engine_1.connect()
@@ -45,8 +45,8 @@ questions = Table('questions',metadata,
 			Column('is_confidential', Integer),
 			Column('question_type', String(20)),)
 
-connect_info_file = open(sys.argv[2]).strip()
-connect_info = connect_info_file.readline()
+connect_info_file = open(sys.argv[2])
+connect_info = connect_info_file.readline().strip()
 connect_info_file.close()
 engine_2 = create_engine(connect_info)
 conn_2 = engine_2.connect()
