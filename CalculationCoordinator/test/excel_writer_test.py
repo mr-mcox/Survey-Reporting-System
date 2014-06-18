@@ -29,7 +29,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		config_reader.config['excel_template_file'] = 'test_file.xlsx'
 		config_reader.config['cut_menu_order'] = ['Region','Subject','Grade']
 		self.cuts_for_excel_menu_results = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None'],['Gender', 'static', 'Gender', 'Region', 'Corps']]
-		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_results,'historical':[['Region', 'static', 'Region', 'Corps','None']],'cuts_2':[],'cuts_3':[]}
+		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_results,'historical':[['Region', 'static', 'Region', 'Corps','None']],'cuts_2':[],'cuts_3':[],'cuts_4':[],'cuts_5':[]}
 		config_reader.cuts_for_excel_menu = mock.MagicMock(side_effect= lambda **arg: return_for_cuts_for_excel_menu[arg['menu']])
 		coordinator.config = config_reader
 
