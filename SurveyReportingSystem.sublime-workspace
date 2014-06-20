@@ -408,16 +408,6 @@
 			}
 		},
 		{
-			"contents": "Searching 106 files for \"cuts_2\"\n\n/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py:\n  717  		#Add cut menu 2 and 3\n  718  		menu_start = ws.get_highest_row()\n  719: 		menu = self.config.cuts_for_excel_menu(menu='cuts_2')\n  720  		menu_length = len(menu)\n  721  		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):\n  722  			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu\n  723: 		lookup_wb.create_named_range('cuts_2',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))\n  724  		menu_start = ws.get_highest_row()\n  725  		menu = self.config.cuts_for_excel_menu(menu='cuts_3')\n\n/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writer_test.py:\n   30  		config_reader.config['cut_menu_order'] = ['Region','Subject','Grade']\n   31  		self.cuts_for_excel_menu_results = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None'],['Gender', 'static', 'Gender', 'Region', 'Corps']]\n   32: 		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_results,'historical':[['Region', 'static', 'Region', 'Corps','None']],'cuts_2':[],'cuts_3':[]}\n   33  		config_reader.cuts_for_excel_menu = mock.MagicMock(side_effect= lambda **arg: return_for_cuts_for_excel_menu[arg['menu']])\n   34  		coordinator.config = config_reader\n\n3 matches across 2 files\n\n\nSearching 101 files for \"cuts_4\"\n\n/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py:\n  730  \n  731  		menu_start = ws.get_highest_row()\n  732: 		menu = self.config.cuts_for_excel_menu(menu='cuts_4')\n  733  		menu_length = len(menu)\n  734  		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):\n  735  			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu\n  736: 		lookup_wb.create_named_range('cuts_4',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))\n  737  \n  738  		menu_start = ws.get_highest_row()\n\n2 matches in 1 file\n",
-			"settings":
-			{
-				"buffer_size": 2102,
-				"line_ending": "Unix",
-				"name": "Find Results",
-				"scratch": true
-			}
-		},
-		{
 			"file": "CalculationCoordinator/CalculationCoordinator.py",
 			"settings":
 			{
@@ -429,7 +419,7 @@
 			"file": "compute_results.py",
 			"settings":
 			{
-				"buffer_size": 1953,
+				"buffer_size": 1875,
 				"line_ending": "Unix"
 			}
 		}
@@ -437,11 +427,15 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 167.0,
+		"height": 87.0,
 		"selected_items":
 		[
 			[
-				"git com",
+				"git push",
+				"Git: Push"
+			],
+			[
+				"git comm",
 				"Git: Commit"
 			],
 			[
@@ -449,11 +443,7 @@
 				"Git: Add..."
 			],
 			[
-				"git push",
-				"Git: Push"
-			],
-			[
-				"git comm",
+				"git com",
 				"Git: Commit"
 			],
 			[
@@ -616,7 +606,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 93.0,
+		"height": 0.0,
 		"where_history":
 		[
 			"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem",
@@ -775,7 +765,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 5,
 			"sheets":
 			[
 				{
@@ -1339,265 +1329,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 662.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"settings":
-					{
-						"buffer_size": 2102,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										271,
-										277
-									],
-									[
-										506,
-										512
-									],
-									[
-										1228,
-										1234
-									],
-									[
-										1704,
-										1710
-									],
-									[
-										1939,
-										1945
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								1488,
-								1488
-							]
-						],
-						"settings":
-						{
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"codeintel": true,
-							"codeintel_config":
-							{
-								"JavaScript":
-								{
-									"codeintel_max_recursive_dir_depth": 2.0,
-									"codeintel_scan_files_in_project": false,
-									"javascriptExtraPaths":
-									[
-									]
-								},
-								"PHP":
-								{
-									"codeintel_max_recursive_dir_depth": 5.0,
-									"codeintel_scan_files_in_project": false,
-									"phpExtraPaths":
-									[
-									]
-								},
-								"Python":
-								{
-									"env":
-									{
-									}
-								}
-							},
-							"codeintel_enabled_languages":
-							[
-								"JavaScript",
-								"Mason",
-								"XBL",
-								"XUL",
-								"RHTML",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"XSLT",
-								"Django",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Smarty",
-								"Node.js",
-								"Tcl",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_live": true,
-							"codeintel_live_enabled_languages":
-							[
-								"JavaScript",
-								"Mason",
-								"XBL",
-								"XUL",
-								"RHTML",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"XSLT",
-								"Django",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Smarty",
-								"Node.js",
-								"Tcl",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_max_recursive_dir_depth": 10.0,
-							"codeintel_scan_exclude_dir":
-							{
-								"JavaScript":
-								[
-									"/build/",
-									"/min/"
-								]
-							},
-							"codeintel_scan_files_in_project": true,
-							"codeintel_selected_catalogs":
-							[
-								"PyWin32",
-								"jQuery",
-								"Rails"
-							],
-							"codeintel_snippets": true,
-							"codeintel_syntax_map":
-							{
-								"Python Django": "Python"
-							},
-							"codeintel_tooltips": "popup",
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"detect_indentation": false,
-							"gjslint_ignore":
-							[
-								110.0
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"output_tag": 2,
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"result_base_dir": "",
-							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"sublime_auto_complete": true,
-							"sublimelinter": true,
-							"sublimelinter_delay": 2.0,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 345.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
 					"file": "CalculationCoordinator/CalculationCoordinator.py",
 					"settings":
 					{
@@ -1811,25 +1549,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 9550.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 5,
 					"file": "compute_results.py",
 					"settings":
 					{
-						"buffer_size": 1953,
+						"buffer_size": 1875,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1318,
-								1318
+								568,
+								568
 							]
 						],
 						"settings":
@@ -2032,7 +1770,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 74.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
