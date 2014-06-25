@@ -9,8 +9,8 @@ def test_cut_menu_options_provides_list_of_menus():
 def test_output_cuts_for_given_menu():
     pass
 
-@given('basic static cuts')
 def reader_with_basic_static_cuts():
+@given('basic static cuts')
 	reader = ConfigurationReader.ConfigurationReader()
 	reader.config = {'cuts':{
 							'Grade': {'dimensions':['Grade','Region','Corps']},
