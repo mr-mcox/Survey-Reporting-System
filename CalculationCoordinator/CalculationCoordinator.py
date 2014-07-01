@@ -694,24 +694,24 @@ class CalculationCoordinator(object):
 		max_menu_length = max([len(menu) for menu in cuts_menus])
 		for menu_i, cut_menu in enumerate(cuts_menus):
 			for col_i, item in enumerate(cut_menu):
-				ws.cell(row=menu_i, column = col_i).value = item
+				ws.cell(row=menu_i +1, column = col_i +1).value = item
 
 		#Added ranges for cut menu
 		range_width = ws.get_highest_column() - 1
 		range_height = ws.get_highest_row() -1 
-		lookup_wb.create_named_range('cuts_config',ws,self.rc_to_range(row=0,col=0,width=range_width + 1,height=range_height + 1))
+		lookup_wb.create_named_range('cuts_config',ws,self.rc_to_range(row=1,col=1,width=range_width + 1,height=range_height + 1))
 		
-		highest_column = ws.get_highest_column()
+		highest_column = ws.get_highest_column() + 1
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(cuts_menus)):
-			ws.cell(row=menu_i, column = highest_column).value = cut_menu
-		lookup_wb.create_named_range('cuts',ws,self.rc_to_range(row=0,col=highest_column,width=1,height=range_height + 1))
+			ws.cell(row=menu_i +1, column = highest_column).value = cut_menu
+		lookup_wb.create_named_range('cuts',ws,self.rc_to_range(row=1,col=highest_column,width=1,height=range_height + 1))
 
 		#Add historical cut menu
-		menu_start = ws.get_highest_row()
+		menu_start = ws.get_highest_row()+1
 		menu = self.config.cuts_for_excel_menu(menu='historical')
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
-			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
+			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu
 		lookup_wb.create_named_range('cuts_historical',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
 		#Add cut menu 2 and 3
@@ -719,32 +719,32 @@ class CalculationCoordinator(object):
 		menu = self.config.cuts_for_excel_menu(menu='cuts_2')
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
-			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
+			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu
 		lookup_wb.create_named_range('cuts_2',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 		menu_start = ws.get_highest_row()
 		menu = self.config.cuts_for_excel_menu(menu='cuts_3')
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
-			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
+			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu
 		lookup_wb.create_named_range('cuts_3',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
 		menu_start = ws.get_highest_row()
 		menu = self.config.cuts_for_excel_menu(menu='cuts_4')
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
-			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
+			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu
 		lookup_wb.create_named_range('cuts_4',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
 		menu_start = ws.get_highest_row()
 		menu = self.config.cuts_for_excel_menu(menu='cuts_5')
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
-			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
+			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu
 		lookup_wb.create_named_range('cuts_5',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
 
 		#Add dimension menus
-		next_column_to_use = ws.get_highest_column()
+		next_column_to_use = ws.get_highest_column() + 1
 		#TODO: Perhaps having a function call directly from config would be better than these structures?
 		all_dimensions = {dimension.title: dimension for dimension in self.config.all_dimensions()}
 		dimension_titles = [dimension.title for dimension in self.config.all_dimensions()]
@@ -770,13 +770,13 @@ class CalculationCoordinator(object):
 			else:
 				mapping = self.get_integer_string_mapping(dimension_title)
 
-			ws.cell(row=0, column = next_column_to_use).value = dimension_title
+			ws.cell(row=1, column = next_column_to_use).value = dimension_title
 			row_offset = 1
 			integer_mapping = dict(zip(mapping['labels'],mapping['integer_strings']))
 			if dimension_title in dynamic_parent_dimension:
 				if dimension_title in all_together_label_for_title and all_together_label_for_title[dimension_title] is not None:
-					ws.cell(row=row_offset, column = next_column_to_use).value = all_together_label_for_title[dimension_title]
-					ws.cell(row=row_offset, column = next_column_to_use + 1 ).value = self.zero_integer_string
+					ws.cell(row=row_offset+1, column = next_column_to_use).value = all_together_label_for_title[dimension_title]
+					ws.cell(row=row_offset+1, column = next_column_to_use + 1 ).value = self.zero_integer_string
 					row_offset = 2
 				assert self.demographic_data is not None, "demographic data not none in dimension " + dimension_title
 				parent_dimension = dynamic_parent_dimension[dimension_title]
@@ -786,15 +786,15 @@ class CalculationCoordinator(object):
 				i = 0
 				for index, row_items in dimension_mapping.iterrows():
 					if row_items[dimension_title] in integer_mapping:
-						ws.cell(row=i+row_offset, column = next_column_to_use).value = row_items[dimension_title]
-						ws.cell(row=i+row_offset, column = next_column_to_use+1).value = integer_mapping[row_items[dimension_title]]
-						ws.cell(row=i+row_offset, column = next_column_to_use+2).value = row_items[parent_dimension]
+						ws.cell(row=i+row_offset+1, column = next_column_to_use).value = row_items[dimension_title]
+						ws.cell(row=i+row_offset+1, column = next_column_to_use+1).value = integer_mapping[row_items[dimension_title]]
+						ws.cell(row=i+row_offset+1, column = next_column_to_use+2).value = row_items[parent_dimension]
 						i += 1
 				next_column_to_use += 3
 			else:
 				if dimension_title in all_together_label_for_title and all_together_label_for_title[dimension_title] is not None:
-					ws.cell(row=row_offset, column = next_column_to_use).value = all_together_label_for_title[dimension_title]
-					ws.cell(row=row_offset, column = next_column_to_use + 1 ).value = self.zero_integer_string
+					ws.cell(row=row_offset+1, column = next_column_to_use).value = all_together_label_for_title[dimension_title]
+					ws.cell(row=row_offset+1, column = next_column_to_use + 1 ).value = self.zero_integer_string
 					row_offset = 2
 				labels_for_menu = mapping['labels']
 				if dimension_title in all_dimensions and type(all_dimensions[dimension_title].value_order) is list:
@@ -802,7 +802,7 @@ class CalculationCoordinator(object):
 					labels_for_menu = all_dimensions[dimension_title].value_order
 				logging.debug("Labels for menu is " + str(labels_for_menu))
 				logging.debug("Integer map for menu is " + str(integer_mapping))
-				i = 0
+				i = 1
 				for label in labels_for_menu:
 					if label in integer_mapping:
 						ws.cell(row=i+row_offset, column = next_column_to_use).value = label
@@ -811,18 +811,18 @@ class CalculationCoordinator(object):
 				next_column_to_use += 2
 
 		#Add ranges for dimension menus
-		col_for_default_menu = range_width + 1
-		range_width = ws.get_highest_column() -1
-		lookup_wb.create_named_range('default_menu',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=1,height=1000))
-		lookup_wb.create_named_range('default_mapping',ws,self.rc_to_range(row=1,col=col_for_default_menu,width=2,height=1000))
-		lookup_wb.create_named_range('default_menu_start',ws,self.rc_to_range(row=1,col=col_for_default_menu))
-		lookup_wb.create_named_range('cuts_head',ws,self.rc_to_range(row=0,col=col_for_default_menu + 1,
+		col_for_default_menu = range_width + 2
+		range_width = ws.get_highest_column()
+		lookup_wb.create_named_range('default_menu',ws,self.rc_to_range(row=2,col=col_for_default_menu,width=1,height=1000))
+		lookup_wb.create_named_range('default_mapping',ws,self.rc_to_range(row=2,col=col_for_default_menu,width=2,height=1000))
+		lookup_wb.create_named_range('default_menu_start',ws,self.rc_to_range(row=2,col=col_for_default_menu))
+		lookup_wb.create_named_range('cuts_head',ws,self.rc_to_range(row=1,col=col_for_default_menu + 1,
 																width=range_width-col_for_default_menu,height=1))
 
 		#Add zero string value
-		next_column_to_use = ws.get_highest_column()
-		ws.cell(row=0,column=next_column_to_use).value = self.zero_integer_string
-		lookup_wb.create_named_range('zero_string',ws,self.rc_to_range(row=0,col=next_column_to_use))
+		next_column_to_use = ws.get_highest_column() + 1
+		ws.cell(row=1,column=next_column_to_use).value = self.zero_integer_string
+		lookup_wb.create_named_range('zero_string',ws,self.rc_to_range(row=1,col=next_column_to_use))
 
 		lookup_wb.save('Lookups.xlsx')
 		#Copy lookups to main wb
@@ -831,7 +831,7 @@ class CalculationCoordinator(object):
 		lookup_ws = new_wb.create_sheet()
 		lookup_ws.title = "Lookups"
 		for r, row in enumerate(ws_to_copy.iter_rows()):
-			lookup_ws.append([cell.internal_value for cell in row])
+			lookup_ws.append([cell.value for cell in row])
 			if r % 500 == 0 and r > 0:
 				print("\r" + str(r) + " rows for lookups written", end= ' ')
 		#Copy ranges names
@@ -875,11 +875,11 @@ class CalculationCoordinator(object):
 		height = kwargs.pop('height',None)
 		width = kwargs.pop('width',None)
 		if height == None:
-			return cell.get_column_letter(col + 1) + str(row+1)
+			return cell.get_column_letter(col) + str(row)
 		else:
 			assert width != None
-			start_cell =  cell.get_column_letter(col + 1) + str(row+1)
-			end_cell = cell.get_column_letter(col + width) + str(row+height)
+			start_cell =  cell.get_column_letter(col) + str(row)
+			end_cell = cell.get_column_letter(col + width-1) + str(row+height-1)
 			return start_cell + ":" + end_cell
 
 	def copy_sheet_to_optimized_workbook(self,src_data,dest_ws,wb,range_name_prefix):
@@ -900,9 +900,9 @@ class CalculationCoordinator(object):
 					ws.append([self.float_string_conversion(item) for item in row])
 					if r % 500 == 0 and r > 0:
 						print("\r" + str(r) + " rows written", end= ' ')
-		wb.create_named_range(range_name_prefix + '_col_head',ws,self.rc_to_range(row=0,col=1,width=max_col_width,height=1))
-		wb.create_named_range(range_name_prefix + '_row_head',ws,self.rc_to_range(row=1,col=0,width=1,height=max_row_width))
-		wb.create_named_range(range_name_prefix + '_values',ws,self.rc_to_range(row=1,col=1,width=max_col_width,height=max_row_width))
+		wb.create_named_range(range_name_prefix + '_col_head',ws,self.rc_to_range(row=1,col=2,width=max_col_width,height=1))
+		wb.create_named_range(range_name_prefix + '_row_head',ws,self.rc_to_range(row=2,col=1,width=1,height=max_row_width))
+		wb.create_named_range(range_name_prefix + '_values',ws,self.rc_to_range(row=2,col=2,width=max_col_width,height=max_row_width))
 		return wb
 
 	# @profile
@@ -936,7 +936,7 @@ class CalculationCoordinator(object):
 
 			for i in range(src_ws.get_highest_column()):
 				for j in range(src_ws.get_highest_row()):
-					dest_ws.cell(row=j,column=i).value = src_ws.cell(row=j,column=i).value
+					dest_ws.cell(row=j+1,column=i+1).value = src_ws.cell(row=j+1,column=i+1).value
 		print("\nSaving file, this may take a few minutes")
 		dest_wb.save(dest_wb_name)
 

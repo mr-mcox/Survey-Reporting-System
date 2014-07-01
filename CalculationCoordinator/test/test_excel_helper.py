@@ -16,8 +16,8 @@ def generic_coordinator():
 
 @then('the result of rc_to_range with row = 2 and col = 3 is "D3"')
 def step(generic_coordinator):
-	assert generic_coordinator.rc_to_range(row = 2, col = 3) == "D3"
+	assert generic_coordinator.rc_to_range(row = 3, col = 4) == "D3"
 
 @then('the result of rc_to_range with row = 2, col = 3, height = 3, width = 2 is "D3:E5"')
 def step(generic_coordinator):
-	assert generic_coordinator.rc_to_range(row = 2, col = 3, height = 3, width = 2) == "D3:E5"
+	assert generic_coordinator.rc_to_range(row = 3, col = 4, height = 3, width = 2) == "D3:E5"

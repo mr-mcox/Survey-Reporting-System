@@ -376,18 +376,10 @@
 	"buffers":
 	[
 		{
-			"file": "/Users/mcox/Dropbox/MDIS/Institute_Dashboards/2014_institute/jump_rope_reports/student_achievement_and_attendance_report_computations.py",
+			"file": "dump_results.py",
 			"settings":
 			{
-				"buffer_size": 2750,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "\nimport pandas as pd\nfrom InstituteRetentionAnalyzer.munging.reformat_bobj import rename_bobj_columns\nfrom InstituteRetentionAnalyzer.munging.cmpp_file import rename_cmpp_columns\nfrom InstituteRetentionAnalyzer.analyzer.analyzer_for_tpt import TPTRetention\n\nexit_data_cleaned       = rename_bobj_columns(pd.read_excel(\"institute_retention_and_transfers.xlsx\",\"release_status\"))\ncm_history_cleaned      = rename_bobj_columns(pd.read_excel(\"institute_retention_and_transfers.xlsx\",\"multiple_institutes\"))\ncmpp_data_cleaned       = rename_cmpp_columns(pd.read_excel(\"cm.master.tracker.xlsx\",\"Total\"))\ninstitute_start_date_df = pd.read_excel(\"institute_start_date.xlsx\",0)\n\nanalyzer = TPTRetention(\n                exit_data_cleaned = exit_data_cleaned,\n                cm_history_cleaned      = cm_history_cleaned,\n                cmpp_data_cleaned       = cmpp_data_cleaned,\n                institute_start_date_df = institute_start_date_df\n        )\n\ncme = pd.read_excel(\"cm_effectiveness_report.xlsx\",\"Raw Data\")\n\ncme = cme.rename(columns={\"Institute\":\"institute\",\"Person Id\":\"pid\"})\n\nret_raw = analyzer.exit_data_cleaned\n\nret = ret_raw.ix[(ret_raw.release_code.isnull()&ret_raw.step.notnull())]\nextra_in_cme = cme.ix[~cme.pid.isin(ret.pid)]\nextra_in_ret = ret.ix[~ret.pid.isin(cme.pid)]\n\nextra_in_ret.pid\n\nret_raw.ix[ret_raw.pid.isin(extra_in_cme.pid),[\"pid\",\"institute\",\"release_code\",\"release_date\"]]\n\nextra_in_cme.ix[extra_in_cme.pid.isin(ret_raw.pid),\"pid\"]\n\nextra_in_cme.ix[~extra_in_cme.pid.isin(ret_raw.pid),\"pid\"]",
-			"settings":
-			{
-				"buffer_size": 1522,
+				"buffer_size": 980,
 				"line_ending": "Unix"
 			}
 		}
@@ -395,24 +387,24 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 167.0,
+		"height": 87.0,
 		"selected_items":
 		[
 			[
-				"git comm",
-				"Git: Commit"
+				"git push",
+				"Git: Push"
 			],
 			[
-				"git status",
-				"Git: Status"
+				"git comm",
+				"Git: Commit"
 			],
 			[
 				"git add",
 				"Git: Add..."
 			],
 			[
-				"git push",
-				"Git: Push"
+				"git status",
+				"Git: Status"
 			],
 			[
 				"git com",
@@ -500,6 +492,7 @@
 	},
 	"file_history":
 	[
+		"/Users/mcox/Dropbox/MDIS/Institute_Dashboards/2014_institute/jump_rope_reports/student_achievement_and_attendance_report_computations.py",
 		"/Users/mcox/Dropbox/MDIS/Survey_Dashboards/PilotIdTransformation/pilot_id_parser.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/create_pilot_dashboard.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/NumericOutputCalculator.py",
@@ -743,22 +736,23 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "/Users/mcox/Dropbox/MDIS/Institute_Dashboards/2014_institute/jump_rope_reports/student_achievement_and_attendance_report_computations.py",
+					"file": "dump_results.py",
 					"settings":
 					{
-						"buffer_size": 2750,
+						"buffer_size": 980,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1006,
-								1006
+								979,
+								980
 							]
 						],
 						"settings":
@@ -956,138 +950,7 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"settings":
-					{
-						"buffer_size": 1522,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1522,
-								1464
-							]
-						],
-						"settings":
-						{
-							"auto_name": "",
-							"codeintel": true,
-							"codeintel_config":
-							{
-								"JavaScript":
-								{
-									"codeintel_max_recursive_dir_depth": 2.0,
-									"codeintel_scan_files_in_project": false,
-									"javascriptExtraPaths":
-									[
-									]
-								},
-								"PHP":
-								{
-									"codeintel_max_recursive_dir_depth": 5.0,
-									"codeintel_scan_files_in_project": false,
-									"phpExtraPaths":
-									[
-									]
-								},
-								"Python":
-								{
-									"env":
-									{
-									}
-								}
-							},
-							"codeintel_enabled_languages":
-							[
-								"JavaScript",
-								"Mason",
-								"XBL",
-								"XUL",
-								"RHTML",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"XSLT",
-								"Django",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Smarty",
-								"Node.js",
-								"Tcl",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_live": true,
-							"codeintel_live_enabled_languages":
-							[
-								"JavaScript",
-								"Mason",
-								"XBL",
-								"XUL",
-								"RHTML",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"XSLT",
-								"Django",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Smarty",
-								"Node.js",
-								"Tcl",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_max_recursive_dir_depth": 10.0,
-							"codeintel_scan_exclude_dir":
-							{
-								"JavaScript":
-								[
-									"/build/",
-									"/min/"
-								]
-							},
-							"codeintel_scan_files_in_project": true,
-							"codeintel_selected_catalogs":
-							[
-								"PyWin32",
-								"jQuery",
-								"Rails"
-							],
-							"codeintel_snippets": true,
-							"codeintel_syntax_map":
-							{
-								"Python Django": "Python"
-							},
-							"codeintel_tooltips": "popup",
-							"sublime_auto_complete": true,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
