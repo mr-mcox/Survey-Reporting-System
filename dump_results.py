@@ -18,7 +18,7 @@ else:
 		output_file = 'hist_results.csv'
 
 # Read connection info
-connect_info = 'mssql+pyodbc://survey_user:Survey!1@tpsd_survey'
+connect_info = 'mssql+pyodbc://survey_user:surveyProd1!@tpsd_survey'
 
 engine = create_engine(connect_info)
 
