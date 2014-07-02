@@ -4,7 +4,6 @@ from sqlalchemy.engine import reflection
 import numpy as np
 from alembic.migration import MigrationContext
 from alembic.operations import Operations
-import pdb
 import sys
 
 
@@ -138,7 +137,7 @@ print("Inserting new results")
 try:
 	conn_2.execute(surveys.insert(),df_to_dict_array(surveys_for_db))
 except:
-	pdb.set_trace()
+	print("Unexpected error when inserting new results:", sys.exc_info()[0])
 
 question_rows = df_to_dict_array(questions_for_db)
 for i, row in enumerate(question_rows):
