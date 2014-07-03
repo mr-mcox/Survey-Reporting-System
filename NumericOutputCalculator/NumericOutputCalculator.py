@@ -171,7 +171,12 @@ class NumericOutputCalculator(object):
 			confidential_questions_df = pd.DataFrame(nfv.reset_index(),columns=['question_code','is_confidential'])
 			confidential_questions = confidential_questions_df.ix[confidential_questions_df.is_confidential==1,'question_code'].unique().tolist()
 			if composite_questions is not None:
-				confidential_questions = confidential_questions + [key for key in composite_questions.keys()]
+				# print("Composite question structure is:" + str(composite_questions))
+				# Add composite question if at least one of the questions that make it up are confidential
+				for index, questions in composite_questions.items():
+					if len( set(questions) & set(confidential_questions)) >= 1:
+						confidential_questions.append(index)
+				# confidential_questions = confidential_questions + [key for key in composite_questions.keys()]
 			confidential_questions_index = all_results.reset_index().ix[all_results.reset_index().question_code.isin(confidential_questions)].set_index(cut_groupings).index.tolist()
 			all_results.ix[all_results.index.isin(less_than_5_sample_size_index) & all_results.index.isin(confidential_questions_index) & (all_results.result_type != 'sample_size'),'aggregation_value'] = np.nan
 			all_results = all_results.reset_index()

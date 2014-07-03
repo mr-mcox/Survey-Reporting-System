@@ -139,6 +139,17 @@ def step(context,question_code,value):
         else:
             assert context.result.set_index('question_code').loc[question_code,'aggregation_value'] == float(value)
 
+@then('the net display_value for string based question_code {question_code} is {value}')
+def step(context,question_code,value):
+    if value == 'blank':
+        print( context.result )
+        assert np.isnan( context.result.set_index(['question_code','result_type']).ix[(question_code,'net'),'aggregation_value'] )
+    else:
+        if 'net_formatted_value' in context.result.columns:
+            assert context.result.set_index('question_code').loc[question_code,'aggregation_value'] == float(value)
+        else:
+            assert context.result.set_index(['question_code','result_type']).sortlevel().loc[(question_code,'net'),'aggregation_value'] == float(value)
+
 @then('the regional display_value for string based question_code {question_code} and region "Atlanta" is {value}')
 def step(context,question_code,value):
     print(context.result)

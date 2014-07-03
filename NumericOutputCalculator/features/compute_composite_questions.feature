@@ -64,7 +64,7 @@ Feature: Accurately compute composite questions like Net Corps Strength and Net 
 		When compute sample_size is run with composite of NQ is q1 and q2
 		Then the display_value for string based question_code NQ is 3
 
-	Scenario: When composite questions are confidential, composite question should be blank when survey size is small
+	Scenario: When composite questions are confidential, composite question should be blank when sample size is small
 		Given net formatted values
 			| question_code | net_formatted_value | is_confidential |
 			| q1             | 0                   | 1 |
@@ -79,7 +79,7 @@ Feature: Accurately compute composite questions like Net Corps Strength and Net 
 		When compute net is run with composite of NQ is q1 and q2
 		Then the display_value for string based question_code NQ is blank
 
-	Scenario: When composite questions are confidential and cut for demographics is used, composite question should be blank when survey size is small
+	Scenario: When composite questions are confidential and cut for demographics is used, composite question should be blank when sample size is small
 		Given net formatted values
 			| question_code | net_formatted_value | respondent_id | is_confidential |
 			| q1             | 0                   | 1 | 1 |
@@ -95,3 +95,20 @@ Feature: Accurately compute composite questions like Net Corps Strength and Net 
 			| 3             | SoDak   | Male   |
 		When compute net is run with composite of NQ is q1 and q2 and region cut
 		Then the regional display_value for string based question_code NQ and region "Atlanta" is blank
+
+
+	Scenario: When composite questions are not confidential, composite question should be not be blank when sample size is small
+		Given net formatted values
+			| question_code | net_formatted_value | is_confidential |
+			| q1             | 0                   | 0 |
+			| q1             | 1                   | 0 |
+			| q1             | 1                   | 0 |
+			| q2             | 1                   | 0 |
+			| q2             | -1                  | 0 |
+			| q2             | 1                   | 0 |
+			| q3             | 0                   | 1 |
+			| q3             | -1                  | 1 |
+			| q3             | 0                   | 1 |
+		When compute net is run with composite of NQ is q1 and q2
+		Then the net display_value for string based question_code NQ is 0.5
+
