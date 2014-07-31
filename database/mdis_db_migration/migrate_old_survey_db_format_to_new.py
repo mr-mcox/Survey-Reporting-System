@@ -35,7 +35,7 @@ results = Table('results',metadata,
 			Column('question_id', Integer, ForeignKey('questions.id')),
 			Column('response', Integer))
 surveys = Table('surveys',metadata,
-			Column('id', Integer, primary_key=True),
+			Column('id', Integer, primary_key=True, autoincrement=False),
 			Column('survey_code', String))
 questions = Table('questions',metadata,
 			Column('id', Integer, primary_key=True),
