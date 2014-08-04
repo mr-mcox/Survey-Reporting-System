@@ -118,14 +118,14 @@ def convert_types_for_db(values):
 	new_values = list()
 	for value in values:
 		new_value = value
-		if type(value) != str:
+		if type(value) != str and new_value is not None:
 			new_value = np.asscalar(value)
 		if type(new_value) == str:
 			try:
 				new_value = float(new_value)
 			except:
 				pass
-		if type(new_value) != str:
+		if type(new_value) != str  and new_value is not None:
 			if np.isnan(new_value):
 				new_value = None
 			elif int(new_value) == new_value:
