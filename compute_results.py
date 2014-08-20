@@ -11,7 +11,7 @@ logging.basicConfig(filename='debug.log',level=logging.WARNING)
 
 config = ConfigurationReader.ConfigurationReader(config_file='config.yaml')
 
-connect_info = 'mssql+pyodbc://survey_user:Survey!1@tpsd_survey'
+connect_info = 'mssql+pyodbc://survey_user:surveyProd1!@tpsd_survey'
 
 engine = create_engine(connect_info)
 
