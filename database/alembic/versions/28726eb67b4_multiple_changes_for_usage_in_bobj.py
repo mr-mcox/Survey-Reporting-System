@@ -27,7 +27,7 @@ def upgrade():
 		Column('text',Text()))
 	op.add_column('questions', Column('index_id',Integer(), sa.ForeignKey('question_indicies.id')))
 	op.add_column('questions', Column('parent_question_id',Integer(), sa.ForeignKey('parent_questions.id')))
-	op.drop_column('responses','survey_id')
+	op.drop_column('responses','survey_id', mssql_drop_foreign_key=True)
 
 
 
