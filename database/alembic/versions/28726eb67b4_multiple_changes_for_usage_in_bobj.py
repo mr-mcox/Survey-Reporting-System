@@ -16,25 +16,25 @@ from sqlalchemy import Column, String, Integer, Text
 
 
 def upgrade():
-    op.rename_table('results','responses')
-    op.add_column('responses',Column('net_formatted_value',Integer()))
-    op.create_table('question_indicies',
-    	Column('id',Integer(),primary_key=True),
-    	Column('name',String(20)))
-    op.add_column('questions',Column('question_text',Text()))
-    op.create_table('parent_questions',
-    	Column('id',Integer(),primary_key=True),
-    	Column('text',Text()))
-    op.add_column('questions', Column('parent_question_id',Integer(), sa.ForeignKey('parent_questions.id')))
-    op.create_table('person_respondent',
-    	Column('person_id',Integer()),
-    	Column('respondent_id',Integer(),sa.ForeignKey('responses.respondent_id')))
+	op.rename_table('results','responses')
+	op.add_column('responses',Column('net_formatted_value',Integer()))
+	op.create_table('question_indicies',
+		Column('id',Integer(),primary_key=True),
+		Column('name',String(20)))
+	op.add_column('questions',Column('question_text',Text()))
+	op.create_table('parent_questions',
+		Column('id',Integer(),primary_key=True),
+		Column('text',Text()))
+	op.add_column('questions', Column('index_id',Integer(), sa.ForeignKey('question_indicies.id')))
+	op.add_column('questions', Column('parent_question_id',Integer(), sa.ForeignKey('parent_questions.id')))
+	op.drop_column('responses','survey_id')
 
 
 
 def downgrade():
-	op.drop_table('person_respondent')
+	op.add_column('responses',Column('survey_id', Integer(), sa.ForeignKey('surveys.id')))
 	op.drop_column('questions','parent_question_id')
+	op.drop_column('questions','index_id')
 	op.drop_table('parent_questions')
 	op.drop_column('questions','question_text')
 	op.drop_table('question_indicies')
