@@ -11,7 +11,7 @@ def test_add_pilot_cms():
 @given(re.compile('net formatted values\n(?P<text_table>.+)', re.DOTALL))
 def coordinator_with_net_formatted_values(text_table):
 	coordinator = CalculationCoordinator.CalculationCoordinator()
-	coordinator.results = pd.DataFrame(import_table_data(text_table))
+	coordinator.responses = pd.DataFrame(import_table_data(text_table))
 	return coordinator
 
 @given(re.compile('demographic data passed to coordinator\n(?P<text_table>.+)', re.DOTALL))

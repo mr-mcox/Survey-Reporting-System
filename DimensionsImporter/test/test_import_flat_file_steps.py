@@ -1,6 +1,6 @@
 from pytest_bdd import scenario, given, when, then
 import re
-from DimensionsImporter import DimensionsImporter
+from SurveyReportingSystem.DimensionsImporter import DimensionsImporter
 import os
 import pandas as pd
 
@@ -38,7 +38,7 @@ def demographic_file():
 
 @given('DimensionsImporter is initialized with xlsx file')
 def importer_with_data(demographic_file):
-	return DimensionsImporter(flat_file = demographic_file)
+	return DimensionsImporter.DimensionsImporter(flat_file = demographic_file)
 
 @then('demographic_data has a table with 6 rows')
 def has_table(importer_with_data):
@@ -55,7 +55,7 @@ def demograhpic_input(text_table):
 
 @given('an importer')
 def importer():
-    return DimensionsImporter()
+    return DimensionsImporter.DimensionsImporter()
 
 @when('this data is assigned to demographic_data')
 def assign_data_to_importer(importer, demograhpic_input):

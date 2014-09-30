@@ -31,9 +31,9 @@ def run_cuts_for_excel_menu(reader_with_basic_static_cuts):
 def static_cut_list(reader_with_basic_static_cuts):
 
 	result = reader_with_basic_static_cuts.cuts_for_excel_menu()
-	expected_results = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','Something']]
+	expected_responses = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','Something']]
 	assert len(result) == 2
-	for res in expected_results:
+	for res in expected_responses:
 		match = False
 		for res2 in result:
 			if res == res2:
@@ -61,9 +61,9 @@ def run_cuts_for_excel_menu_with_historical(reader_with_historical_cut):
 def historical_cut_output(reader_with_historical_cut):
 	result = reader_with_historical_cut.cuts_for_excel_menu(menu='historical')
 
-	expected_results = [['Region', 'static', 'Region', 'Corps',"Something"]]
+	expected_responses = [['Region', 'static', 'Region', 'Corps',"Something"]]
 	assert len(result) == 1
-	for res in expected_results:
+	for res in expected_responses:
 		match = False
 		for res2 in result:
 			if res == res2:

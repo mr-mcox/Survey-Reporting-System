@@ -60,9 +60,9 @@ for code in survey_codes:
 	#Remove old questions on the remote database
 	r_conn.execute(survey_specific_questions.delete().where(survey_specific_questions.c.survey==code))
 
-ssq_results = l_conn.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(survey_codes)))
+ssq_responses = l_conn.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(survey_codes)))
 
-question_table = pd.DataFrame(ssq_results.fetchall())
-question_table.columns = ssq_results.keys()
+question_table = pd.DataFrame(ssq_responses.fetchall())
+question_table.columns = ssq_responses.keys()
 
 r_conn.execute(survey_specific_questions.insert(),df_to_dict_array(question_table))

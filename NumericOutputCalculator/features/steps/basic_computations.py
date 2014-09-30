@@ -19,12 +19,12 @@ def import_table_data(table):
 
 @given('net formatted values')
 def step(context):
-    context.results = import_table_data(context.table)
-    context.numeric_output_calculator = NumericOutputCalculator(responses=context.results)
+    context.responses = import_table_data(context.table)
+    context.numeric_output_calculator = NumericOutputCalculator(responses=context.responses)
 
 @when('compute net is run')
 def step(context):
-	context.result = context.numeric_output_calculator.compute_net_results()
+	context.result = context.numeric_output_calculator.compute_net_responses()
 
 @then('the display_value for question_code {question_code} is {value}')
 def step(context,question_code,value):
@@ -62,11 +62,11 @@ def step(context,column,question_code,region, value):
 
 @when('compute strong is run')
 def step(context):
-    context.result = context.numeric_output_calculator.compute_strong_results()
+    context.result = context.numeric_output_calculator.compute_strong_responses()
 
 @when('compute weak is run')
 def step(context):
-    context.result = context.numeric_output_calculator.compute_weak_results()
+    context.result = context.numeric_output_calculator.compute_weak_responses()
 
 @when('NumericOutputCalculator is initialized')
 def step(context):
@@ -84,13 +84,13 @@ def step(context, person_id, value):
         assert nfv.set_index('person_id').loc[int(person_id),value_column] == int(value)
     
 
-@given('raw 7pt questions results')
+@given('raw 7pt questions responses')
 def step(context):
     context.numeric_output_calculator = NumericOutputCalculator(responses=import_table_data(context.table))
 
 @when('compute average is run')
 def step(context):
-    context.result = context.numeric_output_calculator.compute_average_results()
+    context.result = context.numeric_output_calculator.compute_average_responses()
 
 @then('there is a result_type column where all rows have value of net')
 def step(context):
@@ -100,7 +100,7 @@ def step(context):
 
 @when('compute sample size is run')
 def step(context):
-    context.result = context.numeric_output_calculator.compute_sample_size_results()
+    context.result = context.numeric_output_calculator.compute_sample_size_responses()
 
 @when('when compute_aggregation is run with net and strong')
 def step(context):
@@ -160,7 +160,7 @@ def step(context,question_code,value):
 
 @when('compute net is run with composite of NQ is q1 and q2 and region cut')
 def step(context):
-    context.result = context.numeric_output_calculator.compute_net_results(cut_demographic = 'region', composite_questions = {'NQ':['q1','q2']})
+    context.result = context.numeric_output_calculator.compute_net_responses(cut_demographic = 'region', composite_questions = {'NQ':['q1','q2']})
 
 @when('compute {result_type} is run with composite of NQ is q1 and q2')
 def step(context,result_type):
@@ -176,16 +176,16 @@ def step(context,result_type,value):
     else:
         assert context.result.set_index(['question_code','result_type']).ix[(1.0,result_type),'aggregation_value'] == float(value)
 
-@then('results_with_dimensions has region of "{region}" for respondent_id 1 and survey_code "{survey_code}"')
+@then('responses_with_dimensions has region of "{region}" for respondent_id 1 and survey_code "{survey_code}"')
 def step(context,region,survey_code):
-    print(context.numeric_output_calculator.results_with_dimensions)
+    print(context.numeric_output_calculator.responses_with_dimensions)
     print(context.numeric_output_calculator.demographic_data)
     print(context.numeric_output_calculator.responses)
-    assert context.numeric_output_calculator.results_with_dimensions.set_index(['respondent_id','survey_code']).ix[(1,survey_code),'region'] == region
+    assert context.numeric_output_calculator.responses_with_dimensions.set_index(['respondent_id','survey_code']).ix[(1,survey_code),'region'] == region
 
-@when('NumericOutputCalculator is initialized with results and demographic_data')
+@when('NumericOutputCalculator is initialized with responses and demographic_data')
 def step(context):
-    context.numeric_output_calculator = NumericOutputCalculator(responses=context.results,demographic_data=context.demographic_data)
+    context.numeric_output_calculator = NumericOutputCalculator(responses=context.responses,demographic_data=context.demographic_data)
 
 @then('the display_value including region and gender for question_code 1, result_type "{result_type}" and region "Atlanta", gender "Female" is {value}')
 def step(context,result_type,value):

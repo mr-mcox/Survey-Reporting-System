@@ -44,7 +44,7 @@ Feature: When provided a set of demographics, cut by those demograhpics when spe
 
 
 	Scenario: When 7pt with 1=Strongly Agree questions are given, average is accurately computed
-	Given raw 7pt questions results
+	Given raw 7pt questions responses
 		| respondent_id | question_code | response |
 		| 1             | 1             | 1        |
 		| 2             | 1             | 1        |

@@ -1,4 +1,4 @@
-Feature: Remove results when the question is confidential and there are fewere than 5 respondents
+Feature: Remove responses when the question is confidential and there are fewere than 5 respondents
 	Scenario: Remove display values for fewer than 5
 		Given net formatted values
 			| question_code | net_formatted_value | is_confidential |
@@ -56,7 +56,7 @@ Feature: Remove results when the question is confidential and there are fewere t
 		Then the regional "net" display_value for question_code "1" and region "SoDak" is blank
 
 	Scenario: Remove display values for fewer than 5 for categorical responses
-		Given raw 7pt questions results
+		Given raw 7pt questions responses
 			| question_code | response | question_type        | respondent_id | is_confidential |
 			| 1             | 1        | Categorical_response | 1             | 1               |
 			| 1             | 1        | Categorical_response | 2             | 1               |

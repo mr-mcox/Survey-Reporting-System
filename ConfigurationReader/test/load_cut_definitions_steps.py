@@ -339,10 +339,10 @@ def step(context):
 
 @then('the result has the default dimension in the last place')
 def step(context):
-	expected_results = [['Region', 'static', 'region', 'corps',context.reader.default_dimension_title]]
+	expected_responses = [['Region', 'static', 'region', 'corps',context.reader.default_dimension_title]]
 	print(context.result)
 	assert len(context.result) == 1
-	for res in expected_results:
+	for res in expected_responses:
 		match = False
 		for res2 in context.result:
 			if res == res2:

@@ -1,6 +1,6 @@
 Feature: Compute sample size
 	Scenario: Compute basic sample size for questions
-		Given raw 7pt questions results
+		Given raw 7pt questions responses
 			| question_code | response |
 			| 1             | 1        |
 			| 1             | 2        |
