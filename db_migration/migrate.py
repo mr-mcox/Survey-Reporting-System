@@ -22,6 +22,8 @@ def migrate(conn_1,conn_2,*args,**kwargs):
 								Column('confidential',Integer),
 								Column('question_type',String)
 								)
+	clean_CSI = kwargs.pop('clean_CSI',False)
+	clean_CALI = kwargs.pop('clean_CALI',False)
 
 	#Connecting to new db
 	results = Table('results',metadata,
@@ -82,6 +84,7 @@ def migrate(conn_1,conn_2,*args,**kwargs):
 	if max_current_question_id is None:
 		max_current_question_id = 0
 	question_map = dict(zip(questions_list,[i + max_current_question_id + 1 for i in range(len(questions_list))]))
+	question_code_map = question_table.set_index('survey_specific_qid')['master_qid']
 
 	question_table['question_id'] = question_table.survey_specific_qid.map(question_map)
 	question_table['survey_id'] = question_table.survey.map(survey_map)
@@ -146,8 +149,46 @@ def migrate(conn_1,conn_2,*args,**kwargs):
 
 		#Map survey id and question id onto survey responses
 		responses['question_id'] = responses.survey_specific_qid.map(question_map)
+		responses['question_code']  = responses.survey_specific_qid.map(question_code_map)
 		responses['survey_id'] = responses.survey.map(survey_map) 
 		responses = responses.rename(columns={'cm_pid':'respondent_id'})
+
+		#Clean CSI
+		if clean_CSI:
+			csi_codes = [
+			'CSI1',
+			'CSI2',
+			'CSI3',
+			'CSI4',
+			'CSI5',
+			'CSI6',
+			'CSI7',
+			'CSI8',
+			'CSI10',
+			'CSI12',
+			'Culture1',
+			]
+			responses['is_csi'] = responses.question_code.isin(csi_codes)
+			csi_count = responses.groupby('respondent_id').sum()['is_csi']
+			cms_to_keep = csi_count.index[csi_count == len(csi_codes)].values
+			responses = responses.ix[responses.respondent_id.isin(cms_to_keep)]
+
+		#Clean CALI
+		if clean_CALI:
+			cli_codes = [
+			'CLI1',
+			'CLI2',
+			'CLI3',
+			'CLI4',
+			'CLI5',
+			'CLI6',
+			'CLI7',
+			'CLI8',
+			]
+			responses['is_cli'] = responses.question_code.isin(cli_codes)
+			cli_count = responses.groupby('respondent_id').sum()['is_cli']
+			cms_to_keep = cli_count.index[cli_count == len(cli_codes)].values
+			responses = responses.ix[responses.respondent_id.isin(cms_to_keep)]
 
 		#Create results table
 		results_for_db = pd.DataFrame(responses,columns=['respondent_id','survey_id','question_id','response'])
