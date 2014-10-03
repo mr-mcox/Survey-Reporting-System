@@ -172,7 +172,7 @@ def test_basic_migration(db_ready_to_migrate):
 	surveys = schema['surveys']
 	questions = schema['questions']
 
-	migrate(db_ready_to_migrate['conn'],db_ready_to_migrate['conn'],'1415F8W')
+	migrate(db_ready_to_migrate['conn'],db_ready_to_migrate['conn'],['1415F8W'])
 	sq = (select([surveys],use_labels=True).where(surveys.c.survey_code.in_(['1415F8W']))).alias('sq')
 	select_results = select([results, questions.c.question_code,questions.c.is_confidential,questions.c.question_type]).select_from(results.join(questions).join(select([surveys],use_labels=True).where(surveys.c.survey_code.in_(['1415F8W'])).alias('sq')))
 	db_results = db_ready_to_migrate['conn'].execute(select_results)
@@ -186,7 +186,7 @@ def test_removing_responses_incomplete_CSI(db_with_incomplete_CSI):
 	surveys = schema['surveys']
 	questions = schema['questions']
 
-	migrate(db_with_incomplete_CSI['conn'],db_with_incomplete_CSI['conn'],'1415F8W',clean_CSI=True)
+	migrate(db_with_incomplete_CSI['conn'],db_with_incomplete_CSI['conn'],['1415F8W'],clean_CSI=True)
 	sq = (select([surveys],use_labels=True).where(surveys.c.survey_code.in_(['1415F8W']))).alias('sq')
 	select_results = select([results, questions.c.question_code,questions.c.is_confidential,questions.c.question_type]).select_from(results.join(questions).join(select([surveys],use_labels=True).where(surveys.c.survey_code.in_(['1415F8W'])).alias('sq')))
 	db_results = db_with_incomplete_CSI['conn'].execute(select_results)
@@ -201,7 +201,7 @@ def test_removing_responses_incomplete_CALI(db_with_incomplete_CALI):
 	surveys = schema['surveys']
 	questions = schema['questions']
 
-	migrate(db_with_incomplete_CALI['conn'],db_with_incomplete_CALI['conn'],'1415F8W',clean_CALI=True)
+	migrate(db_with_incomplete_CALI['conn'],db_with_incomplete_CALI['conn'],['1415F8W'],clean_CALI=True)
 	sq = (select([surveys],use_labels=True).where(surveys.c.survey_code.in_(['1415F8W']))).alias('sq')
 	select_results = select([results, questions.c.question_code,questions.c.is_confidential,questions.c.question_type]).select_from(results.join(questions).join(select([surveys],use_labels=True).where(surveys.c.survey_code.in_(['1415F8W'])).alias('sq')))
 	db_results = db_with_incomplete_CALI['conn'].execute(select_results)

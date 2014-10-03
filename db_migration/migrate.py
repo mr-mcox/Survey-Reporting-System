@@ -6,7 +6,7 @@ from alembic.migration import MigrationContext
 from alembic.operations import Operations
 import sys
 
-def migrate(conn_1,conn_2,*args,**kwargs):
+def migrate(conn_1,conn_2,survey_codes,**kwargs):
 	#Connect to local DB
 	metadata = MetaData()
 	numerical_responses = Table('numerical_responses',metadata,
@@ -50,7 +50,6 @@ def migrate(conn_1,conn_2,*args,**kwargs):
 	# 	alembic_op.drop_constraint(fk['name'],'results')
 
 	#Import from local DB
-	survey_codes = args
 					
 	ssq_results = conn_1.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(survey_codes)))
 
