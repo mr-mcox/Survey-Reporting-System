@@ -65,7 +65,8 @@ def empty_db():
 
 	return {'conn':conn,'schema':schema}
 
-def test_extract_survey_code_from_survey_specific_questions(empty_db):
+@pytest.fixture
+def migrator_with_ssq_for_survey(empty_db):
 	conn = empty_db['conn']
 	survey_specific_questions = empty_db['schema']['survey_specific_questions']
 	ssq_cols = ['survey_specific_qid', 'survey']
@@ -74,18 +75,13 @@ def test_extract_survey_code_from_survey_specific_questions(empty_db):
 				('1415F8W-CSI2','1415F8W')]
 	for row in ssq_rows:
 		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
-	m = Migrator(conn)
+	return Migrator(conn)
+
+def test_extract_survey_code_from_survey_specific_questions(migrator_with_ssq_for_survey):
+	m = migrator_with_ssq_for_survey
 	assert len(m.survey_df.index)==2
 
-def test_assign_survey_id_and_map(empty_db):
-	conn = empty_db['conn']
-	survey_specific_questions = empty_db['schema']['survey_specific_questions']
-	ssq_cols = ['survey_specific_qid', 'survey']
-	ssq_rows = [('2014Inst-EIS-CSI1','2014Inst-EIS'),
-				('1415F8W-CSI1','1415F8W'),
-				('1415F8W-CSI2','1415F8W')]
-	for row in ssq_rows:
-		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
-	m = Migrator(conn)
+def test_assign_survey_id_and_map(migrator_with_ssq_for_survey):
+	m = migrator_with_ssq_for_survey
 	for i in m.survey_df.index:
 		assert m.survey_df.loc[i,'survey_id'] == m.survey_id_survey_code_map[m.survey_df.loc[i,'survey_code']]
