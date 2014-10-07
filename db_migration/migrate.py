@@ -61,6 +61,11 @@ class Migrator(object):
         }
         self.db = connection
 
+        self.survey_code_title_map = {
+            '1415F8W' : '2014-15 First 8 Weeks CM Survey',
+            '2014Inst-EIS' : '2014 End of Institute CM Survey',
+        }
+
     def survey_df():
         doc = "The survey_df property."
         def fget(self):
@@ -70,6 +75,7 @@ class Migrator(object):
                 _survey_df = df.drop_duplicates()
                 _survey_df['survey_code'] = _survey_df.survey
                 _survey_df['survey_id'] = [i + 1 for i in range(len(_survey_df.index))]
+                _survey_df['survey_title'] = _survey_df.survey_code.map(self.survey_code_title_map)
                 self._survey_df = _survey_df
             return self._survey_df
         def fset(self, value):
@@ -91,45 +97,3 @@ class Migrator(object):
             del self._survey_id_survey_code_map
         return locals()
     survey_id_survey_code_map = property(**survey_id_survey_code_map())
-
-#Create survey question category map based on question code and asign arbitrary ids
-
-#Create map of question code to question_category_id
-
-#Extract survey code and title from survey_specific_questions
-
-#Write survey title
-
-#Assign survey_id and map to survey code
-
-#Extract question code, title, confidential, survey_specific_qid and survey from survey_specific_questions
-
-#Create question_code_survey column, survey_question_id and map
-
-#Pick most recent question title based on most recent survey
-
-#Create question_id and map
-
-#Map question_category_id on survey_question
-
-#Map survey_id on survey_question
-
-#Map question_id on survey_question
-
-#Create question_override title if survey question doesn't match with associated question
-
-#Extract survey_specific_qid, cm_pid, repsonse from numeric_responses
-
-#Map responses based on survey_specific_qid
-
-#Map converted_net_value based on response
-
-#Import survey
-
-#Import survey_question_category
-
-#Import survey_question
-
-#Import question
-
-#Import cm_survey_response

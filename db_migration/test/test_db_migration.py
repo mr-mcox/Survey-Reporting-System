@@ -85,3 +85,7 @@ def test_assign_survey_id_and_map(migrator_with_ssq_for_survey):
 	m = migrator_with_ssq_for_survey
 	for i in m.survey_df.index:
 		assert m.survey_df.loc[i,'survey_id'] == m.survey_id_survey_code_map[m.survey_df.loc[i,'survey_code']]
+
+def test_assign_question_text(migrator_with_ssq_for_survey):
+	m = migrator_with_ssq_for_survey
+	assert m.survey_df.set_index('survey_code').get_value('1415F8W','survey_title') =='2014-15 First 8 Weeks CM Survey'
