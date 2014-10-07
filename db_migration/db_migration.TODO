@@ -1,6 +1,6 @@
  Phase 1:
   ✔ Extract survey code and title from survey_specific_questions @done (14-10-07 17:43)
-  ☐ Assign survey_id and map to survey code
+  ✔ Assign survey_id and map to survey code @done (14-10-07 18:01)
   ☐ Write survey title
   ☐ Create survey question category map based on question code and asign arbitrary ids
   ☐ Create map of question code to question_category_id

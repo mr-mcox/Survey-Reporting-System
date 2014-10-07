@@ -67,7 +67,10 @@ class Migrator(object):
             if not hasattr(self,'_survey_df'):
                 records = self.db.execute(select([self.table['survey_specific_questions'].c.survey]))
                 df = pd.DataFrame({'survey':[r[0] for r in records.fetchall()]})
-                self._survey_df = df.drop_duplicates()
+                _survey_df = df.drop_duplicates()
+                _survey_df['survey_code'] = _survey_df.survey
+                _survey_df['survey_id'] = [i + 1 for i in range(len(_survey_df.index))]
+                self._survey_df = _survey_df
             return self._survey_df
         def fset(self, value):
             self._survey_df = value
@@ -75,6 +78,19 @@ class Migrator(object):
             del self._survey_df
         return locals()
     survey_df = property(**survey_df())
+
+    def survey_id_survey_code_map():
+        doc = "The survey_id_survey_code_map property."
+        def fget(self):
+            if not hasattr(self,'_survey_id_survey_code_map'):
+                self._survey_id_survey_code_map = dict(zip(self.survey_df.survey_code.tolist(),self.survey_df.survey_id.tolist()))
+            return self._survey_id_survey_code_map
+        def fset(self, value):
+            self._survey_id_survey_code_map = value
+        def fdel(self):
+            del self._survey_id_survey_code_map
+        return locals()
+    survey_id_survey_code_map = property(**survey_id_survey_code_map())
 
 #Create survey question category map based on question code and asign arbitrary ids
 
