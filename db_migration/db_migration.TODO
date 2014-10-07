@@ -2,7 +2,7 @@
   ✔ Extract survey code and title from survey_specific_questions @done (14-10-07 17:43)
   ✔ Assign survey_id and map to survey code @done (14-10-07 18:01)
   ✔ Write survey title @done (14-10-07 18:11)
-  ☐ Create survey question category map based on question code and asign arbitrary ids
+  ✔ Create survey question category map based on question code and asign arbitrary ids @done (14-10-07 18:33)
   ☐ Create map of question code to question_category_id
   ☐ Extract question code, title, confidential, survey_specific_qid and survey from survey_specific_questions
   ☐ Create question_code_survey column, survey_question_id and map
@@ -23,3 +23,4 @@
 
 Phase 2:
   ☐ survey question category map based on imported csv file
+  ☐ Create more robust mapping of survey titles

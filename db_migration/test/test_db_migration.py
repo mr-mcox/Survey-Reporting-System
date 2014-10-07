@@ -1,6 +1,7 @@
 from SurveyReportingSystem.db_migration.migrate import Migrator
 from sqlalchemy import Table, Column, Integer, String, MetaData, select, create_engine
 import pytest
+import pandas as pd
 
 @pytest.fixture
 def empty_db():
@@ -89,3 +90,13 @@ def test_assign_survey_id_and_map(migrator_with_ssq_for_survey):
 def test_assign_question_text(migrator_with_ssq_for_survey):
 	m = migrator_with_ssq_for_survey
 	assert m.survey_df.set_index('survey_code').get_value('1415F8W','survey_title') =='2014-15 First 8 Weeks CM Survey'
+
+@pytest.fixture
+def empty_migrator(empty_db):
+	conn = empty_db['conn']
+	return Migrator(conn)
+
+def test_basic_question_category_df(empty_migrator):
+	m = empty_migrator
+	expected_df = pd.DataFrame({'question_category_id':[1,2],'question_category':['CALI','CSI']})
+	pd.util.testing.assert_frame_equal(m.question_category_df, expected_df)
