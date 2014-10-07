@@ -100,3 +100,30 @@ def test_basic_question_category_df(empty_migrator):
 	m = empty_migrator
 	expected_df = pd.DataFrame({'question_category_id':[1,2],'question_category':['CALI','CSI']})
 	pd.util.testing.assert_frame_equal(m.question_category_df, expected_df)
+
+def test_question_category_question_code_map(empty_migrator):
+	m = empty_migrator
+	expected_dict = {
+		'CSI2' : 'CSI',
+		'CSI1' : 'CSI',
+		'CSI8' : 'CSI',
+		'CSI10' : 'CSI',
+		'CSI12' : 'CSI',
+		'CSI4' : 'CSI',
+		'CSI5' : 'CSI',
+		'CSI6' : 'CSI',
+		'Culture1' : 'CSI',
+		'CSI3' : 'CSI',
+		'CSI7' : 'CSI',
+		'CLI1' : 'CALI',
+		'CLI2' : 'CALI',
+		'CLI3' : 'CALI',
+		'CLI4' : 'CALI',
+		'CLI5' : 'CALI',
+		'CLI6' : 'CALI',
+		'CLI7' : 'CALI',
+		'CLI8' : 'CALI',
+	}
+	df = m.question_category_df.set_index('question_category')
+	for key, value in expected_dict.items():
+		assert m.question_category_question_code_map[key] == df.get_value(value,'question_category_id')

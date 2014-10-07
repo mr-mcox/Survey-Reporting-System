@@ -66,6 +66,27 @@ class Migrator(object):
             '2014Inst-EIS' : '2014 End of Institute CM Survey',
         }
         self.question_category_df = pd.DataFrame({'question_category_id':[1,2],'question_category':['CALI','CSI']})
+        self.question_category_question_code_map = {
+                                                        'CSI2' : 2,
+                                                        'CSI1' : 2,
+                                                        'CSI8' : 2,
+                                                        'CSI10' :2,
+                                                        'CSI12' :2,
+                                                        'CSI4' : 2,
+                                                        'CSI5' : 2,
+                                                        'CSI6' : 2,
+                                                        'Culture1' : 2,
+                                                        'CSI3' : 2,
+                                                        'CSI7' : 2,
+                                                        'CLI1' : 1,
+                                                        'CLI2' : 1,
+                                                        'CLI3' : 1,
+                                                        'CLI4' : 1,
+                                                        'CLI5' : 1,
+                                                        'CLI6' : 1,
+                                                        'CLI7' : 1,
+                                                        'CLI8' : 1,
+                                                    }
 
     def survey_df():
         doc = "The survey_df property."
