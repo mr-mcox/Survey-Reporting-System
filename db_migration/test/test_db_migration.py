@@ -315,3 +315,9 @@ def test_migrate_survey_question_table_to_new_schema(migrator_with_ssq_and_nr_fo
 	table_df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
 	pd.util.testing.assert_frame_equal(pd.DataFrame(m.survey_question_df,columns=records.keys()), table_df.convert_objects())
 
+def test_migrate_question_category_table_to_new_schema(migrator_with_ssq_and_nr_for_response):
+	m = migrator_with_ssq_and_nr_for_response
+	m.migrate_to_new_schema()
+	records = m.db.execute(select([m.table['question_category']]))
+	table_df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
+	pd.util.testing.assert_frame_equal(pd.DataFrame(m.question_category_df,columns=records.keys()), table_df.convert_objects())

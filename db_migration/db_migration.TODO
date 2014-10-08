@@ -16,7 +16,7 @@
   ✔ Map responses based on survey_specific_qid @done (14-10-07 22:23)
   ✔ Map converted_net_value based on response @done (14-10-07 22:32)
   ✔ Import survey @done (14-10-07 23:05)
-  ☐ Import survey_question_category
+  ✔ Import survey_question_category @done (14-10-07 23:21)
   ✔ Import survey_question @done (14-10-07 23:19)
   ✔ Import question @done (14-10-07 23:15)
   ✔ Import cm_survey_response @done (14-10-07 23:08)
