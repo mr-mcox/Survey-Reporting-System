@@ -273,3 +273,10 @@ def test_basic_fields_for_response(migrator_with_ssq_and_nr_for_response):
 	expected_df = pd.DataFrame.from_records(expected_records,columns=expected_columns)
 	pd.util.testing.assert_frame_equal(pd.DataFrame(m.response_df,columns=expected_columns), expected_df)
 
+def test_map_survey_question_id_on_response(migrator_with_ssq_and_nr_for_response):
+	m = migrator_with_ssq_and_nr_for_response
+	sq = m.survey_question_df.set_index('survey_question_id')
+	resp = m.response_df
+	for idx in resp.index:
+		assert sq.get_value(resp.get_value(idx,'survey_question_id'),'survey_specific_qid') == resp.get_value(idx,'survey_specific_qid')
+

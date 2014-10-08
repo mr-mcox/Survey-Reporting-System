@@ -214,6 +214,9 @@ class Migrator(object):
             if not hasattr(self,'_response_df'):
                 records = self.db.execute(select([self.table['numerical_responses']]))
                 df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys()).rename(columns={'cm_pid':'person_id'})
+                survey_specific_qid_question_id_map = dict(zip(self.survey_question_df.survey_specific_qid.tolist(),
+                                                                            self.survey_question_df.survey_question_id.tolist()))
+                df['survey_question_id'] = df.survey_specific_qid.map(survey_specific_qid_question_id_map)
                 self._response_df = df
             return self._response_df
         def fset(self, value):
