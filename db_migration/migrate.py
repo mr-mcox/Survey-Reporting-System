@@ -1,5 +1,6 @@
 from sqlalchemy import Table, Column, Integer, String, MetaData, select
 import pandas as pd
+import numpy as np
 
 class Migrator(object):
     """docstring for migrate"""
@@ -217,6 +218,10 @@ class Migrator(object):
                 survey_specific_qid_question_id_map = dict(zip(self.survey_question_df.survey_specific_qid.tolist(),
                                                                             self.survey_question_df.survey_question_id.tolist()))
                 df['survey_question_id'] = df.survey_specific_qid.map(survey_specific_qid_question_id_map)
+                df['converted_net_value'] = np.nan
+                df.ix[df.response <= 2,'converted_net_value'] = 1
+                df.ix[df.response == 3,'converted_net_value'] = 0
+                df.ix[(df.response >= 4) & (df.response <= 7),'converted_net_value'] = -1
                 self._response_df = df
             return self._response_df
         def fset(self, value):

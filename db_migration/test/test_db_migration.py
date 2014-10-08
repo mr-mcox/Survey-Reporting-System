@@ -280,3 +280,10 @@ def test_map_survey_question_id_on_response(migrator_with_ssq_and_nr_for_respons
 	for idx in resp.index:
 		assert sq.get_value(resp.get_value(idx,'survey_question_id'),'survey_specific_qid') == resp.get_value(idx,'survey_specific_qid')
 
+def test_converted_net_value_mapping(migrator_with_ssq_and_nr_for_response):
+	m = migrator_with_ssq_and_nr_for_response
+	assert (m.response_df.ix[m.response_df.response <= 2,'converted_net_value'] == 1).all()
+	assert (m.response_df.ix[(m.response_df.response >= 4) & (m.response_df.response <= 7),'converted_net_value'] == -1).all()
+	assert (m.response_df.ix[m.response_df.response == 3,'converted_net_value'] == 0).all()
+	assert (np.isnan(m.response_df.ix[m.response_df.response >= 8,'converted_net_value'])).all()
+
