@@ -239,19 +239,54 @@ class Migrator(object):
         self.db.execute(self.table['survey_question'].delete())
         self.db.execute(self.table['question_category'].delete())
         self.db.execute(self.table['response'].delete())
-        self.survey_df.ix[:,['survey_id','survey_code','survey_title']].to_sql('cm_survey',self.engine,index=False,if_exists='append')
-        self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']].to_sql('cm_response',self.engine,index=False,if_exists='append')
-        self.question_df.ix[:,['question_id',
-                 'question_title',
-                'question_code']
-                ].to_sql('cm_question',self.engine,index=False,if_exists='append')
-        self.question_category_df.ix[:,['question_category_id','question_category']].to_sql('cm_question_category',self.engine,index=False,if_exists='append')
+        df = self.survey_df.ix[:,['survey_id','survey_code','survey_title']]
+        for row in df.itertuples():
+            self.db.execute(self.table['survey'].insert(), {
+                'survey_id':int(row[1]),
+                'survey_code':str(row[2]),
+                'survey_title':str(row[3])
+                })
+
+        df = self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']]
+        for row in df.itertuples():
+            self.db.execute(self.table['response'].insert(), {
+                'person_id'           : int(row[1]),
+                'survey_question_id'  : int(row[2]),
+                'response'            : int(row[3]),
+                'converted_net_value' : float(row[4])
+                })
+
+        df = self.question_df.ix[:,['question_id','question_title','question_code']]
+        for row in df.itertuples():
+            self.db.execute(self.table['question'].insert(), {
+                'question_id'    : int(row[1]),
+                'question_title' : str(row[2]),
+                'question_code'  : str(row[3]),
+                })
+
+        df = self.question_category_df.ix[:,['question_category_id','question_category']]
+        for row in df.itertuples():
+            self.db.execute(self.table['question_category'].insert(), {
+                'question_id'       : int(row[1]),
+                'question_category' : str(row[2]),
+                })
+
         self.question_code_question_id_map #Also code smell
-        self.survey_question_df.ix[:,['survey_question_id',
-                                 'survey_id',
-                                'is_confidential',
-                                'question_type',
-                                'question_title_override',
-                                'question_id',
-                                'question_category_id',]
-                                ].to_sql('cm_survey_question',self.engine,index=False,if_exists='append')
+
+        df = self.survey_question_df.ix[:,['survey_question_id',
+                                                'survey_id',
+                                                'is_confidential',
+                                                'question_type',
+                                                'question_title_override',
+                                                'question_id',
+                                                'question_category_id',]]
+        for row in df.itertuples():
+            self.db.execute(self.table['survey_question'].insert(), {
+                'survey_question_id'      : int(row[1]),
+                'survey_id'               : int(row[2]),
+                'is_confidential'         : int(row[3]),
+                'question_type'           : str(row[4]),
+                'question_title_override' : row[5],
+                'question_id'             : int(row[6]),
+                'question_category_id'    : int(row[7]),
+                })
