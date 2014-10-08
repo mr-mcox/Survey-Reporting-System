@@ -321,3 +321,26 @@ def test_migrate_question_category_table_to_new_schema(migrator_with_ssq_and_nr_
 	records = m.db.execute(select([m.table['question_category']]))
 	table_df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
 	pd.util.testing.assert_frame_equal(pd.DataFrame(m.question_category_df,columns=records.keys()), table_df.convert_objects())
+
+def test_remove_duplicate_response_row(empty_db):
+	conn = empty_db['conn']
+	survey_specific_questions = empty_db['schema']['survey_specific_questions']
+	numerical_responses = empty_db['schema']['numerical_responses']
+	ssq_cols = ['survey_specific_qid','master_qid','survey','confidential','question_type','survey_specific_question']
+	ssq_rows = [
+				('1415F8W-CSI1','CSI1','1415F8W',1,'7pt_1=SA','This is CSI question 1!'),
+				]
+	nr_cols = ['cm_pid','survey_specific_qid','response']
+	nr_rows = [
+		(1,'1415F8W-CSI1',1),
+		(2,'1415F8W-CSI1',3),
+		(2,'1415F8W-CSI1',4),
+		(3,'1415F8W-CSI1',5),
+		(4,'1415F8W-CSI1',8),
+	]
+	for row in ssq_rows:
+		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+	for row in nr_rows:
+		conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
+	m = Migrator(empty_db['engine'],conn)
+	assert (m.response_df.groupby('person_id').size()==1).all()

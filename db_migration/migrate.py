@@ -219,6 +219,8 @@ class Migrator(object):
                 survey_specific_qid_question_id_map = dict(zip(self.survey_question_df.survey_specific_qid.tolist(),
                                                                             self.survey_question_df.survey_question_id.tolist()))
                 df['survey_question_id'] = df.survey_specific_qid.map(survey_specific_qid_question_id_map)
+                #Remove duplicate records
+                df = df.groupby(['person_id','survey_question_id']).min().reset_index()
                 df = df.ix[df.survey_question_id.notnull()]#Change this behaviour later
                 df['converted_net_value'] = np.nan
                 df.ix[df.response <= 2,'converted_net_value'] = 1
