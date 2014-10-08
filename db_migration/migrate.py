@@ -34,9 +34,8 @@ class Migrator(object):
             )
         response = Table('cm_response',metadata,
             Column('person_id', Integer, primary_key=True, autoincrement=False),
-            Column('survey_question_id', Integer, primary_key=True, autoincrement=False),
-            Column('response', Integer),
-            Column('converted_net_value', Integer),
+
+
             )
         survey = Table('cm_survey',metadata,
             Column('survey_id', Integer, primary_key=True, autoincrement=False),
@@ -234,3 +233,4 @@ class Migrator(object):
 
     def migrate_to_new_schema(self):
         self.survey_df.ix[:,['survey_id','survey_code','survey_title']].to_sql('cm_survey',self.engine,index=False,if_exists='append')
+        self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']].to_sql('cm_response',self.engine,index=False,if_exists='append')
