@@ -163,3 +163,29 @@ def test_survey_question_code_survey_question_id_map(migrator_with_ssq_for_surve
 	m = migrator_with_ssq_for_survey_question
 	for i in m.survey_question_df.index:
 		assert m.survey_question_df.loc[i,'survey_question_id'] == m.survey_question_code_survey_question_id_map[m.survey_question_df.loc[i,'survey_question_code']]
+
+@pytest.fixture
+def migrator_with_ssq_for_question(empty_db):
+	conn = empty_db['conn']
+	survey_specific_questions = empty_db['schema']['survey_specific_questions']
+	ssq_cols = ['survey_specific_qid','master_qid','survey','confidential','question_type','survey_specific_question']
+	ssq_rows = [
+				('2014Inst-EIS-CSI1','CSI1','2014Inst-EIS',1,'7pt_1=SA','This is CSI question 1 for institute!'),
+				('2014Inst-EIS-Institute1','Institute1','2014Inst-EIS',1,'7pt_1=SA','This is an institute question!'),
+				('1415F8W-CSI1','CSI1','1415F8W',1,'7pt_1=SA','This is CSI question 1!'),
+				('1415F8W-CSI2','CSI2','1415F8W',1,'7pt_1=SA','This is CSI question 2!')
+				]
+	for row in ssq_rows:
+		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+	return Migrator(conn)
+
+def test_most_recent_version_of_question_used_on_question(migrator_with_ssq_for_question):
+	m = migrator_with_ssq_for_question
+	expected_records = [
+				('Institute1','This is an institute question!'),
+				('CSI1','This is CSI question 1!'),
+				('CSI2','This is CSI question 2!'),
+				]
+	expected_columns = ['question_code','question_title']
+	expected_df = pd.DataFrame.from_records(expected_records,columns=expected_columns)
+	pd.util.testing.assert_frame_equal(pd.DataFrame(m.question_df,columns=expected_columns).set_index('question_code').sort_index(), expected_df.set_index('question_code').sort_index())

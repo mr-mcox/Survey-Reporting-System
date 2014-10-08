@@ -88,6 +88,7 @@ class Migrator(object):
                                                         'CLI7' : 1,
                                                         'CLI8' : 1,
                                                     }
+        self.survey_order = ['1415F8W','2014Inst-EIS']
 
     def survey_df():
         doc = "The survey_df property."
@@ -151,3 +152,31 @@ class Migrator(object):
             del self._survey_question_code_survey_question_id_map
         return locals()
     survey_question_code_survey_question_id_map = property(**survey_question_code_survey_question_id_map())
+
+
+    def question_df():
+        doc = "The question_df property."
+        def fget(self):
+            if not hasattr(self,'_question_df'):
+                sq = self.survey_question_df.set_index('survey_question_code')
+                records = list()
+                #Create list of questions
+                questions = self.survey_question_df.master_qid.unique().tolist()
+                for question_code in questions:
+                    found_question = False
+                    question_title = None
+                    for survey in self.survey_order:
+                        if (survey + question_code) in sq.index:
+                            question_title = sq.get_value((survey + question_code),'survey_specific_question')
+                            found_question = True
+                            break
+                    assert found_question
+                    records.append((question_code,question_title))
+                self._question_df = pd.DataFrame.from_records(records,columns=['question_code','question_title'])
+            return self._question_df
+        def fset(self, value):
+            self._question_df = value
+        def fdel(self):
+            del self._question_df
+        return locals()
+    question_df = property(**question_df())
