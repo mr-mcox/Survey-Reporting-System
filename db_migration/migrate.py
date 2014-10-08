@@ -4,7 +4,7 @@ import numpy as np
 
 class Migrator(object):
     """docstring for migrate"""
-    def __init__(self, connection):
+    def __init__(self, engine, connection):
         
 
         metadata = MetaData()
@@ -62,6 +62,7 @@ class Migrator(object):
             'survey_question':survey_question,
         }
         self.db = connection
+        self.engine = engine
 
         self.survey_code_title_map = {
             '1415F8W' : '2014-15 First 8 Weeks CM Survey',
@@ -230,3 +231,6 @@ class Migrator(object):
             del self._response_df
         return locals()
     response_df = property(**response_df())
+
+    def migrate_to_new_schema(self):
+        self.survey_df.ix[:,['survey_id','survey_code','survey_title']].to_sql('cm_survey',self.engine,index=False,if_exists='append')

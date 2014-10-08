@@ -15,7 +15,7 @@
   ✔ Extract survey_specific_qid, cm_pid, repsonse from numeric_responses @done (14-10-07 22:10)
   ✔ Map responses based on survey_specific_qid @done (14-10-07 22:23)
   ✔ Map converted_net_value based on response @done (14-10-07 22:32)
-  ☐ Import survey
+  ✔ Import survey @done (14-10-07 23:05)
   ☐ Import survey_question_category
   ☐ Import survey_question
   ☐ Import question

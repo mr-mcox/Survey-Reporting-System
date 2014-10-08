@@ -66,7 +66,7 @@ def empty_db():
 		}
 	conn = engine.connect()
 
-	return {'conn':conn,'schema':schema}
+	return {'conn':conn,'schema':schema,'engine':engine}
 
 @pytest.fixture
 def migrator_with_ssq_for_survey(empty_db):
@@ -78,7 +78,7 @@ def migrator_with_ssq_for_survey(empty_db):
 				('1415F8W-CSI2','1415F8W')]
 	for row in ssq_rows:
 		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
-	return Migrator(conn)
+	return Migrator(empty_db['engine'],conn)
 
 def test_extract_survey_code_from_survey_specific_questions(migrator_with_ssq_for_survey):
 	m = migrator_with_ssq_for_survey
@@ -96,7 +96,7 @@ def test_assign_question_text(migrator_with_ssq_for_survey):
 @pytest.fixture
 def empty_migrator(empty_db):
 	conn = empty_db['conn']
-	return Migrator(conn)
+	return Migrator(empty_db['engine'],conn)
 
 def test_basic_question_category_df(empty_migrator):
 	m = empty_migrator
@@ -142,7 +142,7 @@ def migrator_with_ssq_for_survey_question(empty_db):
 				]
 	for row in ssq_rows:
 		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
-	return Migrator(conn)
+	return Migrator(empty_db['engine'],conn)
 
 def test_basic_fields_in_survey_question(migrator_with_ssq_for_survey_question):
 	m = migrator_with_ssq_for_survey_question
@@ -178,7 +178,7 @@ def migrator_with_ssq_for_question(empty_db):
 				]
 	for row in ssq_rows:
 		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
-	return Migrator(conn)
+	return Migrator(empty_db['engine'],conn)
 
 def test_most_recent_version_of_question_used_on_question(migrator_with_ssq_for_question):
 	m = migrator_with_ssq_for_question
@@ -208,7 +208,7 @@ def test_map_of_question_category_id_on_survey_question(empty_db):
 				]
 	for row in ssq_rows:
 		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
-	m = Migrator(conn)
+	m = Migrator(empty_db['engine'],conn)
 	df = m.survey_question_df.set_index('master_qid')
 	cat_df = m.question_category_df.set_index('question_category')
 	assert cat_df.loc['CSI','question_category_id'] == df.get_value('CSI1','question_category_id') 
@@ -259,7 +259,7 @@ def migrator_with_ssq_and_nr_for_response(empty_db):
 		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
 	for row in nr_rows:
 		conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
-	return Migrator(conn)
+	return Migrator(empty_db['engine'],conn)
 
 def test_basic_fields_for_response(migrator_with_ssq_and_nr_for_response):
 	m = migrator_with_ssq_and_nr_for_response
@@ -287,3 +287,9 @@ def test_converted_net_value_mapping(migrator_with_ssq_and_nr_for_response):
 	assert (m.response_df.ix[m.response_df.response == 3,'converted_net_value'] == 0).all()
 	assert (np.isnan(m.response_df.ix[m.response_df.response >= 8,'converted_net_value'])).all()
 
+def test_migrate_survey_table_to_new_schema(migrator_with_ssq_and_nr_for_response):
+	m = migrator_with_ssq_and_nr_for_response
+	m.migrate_to_new_schema()
+	records = m.db.execute(select([m.table['survey']]))
+	table_df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
+	pd.util.testing.assert_frame_equal(pd.DataFrame(m.survey_df,columns=records.keys()), table_df)
