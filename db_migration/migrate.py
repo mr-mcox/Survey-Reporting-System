@@ -19,7 +19,8 @@ class Migrator(object):
                                 Column('master_qid',String),
                                 Column('survey',String),
                                 Column('confidential',Integer),
-                                Column('question_type',String)
+                                Column('question_type',String),
+                                Column('survey_specific_question',String(2000)),
                                 )
         question = Table('cm_question',metadata,
             Column('question_id', Integer, primary_key=True, autoincrement=False),
@@ -119,3 +120,18 @@ class Migrator(object):
             del self._survey_id_survey_code_map
         return locals()
     survey_id_survey_code_map = property(**survey_id_survey_code_map())
+
+    def survey_question_df():
+        doc = "The survey_question_df property."
+        def fget(self):
+            if not hasattr(self,'_survey_question_df'):
+                records = self.db.execute(select([self.table['survey_specific_questions']]))
+                df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
+                self._survey_question_df = df.rename(columns={'confidential':'is_confidential'})
+            return self._survey_question_df
+        def fset(self, value):
+            self._survey_question_df = value
+        def fdel(self):
+            del self._survey_question_df
+        return locals()
+    survey_question_df = property(**survey_question_df())

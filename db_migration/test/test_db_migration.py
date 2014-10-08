@@ -19,7 +19,8 @@ def empty_db():
 							Column('master_qid',String),
 							Column('survey',String),
 							Column('confidential',Integer),
-							Column('question_type',String)
+							Column('question_type',String),
+							Column('survey_specific_question',String(2000)),
 							)
 	question = Table('cm_question',metadata,
 		Column('question_id', Integer, primary_key=True, autoincrement=False),
@@ -127,3 +128,28 @@ def test_question_category_question_code_map(empty_migrator):
 	df = m.question_category_df.set_index('question_category')
 	for key, value in expected_dict.items():
 		assert m.question_category_question_code_map[key] == df.get_value(value,'question_category_id')
+
+@pytest.fixture
+def migrator_with_ssq_for_survey_question(empty_db):
+	conn = empty_db['conn']
+	survey_specific_questions = empty_db['schema']['survey_specific_questions']
+	ssq_cols = ['survey_specific_qid','master_qid','survey','confidential','question_type','survey_specific_question']
+	ssq_rows = [
+				('2014Inst-EIS-CSI1','CSI1','2014Inst-EIS',1,'7pt_1=SA','This is CSI question 1 for institute!'),
+				('1415F8W-CSI1','CSI1','1415F8W',1,'7pt_1=SA','This is CSI question 1!'),
+				('1415F8W-CSI2','CSI2','1415F8W',1,'7pt_1=SA','This is CSI question 2!')
+				]
+	for row in ssq_rows:
+		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+	return Migrator(conn)
+
+def test_basic_fields_in_survey_question(migrator_with_ssq_for_survey_question):
+	m = migrator_with_ssq_for_survey_question
+	expected_records = [
+				('2014Inst-EIS-CSI1','CSI1','2014Inst-EIS',1,'7pt_1=SA','This is CSI question 1 for institute!'),
+				('1415F8W-CSI1','CSI1','1415F8W',1,'7pt_1=SA','This is CSI question 1!'),
+				('1415F8W-CSI2','CSI2','1415F8W',1,'7pt_1=SA','This is CSI question 2!')
+				]
+	expected_columns = ['survey_specific_qid','master_qid','survey','is_confidential','question_type','survey_specific_question']
+	expected_df = pd.DataFrame.from_records(expected_records,columns=expected_columns)
+	pd.util.testing.assert_frame_equal(pd.DataFrame(m.survey_question_df,columns=expected_columns), expected_df)
