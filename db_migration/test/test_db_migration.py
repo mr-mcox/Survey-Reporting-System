@@ -229,3 +229,10 @@ def test_map_of_question_id_on_survey_question(migrator_with_ssq_for_survey_ques
 	sq = m.survey_question_df
 	for idx in sq.index:
 		assert q.get_value(sq.get_value(idx,'question_id'),'question_code') == sq.get_value(idx,'master_qid')
+
+def test_override_titlte(migrator_with_ssq_for_question):
+	m = migrator_with_ssq_for_question
+	m.question_code_question_id_map
+	sq = m.survey_question_df.set_index('survey_specific_qid')
+	assert sq.get_value('2014Inst-EIS-CSI1','question_title_override') == 'This is CSI question 1 for institute!'
+	assert sq.get_value('2014Inst-EIS-Institute1','question_title_override') is None
