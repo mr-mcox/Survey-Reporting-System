@@ -153,3 +153,13 @@ def test_basic_fields_in_survey_question(migrator_with_ssq_for_survey_question):
 	expected_columns = ['survey_specific_qid','master_qid','survey','is_confidential','question_type','survey_specific_question']
 	expected_df = pd.DataFrame.from_records(expected_records,columns=expected_columns)
 	pd.util.testing.assert_frame_equal(pd.DataFrame(m.survey_question_df,columns=expected_columns), expected_df)
+
+def test_question_code_survey_column(migrator_with_ssq_for_survey_question):
+	m = migrator_with_ssq_for_survey_question
+	for i in m.survey_question_df.index:
+		assert m.survey_question_df.get_value(i,'survey_question_code') == m.survey_question_df.get_value(i,'survey') + m.survey_question_df.get_value(i,'master_qid')
+
+def test_survey_question_code_survey_question_id_map(migrator_with_ssq_for_survey_question):
+	m = migrator_with_ssq_for_survey_question
+	for i in m.survey_question_df.index:
+		assert m.survey_question_df.loc[i,'survey_question_id'] == m.survey_question_code_survey_question_id_map[m.survey_question_df.loc[i,'survey_question_code']]

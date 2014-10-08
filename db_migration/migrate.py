@@ -127,6 +127,8 @@ class Migrator(object):
             if not hasattr(self,'_survey_question_df'):
                 records = self.db.execute(select([self.table['survey_specific_questions']]))
                 df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
+                df['survey_question_code'] = df.survey + df.master_qid
+                df['survey_question_id'] = [i + 1 for i in range(len(df.index))]
                 self._survey_question_df = df.rename(columns={'confidential':'is_confidential'})
             return self._survey_question_df
         def fset(self, value):
@@ -135,3 +137,17 @@ class Migrator(object):
             del self._survey_question_df
         return locals()
     survey_question_df = property(**survey_question_df())
+
+    def survey_question_code_survey_question_id_map():
+        doc = "The survey_question_code_survey_question_id_map property."
+        def fget(self):
+            if not hasattr(self,'_survey_question_code_survey_question_id_map'):
+                self._survey_question_code_survey_question_id_map = dict(zip(self.survey_question_df.survey_question_code.tolist(),
+                                                                            self.survey_question_df.survey_question_id.tolist()))
+            return self._survey_question_code_survey_question_id_map
+        def fset(self, value):
+            self._survey_question_code_survey_question_id_map = value
+        def fdel(self):
+            del self._survey_question_code_survey_question_id_map
+        return locals()
+    survey_question_code_survey_question_id_map = property(**survey_question_code_survey_question_id_map())
