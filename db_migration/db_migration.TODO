@@ -31,3 +31,11 @@ Phase 2:
   ☐ Do something besides throw out responses that don't have survey_question_id s
   ☐ It looks like nulls for converted_net_value are not being properly mapped. Fix that.
   ☐ Double check that question_title_override is working as intended - it appears all blank
+  ☐ When new survey is migrated, remove records tied to that survey from the survey table
+  ☐ When new survey is migrated, remove records tied to that survey from the question_survey table
+  ☐ When new survey is migrated, remove records tied to that survey from the response table
+  ☐ When new survey is migrated, remove orphaned records from the question table
+  ☐ survey_df does not set ids that already exist
+  ☐ question_df does not set ids that already exist
+  ☐ survey_question_df does not set ids that already exist
+  ☐ Investigate slowness of migration on dev server and brainstorm ways to mitigate

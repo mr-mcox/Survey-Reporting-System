@@ -241,57 +241,97 @@ class Migrator(object):
         self.db.execute(self.table['survey_question'].delete())
         self.db.execute(self.table['question_category'].delete())
         self.db.execute(self.table['response'].delete())
-        df = self.survey_df.ix[:,['survey_id','survey_code','survey_title']]
-        for row in df.itertuples():
-            self.db.execute(self.table['survey'].insert(), {
-                'survey_id':int(row[1]),
-                'survey_code':str(row[2]),
-                'survey_title':str(row[3])
-                })
 
-        df = self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']]
-        for row in df.itertuples():
-            converted_net_value = row[4]
-            if np.isnan(converted_net_value):
-                converted_net_value = None
-            self.db.execute(self.table['response'].insert(), {
-                'person_id'           : int(row[1]),
-                'survey_question_id'  : int(row[2]),
-                'response'            : int(row[3]),
-                'converted_net_value' : converted_net_value
-                })
+        self.db.execute(self.table['survey'].insert(),df_to_dict_array(self.survey_df.ix[:,['survey_id','survey_code','survey_title']]))
+        # df = self.survey_df.ix[:,['survey_id','survey_code','survey_title']]
+        # for row in df.itertuples():
+        #     self.db.execute(self.table['survey'].insert(), {
+        #         'survey_id':int(row[1]),
+        #         'survey_code':str(row[2]),
+        #         'survey_title':str(row[3])
+        #         })
 
-        df = self.question_df.ix[:,['question_id','question_title','question_code']]
-        for row in df.itertuples():
-            self.db.execute(self.table['question'].insert(), {
-                'question_id'    : int(row[1]),
-                'question_title' : str(row[2]),
-                'question_code'  : str(row[3]),
-                })
+        self.db.execute(self.table['response'].insert(),df_to_dict_array(self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']]))
+        # df = self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']]
+        # for row in df.itertuples():
+        #     converted_net_value = row[4]
+        #     if np.isnan(converted_net_value):
+        #         converted_net_value = None
+        #     self.db.execute(self.table['response'].insert(), {
+        #         'person_id'           : int(row[1]),
+        #         'survey_question_id'  : int(row[2]),
+        #         'response'            : int(row[3]),
+        #         'converted_net_value' : converted_net_value
+        #         })
 
-        df = self.question_category_df.ix[:,['question_category_id','question_category']]
-        for row in df.itertuples():
-            self.db.execute(self.table['question_category'].insert(), {
-                'question_id'       : int(row[1]),
-                'question_category' : str(row[2]),
-                })
+        self.db.execute(self.table['question'].insert(),df_to_dict_array(self.question_df.ix[:,['question_id','question_title','question_code']]))
+        # df = self.question_df.ix[:,['question_id','question_title','question_code']]
+        # for row in df.itertuples():
+        #     self.db.execute(self.table['question'].insert(), {
+        #         'question_id'    : int(row[1]),
+        #         'question_title' : str(row[2]),
+        #         'question_code'  : str(row[3]),
+        #         })
+
+        self.db.execute(self.table['question_category'].insert(),df_to_dict_array(self.question_category_df.ix[:,['question_category_id','question_category']]))
+        # df = self.question_category_df.ix[:,['question_category_id','question_category']]
+        # for row in df.itertuples():
+        #     self.db.execute(self.table['question_category'].insert(), {
+        #         'question_id'       : int(row[1]),
+        #         'question_category' : str(row[2]),
+        #         })
 
         self.question_code_question_id_map #Also code smell
+        
+        self.db.execute(self.table['survey_question'].insert(),df_to_dict_array(self.survey_question_df.ix[:,['survey_question_id',
+                                                                                                                'survey_id',
+                                                                                                                'is_confidential',
+                                                                                                                'question_type',
+                                                                                                                'question_title_override',
+                                                                                                                'question_id',
+                                                                                                                'question_category_id',]]))
+        # df = self.survey_question_df.ix[:,['survey_question_id',
+        #                                         'survey_id',
+        #                                         'is_confidential',
+        #                                         'question_type',
+        #                                         'question_title_override',
+        #                                         'question_id',
+        #                                         'question_category_id',]]
+        # for row in df.itertuples():
+        #     self.db.execute(self.table['survey_question'].insert(), {
+        #         'survey_question_id'      : int(row[1]),
+        #         'survey_id'               : int(row[2]),
+        #         'is_confidential'         : int(row[3]),
+        #         'question_type'           : str(row[4]),
+        #         'question_title_override' : row[5],
+        #         'question_id'             : int(row[6]),
+        #         'question_category_id'    : int(row[7]),
+        #         })
 
-        df = self.survey_question_df.ix[:,['survey_question_id',
-                                                'survey_id',
-                                                'is_confidential',
-                                                'question_type',
-                                                'question_title_override',
-                                                'question_id',
-                                                'question_category_id',]]
-        for row in df.itertuples():
-            self.db.execute(self.table['survey_question'].insert(), {
-                'survey_question_id'      : int(row[1]),
-                'survey_id'               : int(row[2]),
-                'is_confidential'         : int(row[3]),
-                'question_type'           : str(row[4]),
-                'question_title_override' : row[5],
-                'question_id'             : int(row[6]),
-                'question_category_id'    : int(row[7]),
-                })
+#Some basic conversion of types needs to occur for the database library to be ok with it
+def convert_types_for_db(values):
+    new_values = list()
+    for value in values:
+        new_value = value
+        if type(value) != str and new_value is not None:
+            new_value = np.asscalar(value)
+        if type(new_value) == str:
+            try:
+                new_value = float(new_value)
+            except:
+                pass
+        if type(new_value) != str  and new_value is not None:
+            if np.isnan(new_value):
+                new_value = None
+            elif int(new_value) == new_value:
+                new_value = int(new_value)
+        new_values.append(new_value)
+    return new_values
+
+#Insert in new db
+def df_to_dict_array(df):
+    columns = df.columns
+    list_of_rows = list()
+    for row in df.itertuples(index=False):
+        list_of_rows.append(dict(zip(columns,convert_types_for_db(row))))
+    return list_of_rows
