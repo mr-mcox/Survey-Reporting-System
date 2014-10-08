@@ -219,6 +219,7 @@ class Migrator(object):
                 survey_specific_qid_question_id_map = dict(zip(self.survey_question_df.survey_specific_qid.tolist(),
                                                                             self.survey_question_df.survey_question_id.tolist()))
                 df['survey_question_id'] = df.survey_specific_qid.map(survey_specific_qid_question_id_map)
+                df = df.ix[df.survey_question_id.notnull()]#Change this behaviour later
                 df['converted_net_value'] = np.nan
                 df.ix[df.response <= 2,'converted_net_value'] = 1
                 df.ix[df.response == 3,'converted_net_value'] = 0
@@ -233,6 +234,11 @@ class Migrator(object):
     response_df = property(**response_df())
 
     def migrate_to_new_schema(self):
+        self.db.execute(self.table['survey'].delete())
+        self.db.execute(self.table['question'].delete())
+        self.db.execute(self.table['survey_question'].delete())
+        self.db.execute(self.table['question_category'].delete())
+        self.db.execute(self.table['response'].delete())
         self.survey_df.ix[:,['survey_id','survey_code','survey_title']].to_sql('cm_survey',self.engine,index=False,if_exists='append')
         self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']].to_sql('cm_response',self.engine,index=False,if_exists='append')
         self.question_df.ix[:,['question_id',
