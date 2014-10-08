@@ -10,7 +10,7 @@
   ✔ Create question_id and map @done (14-10-07 21:06)
   ✔ Map question_category_id on survey_question @done (14-10-07 21:20)
   ✔ Map survey_id on survey_question @done (14-10-07 21:28)
-  ☐ Map question_id on survey_question
+  ✔ Map question_id on survey_question @done (14-10-07 21:42)
   ☐ Create question_override title if survey question doesn't match with associated question
   ☐ Extract survey_specific_qid, cm_pid, repsonse from numeric_responses
   ☐ Map responses based on survey_specific_qid
@@ -26,3 +26,4 @@ Phase 2:
   ☐ survey question category map based on imported csv file
   ☐ Create more robust mapping of survey titles
   ☐ Most recent survey should be external to the script
+  ☐ Review code smell in question_code_question_id_map

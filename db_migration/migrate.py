@@ -132,6 +132,7 @@ class Migrator(object):
                 df['survey_question_id'] = [i + 1 for i in range(len(df.index))]
                 df['question_category_id'] = df.master_qid.map(self.question_category_question_code_map)
                 df['survey_id'] = df.survey.map(self.survey_id_survey_code_map)
+                # df['question_id'] = df.master_qid.map(self.question_code_question_id_map)
                 self._survey_question_df = df.rename(columns={'confidential':'is_confidential'})
             return self._survey_question_df
         def fset(self, value):
@@ -191,6 +192,9 @@ class Migrator(object):
             if not hasattr(self,'_question_code_question_id_map'):
                 self._question_code_question_id_map = dict(zip(self.question_df.question_code.tolist(),
                                                                             self.question_df.question_id.tolist()))
+                #This code smells. Is there a better way?
+                if 'master_qid' in self.survey_question_df.columns:
+                    self.survey_question_df['question_id'] = self.survey_question_df.master_qid.map(self._question_code_question_id_map)
             return self._question_code_question_id_map
         def fset(self, value):
             self._question_code_question_id_map = value

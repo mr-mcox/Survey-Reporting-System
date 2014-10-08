@@ -221,3 +221,11 @@ def test_map_of_survey_id_on_survey_question(migrator_with_ssq_for_survey_questi
 	sq = m.survey_question_df
 	for idx in sq.index:
 		assert s.get_value(sq.get_value(idx,'survey_id'),'survey_code') == sq.get_value(idx,'survey')
+
+def test_map_of_question_id_on_survey_question(migrator_with_ssq_for_survey_question):
+	m = migrator_with_ssq_for_survey_question
+	q = m.question_df.set_index('question_id')
+	m.question_code_question_id_map
+	sq = m.survey_question_df
+	for idx in sq.index:
+		assert q.get_value(sq.get_value(idx,'question_id'),'question_code') == sq.get_value(idx,'master_qid')
