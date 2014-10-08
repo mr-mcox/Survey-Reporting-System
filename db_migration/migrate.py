@@ -207,3 +207,18 @@ class Migrator(object):
             del self._question_code_question_id_map
         return locals()
     question_code_question_id_map = property(**question_code_question_id_map())
+
+    def response_df():
+        doc = "The response_df property."
+        def fget(self):
+            if not hasattr(self,'_response_df'):
+                records = self.db.execute(select([self.table['numerical_responses']]))
+                df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys()).rename(columns={'cm_pid':'person_id'})
+                self._response_df = df
+            return self._response_df
+        def fset(self, value):
+            self._response_df = value
+        def fdel(self):
+            del self._response_df
+        return locals()
+    response_df = property(**response_df())

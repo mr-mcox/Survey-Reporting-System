@@ -236,3 +236,40 @@ def test_override_titlte(migrator_with_ssq_for_question):
 	sq = m.survey_question_df.set_index('survey_specific_qid')
 	assert sq.get_value('2014Inst-EIS-CSI1','question_title_override') == 'This is CSI question 1 for institute!'
 	assert sq.get_value('2014Inst-EIS-Institute1','question_title_override') is None
+
+@pytest.fixture
+def migrator_with_ssq_and_nr_for_response(empty_db):
+	conn = empty_db['conn']
+	survey_specific_questions = empty_db['schema']['survey_specific_questions']
+	numerical_responses = empty_db['schema']['numerical_responses']
+	ssq_cols = ['survey_specific_qid','master_qid','survey','confidential','question_type','survey_specific_question']
+	ssq_rows = [
+				('2014Inst-EIS-CSI1','CSI1','2014Inst-EIS',1,'7pt_1=SA','This is CSI question 1 for institute!'),
+				('1415F8W-CSI1','CSI1','1415F8W',1,'7pt_1=SA','This is CSI question 1!'),
+				('1415F8W-CSI2','CSI2','1415F8W',1,'7pt_1=SA','This is CSI question 2!')
+				]
+	nr_cols = ['cm_pid','survey_specific_qid','response']
+	nr_rows = [
+		(1,'1415F8W-CSI1',1),
+		(2,'1415F8W-CSI1',3),
+		(3,'1415F8W-CSI1',5),
+		(4,'1415F8W-CSI1',8),
+	]
+	for row in ssq_rows:
+		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+	for row in nr_rows:
+		conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
+	return Migrator(conn)
+
+def test_basic_fields_for_response(migrator_with_ssq_and_nr_for_response):
+	m = migrator_with_ssq_and_nr_for_response
+	expected_records = [
+		(1,'1415F8W-CSI1',1),
+		(2,'1415F8W-CSI1',3),
+		(3,'1415F8W-CSI1',5),
+		(4,'1415F8W-CSI1',8),
+	]
+	expected_columns = ['person_id','survey_specific_qid','response']
+	expected_df = pd.DataFrame.from_records(expected_records,columns=expected_columns)
+	pd.util.testing.assert_frame_equal(pd.DataFrame(m.response_df,columns=expected_columns), expected_df)
+
