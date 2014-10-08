@@ -214,3 +214,10 @@ def test_map_of_question_category_id_on_survey_question(empty_db):
 	assert cat_df.loc['CSI','question_category_id'] == df.get_value('CSI1','question_category_id') 
 	assert cat_df.loc['CALI','question_category_id'] == df.get_value('CLI1','question_category_id') 
 	assert np.isnan(df.get_value('OTH1','question_category_id'))
+
+def test_map_of_survey_id_on_survey_question(migrator_with_ssq_for_survey_question):
+	m = migrator_with_ssq_for_survey_question
+	s = m.survey_df.set_index('survey_id')
+	sq = m.survey_question_df
+	for idx in sq.index:
+		assert s.get_value(sq.get_value(idx,'survey_id'),'survey_code') == sq.get_value(idx,'survey')
