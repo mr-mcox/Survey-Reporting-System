@@ -189,3 +189,9 @@ def test_most_recent_version_of_question_used_on_question(migrator_with_ssq_for_
 	expected_columns = ['question_code','question_title']
 	expected_df = pd.DataFrame.from_records(expected_records,columns=expected_columns)
 	pd.util.testing.assert_frame_equal(pd.DataFrame(m.question_df,columns=expected_columns).set_index('question_code').sort_index(), expected_df.set_index('question_code').sort_index())
+
+def test_question_code_question_id_map(migrator_with_ssq_for_question):
+	m = migrator_with_ssq_for_question
+	assert m.question_df.set_index('question_id').index.is_unique
+	for i in m.question_df.index:
+		assert m.question_df.loc[i,'question_id'] == m.question_code_question_id_map[m.question_df.loc[i,'question_code']]

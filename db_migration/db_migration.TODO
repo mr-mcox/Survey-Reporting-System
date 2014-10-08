@@ -7,7 +7,7 @@
   ✔ Extract question_code, title, confidential, survey_specific_qid and survey from survey_specific_questions @done (14-10-07 19:12)
   ✔ Create question_code_survey column, survey_question_id and map @done (14-10-07 19:23)
   ✔ Pick most recent question title based on most recent survey @done (14-10-07 20:59)
-  ☐ Create question_id and map
+  ✔ Create question_id and map @done (14-10-07 21:06)
   ☐ Map question_category_id on survey_question
   ☐ Map survey_id on survey_question
   ☐ Map question_id on survey_question

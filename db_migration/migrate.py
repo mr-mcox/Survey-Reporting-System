@@ -172,7 +172,9 @@ class Migrator(object):
                             break
                     assert found_question
                     records.append((question_code,question_title))
-                self._question_df = pd.DataFrame.from_records(records,columns=['question_code','question_title'])
+                df = pd.DataFrame.from_records(records,columns=['question_code','question_title'])
+                df['question_id'] = [i + 1 for i in range(len(df.index))]
+                self._question_df = df
             return self._question_df
         def fset(self, value):
             self._question_df = value
@@ -180,3 +182,17 @@ class Migrator(object):
             del self._question_df
         return locals()
     question_df = property(**question_df())
+
+    def question_code_question_id_map():
+        doc = "The question_code_question_id_map property."
+        def fget(self):
+            if not hasattr(self,'_question_code_question_id_map'):
+                self._question_code_question_id_map = dict(zip(self.question_df.question_code.tolist(),
+                                                                            self.question_df.question_id.tolist()))
+            return self._question_code_question_id_map
+        def fset(self, value):
+            self._question_code_question_id_map = value
+        def fdel(self):
+            del self._question_code_question_id_map
+        return locals()
+    question_code_question_id_map = property(**question_code_question_id_map())
