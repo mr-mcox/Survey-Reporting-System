@@ -24,12 +24,12 @@ class Migrator(object):
                                 Column('survey_specific_question',String(2000)),
                                 )
         question = Table('cm_question',metadata,
-            Column('question_id', Integer, primary_key=True, autoincrement=False),
+            Column('question_id', Integer, primary_key=True),#Somehow taking autoincrement off helps here
             Column('question_title', String(2000)),
             Column('question_code', String(20)),
             )
         question_category = Table('cm_question_category',metadata,
-            Column('question_category_id', Integer, primary_key=True, autoincrement=False),
+            Column('question_category_id', Integer, primary_key=True),#Somehow taking autoincrement off helps here
             Column('question_category', String(20)),
             )
         response = Table('cm_response',metadata,
@@ -44,7 +44,7 @@ class Migrator(object):
             Column('survey_title', String(2000)),
             )
         survey_question = Table('cm_survey_question',metadata,
-            Column('survey_question_id', Integer, primary_key=True, autoincrement=False),
+            Column('survey_question_id', Integer, primary_key=True),#Somehow taking autoincrement off helps here
             Column('survey_id', Integer),
             Column('is_confidential', Integer),
             Column('question_type', String(20)),
@@ -282,7 +282,7 @@ class Migrator(object):
         #         })
 
         self.question_code_question_id_map #Also code smell
-        
+
         self.db.execute(self.table['survey_question'].insert(),df_to_dict_array(self.survey_question_df.ix[:,['survey_question_id',
                                                                                                                 'survey_id',
                                                                                                                 'is_confidential',
