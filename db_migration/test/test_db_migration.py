@@ -2,6 +2,7 @@ from SurveyReportingSystem.db_migration.migrate import Migrator
 from sqlalchemy import Table, Column, Integer, String, MetaData, select, create_engine
 import pytest
 import pandas as pd
+import numpy as np
 
 @pytest.fixture
 def empty_db():
@@ -195,3 +196,21 @@ def test_question_code_question_id_map(migrator_with_ssq_for_question):
 	assert m.question_df.set_index('question_id').index.is_unique
 	for i in m.question_df.index:
 		assert m.question_df.loc[i,'question_id'] == m.question_code_question_id_map[m.question_df.loc[i,'question_code']]
+
+def test_map_of_question_category_id_on_survey_question(empty_db):
+	conn = empty_db['conn']
+	survey_specific_questions = empty_db['schema']['survey_specific_questions']
+	ssq_cols = ['master_qid','survey']
+	ssq_rows = [
+				('CSI1','1415F8W'),
+				('CLI1','1415F8W'),
+				('OTH1','1415F8W'),
+				]
+	for row in ssq_rows:
+		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+	m = Migrator(conn)
+	df = m.survey_question_df.set_index('master_qid')
+	cat_df = m.question_category_df.set_index('question_category')
+	assert cat_df.loc['CSI','question_category_id'] == df.get_value('CSI1','question_category_id') 
+	assert cat_df.loc['CALI','question_category_id'] == df.get_value('CLI1','question_category_id') 
+	assert np.isnan(df.get_value('OTH1','question_category_id'))

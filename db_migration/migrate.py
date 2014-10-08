@@ -130,6 +130,7 @@ class Migrator(object):
                 df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
                 df['survey_question_code'] = df.survey + df.master_qid
                 df['survey_question_id'] = [i + 1 for i in range(len(df.index))]
+                df['question_category_id'] = df.master_qid.map(self.question_category_question_code_map)
                 self._survey_question_df = df.rename(columns={'confidential':'is_confidential'})
             return self._survey_question_df
         def fset(self, value):

@@ -8,7 +8,7 @@
   ✔ Create question_code_survey column, survey_question_id and map @done (14-10-07 19:23)
   ✔ Pick most recent question title based on most recent survey @done (14-10-07 20:59)
   ✔ Create question_id and map @done (14-10-07 21:06)
-  ☐ Map question_category_id on survey_question
+  ✔ Map question_category_id on survey_question @done (14-10-07 21:20)
   ☐ Map survey_id on survey_question
   ☐ Map question_id on survey_question
   ☐ Create question_override title if survey question doesn't match with associated question
