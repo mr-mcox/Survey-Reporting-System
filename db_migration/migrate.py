@@ -39,7 +39,7 @@ class Migrator(object):
             Column('converted_net_value', Integer),
             )
         survey = Table('cm_survey',metadata,
-            Column('survey_id', Integer, primary_key=True, autoincrement=False),
+            Column('survey_id', Integer, primary_key=True),#Somehow taking autoincrement off helps here
             Column('survey_code', String(20)),
             Column('survey_title', String(2000)),
             )
@@ -249,11 +249,14 @@ class Migrator(object):
 
         df = self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']]
         for row in df.itertuples():
+            converted_net_value = row[4]
+            if np.isnan(converted_net_value):
+                converted_net_value = None
             self.db.execute(self.table['response'].insert(), {
                 'person_id'           : int(row[1]),
                 'survey_question_id'  : int(row[2]),
                 'response'            : int(row[3]),
-                'converted_net_value' : float(row[4])
+                'converted_net_value' : converted_net_value
                 })
 
         df = self.question_df.ix[:,['question_id','question_title','question_code']]
