@@ -239,6 +239,7 @@ class Migrator(object):
                  'question_title',
                 'question_code']
                 ].to_sql('cm_question',self.engine,index=False,if_exists='append')
+        self.question_code_question_id_map #Also code smell
         self.survey_question_df.ix[:,['survey_question_id',
                                  'survey_id',
                                 'is_confidential',
