@@ -29,8 +29,8 @@ Phase 2:
   ☐ Review code smell in question_code_question_id_map
   ☐ converted_net_value needs to apply to other question types
   ☐ Do something besides throw out responses that don't have survey_question_id s
-  ☐ It looks like nulls for converted_net_value are not being properly mapped. Fix that.
-  ☐ Double check that question_title_override is working as intended - it appears all blank
+  ✘ It looks like nulls for converted_net_value are not being properly mapped. Fix that. @cancelled (14-10-08 10:19)
+  ✘ Double check that question_title_override is working as intended - it appears all blank @cancelled (14-10-08 10:19)
   ☐ When new survey is migrated, remove records tied to that survey from the survey table
   ☐ When new survey is migrated, remove records tied to that survey from the question_survey table
   ☐ When new survey is migrated, remove records tied to that survey from the response table

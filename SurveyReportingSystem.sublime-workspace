@@ -4,6 +4,134 @@
 		"selected_items":
 		[
 			[
+				"sur",
+				"survey_question_id"
+			],
+			[
+				"conver",
+				"converted_net_value"
+			],
+			[
+				"surve",
+				"survey_specific_questions"
+			],
+			[
+				"que",
+				"question_table	(global, instance)"
+			],
+			[
+				"quest",
+				"question_table"
+			],
+			[
+				"res",
+				"response"
+			],
+			[
+				"survey_qu",
+				"survey_question"
+			],
+			[
+				"question",
+				"question"
+			],
+			[
+				"con",
+				"connection"
+			],
+			[
+				"conn",
+				"connect"
+			],
+			[
+				"ex",
+				"execute"
+			],
+			[
+				"resp",
+				"response"
+			],
+			[
+				"exp",
+				"expected_columns"
+			],
+			[
+				"num",
+				"numerical_responses"
+			],
+			[
+				"quest_ov",
+				"question_title_override"
+			],
+			[
+				"su",
+				"survey_question_df"
+			],
+			[
+				"qu",
+				"question_title"
+			],
+			[
+				"q",
+				"question_title"
+			],
+			[
+				"question_t",
+				"question_title_override"
+			],
+			[
+				"survey_que",
+				"survey_question_df"
+			],
+			[
+				"survey_question",
+				"survey_question_df"
+			],
+			[
+				"survey",
+				"survey_code"
+			],
+			[
+				"questio",
+				"question_title"
+			],
+			[
+				"sur_id",
+				"survey_question_id"
+			],
+			[
+				"from",
+				"from_records"
+			],
+			[
+				"que_id",
+				"question_category_id"
+			],
+			[
+				"em",
+				"empty_db"
+			],
+			[
+				"emp",
+				"empty_migrator"
+			],
+			[
+				"surv",
+				"survey_title"
+			],
+			[
+				"mig",
+				"migrator_with_ssq_for_survey"
+			],
+			[
+				"ssq",
+				"survey_specific_questions"
+			],
+			[
+				"has",
+				"hasattr	(builtin, function)"
+			],
+			[
 				"compos",
 				"composite_questions"
 			],
@@ -32,10 +160,6 @@
 				"calculator"
 			],
 			[
-				"num",
-				"num_rows"
-			],
-			[
 				"new",
 				"new_values"
 			],
@@ -46,10 +170,6 @@
 			[
 				"list",
 				"list_of_rows	(local, instance)"
-			],
-			[
-				"que",
-				"question_table"
 			],
 			[
 				"re",
@@ -118,10 +238,6 @@
 			[
 				"app",
 				"append"
-			],
-			[
-				"question",
-				"question_code"
 			],
 			[
 				"assT",
@@ -206,10 +322,6 @@
 			[
 				"dem",
 				"demographic_data"
-			],
-			[
-				"res",
-				"results"
 			],
 			[
 				"agg",
@@ -384,10 +496,44 @@
 	"buffers":
 	[
 		{
-			"file": "compute_results.py",
+			"file": "db_migration/db_migration.TODO",
 			"settings":
 			{
-				"buffer_size": 1879,
+				"buffer_size": 2822,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "migrate_db.py",
+			"settings":
+			{
+				"buffer_size": 237,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "db_migration/migrate.py",
+			"settings":
+			{
+				"buffer_size": 18194,
+				"line_ending": "Unix",
+				"name": "#Create survey question category map based on ques"
+			}
+		},
+		{
+			"file": "db_migration/test/test_db_migration.py",
+			"settings":
+			{
+				"buffer_size": 15662,
+				"line_ending": "Unix",
+				"name": "from SurveyReportingSystem.db_migration.migrate im"
+			}
+		},
+		{
+			"file": "database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
+			"settings":
+			{
+				"buffer_size": 7027,
 				"line_ending": "Unix"
 			}
 		}
@@ -395,7 +541,7 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 87.0,
+		"height": 392.0,
 		"selected_items":
 		[
 			[
@@ -403,7 +549,7 @@
 				"Git: Push"
 			],
 			[
-				"git comm",
+				"git com",
 				"Git: Commit"
 			],
 			[
@@ -411,16 +557,40 @@
 				"Git: Add..."
 			],
 			[
-				"git",
-				"Git: Commit"
-			],
-			[
-				"git com",
+				"git ",
 				"Git: Commit"
 			],
 			[
 				"git status",
 				"Git: Status"
+			],
+			[
+				"alig",
+				"AlignTab"
+			],
+			[
+				"git comm",
+				"Git: Commit"
+			],
+			[
+				"git qu",
+				"Git: Quick Commit"
+			],
+			[
+				"git co",
+				"Git: Commit"
+			],
+			[
+				"space",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"spac",
+				"FindKeyConflicts: Single Package Conflicts"
+			],
+			[
+				"git",
+				"Git: Commit"
 			],
 			[
 				"git add .",
@@ -451,10 +621,6 @@
 				"Git: Status"
 			],
 			[
-				"git co",
-				"Git: Commit"
-			],
-			[
 				"gher",
 				"Set Syntax: Gherkin"
 			],
@@ -483,7 +649,7 @@
 				"Set Syntax: JavaScript"
 			]
 		],
-		"width": 602.0
+		"width": 467.0
 	},
 	"console":
 	{
@@ -500,14 +666,28 @@
 	},
 	"file_history":
 	[
-		"/opt/local/etc/freetds/freetds.conf",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/2f9a751d0c9_rename_question_indicies_table_to_.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/28726eb67b4_multiple_changes_for_usage_in_bobj.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/1db95820760_stage_survey_tables_included_in_.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/265cf2450cf_drop_parent_questions_table.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/413dc5087a3_trying_to_change_autoincrement_of_.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/4085b989a16_double_length_of_survey_specific_qid_.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/syncronize_survey_specific_questions.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic.ini",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/3a5a97f7fe3_add_question_type_fi.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/4119a32d65b_several_column_name_changes.py",
+		"/Users/mcox/Library/Application Support/Sublime Text 2/Packages/Git/Git.sublime-settings",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/3018942e76f_add_survey_specific_question_to_survey_.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/developmet.TODO",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResponsesRetriever/ResponsesRetriever.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/compute_results.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/Lookups.xlsx",
+		"/opt/local/etc/freetds/freetds.conf",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/features/steps/retetrieve_numeric_results_steps.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/ResultsRetriever.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/NumericOutputCalculator.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps/basic_computations.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/compute_results.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_composite_questions.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/create_pilot_dashboard.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/test_excel_helper.py",
@@ -532,11 +712,9 @@
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/add_pilot_cms.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/computations_for_categorical_questions.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/remove_results_for_fewer_than_5.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/developmet.TODO",
 		"/Users/mcox/Dropbox/MDIS/tmp/Development.6.4.14/Development/config.yaml",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/test_data/execution_demonstration.py",
 		"/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1314EYS/dashboard_creation.pl",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic.ini",
 		"/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1314MYS/MYS_working_folder/config_summary.yaml",
 		"/C/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1314MYS/MYS_working_folder/config.yaml",
 		"/C/Users/mcox/Dropbox/MDIS/Documents for TPSD Survey Database Import/migrate_old_survey_db_format_to_new.py",
@@ -602,6 +780,63 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"df_to_dict_array",
+			"DENTITY_INSERT",
+			"survey",
+			"survey_question",
+			"question",
+			"survey_question",
+			"question",
+			"response",
+			"')",
+			"response",
+			"Migrator(conn)",
+			"self.db",
+			"records",
+			"select",
+			"question",
+			"r.",
+			"r",
+			"sq",
+			"survey_specific_questions",
+			"ssq",
+			"question_df",
+			"migrator_with_ssq_for_survey_question",
+			"s",
+			"survey_id",
+			"test_map_of_survey_id_on_survey_question",
+			"survey_df",
+			"survey_id",
+			"nan",
+			"is_NaN",
+			"category",
+			"survey_question_df",
+			"survey_question_code_survey_question_id_map",
+			"survey_question_df",
+			"migrator_with_ssq_for_survey_question",
+			"_survey_id_survey_code_map",
+			"survey_df",
+			"from_records",
+			"',\n",
+			"from_records",
+			"expected_df",
+			"expected_columns",
+			"question_type",
+			"),\n",
+			"CSI1",
+			"2014Inst-EIS",
+			"'CSI'",
+			"expected_df",
+			"survey",
+			"survey_df",
+			"empty_db",
+			"survey_",
+			"numerical_responses",
+			"question_category",
+			"numerical_responses",
+			"response",
+			"numerical_responses",
+			"survey_id",
 			", ",
 			"Survey!1",
 			"primary_key=True",
@@ -672,64 +907,7 @@
 			"dynamic",
 			"there is not a row",
 			"value",
-			"results",
-			"src_ws_name",
-			"dest_wb",
-			"get",
-			"ws1",
-			"WB1",
-			"wb1",
-			"get_active",
-			"get_integer_string_mapping",
-			"mappings_to_output",
-			"row_heading",
-			"loggin.debug",
-			"loggin.deb",
-			"zero_integer_string",
-			"replace_dimensions_with_integers",
-			"adjust_zero_padding_of_heading",
-			"create_row_column_headers",
-			"adjust_zero_padding_of_heading",
-			"return_table",
-			"all_aggregations",
-			"apply",
-			"format_string",
-			" \n",
-			"adjust_zero_padding_of_heading",
-			"pass",
-			"results for",
-			"dimension_integer_mapping",
-			"get_highest_row",
-			"default_menu",
-			"cuts_head",
-			"cuts",
-			"default_menu",
-			"cuts",
-			"cuts_config",
-			"dv_ws",
-			"cuts",
-			"disp_value_row_head",
-			"dis_value_cuts_headvalues",
-			"dis_value_values",
-			"disp_valuecuts_config_col_head",
-			"E5",
-			"B2",
-			"end_col",
-			"disp_value_row_head",
-			"dis_value_values",
-			"A2",
-			"disp_value_row_head",
-			"disp_value_col_head",
-			"disp_value_row_head",
-			"master_aggregation",
-			"first_refirst_question_codesult_type",
-			"first_question_code",
-			"result_type",
-			"dict_for_df",
-			"None",
-			"list_to_add_onto",
-			"first_result_type",
-			"value_list"
+			"results"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -737,6 +915,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"Migrator(empty_db['engine'],conn)",
 			"\\n",
 			"surveyProd1!",
 			"Survey!1",
@@ -752,23 +931,22 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "compute_results.py",
+					"file": "db_migration/db_migration.TODO",
 					"settings":
 					{
-						"buffer_size": 1879,
+						"buffer_size": 2822,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1877,
-								1879
+								2033,
+								2033
 							]
 						],
 						"settings":
@@ -966,11 +1144,790 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PlainTasks/PlainTasks.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "migrate_db.py",
+					"settings":
+					{
+						"buffer_size": 237,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								146,
+								146
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublime_auto_complete": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "db_migration/migrate.py",
+					"settings":
+					{
+						"buffer_size": 18194,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2378,
+								2378
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"auto_name": "#Create survey question category map based on ques",
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublime_auto_complete": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "db_migration/test/test_db_migration.py",
+					"settings":
+					{
+						"buffer_size": 15662,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								15662,
+								15662
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"auto_name": "from SurveyReportingSystem.db_migration.migrate im",
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublime_auto_complete": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
 							"syntax": "Packages/Python/Python.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 4186.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
+					"settings":
+					{
+						"buffer_size": 7027,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5456,
+								5398
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1192.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -980,7 +1937,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 0.0
+		"height": 34.0
 	},
 	"input":
 	{
