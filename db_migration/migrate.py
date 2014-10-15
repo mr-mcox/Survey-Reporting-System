@@ -67,6 +67,7 @@ class Migrator(object):
         self.survey_code_title_map = {
             '1415F8W' : '2014-15 First 8 Weeks CM Survey',
             '2014Inst-EIS' : '2014 End of Institute CM Survey',
+            '1314EYS' : '2013-14 End of Year CM Survey',
         }
         self.question_category_df = pd.DataFrame({'question_category_id':[1,2],'question_category':['CALI','CSI']})
         self.question_category_question_code_map = {
@@ -90,7 +91,7 @@ class Migrator(object):
                                                         'CLI7' : 1,
                                                         'CLI8' : 1,
                                                     }
-        self.survey_order = ['1415F8W','2014Inst-EIS']
+        self.survey_order = ['1415F8W','2014Inst-EIS','1314EYS']
 
     def survey_df():
         doc = "The survey_df property."
