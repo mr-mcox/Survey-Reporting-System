@@ -321,7 +321,9 @@ class Migrator(object):
                 df = pd.DataFrame()
                 if self.question_category_csv is not None:
                     df = pd.read_csv(self.question_category_csv)
-                    
+                    assert 'survey' in df.columns
+                    assert 'question_code' in df.columns
+                    assert 'question_category' in df.columns
                 else:
                     df = pd.DataFrame.from_records([
                         ('CSI2'     , 'CSI'),
