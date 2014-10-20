@@ -38,4 +38,4 @@ Phase 2:
   ☐ survey_df does not set ids that already exist
   ☐ question_df does not set ids that already exist
   ☐ survey_question_df does not set ids that already exist
-  ☐ Investigate slowness of migration on dev server and brainstorm ways to mitigate
+  ✔ Investigate slowness of migration on dev server and brainstorm ways to mitigate @done (14-10-20 15:26)

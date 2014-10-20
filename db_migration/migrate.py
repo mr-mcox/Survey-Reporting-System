@@ -4,7 +4,7 @@ import numpy as np
 
 class Migrator(object):
     """docstring for migrate"""
-    def __init__(self, engine, connection):
+    def __init__(self, engine, connection, **kwargs):
         
 
         metadata = MetaData()
@@ -64,33 +64,35 @@ class Migrator(object):
         self.db = connection
         self.engine = engine
 
+        self.question_category_csv = kwargs.pop('question_category.csv',None)
+
         self.survey_code_title_map = {
             '1415F8W' : '2014-15 First 8 Weeks CM Survey',
             '2014Inst-EIS' : '2014 End of Institute CM Survey',
             '1314EYS' : '2013-14 End of Year CM Survey',
         }
-        self.question_category_df = pd.DataFrame({'question_category_id':[1,2],'question_category':['CALI','CSI']})
-        self.question_category_question_code_map = {
-                                                        'CSI2' : 2,
-                                                        'CSI1' : 2,
-                                                        'CSI8' : 2,
-                                                        'CSI10' :2,
-                                                        'CSI12' :2,
-                                                        'CSI4' : 2,
-                                                        'CSI5' : 2,
-                                                        'CSI6' : 2,
-                                                        'Culture1' : 2,
-                                                        'CSI3' : 2,
-                                                        'CSI7' : 2,
-                                                        'CLI1' : 1,
-                                                        'CLI2' : 1,
-                                                        'CLI3' : 1,
-                                                        'CLI4' : 1,
-                                                        'CLI5' : 1,
-                                                        'CLI6' : 1,
-                                                        'CLI7' : 1,
-                                                        'CLI8' : 1,
-                                                    }
+        # self.question_category_df = pd.DataFrame({'question_category_id':[1,2],'question_category':['CALI','CSI']})
+        # self.question_category_question_code_map = {
+        #                                                 'CSI2' : 2,
+        #                                                 'CSI1' : 2,
+        #                                                 'CSI8' : 2,
+        #                                                 'CSI10' :2,
+        #                                                 'CSI12' :2,
+        #                                                 'CSI4' : 2,
+        #                                                 'CSI5' : 2,
+        #                                                 'CSI6' : 2,
+        #                                                 'Culture1' : 2,
+        #                                                 'CSI3' : 2,
+        #                                                 'CSI7' : 2,
+        #                                                 'CLI1' : 1,
+        #                                                 'CLI2' : 1,
+        #                                                 'CLI3' : 1,
+        #                                                 'CLI4' : 1,
+        #                                                 'CLI5' : 1,
+        #                                                 'CLI6' : 1,
+        #                                                 'CLI7' : 1,
+        #                                                 'CLI8' : 1,
+        #                                             }
         self.survey_order = ['1415F8W','2014Inst-EIS','1314EYS']
 
     def survey_df():
@@ -132,10 +134,12 @@ class Migrator(object):
                 records = self.db.execute(select([self.table['survey_specific_questions']]))
                 df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
                 df['survey_question_code'] = df.survey + df.master_qid
+                df['question_code'] = df.master_qid
                 df['survey_question_id'] = [i + 1 for i in range(len(df.index))]
-                df['question_category_id'] = df.master_qid.map(self.question_category_question_code_map)
                 df['survey_id'] = df.survey.map(self.survey_id_survey_code_map)
                 df['question_title_override'] = None
+                #Add question category id
+                df = df.merge(self.survey_question_question_category_df, how='left')
                 self._survey_question_df = df.rename(columns={'confidential':'is_confidential'})
             return self._survey_question_df
         def fset(self, value):
@@ -308,6 +312,62 @@ class Migrator(object):
         #         'question_id'             : int(row[6]),
         #         'question_category_id'    : int(row[7]),
         #         })
+        #
+         
+    def survey_question_question_category_df():
+        doc = "The survey_question_question_category_df property."
+        def fget(self):
+            if not hasattr(self,'_survey_question_question_category_df'):
+                df = pd.DataFrame()
+                if self.question_category_csv is not None:
+                    df = pd.read_csv(self.question_category_csv)
+                    
+                else:
+                    df = pd.DataFrame.from_records([
+                        ('CSI2'     , 'CSI'),
+                        ('CSI1'     , 'CSI'),
+                        ('CSI8'     , 'CSI'),
+                        ('CSI10'    , 'CSI'),
+                        ('CSI12'    , 'CSI'),
+                        ('CSI4'     , 'CSI'),
+                        ('CSI5'     , 'CSI'),
+                        ('CSI6'     , 'CSI'),
+                        ('Culture1' , 'CSI'),
+                        ('CSI3'     , 'CSI'),
+                        ('CSI7'     , 'CSI'),
+                        ('CLI1'     , 'CALI'),
+                        ('CLI2'     , 'CALI'),
+                        ('CLI3'     , 'CALI'),
+                        ('CLI4'     , 'CALI'),
+                        ('CLI5'     , 'CALI'),
+                        ('CLI6'     , 'CALI'),
+                        ('CLI7'     , 'CALI'),
+                        ('CLI8'     , 'CALI'),
+                    ],columns=['question_code','question_category'])
+                unique_category = df.question_category.unique().tolist()
+                category_id_df = pd.DataFrame({'question_category':unique_category,'question_category_id':[x + 1 for x in range(len(unique_category))]})
+                df = df.merge(category_id_df)
+                self._survey_question_question_category_df = df
+            return self._survey_question_question_category_df
+        def fset(self, value):
+            self._survey_question_question_category_df = value
+        def fdel(self):
+            del self._survey_question_question_category_df
+        return locals()
+    survey_question_question_category_df = property(**survey_question_question_category_df())
+
+    def question_category_df():
+        doc = "The question_category_df property."
+        def fget(self):
+            if not hasattr(self,'_question_category_df'):
+                self._question_category_df = self.survey_question_question_category_df.ix[:,['question_category','question_category_id']].drop_duplicates()
+            return self._question_category_df
+        def fset(self, value):
+            self._question_category_df = value
+        def fdel(self):
+            del self._question_category_df
+        return locals()
+    question_category_df = property(**question_category_df())
 
 #Some basic conversion of types needs to occur for the database library to be ok with it
 def convert_types_for_db(values):

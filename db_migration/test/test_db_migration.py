@@ -1,5 +1,6 @@
 from SurveyReportingSystem.db_migration.migrate import Migrator
 from sqlalchemy import Table, Column, Integer, String, MetaData, select, create_engine
+from unittest.mock import MagicMock, patch
 import pytest
 import pandas as pd
 import numpy as np
@@ -100,36 +101,9 @@ def empty_migrator(empty_db):
 
 def test_basic_question_category_df(empty_migrator):
 	m = empty_migrator
-	expected_df = pd.DataFrame({'question_category_id':[1,2],'question_category':['CALI','CSI']})
-	pd.util.testing.assert_frame_equal(m.question_category_df, expected_df)
-
-def test_question_category_question_code_map(empty_migrator):
-	m = empty_migrator
-	expected_dict = {
-		'CSI2' : 'CSI',
-		'CSI1' : 'CSI',
-		'CSI8' : 'CSI',
-		'CSI10' : 'CSI',
-		'CSI12' : 'CSI',
-		'CSI4' : 'CSI',
-		'CSI5' : 'CSI',
-		'CSI6' : 'CSI',
-		'Culture1' : 'CSI',
-		'CSI3' : 'CSI',
-		'CSI7' : 'CSI',
-		'CLI1' : 'CALI',
-		'CLI2' : 'CALI',
-		'CLI3' : 'CALI',
-		'CLI4' : 'CALI',
-		'CLI5' : 'CALI',
-		'CLI6' : 'CALI',
-		'CLI7' : 'CALI',
-		'CLI8' : 'CALI',
-	}
-	df = m.question_category_df.set_index('question_category')
-	for key, value in expected_dict.items():
-		assert m.question_category_question_code_map[key] == df.get_value(value,'question_category_id')
-
+	expected_df = pd.DataFrame({'question_category_id':[1,2],'question_category':['CSI','CALI']})
+	pd.util.testing.assert_frame_equal(m.question_category_df.set_index('question_category'), expected_df.set_index('question_category'))
+	
 @pytest.fixture
 def migrator_with_ssq_for_survey_question(empty_db):
 	conn = empty_db['conn']
@@ -320,7 +294,7 @@ def test_migrate_question_category_table_to_new_schema(migrator_with_ssq_and_nr_
 	m.migrate_to_new_schema()
 	records = m.db.execute(select([m.table['question_category']]))
 	table_df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
-	pd.util.testing.assert_frame_equal(pd.DataFrame(m.question_category_df,columns=records.keys()), table_df.convert_objects())
+	pd.util.testing.assert_frame_equal(pd.DataFrame(m.question_category_df,columns=records.keys()).set_index('question_category'), table_df.convert_objects().set_index('question_category'))
 
 def test_remove_duplicate_response_row(empty_db):
 	conn = empty_db['conn']
@@ -344,3 +318,25 @@ def test_remove_duplicate_response_row(empty_db):
 		conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
 	m = Migrator(empty_db['engine'],conn)
 	assert (m.response_df.groupby('person_id').size()==1).all()
+
+def test_get_question_category_from_csv(empty_migrator):
+	m = empty_migrator
+	survey_specific_questions = m.table['survey_specific_questions']
+	ssq_cols = ['master_qid','survey']
+	ssq_rows = [
+		('Culture7','1314MYS'),
+		('Culture7','1415F8W')
+	]
+	m.survey_order = ['1415F8W','1314MYS']
+	for row in ssq_rows:
+		m.db.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+
+
+	question_category_df = pd.DataFrame({'question_code':['Culture7'],'survey':['1415F8W'],'question_category':'CSI'})
+	m.question_category_csv = 'sample_file.csv'
+	with patch('pandas.read_csv',return_value=question_category_df) as mock_question_category_csv:
+		m.question_code_question_id_map
+		df = m.survey_question_df.merge(m.question_df, how='outer').merge(m.question_category_df, how='outer').merge(m.survey_df, how='outer').ix[:,['survey_code','question_category']].set_index('survey_code')
+	mock_question_category_csv.assert_any_call('sample_file.csv')
+	assert df.get_value('1415F8W','question_category') == 'CSI'
+	assert np.isnan(df.get_value('1314MYS','question_category'))
