@@ -337,6 +337,14 @@ def test_get_question_category_from_csv(empty_migrator):
 	with patch('pandas.read_csv',return_value=question_category_df) as mock_question_category_csv:
 		m.question_code_question_id_map
 		df = m.survey_question_df.merge(m.question_df, how='outer').merge(m.question_category_df, how='outer').merge(m.survey_df, how='outer').ix[:,['survey_code','question_category']].set_index('survey_code')
-	mock_question_category_csv.assert_any_call('sample_file.csv')
+	mock_question_category_csv.assert_called_with('sample_file.csv')
 	assert df.get_value('1415F8W','question_category') == 'CSI'
 	assert np.isnan(df.get_value('1314MYS','question_category'))
+
+def test_import_of_survey_titles_from_external_file(empty_migrator):
+	m = empty_migrator
+	survey_title_df  = pd.DataFrame({'survey_code':['1314F8W','1314MYS'],'survey_title':['A F8W survey','A mid-year survey']})
+	m.survey_title_csv = 'sample_file.csv'
+	with patch('pandas.read_csv',return_value=survey_title_df) as mock_survey_title_csv:
+		assert m.survey_code_title_map['1314F8W'] == 'A F8W survey'
+	mock_survey_title_csv.assert_called_with('sample_file.csv')

@@ -1,36 +1,11 @@
- Phase 1:
-  ✔ Extract survey code and title from survey_specific_questions @done (14-10-07 17:43)
-  ✔ Assign survey_id and map to survey code @done (14-10-07 18:01)
-  ✔ Write survey title @done (14-10-07 18:11)
-  ✔ Create survey question category map based on question code and asign arbitrary ids @done (14-10-07 18:33)
-  ✔ Create map of question code to question_category_id @done (14-10-07 18:46)
-  ✔ Extract question_code, title, confidential, survey_specific_qid and survey from survey_specific_questions @done (14-10-07 19:12)
-  ✔ Create question_code_survey column, survey_question_id and map @done (14-10-07 19:23)
-  ✔ Pick most recent question title based on most recent survey @done (14-10-07 20:59)
-  ✔ Create question_id and map @done (14-10-07 21:06)
-  ✔ Map question_category_id on survey_question @done (14-10-07 21:20)
-  ✔ Map survey_id on survey_question @done (14-10-07 21:28)
-  ✔ Map question_id on survey_question @done (14-10-07 21:42)
-  ✔ Create question_override title if survey question doesn't match with associated question @done (14-10-07 21:57)
-  ✔ Extract survey_specific_qid, cm_pid, repsonse from numeric_responses @done (14-10-07 22:10)
-  ✔ Map responses based on survey_specific_qid @done (14-10-07 22:23)
-  ✔ Map converted_net_value based on response @done (14-10-07 22:32)
-  ✔ Import survey @done (14-10-07 23:05)
-  ✔ Import survey_question_category @done (14-10-07 23:21)
-  ✔ Import survey_question @done (14-10-07 23:19)
-  ✔ Import question @done (14-10-07 23:15)
-  ✔ Import cm_survey_response @done (14-10-07 23:08)
-  ✔ Update remote DB schema @done (14-10-07 19:01)
+ ✔ Phase 1: @done (14-10-20 18:28)
 
 Phase 2:
-  ✔ survey question category map based on imported csv file @done (14-10-20 16:32)
-  ☐ Create more robust mapping of survey titles
+  ✔ Create more robust mapping of survey titles @done (14-10-20 18:42)
   ☐ Most recent survey should be external to the script
   ☐ Review code smell in question_code_question_id_map
   ☐ converted_net_value needs to apply to other question types
   ☐ Do something besides throw out responses that don't have survey_question_id s
-  ✘ It looks like nulls for converted_net_value are not being properly mapped. Fix that. @cancelled (14-10-08 10:19)
-  ✘ Double check that question_title_override is working as intended - it appears all blank @cancelled (14-10-08 10:19)
   ☐ When new survey is migrated, remove records tied to that survey from the survey table
   ☐ When new survey is migrated, remove records tied to that survey from the question_survey table
   ☐ When new survey is migrated, remove records tied to that survey from the response table
@@ -38,4 +13,32 @@ Phase 2:
   ☐ survey_df does not set ids that already exist
   ☐ question_df does not set ids that already exist
   ☐ survey_question_df does not set ids that already exist
-  ✔ Investigate slowness of migration on dev server and brainstorm ways to mitigate @done (14-10-20 15:26)
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ Extract survey code and title from survey_specific_questions @done (14-10-07 17:43) @project(Phase 1)
+ ✔ Assign survey_id and map to survey code @done (14-10-07 18:01) @project(Phase 1)
+ ✔ Write survey title @done (14-10-07 18:11) @project(Phase 1)
+ ✔ Create survey question category map based on question code and asign arbitrary ids @done (14-10-07 18:33) @project(Phase 1)
+ ✔ Create map of question code to question_category_id @done (14-10-07 18:46) @project(Phase 1)
+ ✔ Extract question_code, title, confidential, survey_specific_qid and survey from survey_specific_questions @done (14-10-07 19:12) @project(Phase 1)
+ ✔ Create question_code_survey column, survey_question_id and map @done (14-10-07 19:23) @project(Phase 1)
+ ✔ Pick most recent question title based on most recent survey @done (14-10-07 20:59) @project(Phase 1)
+ ✔ Create question_id and map @done (14-10-07 21:06) @project(Phase 1)
+ ✔ Map question_category_id on survey_question @done (14-10-07 21:20) @project(Phase 1)
+ ✔ Map survey_id on survey_question @done (14-10-07 21:28) @project(Phase 1)
+ ✔ Map question_id on survey_question @done (14-10-07 21:42) @project(Phase 1)
+ ✔ Create question_override title if survey question doesn't match with associated question @done (14-10-07 21:57) @project(Phase 1)
+ ✔ Extract survey_specific_qid, cm_pid, repsonse from numeric_responses @done (14-10-07 22:10) @project(Phase 1)
+ ✔ Map responses based on survey_specific_qid @done (14-10-07 22:23) @project(Phase 1)
+ ✔ Map converted_net_value based on response @done (14-10-07 22:32) @project(Phase 1)
+ ✔ Import survey @done (14-10-07 23:05) @project(Phase 1)
+ ✔ Import survey_question_category @done (14-10-07 23:21) @project(Phase 1)
+ ✔ Import survey_question @done (14-10-07 23:19) @project(Phase 1)
+ ✔ Import question @done (14-10-07 23:15) @project(Phase 1)
+ ✔ Import cm_survey_response @done (14-10-07 23:08) @project(Phase 1)
+ ✔ Update remote DB schema @done (14-10-07 19:01) @project(Phase 1)
+ ✔ survey question category map based on imported csv file @done (14-10-20 16:32) @project(Phase 2)
+ ✘ It looks like nulls for converted_net_value are not being properly mapped. Fix that. @cancelled (14-10-08 10:19) @project(Phase 2)
+ ✘ Double check that question_title_override is working as intended - it appears all blank @cancelled (14-10-08 10:19) @project(Phase 2)
+ ✔ Investigate slowness of migration on dev server and brainstorm ways to mitigate @done (14-10-20 15:26) @project(Phase 2)

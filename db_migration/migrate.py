@@ -64,14 +64,36 @@ class Migrator(object):
         self.db = connection
         self.engine = engine
 
-        self.question_category_csv = kwargs.pop('question_category.csv',None)
+        self.question_category_csv = kwargs.pop('question_category_csv',None)
+        self.survey_title_csv = kwargs.pop('survey_title_csv',None)
 
-        self.survey_code_title_map = {
-            '1415F8W' : '2014-15 First 8 Weeks CM Survey',
-            '2014Inst-EIS' : '2014 End of Institute CM Survey',
-            '1314EYS' : '2013-14 End of Year CM Survey',
-        }
+        # self.survey_code_title_map = {
+        #     '1415F8W' : '2014-15 First 8 Weeks CM Survey',
+        #     '2014Inst-EIS' : '2014 End of Institute CM Survey',
+        #     '1314EYS' : '2013-14 End of Year CM Survey',
+        # }
         self.survey_order = ['1415F8W','2014Inst-EIS','1314EYS']
+
+    def survey_code_title_map():
+        doc = "The survey_code_title_map property."
+        def fget(self):
+            if not hasattr(self,'_survey_code_title_map'):
+                if self.survey_title_csv is None:
+                    self._survey_code_title_map = {
+                            '1415F8W' : '2014-15 First 8 Weeks CM Survey',
+                            '2014Inst-EIS' : '2014 End of Institute CM Survey',
+                            '1314EYS' : '2013-14 End of Year CM Survey',
+                        }
+                else:
+                    df = pd.read_csv(self.survey_title_csv)
+                    self._survey_code_title_map = df.set_index('survey_code').survey_title.to_dict()
+            return self._survey_code_title_map
+        def fset(self, value):
+            self._survey_code_title_map = value
+        def fdel(self):
+            del self._survey_code_title_map
+        return locals()
+    survey_code_title_map = property(**survey_code_title_map())
 
     def survey_df():
         doc = "The survey_df property."
