@@ -348,3 +348,8 @@ def test_import_of_survey_titles_from_external_file(empty_migrator):
 	with patch('pandas.read_csv',return_value=survey_title_df) as mock_survey_title_csv:
 		assert m.survey_code_title_map['1314F8W'] == 'A F8W survey'
 	mock_survey_title_csv.assert_called_with('sample_file.csv')
+
+def test_order_of_surveys_extracted_from_survey_title(empty_migrator):
+	m = empty_migrator
+	m.survey_code_title_map = pd.Series(['Most recent survey','An older survey'],['SUR1','SUR2'])
+	assert m.survey_order == ['SUR1','SUR2']
