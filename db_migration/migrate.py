@@ -71,28 +71,6 @@ class Migrator(object):
             '2014Inst-EIS' : '2014 End of Institute CM Survey',
             '1314EYS' : '2013-14 End of Year CM Survey',
         }
-        # self.question_category_df = pd.DataFrame({'question_category_id':[1,2],'question_category':['CALI','CSI']})
-        # self.question_category_question_code_map = {
-        #                                                 'CSI2' : 2,
-        #                                                 'CSI1' : 2,
-        #                                                 'CSI8' : 2,
-        #                                                 'CSI10' :2,
-        #                                                 'CSI12' :2,
-        #                                                 'CSI4' : 2,
-        #                                                 'CSI5' : 2,
-        #                                                 'CSI6' : 2,
-        #                                                 'Culture1' : 2,
-        #                                                 'CSI3' : 2,
-        #                                                 'CSI7' : 2,
-        #                                                 'CLI1' : 1,
-        #                                                 'CLI2' : 1,
-        #                                                 'CLI3' : 1,
-        #                                                 'CLI4' : 1,
-        #                                                 'CLI5' : 1,
-        #                                                 'CLI6' : 1,
-        #                                                 'CLI7' : 1,
-        #                                                 'CLI8' : 1,
-        #                                             }
         self.survey_order = ['1415F8W','2014Inst-EIS','1314EYS']
 
     def survey_df():
@@ -246,48 +224,11 @@ class Migrator(object):
         self.db.execute(self.table['survey_question'].delete())
         self.db.execute(self.table['question_category'].delete())
         self.db.execute(self.table['response'].delete())
-
         self.db.execute(self.table['survey'].insert(),df_to_dict_array(self.survey_df.ix[:,['survey_id','survey_code','survey_title']]))
-        # df = self.survey_df.ix[:,['survey_id','survey_code','survey_title']]
-        # for row in df.itertuples():
-        #     self.db.execute(self.table['survey'].insert(), {
-        #         'survey_id':int(row[1]),
-        #         'survey_code':str(row[2]),
-        #         'survey_title':str(row[3])
-        #         })
-
         self.db.execute(self.table['response'].insert(),df_to_dict_array(self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']]))
-        # df = self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']]
-        # for row in df.itertuples():
-        #     converted_net_value = row[4]
-        #     if np.isnan(converted_net_value):
-        #         converted_net_value = None
-        #     self.db.execute(self.table['response'].insert(), {
-        #         'person_id'           : int(row[1]),
-        #         'survey_question_id'  : int(row[2]),
-        #         'response'            : int(row[3]),
-        #         'converted_net_value' : converted_net_value
-        #         })
-
         self.db.execute(self.table['question'].insert(),df_to_dict_array(self.question_df.ix[:,['question_id','question_title','question_code']]))
-        # df = self.question_df.ix[:,['question_id','question_title','question_code']]
-        # for row in df.itertuples():
-        #     self.db.execute(self.table['question'].insert(), {
-        #         'question_id'    : int(row[1]),
-        #         'question_title' : str(row[2]),
-        #         'question_code'  : str(row[3]),
-        #         })
-
         self.db.execute(self.table['question_category'].insert(),df_to_dict_array(self.question_category_df.ix[:,['question_category_id','question_category']]))
-        # df = self.question_category_df.ix[:,['question_category_id','question_category']]
-        # for row in df.itertuples():
-        #     self.db.execute(self.table['question_category'].insert(), {
-        #         'question_id'       : int(row[1]),
-        #         'question_category' : str(row[2]),
-        #         })
-
         self.question_code_question_id_map #Also code smell
-
         self.db.execute(self.table['survey_question'].insert(),df_to_dict_array(self.survey_question_df.ix[:,['survey_question_id',
                                                                                                                 'survey_id',
                                                                                                                 'is_confidential',
@@ -295,24 +236,6 @@ class Migrator(object):
                                                                                                                 'question_title_override',
                                                                                                                 'question_id',
                                                                                                                 'question_category_id',]]))
-        # df = self.survey_question_df.ix[:,['survey_question_id',
-        #                                         'survey_id',
-        #                                         'is_confidential',
-        #                                         'question_type',
-        #                                         'question_title_override',
-        #                                         'question_id',
-        #                                         'question_category_id',]]
-        # for row in df.itertuples():
-        #     self.db.execute(self.table['survey_question'].insert(), {
-        #         'survey_question_id'      : int(row[1]),
-        #         'survey_id'               : int(row[2]),
-        #         'is_confidential'         : int(row[3]),
-        #         'question_type'           : str(row[4]),
-        #         'question_title_override' : row[5],
-        #         'question_id'             : int(row[6]),
-        #         'question_category_id'    : int(row[7]),
-        #         })
-        #
          
     def survey_question_question_category_df():
         doc = "The survey_question_question_category_df property."

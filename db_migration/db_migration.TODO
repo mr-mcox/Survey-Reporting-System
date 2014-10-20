@@ -23,7 +23,7 @@
   ✔ Update remote DB schema @done (14-10-07 19:01)
 
 Phase 2:
-  ☐ survey question category map based on imported csv file
+  ✔ survey question category map based on imported csv file @done (14-10-20 16:32)
   ☐ Create more robust mapping of survey titles
   ☐ Most recent survey should be external to the script
   ☐ Review code smell in question_code_question_id_map
