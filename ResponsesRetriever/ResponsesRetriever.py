@@ -14,8 +14,8 @@ class ResponsesRetriever(object):
 		metadata = MetaData()
 		responses = Table('cm_responses',metadata,
 					Column('respondent_id', Integer),
-					Column('survey_id', Integer, ForeignKey('surveys.id')),
-					Column('question_id', Integer, ForeignKey('questions.id')),
+					Column('survey_id', Integer, ForeignKey('cm_surveys.id')),
+					Column('question_id', Integer, ForeignKey('cm_questions.id')),
 					Column('response', Integer))
 		surveys = Table('cm_surveys',metadata,
 					Column('id', Integer, primary_key=True, autoincrement=False),
@@ -29,7 +29,7 @@ class ResponsesRetriever(object):
 		if survey_code != [None]:
 			sq = (select([surveys],use_labels=True).where(surveys.c.survey_code.in_(survey_code))).alias('sq')
 			if len(survey_code) > 1:
-				select_responses = select([responses, questions.c.question_code,questions.c.is_confidential,questions.c.question_type, questions.c.question_code,sq.c.surveys_survey_code.label('survey_code')]).select_from(responses.join(questions).join(sq))
+				select_responses = select([responses, questions.c.question_code,questions.c.is_confidential,questions.c.question_type, questions.c.question_code,sq.c.cm_surveys_survey_code.label('survey_code')]).select_from(responses.join(questions).join(sq))
 			else:
 				select_responses = select([responses, questions.c.question_code,questions.c.is_confidential,questions.c.question_type]).select_from(responses.join(questions).join(select([surveys],use_labels=True).where(surveys.c.survey_code.in_(survey_code)).alias('sq')))
 		else:
