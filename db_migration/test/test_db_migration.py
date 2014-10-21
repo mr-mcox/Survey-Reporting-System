@@ -420,3 +420,9 @@ def test_survey_question_df_when_survey_specified(migrator_with_ssq_and_nr_for_s
 	m.surveys_to_migrate = ['1415F8W']
 	df = m.survey_question_df.merge(m.survey_df,how='outer')
 	assert (df.survey_code == '1415F8W').all()
+
+def test_question_df_when_survey_specified(migrator_with_ssq_and_nr_for_separate_surveys):
+	m = migrator_with_ssq_and_nr_for_separate_surveys
+	m.surveys_to_migrate = ['1415F8W']
+	df = m.survey_question_df.merge(m.survey_df,how='outer').merge(m.question_df,how='outer')
+	assert (df.survey_code == '1415F8W').all()
