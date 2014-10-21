@@ -142,7 +142,12 @@ class Migrator(object):
         doc = "The survey_question_df property."
         def fget(self):
             if not hasattr(self,'_survey_question_df'):
-                records = self.db.execute(select([self.table['survey_specific_questions']]))
+                records = None
+                ssq = self.table['survey_specific_questions'] 
+                if self.surveys_to_migrate:
+                    records = self.db.execute(select([ssq]).where(ssq.c.survey.in_(self.surveys_to_migrate)))
+                else:
+                    records = self.db.execute(select([ssq]))
                 df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
                 df['survey_question_code'] = df.survey + df.master_qid
                 df['question_code'] = df.master_qid
