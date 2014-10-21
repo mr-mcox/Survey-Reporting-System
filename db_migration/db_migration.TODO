@@ -4,7 +4,7 @@ Phase 2:
   ✔ Create more robust mapping of survey titles @done (14-10-20 18:42)
   ✔ Most recent survey should be external to the script @done (14-10-20 18:56)
   ☐ Review code smell in question_code_question_id_map
-  ☐ converted_net_value needs to apply to other question types
+  ✔ converted_net_value needs to apply to other question types @done (14-10-20 19:21)
   ☐ Do something besides throw out responses that don't have survey_question_id s
   ☐ When new survey is migrated, remove records tied to that survey from the survey table
   ☐ When new survey is migrated, remove records tied to that survey from the question_survey table

@@ -238,10 +238,10 @@ def migrator_with_ssq_and_nr_for_response(empty_db):
 def test_basic_fields_for_response(migrator_with_ssq_and_nr_for_response):
 	m = migrator_with_ssq_and_nr_for_response
 	expected_records = [
-		(1,'1415F8W-CSI1',1),
-		(2,'1415F8W-CSI1',3),
-		(3,'1415F8W-CSI1',5),
-		(4,'1415F8W-CSI1',8),
+		(1,'1415F8W-CSI1',7.0),
+		(2,'1415F8W-CSI1',5.0),
+		(3,'1415F8W-CSI1',3.0),
+		(4,'1415F8W-CSI1',np.nan),
 	]
 	expected_columns = ['person_id','survey_specific_qid','response']
 	expected_df = pd.DataFrame.from_records(expected_records,columns=expected_columns)
@@ -256,10 +256,10 @@ def test_map_survey_question_id_on_response(migrator_with_ssq_and_nr_for_respons
 
 def test_converted_net_value_mapping(migrator_with_ssq_and_nr_for_response):
 	m = migrator_with_ssq_and_nr_for_response
-	assert (m.response_df.ix[m.response_df.response <= 2,'converted_net_value'] == 1).all()
-	assert (m.response_df.ix[(m.response_df.response >= 4) & (m.response_df.response <= 7),'converted_net_value'] == -1).all()
-	assert (m.response_df.ix[m.response_df.response == 3,'converted_net_value'] == 0).all()
-	assert (np.isnan(m.response_df.ix[m.response_df.response >= 8,'converted_net_value'])).all()
+	assert (m.response_df.ix[m.response_df.response >= 6,'converted_net_value'] == 1).all()
+	assert (m.response_df.ix[(m.response_df.response <= 4) & (m.response_df.response >= 0),'converted_net_value'] == -1).all()
+	assert (m.response_df.ix[m.response_df.response == 5,'converted_net_value'] == 0).all()
+	assert (np.isnan(m.response_df.ix[m.response_df.response.isnull(),'converted_net_value'])).all()
 
 def test_migrate_survey_table_to_new_schema(migrator_with_ssq_and_nr_for_response):
 	m = migrator_with_ssq_and_nr_for_response
@@ -353,3 +353,34 @@ def test_order_of_surveys_extracted_from_survey_title(empty_migrator):
 	m = empty_migrator
 	m.survey_code_title_map = pd.Series(['Most recent survey','An older survey'],['SUR1','SUR2'])
 	assert m.survey_order == ['SUR1','SUR2']
+
+@pytest.fixture
+def migrator_with_ssq_and_nr_for_nps_computations(empty_db):
+	conn = empty_db['conn']
+	survey_specific_questions = empty_db['schema']['survey_specific_questions']
+	numerical_responses = empty_db['schema']['numerical_responses']
+	ssq_cols = ['survey_specific_qid','master_qid','survey','confidential','question_type','survey_specific_question']
+	ssq_rows = [
+				('2014Inst-EIS-NPS1','NPS1','2014Inst-EIS',1,'10pt_NPS_1=SA','This is NPS question 1 for institute!'),
+				('1415F8W-NPS1','NPS1','1415F8W',1,'10pt_NPS_1=SA','This is NPS question 1!'),
+				('1415F8W-NPS2','NPS2','1415F8W',1,'10pt_NPS_1=SA','This is NPS question 2!')
+				]
+	nr_cols = ['cm_pid','survey_specific_qid','response']
+	nr_rows = [
+		(1,'1415F8W-NPS1',1),
+		(2,'1415F8W-NPS1',4),
+		(3,'1415F8W-NPS1',8),
+		(4,'1415F8W-NPS1',11),
+	]
+	for row in ssq_rows:
+		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+	for row in nr_rows:
+		conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
+	return Migrator(empty_db['engine'],conn)
+
+def test_converted_net_value_mapping_for_nps(migrator_with_ssq_and_nr_for_nps_computations):
+	m = migrator_with_ssq_and_nr_for_nps_computations
+	assert (m.response_df.ix[m.response_df.response >= 9,'converted_net_value'] == 1).all()
+	assert (m.response_df.ix[(m.response_df.response <= 6) & (m.response_df.response >= 1),'converted_net_value'] == -1).all()
+	assert (m.response_df.ix[(m.response_df.response <= 8) & (m.response_df.response >= 7),'converted_net_value'] == 0).all()
+	assert (np.isnan(m.response_df.ix[m.response_df.response.isnull(),'converted_net_value'])).all()

@@ -1,6 +1,7 @@
 from sqlalchemy import Table, Column, Integer, String, MetaData, select
 import pandas as pd
 import numpy as np
+from SurveyReportingSystem.NumericOutputCalculator.NumericOutputCalculator import map_responses_to_net_formatted_values
 
 class Migrator(object):
     """docstring for migrate"""
@@ -231,10 +232,12 @@ class Migrator(object):
                 #Remove duplicate records
                 df = df.groupby(['person_id','survey_question_id']).min().reset_index()
                 df = df.ix[df.survey_question_id.notnull()]#Change this behaviour later
-                df['converted_net_value'] = np.nan
-                df.ix[df.response <= 2,'converted_net_value'] = 1
-                df.ix[df.response == 3,'converted_net_value'] = 0
-                df.ix[(df.response >= 4) & (df.response <= 7),'converted_net_value'] = -1
+                df = df.set_index('survey_question_id').join(self.survey_question_df.set_index('survey_question_id').ix[:,'question_type']).reset_index()
+                df = map_responses_to_net_formatted_values(df).convert_objects()
+                df['converted_net_value'] = df.net_formatted_value
+                # df.ix[df.response <= 2,'converted_net_value'] = 1
+                # df.ix[df.response == 3,'converted_net_value'] = 0
+                # df.ix[(df.response >= 4) & (df.response <= 7),'converted_net_value'] = -1
                 self._response_df = df
             return self._response_df
         def fset(self, value):
