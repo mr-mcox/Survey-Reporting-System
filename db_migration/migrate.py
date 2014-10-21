@@ -235,7 +235,13 @@ class Migrator(object):
         doc = "The response_df property."
         def fget(self):
             if not hasattr(self,'_response_df'):
-                records = self.db.execute(select([self.table['numerical_responses']]))
+                records = None
+                nr = self.table['numerical_responses'] 
+                if self.surveys_to_migrate:
+                    records = self.db.execute(select([nr]).where(nr.c.survey.in_(self.surveys_to_migrate)))
+                else:
+                    records = self.db.execute(select([nr]))
+                # records = self.db.execute(select([self.table['numerical_responses']]))
                 df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys()).rename(columns={'cm_pid':'person_id'})
                 survey_specific_qid_question_id_map = dict(zip(self.survey_question_df.survey_specific_qid.tolist(),
                                                                             self.survey_question_df.survey_question_id.tolist()))
@@ -246,9 +252,6 @@ class Migrator(object):
                 df = df.set_index('survey_question_id').join(self.survey_question_df.set_index('survey_question_id').ix[:,'question_type']).reset_index()
                 df = map_responses_to_net_formatted_values(df).convert_objects()
                 df['converted_net_value'] = df.net_formatted_value
-                # df.ix[df.response <= 2,'converted_net_value'] = 1
-                # df.ix[df.response == 3,'converted_net_value'] = 0
-                # df.ix[(df.response >= 4) & (df.response <= 7),'converted_net_value'] = -1
                 self._response_df = df
             return self._response_df
         def fset(self, value):

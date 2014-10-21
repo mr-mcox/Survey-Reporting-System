@@ -397,12 +397,12 @@ def migrator_with_ssq_and_nr_for_separate_surveys(empty_db):
 				('1415F8W-CSI1','CSI1','1415F8W',1,'7pt_1=SA','This is CSI question 1!'),
 				('1415F8W-CSI2','CSI2','1415F8W',1,'7pt_1=SA','This is CSI question 2!')
 				]
-	nr_cols = ['cm_pid','survey_specific_qid','response']
+	nr_cols = ['cm_pid','survey','survey_specific_qid','response']
 	nr_rows = [
-		(1,'2014Inst-EIS-CSI1',1),
-		(2,'2014Inst-EIS-Inst1',3),
-		(3,'1415F8W-CSI1',5),
-		(4,'1415F8W-CSI2',8),
+		(1,'2014Inst','2014Inst-EIS-CSI1',1),
+		(2,'2014Inst','2014Inst-EIS-Inst1',3),
+		(3,'1415F8W','1415F8W-CSI1',5),
+		(4,'1415F8W','1415F8W-CSI2',8),
 	]
 	for row in ssq_rows:
 		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
@@ -425,4 +425,10 @@ def test_question_df_when_survey_specified(migrator_with_ssq_and_nr_for_separate
 	m = migrator_with_ssq_and_nr_for_separate_surveys
 	m.surveys_to_migrate = ['1415F8W']
 	df = m.survey_question_df.merge(m.survey_df,how='outer').merge(m.question_df,how='outer')
+	assert (df.survey_code == '1415F8W').all()
+
+def test_response_df_when_survey_specified(migrator_with_ssq_and_nr_for_separate_surveys):
+	m = migrator_with_ssq_and_nr_for_separate_surveys
+	m.surveys_to_migrate = ['1415F8W']
+	df = m.response_df.merge(m.survey_question_df,how='outer').merge(m.survey_df,how='outer')
 	assert (df.survey_code == '1415F8W').all()

@@ -7,7 +7,7 @@ Phase 2:
   ✔ When survey is specified, only records from that survey show up in the survey_df @done (14-10-21 08:46)
   ✔ When survey is specified, only records from that survey show up in the question_df @done (14-10-21 08:59)
   ✔ When survey is specified, only records from that survey show up in the survey_question_df @done (14-10-21 09:01)
-  ☐ When survey is specified, only records from that survey show up in the response_df
+  ✔ When survey is specified, only records from that survey show up in the response_df @done (14-10-21 09:08)
   ☐ When new survey is migrated, remove records tied to that survey from the survey table
   ☐ When new survey is migrated, remove records tied to that survey from the question_survey table
   ☐ When new survey is migrated, remove records tied to that survey from the response table
