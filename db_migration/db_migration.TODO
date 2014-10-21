@@ -8,9 +8,9 @@ Phase 2:
   ✔ When survey is specified, only records from that survey show up in the question_df @done (14-10-21 08:59)
   ✔ When survey is specified, only records from that survey show up in the survey_question_df @done (14-10-21 09:01)
   ✔ When survey is specified, only records from that survey show up in the response_df @done (14-10-21 09:08)
-  ☐ When new survey is migrated, remove records tied to that survey from the survey table
-  ☐ When new survey is migrated, remove records tied to that survey from the question_survey table
-  ☐ When new survey is migrated, remove records tied to that survey from the response table
+  ✔ When new survey is migrated, remove records tied to that survey from the survey table @done (14-10-21 10:14)
+  ✔ When new survey is migrated, remove records tied to that survey from the question_survey table @done (14-10-21 10:44)
+  ✔ When new survey is migrated, remove records tied to that survey from the response table @done (14-10-21 10:54)
   ☐ When new survey is migrated, remove orphaned records from the question table
   ☐ survey_df does not set ids that already exist
   ☐ question_df does not set ids that already exist

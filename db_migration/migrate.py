@@ -280,6 +280,22 @@ class Migrator(object):
                                                                                                                 'question_id',
                                                                                                                 'question_category_id',]]))
          
+    def remove_old_migrated_data(self):
+        survey = self.table['survey']
+        survey_id_records = self.db.execute(select([survey.c.survey_id]).where(survey.c.survey_code.in_(self.surveys_to_migrate)))
+        survey_to_delete_df = pd.DataFrame.from_records(survey_id_records.fetchall(),columns=survey_id_records.keys())
+        self.db.execute(survey.delete().where(survey.c.survey_code.in_(self.surveys_to_migrate)))
+
+        survey_question = self.table['survey_question']
+        survey_id_to_delete = [ int(x) for x in survey_to_delete_df.survey_id.tolist() ]
+        survey_question_id_records = self.db.execute(select([survey_question.c.survey_question_id]).where(survey_question.c.survey_id.in_(survey_id_to_delete)))
+        survey_question_to_delete_df = pd.DataFrame.from_records(survey_question_id_records.fetchall(),columns=survey_question_id_records.keys())
+        self.db.execute(survey_question.delete().where(survey_question.c.survey_id.in_(survey_id_to_delete)))
+
+        response = self.table['response']
+        self.db.execute(response.delete().where(response.c.survey_question_id.in_([ int(x) for x in survey_question_to_delete_df.survey_question_id.tolist() ])))
+
+
     def survey_question_question_category_df():
         doc = "The survey_question_question_category_df property."
         def fget(self):
