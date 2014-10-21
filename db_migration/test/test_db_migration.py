@@ -445,13 +445,16 @@ def migrator_with_data_already_migrated(empty_db):
     for row in survey_rows:
         conn.execute(survey.insert(), {c:v for c,v in zip(survey_cols,row)})
     survey_question = empty_db['schema']['survey_question']
-    survey_question_cols = ['survey_question_id','survey_id']
+    survey_question_cols = ['survey_question_id','survey_id','question_id']
     survey_question_rows = [
-                (1,1),
-                (2,2),
+                (1,1,1),
+                (2,2,2),
+                (3,1,3),
+                (4,2,3),
                 ]
     for row in survey_question_rows:
         conn.execute(survey_question.insert(), {c:v for c,v in zip(survey_question_cols,row)})
+
     response = empty_db['schema']['response']
     response_cols = ['person_id','survey_question_id']
     response_rows = [
@@ -460,6 +463,16 @@ def migrator_with_data_already_migrated(empty_db):
                 ]
     for row in response_rows:
         conn.execute(response.insert(), {c:v for c,v in zip(response_cols,row)})
+
+    question = empty_db['schema']['question']
+    question_cols = ['question_id','question_code']
+    question_rows = [
+                (1,'F8W1'),
+                (2,'MYS1'),
+                (3,'ALL1'),
+                ]
+    for row in question_rows:
+        conn.execute(question.insert(), {c:v for c,v in zip(question_cols,row)})
     return Migrator(empty_db['engine'],conn)
 
 def test_clean_up_survey_df(migrator_with_data_already_migrated):
@@ -492,4 +505,17 @@ def test_clean_up_response_df(migrator_with_data_already_migrated):
     response_records = m.db.execute(select([m.table['response']]))
     response_df = pd.DataFrame.from_records(response_records.fetchall(),columns=response_records.keys())
     df = response_df.merge(survey_question_df,how='outer').merge(survey_df,how='outer')
+    assert ((~df.survey_code.isin(m.surveys_to_migrate)) & df.survey_code.notnull()).all()
+
+def test_remove_orphaned_questions(migrator_with_data_already_migrated):
+    m = migrator_with_data_already_migrated
+    m.surveys_to_migrate = ['1415F8W']
+    m.remove_old_migrated_data()
+    survey_records = m.db.execute(select([m.table['survey']]))
+    survey_df = pd.DataFrame.from_records(survey_records.fetchall(),columns=survey_records.keys())
+    survey_question_records = m.db.execute(select([m.table['survey_question']]))
+    survey_question_df = pd.DataFrame.from_records(survey_question_records.fetchall(),columns=survey_question_records.keys())
+    question_records = m.db.execute(select([m.table['question']]))
+    question_df = pd.DataFrame.from_records(question_records.fetchall(),columns=question_records.keys())
+    df = question_df.merge(survey_question_df,how='outer').merge(survey_df,how='outer')
     assert ((~df.survey_code.isin(m.surveys_to_migrate)) & df.survey_code.notnull()).all()
