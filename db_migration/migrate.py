@@ -170,7 +170,7 @@ def migrate(conn_1,conn_2,survey_codes,**kwargs):
 			responses['is_csi'] = responses.question_code.isin(csi_codes)
 			csi_count = responses.groupby('respondent_id').sum()['is_csi']
 			cms_to_keep = csi_count.index[csi_count == len(csi_codes)].values
-			responses = responses.ix[responses.respondent_id.isin(cms_to_keep)]
+			responses = responses.ix[responses.respondent_id.isin(cms_to_keep) | (~responses.question_code.isin(csi_codes))]
 
 		#Clean CALI
 		if clean_CALI:
@@ -187,7 +187,7 @@ def migrate(conn_1,conn_2,survey_codes,**kwargs):
 			responses['is_cli'] = responses.question_code.isin(cli_codes)
 			cli_count = responses.groupby('respondent_id').sum()['is_cli']
 			cms_to_keep = cli_count.index[cli_count == len(cli_codes)].values
-			responses = responses.ix[responses.respondent_id.isin(cms_to_keep)]
+			responses = responses.ix[responses.respondent_id.isin(cms_to_keep) | (~responses.question_code.isin(cli_codes))]
 
 		#Create results table
 		results_for_db = pd.DataFrame(responses,columns=['respondent_id','survey_id','question_id','response'])
