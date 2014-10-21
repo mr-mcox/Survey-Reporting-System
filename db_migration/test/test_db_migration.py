@@ -519,3 +519,4 @@ def test_remove_orphaned_questions(migrator_with_data_already_migrated):
     question_df = pd.DataFrame.from_records(question_records.fetchall(),columns=question_records.keys())
     df = question_df.merge(survey_question_df,how='outer').merge(survey_df,how='outer')
     assert ((~df.survey_code.isin(m.surveys_to_migrate)) & df.survey_code.notnull()).all()
+    assert 'ALL1' in df.question_code.values

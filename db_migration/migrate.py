@@ -295,6 +295,14 @@ class Migrator(object):
         response = self.table['response']
         self.db.execute(response.delete().where(response.c.survey_question_id.in_([ int(x) for x in survey_question_to_delete_df.survey_question_id.tolist() ])))
 
+        survey_question_records = self.db.execute(select([survey_question]))
+        survey_question_df = pd.DataFrame.from_records(survey_question_records.fetchall(),columns=survey_question_records.keys())
+        question = self.table['question']
+        question_records = self.db.execute(select([question]))
+        question_df = pd.DataFrame.from_records(question_records.fetchall(),columns=question_records.keys())
+        orphaned_questions = question_df.ix[~question_df.question_id.isin(survey_question_df.question_id),'question_id']
+        question_id_to_delete = [ int(x) for x in orphaned_questions.tolist() ]
+        self.db.execute(question.delete().where(question.c.question_id.in_(question_id_to_delete)))
 
     def survey_question_question_category_df():
         doc = "The survey_question_question_category_df property."
