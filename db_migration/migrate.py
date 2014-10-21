@@ -67,6 +67,7 @@ class Migrator(object):
 
         self.question_category_csv = kwargs.pop('question_category_csv',None)
         self.survey_title_csv = kwargs.pop('survey_title_csv',None)
+        self.surveys_to_migrate = kwargs.pop('surveys_to_migrate',list())
 
     def survey_code_title_map():
         doc = "The survey_code_title_map property."
@@ -104,7 +105,12 @@ class Migrator(object):
         doc = "The survey_df property."
         def fget(self):
             if not hasattr(self,'_survey_df'):
-                records = self.db.execute(select([self.table['survey_specific_questions'].c.survey]))
+                records = None
+                ssq = self.table['survey_specific_questions'] 
+                if self.surveys_to_migrate:
+                    records = self.db.execute(select([ssq.c.survey]).where(ssq.c.survey.in_(self.surveys_to_migrate)))
+                else:
+                    records = self.db.execute(select([ssq.c.survey]))
                 df = pd.DataFrame({'survey':[r[0] for r in records.fetchall()]})
                 _survey_df = df.drop_duplicates()
                 _survey_df['survey_code'] = _survey_df.survey

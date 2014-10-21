@@ -3,9 +3,11 @@
 Phase 2:
   ✔ Create more robust mapping of survey titles @done (14-10-20 18:42)
   ✔ Most recent survey should be external to the script @done (14-10-20 18:56)
-  ☐ Review code smell in question_code_question_id_map
   ✔ converted_net_value needs to apply to other question types @done (14-10-20 19:21)
-  ☐ Do something besides throw out responses that don't have survey_question_id s
+  ✔ When survey is specified, only records from that survey show up in the survey_df @done (14-10-21 08:46)
+  ☐ When survey is specified, only records from that survey show up in the question_df
+  ☐ When survey is specified, only records from that survey show up in the survey_question_df
+  ☐ When survey is specified, only records from that survey show up in the response_df
   ☐ When new survey is migrated, remove records tied to that survey from the survey table
   ☐ When new survey is migrated, remove records tied to that survey from the question_survey table
   ☐ When new survey is migrated, remove records tied to that survey from the response table
@@ -13,6 +15,11 @@ Phase 2:
   ☐ survey_df does not set ids that already exist
   ☐ question_df does not set ids that already exist
   ☐ survey_question_df does not set ids that already exist
+  ☐ question_category_df does not set ids that already exist
+
+Maybe Later:
+  ☐ Review code smell in question_code_question_id_map
+  ☐ Create record of responses that have been thrown out because they don't have a survey_question_id
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:

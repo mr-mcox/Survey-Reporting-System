@@ -384,3 +384,33 @@ def test_converted_net_value_mapping_for_nps(migrator_with_ssq_and_nr_for_nps_co
 	assert (m.response_df.ix[(m.response_df.response <= 6) & (m.response_df.response >= 1),'converted_net_value'] == -1).all()
 	assert (m.response_df.ix[(m.response_df.response <= 8) & (m.response_df.response >= 7),'converted_net_value'] == 0).all()
 	assert (np.isnan(m.response_df.ix[m.response_df.response.isnull(),'converted_net_value'])).all()
+
+@pytest.fixture
+def migrator_with_ssq_and_nr_for_separate_surveys(empty_db):
+	conn = empty_db['conn']
+	survey_specific_questions = empty_db['schema']['survey_specific_questions']
+	numerical_responses = empty_db['schema']['numerical_responses']
+	ssq_cols = ['survey_specific_qid','master_qid','survey','confidential','question_type','survey_specific_question']
+	ssq_rows = [
+				('2014Inst-EIS-CSI1','CSI1','2014Inst-EIS',1,'7pt_1=SA','This is CSI question 1 for institute!'),
+				('2014Inst-EIS-Inst1','Inst1','2014Inst-EIS',1,'7pt_1=SA','This is CSI question 1 for institute!'),
+				('1415F8W-CSI1','CSI1','1415F8W',1,'7pt_1=SA','This is CSI question 1!'),
+				('1415F8W-CSI2','CSI2','1415F8W',1,'7pt_1=SA','This is CSI question 2!')
+				]
+	nr_cols = ['cm_pid','survey_specific_qid','response']
+	nr_rows = [
+		(1,'2014Inst-EIS-CSI1',1),
+		(2,'2014Inst-EIS-Inst1',3),
+		(3,'1415F8W-CSI1',5),
+		(4,'1415F8W-CSI2',8),
+	]
+	for row in ssq_rows:
+		conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+	for row in nr_rows:
+		conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
+	return Migrator(empty_db['engine'],conn)
+
+def test_survey_df_when_survey_specified(migrator_with_ssq_and_nr_for_separate_surveys):
+	m = migrator_with_ssq_and_nr_for_separate_surveys
+	m.surveys_to_migrate = ['1415F8W']
+	assert (m.survey_df.survey_code == '1415F8W').all()
