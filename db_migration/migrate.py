@@ -209,7 +209,14 @@ class Migrator(object):
                     assert found_question
                     records.append((question_code,question_title))
                 df = pd.DataFrame.from_records(records,columns=['question_code','question_title'])
-                df['question_id'] = [i + max_question_id+ 1 for i in range(len(df.index))]
+
+                #First copy existing old ids
+                existing_ids = current_question_df.set_index('question_code').question_id
+                df = df.set_index('question_code')
+                df['question_id'] = existing_ids
+                df = df.reset_index()
+
+                df.ix[df.question_id.isnull(), 'question_id'] = [i + max_question_id+ 1 for i in range(df.question_id.isnull().sum())]
                 self._question_df = df
             return self._question_df
         def fset(self, value):
@@ -376,7 +383,7 @@ def convert_types_for_db(values):
     new_values = list()
     for value in values:
         new_value = value
-        if type(value) != str and new_value is not None:
+        if type(value) != str and type(value) != int and new_value is not None:
             new_value = np.asscalar(value)
         if type(new_value) == str:
             try:

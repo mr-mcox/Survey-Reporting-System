@@ -280,7 +280,7 @@ def test_migrate_question_table_to_new_schema(migrator_with_ssq_and_nr_for_respo
     m.migrate_to_new_schema()
     records = m.db.execute(select([m.table['question']]))
     table_df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
-    pd.util.testing.assert_frame_equal(pd.DataFrame(m.question_df,columns=records.keys()), table_df)
+    pd.util.testing.assert_frame_equal(pd.DataFrame(m.question_df,columns=records.keys()).convert_objects(), table_df)
 
 def test_migrate_survey_question_table_to_new_schema(migrator_with_ssq_and_nr_for_response):
     m = migrator_with_ssq_and_nr_for_response
@@ -563,4 +563,14 @@ def test_new_question_id_creation(migrator_with_data_already_migrated_and_new_ss
     m.questions_to_migrate = ['1415F8W']
     question_records = m.db.execute(select([m.table['question']]))
     question_df = pd.DataFrame.from_records(question_records.fetchall(),columns=question_records.keys())
-    assert (~m.question_df.question_id.isin(question_df.question_id)).all()
+    assert (~m.question_df.ix[ ~m.question_df.question_code.isin(question_df.question_code),'question_id'].isin(question_df.question_id)).all()
+
+def test_new_question_id_matches_old_id_when_code_the_same(migrator_with_data_already_migrated_and_new_ssq_and_nr):
+    m = migrator_with_data_already_migrated_and_new_ssq_and_nr
+    m.questions_to_migrate = ['1415F8W']
+    question_records = m.db.execute(select([m.table['question']]))
+    question_df = pd.DataFrame.from_records(question_records.fetchall(),columns=question_records.keys())
+    question_df.rename(columns={'question_id':'old_question_id'},inplace=True)
+    df = m.question_df.merge(question_df)
+    assert (df.question_id==df.old_question_id).all()
+
