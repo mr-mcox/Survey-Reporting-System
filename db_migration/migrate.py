@@ -191,6 +191,11 @@ class Migrator(object):
             if not hasattr(self,'_question_df'):
                 sq = self.survey_question_df.set_index('survey_question_code')
                 records = list()
+                question_records = self.db.execute(select([self.table['question']]))
+                current_question_df = pd.DataFrame.from_records(question_records.fetchall(),columns=question_records.keys())
+                max_question_id = current_question_df.question_id.max()
+                if np.isnan(max_question_id):
+                    max_question_id = 0
                 #Create list of questions
                 questions = self.survey_question_df.master_qid.unique().tolist()
                 for question_code in questions:
@@ -204,7 +209,7 @@ class Migrator(object):
                     assert found_question
                     records.append((question_code,question_title))
                 df = pd.DataFrame.from_records(records,columns=['question_code','question_title'])
-                df['question_id'] = [i + 1 for i in range(len(df.index))]
+                df['question_id'] = [i + max_question_id+ 1 for i in range(len(df.index))]
                 self._question_df = df
             return self._question_df
         def fset(self, value):

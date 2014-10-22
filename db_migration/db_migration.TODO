@@ -13,7 +13,8 @@ Phase 2:
   ✔ When new survey is migrated, remove records tied to that survey from the response table @done (14-10-21 10:54)
   ✔ When new survey is migrated, remove orphaned records from the question table @done (14-10-21 16:47)
   ✔ survey_df does not set ids that already exist @done (14-10-22 16:21)
-  ☐ question_df does not set ids that already exist
+  ✔ question_df does not set ids that already exist @done (14-10-22 16:30)
+  ☐ question_df uses old ids if they match
   ☐ survey_question_df does not set ids that already exist
   ☐ question_category_df does not set ids that already exist
 
