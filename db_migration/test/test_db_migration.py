@@ -520,3 +520,31 @@ def test_remove_orphaned_questions(migrator_with_data_already_migrated):
     df = question_df.merge(survey_question_df,how='outer').merge(survey_df,how='outer')
     assert ((~df.survey_code.isin(m.surveys_to_migrate)) & df.survey_code.notnull()).all()
     assert 'ALL1' in df.question_code.values
+
+@pytest.fixture
+def migrator_with_data_already_migrated_and_new_ssq_and_nr(empty_db):
+    conn = empty_db['conn']
+    survey = empty_db['schema']['survey']
+    survey_cols = ['survey_id','survey_code']
+    survey_rows = [
+                (1,'1314EYS'),
+                ]
+    for row in survey_rows:
+        conn.execute(survey.insert(), {c:v for c,v in zip(survey_cols,row)})
+
+    survey_specific_questions = empty_db['schema']['survey_specific_questions']
+    numerical_responses = empty_db['schema']['numerical_responses']
+    ssq_cols = ['survey_specific_qid','master_qid','survey']
+    ssq_rows = [
+                ('1415F8W-CSI1','CSI1','1415F8W'),
+                ]
+    for row in ssq_rows:
+        conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+    return Migrator(empty_db['engine'],conn)
+
+def test_new_survey_id_creation(migrator_with_data_already_migrated_and_new_ssq_and_nr):
+    m = migrator_with_data_already_migrated_and_new_ssq_and_nr
+    m.surveys_to_migrate = ['1415F8W']
+    survey_records = m.db.execute(select([m.table['survey']]))
+    survey_df = pd.DataFrame.from_records(survey_records.fetchall(),columns=survey_records.keys())
+    assert (~m.survey_df.survey_id.isin(survey_df.survey_id)).all()

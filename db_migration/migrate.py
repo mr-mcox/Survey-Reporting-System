@@ -106,7 +106,9 @@ class Migrator(object):
         def fget(self):
             if not hasattr(self,'_survey_df'):
                 records = None
-                ssq = self.table['survey_specific_questions'] 
+                ssq = self.table['survey_specific_questions']
+                survey_records = self.db.execute(select([self.table['survey']]))
+                current_survey_df = pd.DataFrame.from_records(survey_records.fetchall(),columns=survey_records.keys())
                 if self.surveys_to_migrate:
                     records = self.db.execute(select([ssq.c.survey]).where(ssq.c.survey.in_(self.surveys_to_migrate)))
                 else:
@@ -114,7 +116,10 @@ class Migrator(object):
                 df = pd.DataFrame({'survey':[r[0] for r in records.fetchall()]})
                 _survey_df = df.drop_duplicates()
                 _survey_df['survey_code'] = _survey_df.survey
-                _survey_df['survey_id'] = [i + 1 for i in range(len(_survey_df.index))]
+                max_survey_id = current_survey_df.survey_id.max()
+                if np.isnan(max_survey_id):
+                    max_survey_id = 0
+                _survey_df['survey_id'] = [i + max_survey_id + 1 for i in range(len(_survey_df.index))]
                 _survey_df['survey_title'] = _survey_df.survey_code.map(self.survey_code_title_map)
                 self._survey_df = _survey_df
             return self._survey_df
