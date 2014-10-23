@@ -149,6 +149,13 @@ class Migrator(object):
             if not hasattr(self,'_survey_question_df'):
                 records = None
                 ssq = self.table['survey_specific_questions'] 
+
+                survey_question_records = self.db.execute(select([self.table['survey_question']]))
+                current_survey_question_df = pd.DataFrame.from_records(survey_question_records.fetchall(),columns=survey_question_records.keys())
+                max_survey_question_id = current_survey_question_df.survey_question_id.max()
+                if np.isnan(max_survey_question_id):
+                    max_survey_question_id = 0
+
                 if self.surveys_to_migrate:
                     records = self.db.execute(select([ssq]).where(ssq.c.survey.in_(self.surveys_to_migrate)))
                 else:
@@ -156,7 +163,7 @@ class Migrator(object):
                 df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
                 df['survey_question_code'] = df.survey + df.master_qid
                 df['question_code'] = df.master_qid
-                df['survey_question_id'] = [i + 1 for i in range(len(df.index))]
+                df['survey_question_id'] = [i + max_survey_question_id+ 1 for i in range(len(df.index))]
                 df['survey_id'] = df.survey.map(self.survey_id_survey_code_map)
                 df['question_title_override'] = None
                 #Add question category id

@@ -541,6 +541,15 @@ def migrator_with_data_already_migrated_and_new_ssq_and_nr(empty_db):
     for row in question_rows:
         conn.execute(question.insert(), {c:v for c,v in zip(question_cols,row)})
 
+    survey_question = empty_db['schema']['survey_question']
+    survey_question_cols = ['survey_question_id','question_id']
+    survey_question_rows = [
+                (1,1),
+                (2,2),
+                ]
+    for row in survey_question_rows:
+        conn.execute(survey_question.insert(), {c:v for c,v in zip(survey_question_cols,row)})
+
     survey_specific_questions = empty_db['schema']['survey_specific_questions']
     numerical_responses = empty_db['schema']['numerical_responses']
     ssq_cols = ['survey_specific_qid','master_qid','survey']
@@ -573,4 +582,11 @@ def test_new_question_id_matches_old_id_when_code_the_same(migrator_with_data_al
     question_df.rename(columns={'question_id':'old_question_id'},inplace=True)
     df = m.question_df.merge(question_df)
     assert (df.question_id==df.old_question_id).all()
+
+def test_new_survey_question_id_creation(migrator_with_data_already_migrated_and_new_ssq_and_nr):
+    m = migrator_with_data_already_migrated_and_new_ssq_and_nr
+    m.surveys_to_migrate = ['1415F8W']
+    survey_question_records = m.db.execute(select([m.table['survey_question']]))
+    survey_question_df = pd.DataFrame.from_records(survey_question_records.fetchall(),columns=survey_question_records.keys())
+    assert (~m.survey_question_df.survey_question_id.isin(survey_question_df.survey_question_id)).all()
 
