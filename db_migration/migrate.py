@@ -107,8 +107,6 @@ class Migrator(object):
             if not hasattr(self,'_survey_df'):
                 records = None
                 ssq = self.table['survey_specific_questions']
-                survey_records = self.db.execute(select([self.table['survey']]))
-                current_survey_df = pd.DataFrame.from_records(survey_records.fetchall(),columns=survey_records.keys())
                 if self.surveys_to_migrate:
                     records = self.db.execute(select([ssq.c.survey]).where(ssq.c.survey.in_(self.surveys_to_migrate)))
                 else:
@@ -116,10 +114,7 @@ class Migrator(object):
                 df = pd.DataFrame({'survey':[r[0] for r in records.fetchall()]})
                 _survey_df = df.drop_duplicates()
                 _survey_df['survey_code'] = _survey_df.survey
-                max_survey_id = current_survey_df.survey_id.max()
-                if np.isnan(max_survey_id):
-                    max_survey_id = 0
-                _survey_df['survey_id'] = [i + max_survey_id + 1 for i in range(len(_survey_df.index))]
+                _survey_df['survey_id'] = [i + + self.max_id_for_table('survey') + 1 for i in range(len(_survey_df.index))]
                 _survey_df['survey_title'] = _survey_df.survey_code.map(self.survey_code_title_map)
                 self._survey_df = _survey_df
             return self._survey_df
@@ -150,12 +145,6 @@ class Migrator(object):
                 records = None
                 ssq = self.table['survey_specific_questions'] 
 
-                survey_question_records = self.db.execute(select([self.table['survey_question']]))
-                current_survey_question_df = pd.DataFrame.from_records(survey_question_records.fetchall(),columns=survey_question_records.keys())
-                max_survey_question_id = current_survey_question_df.survey_question_id.max()
-                if np.isnan(max_survey_question_id):
-                    max_survey_question_id = 0
-
                 if self.surveys_to_migrate:
                     records = self.db.execute(select([ssq]).where(ssq.c.survey.in_(self.surveys_to_migrate)))
                 else:
@@ -163,7 +152,7 @@ class Migrator(object):
                 df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
                 df['survey_question_code'] = df.survey + df.master_qid
                 df['question_code'] = df.master_qid
-                df['survey_question_id'] = [i + max_survey_question_id+ 1 for i in range(len(df.index))]
+                df['survey_question_id'] = [i + + self.max_id_for_table('survey_question') + 1 for i in range(len(df.index))]
                 df['survey_id'] = df.survey.map(self.survey_id_survey_code_map)
                 df['question_title_override'] = None
                 #Add question category id
@@ -198,11 +187,7 @@ class Migrator(object):
             if not hasattr(self,'_question_df'):
                 sq = self.survey_question_df.set_index('survey_question_code')
                 records = list()
-                question_records = self.db.execute(select([self.table['question']]))
-                current_question_df = pd.DataFrame.from_records(question_records.fetchall(),columns=question_records.keys())
-                max_question_id = current_question_df.question_id.max()
-                if np.isnan(max_question_id):
-                    max_question_id = 0
+
                 #Create list of questions
                 questions = self.survey_question_df.master_qid.unique().tolist()
                 for question_code in questions:
@@ -218,12 +203,14 @@ class Migrator(object):
                 df = pd.DataFrame.from_records(records,columns=['question_code','question_title'])
 
                 #First copy existing old ids
+                question_records = self.db.execute(select([self.table['question']]))
+                current_question_df = pd.DataFrame.from_records(question_records.fetchall(),columns=question_records.keys())
                 existing_ids = current_question_df.set_index('question_code').question_id
                 df = df.set_index('question_code')
                 df['question_id'] = existing_ids
                 df = df.reset_index()
 
-                df.ix[df.question_id.isnull(), 'question_id'] = [i + max_question_id+ 1 for i in range(df.question_id.isnull().sum())]
+                df.ix[df.question_id.isnull(), 'question_id'] = [i + self.max_id_for_table('question')+ 1 for i in range(df.question_id.isnull().sum())]
                 self._question_df = df
             return self._question_df
         def fset(self, value):
@@ -361,13 +348,9 @@ class Migrator(object):
                         ('CLI8'     , 'CALI'),
                     ],columns=['question_code','question_category'])
 
+                #First copy existing old ids
                 question_category_records = self.db.execute(select([self.table['question_category']]))
                 current_question_category_df = pd.DataFrame.from_records(question_category_records.fetchall(),columns=question_category_records.keys())
-                max_question_category_id = current_question_category_df.question_category_id.max()
-                if np.isnan(max_question_category_id):
-                    max_question_category_id = 0
-
-                #First copy existing old ids
                 existing_ids = current_question_category_df.set_index('question_category').question_category_id
                 unique_category = df.question_category.unique().tolist()
                 category_id_df = pd.DataFrame({'question_category':unique_category}).set_index('question_category')
@@ -376,7 +359,7 @@ class Migrator(object):
 
 
                 #Then set new ids
-                category_id_df.ix[category_id_df.question_category_id.isnull(),'question_category_id'] = [x + max_question_category_id + 1 for x in range(category_id_df.question_category_id.isnull().sum())]                
+                category_id_df.ix[category_id_df.question_category_id.isnull(),'question_category_id'] = [x + self.max_id_for_table('question_category') + 1 for x in range(category_id_df.question_category_id.isnull().sum())]                
 
                 df = df.merge(category_id_df)
                 self._survey_question_question_category_df = df
@@ -400,6 +383,14 @@ class Migrator(object):
             del self._question_category_df
         return locals()
     question_category_df = property(**question_category_df())
+
+    def max_id_for_table(self,table):
+        records = self.db.execute(select([self.table[table]]))
+        current_df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys())
+        max_id = current_df[table + '_id'].max()
+        if np.isnan(max_id):
+            max_id = 0
+        return max_id
 
 #Some basic conversion of types needs to occur for the database library to be ok with it
 def convert_types_for_db(values):
@@ -428,3 +419,5 @@ def df_to_dict_array(df):
     for row in df.itertuples(index=False):
         list_of_rows.append(dict(zip(columns,convert_types_for_db(row))))
     return list_of_rows
+
+
