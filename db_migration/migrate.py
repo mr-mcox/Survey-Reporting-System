@@ -360,8 +360,24 @@ class Migrator(object):
                         ('CLI7'     , 'CALI'),
                         ('CLI8'     , 'CALI'),
                     ],columns=['question_code','question_category'])
+
+                question_category_records = self.db.execute(select([self.table['question_category']]))
+                current_question_category_df = pd.DataFrame.from_records(question_category_records.fetchall(),columns=question_category_records.keys())
+                max_question_category_id = current_question_category_df.question_category_id.max()
+                if np.isnan(max_question_category_id):
+                    max_question_category_id = 0
+
+                #First copy existing old ids
+                existing_ids = current_question_category_df.set_index('question_category').question_category_id
                 unique_category = df.question_category.unique().tolist()
-                category_id_df = pd.DataFrame({'question_category':unique_category,'question_category_id':[x + 1 for x in range(len(unique_category))]})
+                category_id_df = pd.DataFrame({'question_category':unique_category}).set_index('question_category')
+                category_id_df['question_category_id'] = existing_ids
+                category_id_df = category_id_df.reset_index()
+
+
+                #Then set new ids
+                category_id_df.ix[category_id_df.question_category_id.isnull(),'question_category_id'] = [x + max_question_category_id + 1 for x in range(category_id_df.question_category_id.isnull().sum())]                
+
                 df = df.merge(category_id_df)
                 self._survey_question_question_category_df = df
             return self._survey_question_question_category_df

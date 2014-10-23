@@ -16,7 +16,7 @@ Phase 2:
   ✔ question_df does not set ids that already exist @done (14-10-22 16:30)
   ✔ question_df uses old ids if they match @done (14-10-22 17:02)
   ✔ survey_question_df does not set ids that already exist @done (14-10-23 10:29)
-  ☐ question_category_df does not set ids that already exist
+  ✔ question_category_df does not set ids that already exist @done (14-10-23 11:36)
 
 Maybe Later:
   ☐ Review code smell in question_code_question_id_map
