@@ -24,7 +24,7 @@ person_id:
   ✔ cms who are not in valid pids are logged with survey @done (14-10-25 09:37)
 
 response_retriever:
-  ☐ Change givens fixtures to in code fixtures
+  ✔ Change givens fixtures to in code fixtures @done (14-10-25 09:57)
   ☐ Change schema of fixtures to match actual schema
 
 Maybe Later:

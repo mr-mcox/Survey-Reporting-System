@@ -1,17 +1,5 @@
 Feature: Retreive all responses from a single survey from a database
-	Scenario: Retrieve all responses from a survey when there is only one survey
-		Given set up database schema
-		Given 8 repsonse db
-		When retrieve responses for survey_id 1 is run
-		Then there are 8 rows returned
-
-	Scenario: Retrieve all responses from a survey when there is more than one survey
-		Given set up database schema
-		Given two survey db
-		When retrieve responses for survey_id 1 is run
-		Then there are 8 rows returned
-
-	Scenario: Retrieve all responses from a survey by name
+Scenario: Retrieve all responses from a survey by name
 		Given set up database schema
 		Given two survey db
 		When retrieve responses for survey_code 1314F8W is run
