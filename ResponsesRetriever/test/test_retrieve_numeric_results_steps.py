@@ -56,13 +56,27 @@ def empty_database():
     database["questions_table"] = questions
     return database
 
+@given('8 repsonse db')
+def eight_response_db(empty_database):
+    responses = [{'survey_id':1,'response':1,'question_id':1,'respondent_id':x} for x in range(8)]
+    questions = [{'question_id':1}]
+    empty_database["db"].execute(empty_database["responses_table"].insert(),responses)
+    empty_database["db"].execute(empty_database["questions_table"].insert(),questions)
+
+@given('two survey db')
+def two_survey_db(empty_database):
+    response_survey_one = [{'survey_id':1,'response':1,'question_id':1,'respondent_id':x} for x in range(8)]
+    response_survey_two = [{'survey_id':2,'response':1,'question_id':1,'respondent_id':x} for x in range(2)]
+    responses = response_survey_one + response_survey_two
+    questions = [{'question_id':1,'question_code':'CSI1','is_confidential':1,'question_type':'7pt_1=SA'}]
+    surveys = [{'survey_id':1,'survey_code':'1314F8W'},{'survey_id':2,'survey_code':'1314MYS'}]
+    empty_database["db"].execute(empty_database["responses_table"].insert(),responses)
+    empty_database["db"].execute(empty_database["questions_table"].insert(),questions)
+    empty_database["db"].execute(empty_database["surveys_table"].insert(),surveys)
+
 @pytest.fixture
 def responses_object():
     return dict()
-
-@given(re.compile('a responses table with this data\n(?P<table>.+)', re.DOTALL))
-def response_table_setup(empty_database,table):
-    empty_database["db"].execute(empty_database["responses_table"].insert(),table_for_db(table))
 
 @when('retrieve responses for survey_id 1 is run')
 def retrieve_response_survey_1(responses_object, empty_database):
@@ -72,17 +86,9 @@ def retrieve_response_survey_1(responses_object, empty_database):
 def check_rows_returned(number, responses_object):
     assert len(responses_object["responses"]['rows'])==int(number)
 
-@given(re.compile('a survey table with this data\n(?P<table>.+)', re.DOTALL))
-def survey_table_setup(table, empty_database):
-    empty_database["db"].execute(empty_database["surveys_table"].insert(),table_for_db(table))
-
 @when('retrieve responses for survey_code 1314F8W is run')
 def retrieve_responses_for_1314F8W(responses_object, empty_database):
     responses_object["responses"] = ResponsesRetriever(db_connection=empty_database["db"]).retrieve_responses_for_survey(survey_code="1314F8W")
-
-@given(re.compile('a question table with this data\n(?P<table>.+)', re.DOTALL))
-def question_table_setup(table, empty_database):
-    empty_database["db"].execute(empty_database["questions_table"].insert(),table_for_db(table))
 
 @then(re.compile('one of the columns returned is (?P<column>.+)'))
 def one_column_returned(column, responses_object):
