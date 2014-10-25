@@ -27,6 +27,10 @@ response_retriever:
   ✔ Change givens fixtures to in code fixtures @done (14-10-25 09:57)
   ✔ Change schema of fixtures to match actual schema @done (14-10-25 10:28)
 
+merge_with_master:
+  ✔ Merge conflict in export_cuts_in_separate_files.py @done (14-10-25 11:14)
+  ☐ Merge conflict in NumericOutputCalculator/NumericOutputCalculator.py
+
 Maybe Later:
   ☐ Review code smell in question_code_question_id_map
   ☐ Create record of responses that have been thrown out because they don't have a survey_question_id

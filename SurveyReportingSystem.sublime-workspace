@@ -4,8 +4,104 @@
 		"selected_items":
 		[
 			[
+				"cm_sur",
+				"cm_survey_question"
+			],
+			[
+				"survey",
+				"survey_question	(local, instance)"
+			],
+			[
 				"sur",
-				"survey_question_id"
+				"survey_question"
+			],
+			[
+				"is",
+				"is_confidential"
+			],
+			[
+				"que",
+				"question_code"
+			],
+			[
+				"res",
+				"respondent_id"
+			],
+			[
+				"resp",
+				"response"
+			],
+			[
+				"call",
+				"assert_called_with"
+			],
+			[
+				"leg",
+				"legal_person_ids	(local, instance)"
+			],
+			[
+				"legal",
+				"legal_person_ids_csv"
+			],
+			[
+				"new",
+				"new_person_id"
+			],
+			[
+				"has",
+				"hasattr"
+			],
+			[
+				"con",
+				"convert_objects"
+			],
+			[
+				"cate",
+				"category_id_df"
+			],
+			[
+				"question",
+				"question_category"
+			],
+			[
+				"que_cat_",
+				"question_category_id"
+			],
+			[
+				"que_ca",
+				"question_category_id"
+			],
+			[
+				"question_cat",
+				"question_category_id"
+			],
+			[
+				"quest",
+				"question_code"
+			],
+			[
+				"new_",
+				"new_value"
+			],
+			[
+				"set",
+				"set_index"
+			],
+			[
+				"qe",
+				"question_code"
+			],
+			[
+				"que_id",
+				"question_id"
+			],
+			[
+				"max",
+				"max_survey_id	(local, instance)"
+			],
+			[
+				"qu",
+				"question_df"
 			],
 			[
 				"conver",
@@ -16,28 +112,8 @@
 				"survey_specific_questions"
 			],
 			[
-				"que",
-				"question_table	(global, instance)"
-			],
-			[
-				"quest",
-				"question_table"
-			],
-			[
-				"res",
-				"response"
-			],
-			[
 				"survey_qu",
 				"survey_question"
-			],
-			[
-				"question",
-				"question"
-			],
-			[
-				"con",
-				"connection"
 			],
 			[
 				"conn",
@@ -46,10 +122,6 @@
 			[
 				"ex",
 				"execute"
-			],
-			[
-				"resp",
-				"response"
 			],
 			[
 				"exp",
@@ -68,10 +140,6 @@
 				"survey_question_df"
 			],
 			[
-				"qu",
-				"question_title"
-			],
-			[
 				"q",
 				"question_title"
 			],
@@ -88,10 +156,6 @@
 				"survey_question_df"
 			],
 			[
-				"survey",
-				"survey_code"
-			],
-			[
 				"questio",
 				"question_title"
 			],
@@ -102,10 +166,6 @@
 			[
 				"from",
 				"from_records"
-			],
-			[
-				"que_id",
-				"question_category_id"
 			],
 			[
 				"em",
@@ -126,10 +186,6 @@
 			[
 				"ssq",
 				"survey_specific_questions"
-			],
-			[
-				"has",
-				"hasattr	(builtin, function)"
 			],
 			[
 				"compos",
@@ -158,14 +214,6 @@
 			[
 				"ca",
 				"calculator"
-			],
-			[
-				"new",
-				"new_values"
-			],
-			[
-				"new_",
-				"new_values"
 			],
 			[
 				"list",
@@ -466,30 +514,6 @@
 			[
 				"integer",
 				"integer_strings"
-			],
-			[
-				"retun",
-				"return_value"
-			],
-			[
-				"sor",
-				"sorted_labels"
-			],
-			[
-				"inte",
-				"integer_string"
-			],
-			[
-				"Di",
-				"Dimensions"
-			],
-			[
-				"title",
-				"title"
-			],
-			[
-				"net_",
-				"net_formatted_values"
 			]
 		]
 	},
@@ -499,41 +523,31 @@
 			"file": "db_migration/db_migration.TODO",
 			"settings":
 			{
-				"buffer_size": 2822,
+				"buffer_size": 4621,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "migrate_db.py",
+			"file": "ResponsesRetriever/test/retrieve_numeric_results.feature",
 			"settings":
 			{
-				"buffer_size": 237,
+				"buffer_size": 1456,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "db_migration/migrate.py",
+			"file": "ResponsesRetriever/test/test_retrieve_numeric_results_steps.py",
 			"settings":
 			{
-				"buffer_size": 18194,
-				"line_ending": "Unix",
-				"name": "#Create survey question category map based on ques"
+				"buffer_size": 6633,
+				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "db_migration/test/test_db_migration.py",
+			"file": "ResponsesRetriever/ResponsesRetriever.py",
 			"settings":
 			{
-				"buffer_size": 15662,
-				"line_ending": "Unix",
-				"name": "from SurveyReportingSystem.db_migration.migrate im"
-			}
-		},
-		{
-			"file": "database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
-			"settings":
-			{
-				"buffer_size": 7027,
+				"buffer_size": 3090,
 				"line_ending": "Unix"
 			}
 		}
@@ -541,13 +555,9 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 392.0,
+		"height": 167.0,
 		"selected_items":
 		[
-			[
-				"git push",
-				"Git: Push"
-			],
 			[
 				"git com",
 				"Git: Commit"
@@ -559,6 +569,18 @@
 			[
 				"git ",
 				"Git: Commit"
+			],
+			[
+				"conv",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"git ad",
+				"Git: Add..."
+			],
+			[
+				"git push",
+				"Git: Push"
 			],
 			[
 				"git status",
@@ -599,10 +621,6 @@
 			[
 				"cucu",
 				"Gherkin/Cucumber: Format"
-			],
-			[
-				"git ad",
-				"Git: Add..."
 			],
 			[
 				"task",
@@ -649,7 +667,7 @@
 				"Set Syntax: JavaScript"
 			]
 		],
-		"width": 467.0
+		"width": 602.0
 	},
 	"console":
 	{
@@ -666,6 +684,16 @@
 	},
 	"file_history":
 	[
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writing_utilities_test.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/NumericOutputCalculator.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/db_migration/migrate.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/db_migration/test/test_db_migration.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResponsesRetriever/test/retrieve_numeric_results.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResponsesRetriever/ResponsesRetriever.py",
+		"/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1415F8W/config.yaml",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/migrate_db.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/db_migration/db_migration.TODO",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/2f9a751d0c9_rename_question_indicies_table_to_.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/28726eb67b4_multiple_changes_for_usage_in_bobj.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/1db95820760_stage_survey_tables_included_in_.py",
@@ -677,23 +705,19 @@
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/3a5a97f7fe3_add_question_type_fi.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/4119a32d65b_several_column_name_changes.py",
 		"/Users/mcox/Library/Application Support/Sublime Text 2/Packages/Git/Git.sublime-settings",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/3018942e76f_add_survey_specific_question_to_survey_.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/developmet.TODO",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResponsesRetriever/ResponsesRetriever.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/compute_results.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/Lookups.xlsx",
 		"/opt/local/etc/freetds/freetds.conf",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/features/steps/retetrieve_numeric_results_steps.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/ResultsRetriever.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/NumericOutputCalculator.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps/basic_computations.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_composite_questions.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/create_pilot_dashboard.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/test_excel_helper.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writer_test.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writing_utilities_test.py",
 		"/Users/mcox/Dropbox/MDIS/tmp/migrate_old_survey_db_format_to_new.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/SurveyReportingSystem.sublime-workspace",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/dump_results.py",
@@ -780,6 +804,56 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"ResponsesRetriever",
+			"CalculationCoordinator",
+			"survey",
+			"survey_question",
+			"question",
+			"questions",
+			"responses",
+			"surveys",
+			"question_id",
+			"respondent_id",
+			"surveys_table",
+			"questions_table",
+			"responses_table",
+			"given",
+			"questions",
+			"responses",
+			"log",
+			"result_df",
+			"log",
+			"cm_map",
+			"nr",
+			"migrate_to_new_schema",
+			"migrator_with_ssq_and_nr_for_response",
+			"question",
+			"1415F8W",
+			"questions_to_migrate",
+			"patch",
+			"question",
+			"question_",
+			"question",
+			"question_records",
+			"    question_category_mock_file = pd.DataFrame({'question_code':['F8W2','CSI1'],'survey':['1415F8W','1415F8W'],'question_category':['NEWCATEGORY','CSI']})\ntest_migrate_question_category_table_to_new_schema",
+			"    question_category_mock_file = pd.DataFrame({'question_code':['F8W2','CSI1'],'survey':['1415F8W','1415F8W'],'question_category':['NEWCATEGORY','CSI']})\n    question_category_mock_file = pd.DataFrame({'question_code':['F8W2','CSI1'],'survey':['1415F8W','1415F8W'],'question_category':['NEWCATEGORY','CSI']})\nquestion_",
+			"question_",
+			"question_df",
+			"question",
+			"question_category",
+			"survey_question",
+			"question",
+			"CSI1",
+			"CALI",
+			"max_survey_id",
+			"survey",
+			"question",
+			"survey",
+			"question",
+			"survey",
+			"2014Inst-EIS",
+			"survey_question",
+			"survey_question_id_records",
 			"df_to_dict_array",
 			"DENTITY_INSERT",
 			"survey",
@@ -857,57 +931,7 @@
 			"zero",
 			"next_column_to_use",
 			"highest_column",
-			"print",
-			"rc_to_range",
-			"test_writing_menu_translations",
-			"menu_i+menu_start,",
-			"menu_i+menu_start",
-			"row=0,column=0",
-			"'",
-			"’",
-			"Date",
-			"cuts_4",
-			"results",
-			"cuts_4",
-			"cuts_3",
-			"menu",
-			"cuts_2",
-			"cuts",
-			"basic_static_cuts",
-			"ConfigurationReader",
-			"for_excel_export.feature",
-			"context.",
-			"coordinator_with_net_formatted_values",
-			"corps",
-			",",
-			"'",
-			"convert_types_for_db",
-			"df_to_dict_array",
-			"local",
-			"engine_1",
-			"local",
-			"categorical_calculation_samp_size",
-			"sample_size",
-			"blank",
-			"result_TYPE",
-			"signif",
-			"stat",
-			"add_pilot_cuts",
-			"pilot",
-			"rows writt",
-			"hist_results",
-			"survey",
-			"question_map",
-			"numerical_responses",
-			"reflection",
-			"Duplicate",
-			"historical",
-			"calculato",
-			"dynamic_parent_dimension",
-			"dynamic",
-			"there is not a row",
-			"value",
-			"results"
+			"print"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -915,6 +939,10 @@
 		"regex": false,
 		"replace_history":
 		[
+			"question",
+			"response",
+			"survey",
+			"surveys_to_migrate",
 			"Migrator(empty_db['engine'],conn)",
 			"\\n",
 			"surveyProd1!",
@@ -931,6 +959,7 @@
 	"groups":
 	[
 		{
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -938,15 +967,15 @@
 					"file": "db_migration/db_migration.TODO",
 					"settings":
 					{
-						"buffer_size": 2822,
+						"buffer_size": 4621,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2033,
-								2033
+								1918,
+								1918
 							]
 						],
 						"settings":
@@ -1156,18 +1185,18 @@
 				},
 				{
 					"buffer": 1,
-					"file": "migrate_db.py",
+					"file": "ResponsesRetriever/test/retrieve_numeric_results.feature",
 					"settings":
 					{
-						"buffer_size": 237,
+						"buffer_size": 1456,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								146,
-								146
+								69,
+								69
 							]
 						],
 						"settings":
@@ -1365,7 +1394,8 @@
 								"Ruby on Rails": "ruby"
 							},
 							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Python/Python.tmLanguage"
+							"syntax": "Packages/Cucumber/Cucumber Plain Text Feature.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1375,18 +1405,26 @@
 				},
 				{
 					"buffer": 2,
-					"file": "db_migration/migrate.py",
+					"file": "ResponsesRetriever/test/test_retrieve_numeric_results_steps.py",
 					"settings":
 					{
-						"buffer_size": 18194,
+						"buffer_size": 6633,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2378,
-								2378
+								4653,
+								4653
+							],
+							[
+								5145,
+								5145
+							],
+							[
+								5666,
+								5666
 							]
 						],
 						"settings":
@@ -1397,7 +1435,6 @@
 								"README",
 								"FIXME"
 							],
-							"auto_name": "#Create survey question category map based on ques",
 							"codeintel": true,
 							"codeintel_config":
 							{
@@ -1590,25 +1627,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1145.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "db_migration/test/test_db_migration.py",
+					"file": "ResponsesRetriever/ResponsesRetriever.py",
 					"settings":
 					{
-						"buffer_size": 15662,
+						"buffer_size": 3090,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								15662,
-								15662
+								327,
+								327
 							]
 						],
 						"settings":
@@ -1619,7 +1656,6 @@
 								"README",
 								"FIXME"
 							],
-							"auto_name": "from SurveyReportingSystem.db_migration.migrate im",
 							"codeintel": true,
 							"codeintel_config":
 							{
@@ -1808,126 +1844,10 @@
 							},
 							"sublimelinter_wrap_find": true,
 							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4186.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
-					"settings":
-					{
-						"buffer_size": 7027,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5456,
-								5398
-							]
-						],
-						"settings":
-						{
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110.0
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
-							"sublimelinter": true,
-							"sublimelinter_delay": 2.0,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1192.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

@@ -227,3 +227,17 @@ Scenario: Compute net formatted values accurately for a variety of question type
 	Then the response value for person_id 18 is 7
 	Then the response value for person_id 19 is 10
 	Then the response value for person_id 20 is blank
+
+
+Scenario: Compute net formatted values accurately for NPS 11 = SA
+	Given raw 7pt questions results
+		| person_id | response | question_type  |
+		| 17        | 1        | 11pt_NPS_11=SA |
+		| 18        | 9        | 11pt_NPS_11=SA |
+		| 19        | 11       | 11pt_NPS_11=SA |
+		| 20        | 12       | 11pt_NPS_11=SA |
+	When NumericOutputCalculator is initialized
+	Then net formatted value for person_id 17 is -1
+	Then net formatted value for person_id 18 is 0
+	Then net formatted value for person_id 19 is 1
+	Then net formatted value for person_id 20 is blank

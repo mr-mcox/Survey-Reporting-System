@@ -689,3 +689,211 @@ def test_log_illegal_cms_ids(migrator_with_ssq_and_nr_for_id_replacement):
         with patch('logging.info') as mock_logger:
             response_df = m.response_df
     mock_logger.assert_called_once_with('person_id 560 removed from survey 1314EYS')
+
+@pytest.fixture
+def db_with_incomplete_CSI(empty_db):
+    conn = empty_db['conn']
+    numerical_responses = empty_db['schema']['numerical_responses']
+    survey_specific_questions = empty_db['schema']['survey_specific_questions']
+    nr_cols = ['cm_pid','survey','survey_specific_qid','response']
+    ssq_cols = ['survey_specific_qid','master_qid','survey','confidential','question_type']
+
+    nr_rows = [
+        (1,'1415F8W','1415F8W-CSI1',1),
+        (1,'1415F8W','1415F8W-CSI2',2),
+        (1,'1415F8W','1415F8W-CSI3',3),
+        (1,'1415F8W','1415F8W-CSI4',3),
+        (1,'1415F8W','1415F8W-CSI5',3),
+        (1,'1415F8W','1415F8W-CSI6',3),
+        (1,'1415F8W','1415F8W-CSI7',3),
+        (1,'1415F8W','1415F8W-CSI8',3),
+        (1,'1415F8W','1415F8W-CSI10',3),
+        (1,'1415F8W','1415F8W-CSI12',3),
+        (1,'1415F8W','1415F8W-Culture1',3),
+        (2,'1415F8W','1415F8W-CSI1',1),
+        (2,'1415F8W','1415F8W-CSI2',2),
+        (2,'1415F8W','1415F8W-CSI3',3),
+        (2,'1415F8W','1415F8W-CSI4',3),
+        (2,'1415F8W','1415F8W-CSI5',3),
+        (2,'1415F8W','1415F8W-CSI6',3),
+        (2,'1415F8W','1415F8W-CSI7',3),
+        (2,'1415F8W','1415F8W-CSI8',3),
+        (2,'1415F8W','1415F8W-CSI10',3),
+        (2,'1415F8W','1415F8W-CSI12',3),
+    ]
+
+    ssq_rows = [
+        ('1415F8W-CSI1','CSI1','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI2','CSI2','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI3','CSI3','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI4','CSI4','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI5','CSI5','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI6','CSI6','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI7','CSI7','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI8','CSI8','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI10','CSI10','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI12','CSI12','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-Culture1','Culture1','1415F8W',1,'7pt_1=SA'),
+    ]
+    for row in nr_rows:
+        conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
+    for row in ssq_rows:
+        conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+    return Migrator(empty_db['engine'],conn)
+
+@pytest.fixture
+def db_with_incomplete_CALI(empty_db):
+    conn = empty_db['conn']
+    numerical_responses = empty_db['schema']['numerical_responses']
+    survey_specific_questions = empty_db['schema']['survey_specific_questions']
+    nr_cols = ['cm_pid','survey','survey_specific_qid','response']
+    ssq_cols = ['survey_specific_qid','master_qid','survey','confidential','question_type']
+
+    nr_rows = [
+        (1,'1415F8W','1415F8W-CLI1',1),
+        (1,'1415F8W','1415F8W-CLI2',2),
+        (1,'1415F8W','1415F8W-CLI3',3),
+        (1,'1415F8W','1415F8W-CLI4',3),
+        (1,'1415F8W','1415F8W-CLI5',3),
+        (1,'1415F8W','1415F8W-CLI6',3),
+        (1,'1415F8W','1415F8W-CLI7',3),
+        (1,'1415F8W','1415F8W-CLI8',3),
+        (2,'1415F8W','1415F8W-CLI1',1),
+        (2,'1415F8W','1415F8W-CLI2',2),
+        (2,'1415F8W','1415F8W-CLI3',3),
+        (2,'1415F8W','1415F8W-CLI4',3),
+        (2,'1415F8W','1415F8W-CLI5',3),
+        (2,'1415F8W','1415F8W-CLI6',3),
+        (2,'1415F8W','1415F8W-CLI7',3),
+    ]
+
+    ssq_rows = [
+        ('1415F8W-CLI1','CLI1','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI2','CLI2','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI3','CLI3','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI4','CLI4','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI5','CLI5','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI6','CLI6','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI7','CLI7','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI8','CLI8','1415F8W',1,'7pt_1=SA'),
+    ]
+    for row in nr_rows:
+        conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
+    for row in ssq_rows:
+        conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+    return Migrator(empty_db['engine'],conn)
+
+@pytest.fixture
+def db_with_incomplete_CALI_but_not_CSI(empty_db):
+    conn = empty_db['conn']
+    numerical_responses = empty_db['schema']['numerical_responses']
+    survey_specific_questions = empty_db['schema']['survey_specific_questions']
+    nr_cols = ['cm_pid','survey','survey_specific_qid','response']
+    ssq_cols = ['survey_specific_qid','master_qid','survey','confidential','question_type']
+
+    nr_rows = [
+        (1,'1415F8W','1415F8W-CLI1',1),
+        (1,'1415F8W','1415F8W-CLI2',2),
+        (1,'1415F8W','1415F8W-CLI3',3),
+        (1,'1415F8W','1415F8W-CLI4',3),
+        (1,'1415F8W','1415F8W-CLI5',3),
+        (1,'1415F8W','1415F8W-CLI6',3),
+        (1,'1415F8W','1415F8W-CLI7',3),
+        (1,'1415F8W','1415F8W-CLI8',3),
+        (2,'1415F8W','1415F8W-CLI1',1),
+        (2,'1415F8W','1415F8W-CLI2',2),
+        (2,'1415F8W','1415F8W-CLI3',3),
+        (2,'1415F8W','1415F8W-CLI4',3),
+        (2,'1415F8W','1415F8W-CLI5',3),
+        (2,'1415F8W','1415F8W-CLI6',3),
+        (2,'1415F8W','1415F8W-CLI7',3),
+        (1,'1415F8W','1415F8W-CSI1',1),
+        (1,'1415F8W','1415F8W-CSI2',2),
+        (1,'1415F8W','1415F8W-CSI3',3),
+        (1,'1415F8W','1415F8W-CSI4',3),
+        (1,'1415F8W','1415F8W-CSI5',3),
+        (1,'1415F8W','1415F8W-CSI6',3),
+        (1,'1415F8W','1415F8W-CSI7',3),
+        (1,'1415F8W','1415F8W-CSI8',3),
+        (1,'1415F8W','1415F8W-CSI10',3),
+        (1,'1415F8W','1415F8W-CSI12',3),
+        (1,'1415F8W','1415F8W-Culture1',3),
+        (2,'1415F8W','1415F8W-CSI1',1),
+        (2,'1415F8W','1415F8W-CSI2',2),
+        (2,'1415F8W','1415F8W-CSI3',3),
+        (2,'1415F8W','1415F8W-CSI4',3),
+        (2,'1415F8W','1415F8W-CSI5',3),
+        (2,'1415F8W','1415F8W-CSI6',3),
+        (2,'1415F8W','1415F8W-CSI7',3),
+        (2,'1415F8W','1415F8W-CSI8',3),
+        (2,'1415F8W','1415F8W-CSI10',3),
+        (2,'1415F8W','1415F8W-CSI12',3),
+        (2,'1415F8W','1415F8W-Culture1',3),
+    ]
+
+    ssq_rows = [
+        ('1415F8W-CLI1','CLI1','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI2','CLI2','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI3','CLI3','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI4','CLI4','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI5','CLI5','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI6','CLI6','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI7','CLI7','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CLI8','CLI8','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI1','CSI1','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI2','CSI2','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI3','CSI3','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI4','CSI4','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI5','CSI5','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI6','CSI6','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI7','CSI7','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI8','CSI8','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI10','CSI10','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-CSI12','CSI12','1415F8W',1,'7pt_1=SA'),
+        ('1415F8W-Culture1','Culture1','1415F8W',1,'7pt_1=SA'),
+    ]
+    for row in nr_rows:
+        conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
+    for row in ssq_rows:
+        conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+    return Migrator(empty_db['engine'],conn)
+
+def test_removing_responses_incomplete_CSI(db_with_incomplete_CSI):
+    m = db_with_incomplete_CSI
+    schema = m.table
+    results = schema['response']
+    surveys = schema['survey']
+    questions = schema['question']
+    survey_questions = schema['survey_question']
+
+    m.clean_CSI = True
+    df = m.response_df
+    assert len(df.ix[df.person_id==2].index) == 0
+    assert len(df.ix[df.person_id==1].index) == 11
+
+def test_removing_responses_incomplete_CALI(db_with_incomplete_CALI):
+    m = db_with_incomplete_CALI
+    schema = m.table
+    results = schema['response']
+    surveys = schema['survey']
+    questions = schema['question']
+    survey_questions = schema['survey_question']
+
+    m.clean_CALI = True
+    df = m.response_df
+    assert len(df.ix[df.person_id==2].index) == 0
+    assert len(df.ix[df.person_id==1].index) == 8
+
+def test_remove_responses_for_only_one_survey(db_with_incomplete_CALI_but_not_CSI):
+    m = db_with_incomplete_CALI_but_not_CSI
+    schema = m.table
+    results = schema['response']
+    surveys = schema['survey']
+    questions = schema['question']
+    survey_questions = schema['survey_question']
+
+    m.clean_CSI = True
+    m.clean_CALI = True
+    df = m.response_df
+    assert len(df.ix[df.person_id==2].index) == 11
+    assert len(df.ix[df.person_id==1].index) == 19

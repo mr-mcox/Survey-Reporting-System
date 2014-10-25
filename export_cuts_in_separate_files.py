@@ -5,32 +5,32 @@ from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
 from SurveyReportingSystem.ResponsesRetriever import ResponsesRetriever
 import logging
 import os
+import sys
 
 logging.basicConfig(filename='debug.log',level=logging.WARNING)
 
 config = ConfigurationReader.ConfigurationReader(config_file='config.yaml')
 
-# Read connection info
-# connect_info_file = open('db_connect_string.txt')
-# connect_info = connect_info_file.readline()
-# connect_info_file.close()
+connect_info = 'mssql+pyodbc://survey_user:surveyProd1!@tpsd_survey'
 
-# engine = create_engine(connect_info)
-
-# conn = engine.connect()
-# db = conn
-# retriever = ResponsesRetriever.ResponsesRetriever(db_connection=db)
-# print("Starting to retrieve responses")
-# responses = retriever.retrieve_responses_for_survey(survey_code='1314F8W')
-# responses_df = pd.DataFrame(responses['rows'])
-# responses_df.columns = responses['column_headings']
-
-# responses_df.to_csv('responses.csv')
-responses_df = pd.read_csv('responses.csv')
+engine = create_engine(connect_info)
+conn = engine.connect()
+db = conn
+retriever = ResponsesRetriever.ResponsesRetriever(db_connection=db)
+print("Starting to retrieve current results")
+results = retriever.retrieve_results_for_survey(survey_code=sys.argv[1])
+responses_df = pd.DataFrame(results['rows'])
+responses_df.columns = results['column_headings']
 
 for_historical = False
-if os.path.exists('hist_demographics.xlsx') and os.path.exists('hist_responses.csv'):
-	hist_responses_df = pd.read_csv('hist_responses.csv')
+if len(sys.argv) > 2:
+	assert os.path.exists('hist_demographics.xlsx'), "hist_demographics.xlsx expected in current folder"
+
+	print("Starting to retrieve historical results")
+	hist_responses = retriever.retrieve_results_for_survey(survey_code=sys.argv[1:])
+	hist_responses_df = pd.DataFrame(hist_responses['rows'])
+	hist_responses_df.columns = hist_responses['column_headings']
+
 	print("Starting calculations with historical data")
 	for_historical = True
 	calc = CalculationCoordinator.CalculationCoordinator(responses=responses_df,

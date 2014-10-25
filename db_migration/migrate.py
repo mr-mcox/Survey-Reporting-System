@@ -282,6 +282,42 @@ class Migrator(object):
                         logging.info('person_id ' + str(row[0]) + ' removed from survey ' + row[1])
                     df = df.ix[df.person_id.isin(legal_person_ids.person_id)]
 
+                #Remove incomplete CSI
+                if hasattr(self,'clean_CSI') and self.clean_CSI:
+                    if 'question_category' not in df.columns:
+                        df = df.merge(self.survey_question_df.ix[:,['survey_question_id','question_category']],how='outer')
+                    clean_df = df.merge(self.survey_question_df)
+                    count_by_pid = clean_df.groupby(['person_id','question_category','survey']).size()
+                    count_by_pid.name = 'count'
+                    count_by_pid = count_by_pid.reset_index()
+                    count_for_max_response = count_by_pid.copy().drop('person_id',axis=1)
+                    max_response = count_for_max_response.groupby(['question_category','survey']).max().rename(columns={'count':'max_count'}).reset_index()
+
+                    df_with_max = count_by_pid.merge(max_response)
+
+                    cm_to_remove = df_with_max.ix[(df_with_max['count'] < df_with_max.max_count) &  (df_with_max.question_category=='CSI')].set_index(['person_id','survey','question_category'])
+
+                    df = df.set_index(['person_id','survey','question_category'])
+                    # assert False
+                    df = df.ix[(~df.index.isin(cm_to_remove.index))].reset_index()
+
+                #Remove incomplete CALI
+                if hasattr(self,'clean_CALI') and self.clean_CALI:
+                    if 'question_category' not in df.columns:
+                        df = df.merge(self.survey_question_df.ix[:,['survey_question_id','question_category']],how='outer')
+                    clean_df = df.merge(self.survey_question_df)
+                    count_by_pid = clean_df.groupby(['person_id','question_category','survey']).size()
+                    count_by_pid.name = 'count'
+                    count_by_pid = count_by_pid.reset_index()
+                    count_for_max_response = count_by_pid.copy().drop('person_id',axis=1)
+                    max_response = count_for_max_response.groupby(['question_category','survey']).max().rename(columns={'count':'max_count'}).reset_index()
+                    df_with_max = count_by_pid.merge(max_response)
+                    cm_to_remove = df_with_max.ix[(df_with_max['count'] < df_with_max.max_count) &  (df_with_max.question_category=='CALI')].set_index(['person_id','survey','question_category'])
+                    
+                    df = df.set_index(['person_id','survey','question_category'])
+                    df = df.ix[(~df.index.isin(cm_to_remove.index))].reset_index()
+
+
                 #Map converted_net_value
                 df = df.set_index('survey_question_id').join(self.survey_question_df.set_index('survey_question_id').ix[:,'question_type']).reset_index()
                 df = map_responses_to_net_formatted_values(df).convert_objects()
@@ -446,5 +482,3 @@ def df_to_dict_array(df):
     for row in df.itertuples(index=False):
         list_of_rows.append(dict(zip(columns,convert_types_for_db(row))))
     return list_of_rows
-
-

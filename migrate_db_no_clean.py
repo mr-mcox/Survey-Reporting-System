@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-from SurveyReportingSystem.db_migration.migrate import Migrator
-from sqlalchemy import create_engine
-import sys
-
-engine = create_engine(sys.argv[1])
-connection = engine.connect()
-
-m = Migrator(engine,connection)
-m.migrate_to_new_schema()
-=======
 from SurveyReportingSystem.db_migration.migrate import migrate
 import sys
 from sqlalchemy import create_engine
@@ -27,5 +16,4 @@ conn_2 = engine_2.connect()
 
 survey_codes = sys.argv[3:]
 
-migrate(conn_1,conn_2,survey_codes,clean_CSI=True,clean_CALI=True)
->>>>>>> master
+migrate(conn_1,conn_2,survey_codes)
