@@ -652,6 +652,7 @@ def migrator_with_ssq_and_nr_for_id_replacement(empty_db):
     nr_rows = [
         (1,'1415F8W-CSI1',1,'1415F8W'),
         (1,'1314EYS-CSI1',1,'1314EYS'),
+        (560,'1314EYS-CSI1',1,'1314EYS'),
     ]
     for row in nr_rows:
         conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
@@ -670,3 +671,11 @@ def test_alter_cm_id_based_on_input_map(migrator_with_ssq_and_nr_for_id_replacem
     df = nr_df.merge(cm_map_mock_file)
     for value in df.new_person_id.values:
         assert value in response_df.person_id.values
+
+def test_throw_out_illegal_cm_ids(migrator_with_ssq_and_nr_for_id_replacement):
+    m = migrator_with_ssq_and_nr_for_id_replacement
+    legal_cm_mock_file = pd.DataFrame({'person_id':[1]})
+    m.legal_person_ids_csv = 'sample_file.csv'
+    with patch('pandas.read_csv',return_value=legal_cm_mock_file) as mock_legal_person_ids:
+        response_df = m.response_df
+    assert 560 not in response_df.person_id.values

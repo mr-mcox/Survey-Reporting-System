@@ -267,12 +267,21 @@ class Migrator(object):
                     assert 'survey' in df
                     cms_to_map = df.merge(cm_map)
                     df.ix[df.index.isin(cms_to_map.index),'person_id'] = cms_to_map.new_person_id
+
                 #Remove duplicate records
                 df = df.groupby(['person_id','survey_question_id']).min().reset_index()
                 df = df.ix[df.survey_question_id.notnull()]#Change this behaviour later
+
+                #Remove illegal person_ids
+                if hasattr(self,'legal_person_ids_csv'):
+                    legal_person_ids = pd.read_csv(self.legal_person_ids_csv)
+                    df = df.ix[df.person_id.isin(legal_person_ids.person_id)]
+
+                #Map converted_net_value
                 df = df.set_index('survey_question_id').join(self.survey_question_df.set_index('survey_question_id').ix[:,'question_type']).reset_index()
                 df = map_responses_to_net_formatted_values(df).convert_objects()
                 df['converted_net_value'] = df.net_formatted_value
+
                 self._response_df = df
             return self._response_df
         def fset(self, value):

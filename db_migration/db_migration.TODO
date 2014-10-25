@@ -20,7 +20,7 @@ Phase 2:
 
 person_id:
   ✔ person_ids mapped based on input file @done (14-10-25 09:08)
-  ☐ cms who are not in valid_pids are thrown out
+  ✔ cms who are not in valid_pids are thrown out @done (14-10-25 09:16)
   ☐ cms who are not in valid pids are logged with survey
 
 response_retriever:
