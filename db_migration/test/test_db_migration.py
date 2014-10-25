@@ -222,12 +222,12 @@ def migrator_with_ssq_and_nr_for_response(empty_db):
                 ('1415F8W-CSI1','CSI1','1415F8W',1,'7pt_1=SA','This is CSI question 1!'),
                 ('1415F8W-CSI2','CSI2','1415F8W',1,'7pt_1=SA','This is CSI question 2!')
                 ]
-    nr_cols = ['cm_pid','survey_specific_qid','response']
+    nr_cols = ['cm_pid','survey_specific_qid','response','survey']
     nr_rows = [
-        (1,'1415F8W-CSI1',1),
-        (2,'1415F8W-CSI1',3),
-        (3,'1415F8W-CSI1',5),
-        (4,'1415F8W-CSI1',8),
+        (1,'1415F8W-CSI1',1,'1415F8W'),
+        (2,'1415F8W-CSI1',3,'1415F8W'),
+        (3,'1415F8W-CSI1',5,'1415F8W'),
+        (4,'1415F8W-CSI1',8,'1415F8W'),
     ]
     for row in ssq_rows:
         conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
@@ -579,14 +579,14 @@ def test_new_survey_id_creation(migrator_with_data_already_migrated_and_new_ssq_
 
 def test_new_question_id_creation(migrator_with_data_already_migrated_and_new_ssq_and_nr):
     m = migrator_with_data_already_migrated_and_new_ssq_and_nr
-    m.questions_to_migrate = ['1415F8W']
+    m.surveys_to_migrate = ['1415F8W']
     question_records = m.db.execute(select([m.table['question']]))
     question_df = pd.DataFrame.from_records(question_records.fetchall(),columns=question_records.keys())
     assert (~m.question_df.ix[ ~m.question_df.question_code.isin(question_df.question_code),'question_id'].isin(question_df.question_id)).all()
 
 def test_new_question_id_matches_old_id_when_code_the_same(migrator_with_data_already_migrated_and_new_ssq_and_nr):
     m = migrator_with_data_already_migrated_and_new_ssq_and_nr
-    m.questions_to_migrate = ['1415F8W']
+    m.surveys_to_migrate = ['1415F8W']
     question_records = m.db.execute(select([m.table['question']]))
     question_df = pd.DataFrame.from_records(question_records.fetchall(),columns=question_records.keys())
     question_df.rename(columns={'question_id':'old_question_id'},inplace=True)
@@ -600,10 +600,9 @@ def test_new_survey_question_id_creation(migrator_with_data_already_migrated_and
     survey_question_df = pd.DataFrame.from_records(survey_question_records.fetchall(),columns=survey_question_records.keys())
     assert (~m.survey_question_df.survey_question_id.isin(survey_question_df.survey_question_id)).all()
 
-
 def test_create_unique_question_category_id_from_file(migrator_with_data_already_migrated_and_new_ssq_and_nr):
     m = migrator_with_data_already_migrated_and_new_ssq_and_nr
-    m.questions_to_migrate = ['1415F8W']
+    m.surveys_to_migrate = ['1415F8W']
     question_category_records = m.db.execute(select([m.table['question_category']]))
     question_category_df = pd.DataFrame.from_records(question_category_records.fetchall(),columns=question_category_records.keys())
 
@@ -616,7 +615,7 @@ def test_create_unique_question_category_id_from_file(migrator_with_data_already
 
 def test_new_question_category_id_from_file_matches_old(migrator_with_data_already_migrated_and_new_ssq_and_nr):
     m = migrator_with_data_already_migrated_and_new_ssq_and_nr
-    m.questions_to_migrate = ['1415F8W']
+    m.surveys_to_migrate = ['1415F8W']
     question_category_records = m.db.execute(select([m.table['question_category']]))
     question_category_df = pd.DataFrame.from_records(question_category_records.fetchall(),columns=question_category_records.keys())
 
@@ -629,3 +628,45 @@ def test_new_question_category_id_from_file_matches_old(migrator_with_data_alrea
     df = new_question_category_df.merge(question_category_df)
     assert (df.question_category_id==df.old_question_category_id).all()
 
+def test_migration_to_new_schema_triggers_cleanup_of_old(migrator_with_ssq_and_nr_for_response):
+    m = migrator_with_ssq_and_nr_for_response
+    m.surveys_to_migrate = ['1415F8W']
+    with patch('SurveyReportingSystem.db_migration.migrate.Migrator.remove_old_migrated_data') as remove_data_mock:
+        m.migrate_to_new_schema()
+    remove_data_mock.assert_called_with()
+
+@pytest.fixture
+def migrator_with_ssq_and_nr_for_id_replacement(empty_db):
+    conn = empty_db['conn']
+    survey_specific_questions = empty_db['schema']['survey_specific_questions']
+    ssq_cols = ['survey_specific_qid','master_qid','survey']
+    ssq_rows = [
+                ('1415F8W-CSI1','CSI1','1415F8W'),
+                ('1314EYS-CSI1','CSI1','1314EYS'),
+                ]
+    for row in ssq_rows:
+        conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+
+    numerical_responses = empty_db['schema']['numerical_responses']
+    nr_cols = ['cm_pid','survey_specific_qid','response','survey']
+    nr_rows = [
+        (1,'1415F8W-CSI1',1,'1415F8W'),
+        (1,'1314EYS-CSI1',1,'1314EYS'),
+    ]
+    for row in nr_rows:
+        conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
+    return Migrator(empty_db['engine'],conn)
+
+def test_alter_cm_id_based_on_input_map(migrator_with_ssq_and_nr_for_id_replacement):
+    m = migrator_with_ssq_and_nr_for_id_replacement
+    cm_map_mock_file = pd.DataFrame({'person_id':[1],'survey':['1415F8W'],'new_person_id':3})
+    m.cm_id_map_csv = 'sample_file.csv'
+    with patch('pandas.read_csv',return_value=cm_map_mock_file) as mock_cm_map_csv:
+        response_df = m.response_df
+
+    nr_records = m.db.execute(select([m.table['numerical_responses']]))
+    nr_df = pd.DataFrame.from_records(nr_records.fetchall(),columns=nr_records.keys())
+
+    df = nr_df.merge(cm_map_mock_file)
+    for value in df.new_person_id.values:
+        assert value in response_df.person_id.values

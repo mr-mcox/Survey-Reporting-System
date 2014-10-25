@@ -257,6 +257,16 @@ class Migrator(object):
                 survey_specific_qid_question_id_map = dict(zip(self.survey_question_df.survey_specific_qid.tolist(),
                                                                             self.survey_question_df.survey_question_id.tolist()))
                 df['survey_question_id'] = df.survey_specific_qid.map(survey_specific_qid_question_id_map)
+
+                #Map ids
+                if hasattr(self,'cm_id_map_csv'):
+                    cm_map = pd.read_csv(self.cm_id_map_csv)
+                    assert 'person_id' in cm_map
+                    assert 'survey' in cm_map
+                    assert 'person_id' in df
+                    assert 'survey' in df
+                    cms_to_map = df.merge(cm_map)
+                    df.ix[df.index.isin(cms_to_map.index),'person_id'] = cms_to_map.new_person_id
                 #Remove duplicate records
                 df = df.groupby(['person_id','survey_question_id']).min().reset_index()
                 df = df.ix[df.survey_question_id.notnull()]#Change this behaviour later
@@ -273,11 +283,14 @@ class Migrator(object):
     response_df = property(**response_df())
 
     def migrate_to_new_schema(self):
-        self.db.execute(self.table['survey'].delete())
-        self.db.execute(self.table['question'].delete())
-        self.db.execute(self.table['survey_question'].delete())
-        self.db.execute(self.table['question_category'].delete())
-        self.db.execute(self.table['response'].delete())
+        if hasattr(self,'surveys_to_migrate') and len(self.surveys_to_migrate) > 0:
+            self.remove_old_migrated_data()
+        else:
+            self.db.execute(self.table['survey'].delete())
+            self.db.execute(self.table['question'].delete())
+            self.db.execute(self.table['survey_question'].delete())
+            self.db.execute(self.table['question_category'].delete())
+            self.db.execute(self.table['response'].delete())
         self.db.execute(self.table['survey'].insert(),df_to_dict_array(self.survey_df.ix[:,['survey_id','survey_code','survey_title']]))
         self.db.execute(self.table['response'].insert(),df_to_dict_array(self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']]))
         self.db.execute(self.table['question'].insert(),df_to_dict_array(self.question_df.ix[:,['question_id','question_title','question_code']]))
