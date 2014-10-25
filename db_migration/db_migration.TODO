@@ -25,7 +25,7 @@ person_id:
 
 response_retriever:
   ✔ Change givens fixtures to in code fixtures @done (14-10-25 09:57)
-  ☐ Change schema of fixtures to match actual schema
+  ✔ Change schema of fixtures to match actual schema @done (14-10-25 10:28)
 
 Maybe Later:
   ☐ Review code smell in question_code_question_id_map

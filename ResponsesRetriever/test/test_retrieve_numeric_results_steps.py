@@ -1,7 +1,7 @@
 from pytest_bdd import scenario, given, when, then
 import pytest
 from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey, create_engine
-from ResponsesRetriever import ResponsesRetriever
+from SurveyReportingSystem.ResponsesRetriever import ResponsesRetriever
 import pandas as pd
 import re
 
@@ -104,7 +104,7 @@ def responses_object():
 
 @when('retrieve responses for survey_id 1 is run')
 def retrieve_response_survey_1(responses_object, empty_database):
-    responses_object["responses"] = ResponsesRetriever(db_connection=empty_database["db"]).retrieve_responses_for_survey(survey_id=1)
+    responses_object["responses"] = ResponsesRetriever.ResponsesRetriever(db_connection=empty_database["db"]).retrieve_responses_for_survey(survey_id=1)
 
 @then(re.compile('there are (?P<number>\d+) rows returned'), converters=dict(number=int))
 def check_rows_returned(number, responses_object):
@@ -112,7 +112,7 @@ def check_rows_returned(number, responses_object):
 
 @when('retrieve responses for survey_code 1314F8W is run')
 def retrieve_responses_for_1314F8W(responses_object, empty_database):
-    responses_object["responses"] = ResponsesRetriever(db_connection=empty_database["db"]).retrieve_responses_for_survey(survey_code="1314F8W")
+    responses_object["responses"] = ResponsesRetriever.ResponsesRetriever(db_connection=empty_database["db"]).retrieve_responses_for_survey(survey_code="1314F8W")
 
 @then(re.compile('one of the columns returned is (?P<column>.+)'))
 def one_column_returned(column, responses_object):
@@ -120,7 +120,7 @@ def one_column_returned(column, responses_object):
 
 @when('retrieve responses for multiple surveys with survey_code 1314F8W and 1314MYS is run')
 def retrieve_responses_multiple_surveys(responses_object, empty_database):
-    responses_object["responses"] = ResponsesRetriever(db_connection=empty_database["db"]).retrieve_responses_for_survey(survey_code=["1314F8W","1314MYS"])
+    responses_object["responses"] = ResponsesRetriever.ResponsesRetriever(db_connection=empty_database["db"]).retrieve_responses_for_survey(survey_code=["1314F8W","1314MYS"])
 
 @scenario('retrieve_numeric_results.feature', "Retrieve all responses from a survey by name")
 def test_retrieve_by_code():
