@@ -2,6 +2,7 @@ from sqlalchemy import Table, Column, Integer, String, MetaData, select
 import pandas as pd
 import numpy as np
 from SurveyReportingSystem.NumericOutputCalculator.NumericOutputCalculator import map_responses_to_net_formatted_values
+import logging
 
 class Migrator(object):
     """docstring for migrate"""
@@ -275,6 +276,10 @@ class Migrator(object):
                 #Remove illegal person_ids
                 if hasattr(self,'legal_person_ids_csv'):
                     legal_person_ids = pd.read_csv(self.legal_person_ids_csv)
+                    #Log ids removed
+                    cms_to_remove = df.ix[~df.person_id.isin(legal_person_ids.person_id),['person_id','survey']].drop_duplicates()
+                    for row in cms_to_remove.itertuples(index=False):
+                        logging.info('person_id ' + str(row[0]) + ' removed from survey ' + row[1])
                     df = df.ix[df.person_id.isin(legal_person_ids.person_id)]
 
                 #Map converted_net_value
