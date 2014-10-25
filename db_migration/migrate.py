@@ -68,7 +68,11 @@ class Migrator(object):
 
         self.question_category_csv = kwargs.pop('question_category_csv',None)
         self.survey_title_csv = kwargs.pop('survey_title_csv',None)
+        self.cm_id_map_csv = kwargs.pop('cm_id_map_csv',None)
+        self.legal_person_ids_csv = kwargs.pop('legal_person_ids_csv',None)
         self.surveys_to_migrate = kwargs.pop('surveys_to_migrate',list())
+        self.clean_CSI = kwargs.pop('clean_CSI',False)
+        self.clean_CALI = kwargs.pop('clean_CALI',False)
 
     def survey_code_title_map():
         doc = "The survey_code_title_map property."
@@ -260,7 +264,7 @@ class Migrator(object):
                 df['survey_question_id'] = df.survey_specific_qid.map(survey_specific_qid_question_id_map)
 
                 #Map ids
-                if hasattr(self,'cm_id_map_csv'):
+                if hasattr(self,'cm_id_map_csv') and self.cm_id_map_csv is not None:
                     cm_map = pd.read_csv(self.cm_id_map_csv)
                     assert 'person_id' in cm_map
                     assert 'survey' in cm_map
@@ -274,7 +278,7 @@ class Migrator(object):
                 df = df.ix[df.survey_question_id.notnull()]#Change this behaviour later
 
                 #Remove illegal person_ids
-                if hasattr(self,'legal_person_ids_csv'):
+                if hasattr(self,'legal_person_ids_csv') and self.legal_person_ids_csv is not None:
                     legal_person_ids = pd.read_csv(self.legal_person_ids_csv)
                     #Log ids removed
                     cms_to_remove = df.ix[~df.person_id.isin(legal_person_ids.person_id),['person_id','survey']].drop_duplicates()
