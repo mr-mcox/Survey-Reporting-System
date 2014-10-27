@@ -1,18 +1,10 @@
-from pytest_bdd import scenario, given, when, then
-from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
+from behave import *
+from ConfigurationReader import ConfigurationReader
 
-@scenario('for_excel_export.feature', 'Basic output for static cuts')
-def test_cut_menu_options_provides_list_of_menus():
-    pass
-
-@scenario('for_excel_export.feature', 'Output cuts for a given menu')
-def test_output_cuts_for_given_menu():
-    pass
-
-def reader_with_basic_static_cuts():
 @given('basic static cuts')
-	reader = ConfigurationReader.ConfigurationReader()
-	reader.config = {'cuts':{
+def step(context):
+	context.reader = ConfigurationReader()
+	context.reader.config = {'cuts':{
 							'Grade': {'dimensions':['Grade','Region','Corps']},
 							'Region':{'dimensions':['Region','Corps','Something']}
 							},
@@ -20,30 +12,28 @@ def reader_with_basic_static_cuts():
 							{'Grade':{'all_together_label':"Lack of Ethnicity"},
 							'Region':{'all_together_label':"Lack of Ethnicity"},
 							'Corps':{'all_together_label':"Lack of Ethnicity"}}}
-	reader.cuts
-	return reader
+	context.reader.cuts
 
 @when('cuts_for_excel_menu is run')
-def run_cuts_for_excel_menu(reader_with_basic_static_cuts):
-	pass
+def step(context):
+	context.result = context.reader.cuts_for_excel_menu()
 
 @then('each cut is represented as an item in a list, starting with title, "static" and all dimension titles')
-def static_cut_list(reader_with_basic_static_cuts):
-
-	result = reader_with_basic_static_cuts.cuts_for_excel_menu()
+def step(context):
 	expected_results = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','Something']]
-	assert len(result) == 2
+	print(context.result)
+	assert len(context.result) == 2
 	for res in expected_results:
 		match = False
-		for res2 in result:
+		for res2 in context.result:
 			if res == res2:
 				match = True
 		assert match == True
 
 @given('basic static cuts with one historical cut')
-def reader_with_historical_cut():
-	reader = ConfigurationReader.ConfigurationReader()
-	reader.config = {'cuts':{
+def step(context):
+	context.reader = ConfigurationReader()
+	context.reader.config = {'cuts':{
 							'Grade': {'dimensions':['Grade','Region','Corps']},
 							'Region':{'dimensions':['Region','Corps','Something'],'cut_menus':['historical']}
 							},
@@ -51,21 +41,19 @@ def reader_with_historical_cut():
 							{'Grade':{'all_together_label':"Lack of Ethnicity"},
 							'Region':{'all_together_label':"Lack of Ethnicity"},
 							'Corps':{'all_together_label':"Lack of Ethnicity"}}}
-	reader.cuts
-	return reader
+	context.reader.cuts
 
 @when('cuts_for_excel_menu is run with menu historical')
-def run_cuts_for_excel_menu_with_historical(reader_with_historical_cut):
-	pass
-@then('only historical cut is output')
-def historical_cut_output(reader_with_historical_cut):
-	result = reader_with_historical_cut.cuts_for_excel_menu(menu='historical')
+def step(context):
+	context.result = context.reader.cuts_for_excel_menu(menu='historical')
 
+@then('only historical cut is output')
+def step(context):
 	expected_results = [['Region', 'static', 'Region', 'Corps',"Something"]]
-	assert len(result) == 1
+	assert len(context.result) == 1
 	for res in expected_results:
 		match = False
-		for res2 in result:
+		for res2 in context.result:
 			if res == res2:
 				match = True
 		assert match == True

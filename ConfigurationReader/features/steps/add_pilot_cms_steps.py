@@ -13,12 +13,12 @@ def import_table_as_rows(table):
 def step(context):
 	context.reader.add_pilot_cuts(import_table_as_rows(context.table))
 
-@then('cuts has a cut titled "pilot_1" which has dimensions "pilot_1", "region", and "Corps"')
+@then('cuts has a cut titled "pilot_1" which has dimensions "pilot_1", "Select Region Below", and "Corps"')
 def step(context):
 	cuts = context.reader.cuts
 	assert 'pilot_1' in cuts
 	cut_dimensions = [dimension.title for dimension in cuts['pilot_1'].dimensions]
-	assert cut_dimensions == ['pilot_1','region', 'Corps']
+	assert cut_dimensions == ['pilot_1','Select Region Below', 'Corps']
 
 @then('there is a dimension called "pilot_1" that has composite dimensions "pilot_1-Target Group" and "pilot_1-All CMs"')
 def step(context):

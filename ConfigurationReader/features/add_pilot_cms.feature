@@ -8,7 +8,7 @@ Feature: When provided a pilot CM file, add appropriate demographics and cuts
 			| ignore_line  | ignore_line | ignore_line  |
 			| 1            | 1           | 2            |
 			|              | 3           |              |
-		Then cuts has a cut titled "pilot_1" which has dimensions "pilot_1", "region", and "Corps"
+		Then cuts has a cut titled "pilot_1" which has dimensions "pilot_1", "Select Region Below", and "Corps"
 
 	Scenario: Given a set of pilot ids, create appropriate config dimensions
 		Given basic static cuts
