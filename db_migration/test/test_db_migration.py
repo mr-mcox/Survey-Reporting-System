@@ -351,7 +351,7 @@ def test_import_of_survey_titles_from_external_file(empty_migrator):
 
 def test_order_of_surveys_extracted_from_survey_title(empty_migrator):
     m = empty_migrator
-    m.survey_code_title_map = pd.Series(['Most recent survey','An older survey'],['SUR1','SUR2'])
+    m.survey_code_title_map = pd.Series(['An older survey','Most recent survey'],['SUR2','SUR1'])
     assert m.survey_order == ['SUR1','SUR2']
 
 @pytest.fixture

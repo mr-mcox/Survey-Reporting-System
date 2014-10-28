@@ -79,8 +79,8 @@ class Migrator(object):
             if not hasattr(self,'_survey_code_title_map'):
                 if self.survey_title_csv is None:
                     self._survey_code_title_map = pd.Series(
-                        ['2014-15 First 8 Weeks CM Survey','2014 End of Institute CM Survey','2013-14 End of Year CM Survey'],
-                        ['1415F8W','2014Inst-EIS','1314EYS'])
+                        ['2013-14 End of Year CM Survey','2014 End of Institute CM Survey','2014-15 First 8 Weeks CM Survey'],
+                        ['1314EYS','2014Inst-EIS','1415F8W'])
                 else:
                     df = pd.read_csv(self.survey_title_csv)
                     self._survey_code_title_map = df.set_index('survey_code').survey_title
@@ -96,7 +96,7 @@ class Migrator(object):
         doc = "The survey_order property."
         def fget(self):
             if not hasattr(self,'_survey_order'):
-                self._survey_order = self.survey_code_title_map.index.tolist()
+                self._survey_order = [x for x in reversed(self.survey_code_title_map.index.tolist())]
             return self._survey_order
         def fset(self, value):
             self._survey_order = value
