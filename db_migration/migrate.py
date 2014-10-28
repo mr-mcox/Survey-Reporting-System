@@ -7,7 +7,6 @@ import logging
 class Migrator(object):
     """docstring for migrate"""
     def __init__(self, engine, connection, **kwargs):
-        
 
         metadata = MetaData()
         #Tables
@@ -214,7 +213,10 @@ class Migrator(object):
                 df = df.set_index('question_code')
                 df['question_id'] = existing_ids
                 df = df.reset_index()
+                df['question_id_in_db'] = True
 
+                #Create new ids
+                df.ix[df.question_id.isnull(), 'question_id_in_db'] = False
                 df.ix[df.question_id.isnull(), 'question_id'] = [i + self.max_id_for_table('question')+ 1 for i in range(df.question_id.isnull().sum())]
                 self._question_df = df
             return self._question_df
@@ -249,6 +251,7 @@ class Migrator(object):
 
     def response_df():
         doc = "The response_df property."
+        # @profile
         def fget(self):
             if not hasattr(self,'_response_df'):
                 records = None
@@ -301,9 +304,9 @@ class Migrator(object):
 
                     cm_to_remove = df_with_max.ix[(df_with_max['count'] < df_with_max.max_count) &  (df_with_max.question_category=='CSI')].set_index(['person_id','survey','question_category'])
 
-                    df = df.set_index(['person_id','survey','question_category'])
-                    # assert False
-                    df = df.ix[(~df.index.isin(cm_to_remove.index))].reset_index()
+                    if len(cm_to_remove.index) > 0:
+                        df = df.set_index(['person_id','survey','question_category'])                   
+                        df = df.ix[(~df.index.isin(cm_to_remove.index))].reset_index()
 
                 #Remove incomplete CALI
                 if hasattr(self,'clean_CALI') and self.clean_CALI:
@@ -318,8 +321,9 @@ class Migrator(object):
                     df_with_max = count_by_pid.merge(max_response)
                     cm_to_remove = df_with_max.ix[(df_with_max['count'] < df_with_max.max_count) &  (df_with_max.question_category=='CALI')].set_index(['person_id','survey','question_category'])
                     
-                    df = df.set_index(['person_id','survey','question_category'])
-                    df = df.ix[(~df.index.isin(cm_to_remove.index))].reset_index()
+                    if len(cm_to_remove.index) > 0:
+                        df = df.set_index(['person_id','survey','question_category'])
+                        df = df.ix[(~df.index.isin(cm_to_remove.index))].reset_index()
 
 
                 #Map converted_net_value
@@ -337,6 +341,7 @@ class Migrator(object):
     response_df = property(**response_df())
 
     def migrate_to_new_schema(self):
+        logging.info("Deleting old responses")
         if hasattr(self,'surveys_to_migrate') and len(self.surveys_to_migrate) > 0:
             self.remove_old_migrated_data()
         else:
@@ -345,10 +350,15 @@ class Migrator(object):
             self.db.execute(self.table['survey_question'].delete())
             self.db.execute(self.table['question_category'].delete())
             self.db.execute(self.table['response'].delete())
+        logging.info("Inserting survey records")
         self.db.execute(self.table['survey'].insert(),df_to_dict_array(self.survey_df.ix[:,['survey_id','survey_code','survey_title']]))
-        self.db.execute(self.table['response'].insert(),df_to_dict_array(self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']]))
-        self.db.execute(self.table['question'].insert(),df_to_dict_array(self.question_df.ix[:,['question_id','question_title','question_code']]))
-        self.db.execute(self.table['question_category'].insert(),df_to_dict_array(self.question_category_df.ix[:,['question_category_id','question_category']]))
+        logging.info("Inserting question records")
+        self.db.execute(self.table['question'].insert(),df_to_dict_array(self.question_df.ix[~self.question_df.question_id_in_db,['question_id','question_title','question_code']]))
+        question_category_records = self.question_category_df.ix[~self.question_category_df.question_category_id_in_db,['question_category_id','question_category']]
+        if len(question_category_records.index) > 0:
+            logging.info("Inserting question_category records")
+            self.db.execute(self.table['question_category'].insert(),df_to_dict_array(question_category_records))
+        logging.info("Inserting survey_question records")
         self.question_code_question_id_map #Also code smell
         self.db.execute(self.table['survey_question'].insert(),df_to_dict_array(self.survey_question_df.ix[:,['survey_question_id',
                                                                                                                 'survey_id',
@@ -357,6 +367,10 @@ class Migrator(object):
                                                                                                                 'question_title_override',
                                                                                                                 'question_id',
                                                                                                                 'question_category_id',]]))
+        logging.info("Inserting response records")
+        for survey in self.response_df.survey.unique().tolist():
+            logging.info("Inserting response records for survey " + str(survey))
+            self.db.execute(self.table['response'].insert(),df_to_dict_array(self.response_df.ix[self.response_df.survey == survey,['person_id','survey_question_id','response','converted_net_value']]))
          
     def remove_old_migrated_data(self):
         survey = self.table['survey']
@@ -368,10 +382,13 @@ class Migrator(object):
         survey_id_to_delete = [ int(x) for x in survey_to_delete_df.survey_id.tolist() ]
         survey_question_id_records = self.db.execute(select([survey_question.c.survey_question_id]).where(survey_question.c.survey_id.in_(survey_id_to_delete)))
         survey_question_to_delete_df = pd.DataFrame.from_records(survey_question_id_records.fetchall(),columns=survey_question_id_records.keys())
-        self.db.execute(survey_question.delete().where(survey_question.c.survey_id.in_(survey_id_to_delete)))
+        if len(survey_id_to_delete) > 0:
+            self.db.execute(survey_question.delete().where(survey_question.c.survey_id.in_(survey_id_to_delete)))
 
         response = self.table['response']
-        self.db.execute(response.delete().where(response.c.survey_question_id.in_([ int(x) for x in survey_question_to_delete_df.survey_question_id.tolist() ])))
+        survey_question_id_to_delete = [ int(x) for x in survey_question_to_delete_df.survey_question_id.tolist() ]
+        if len(survey_question_id_to_delete) > 0:
+            self.db.execute(response.delete().where(response.c.survey_question_id.in_(survey_question_id_to_delete)))
 
         survey_question_records = self.db.execute(select([survey_question]))
         survey_question_df = pd.DataFrame.from_records(survey_question_records.fetchall(),columns=survey_question_records.keys())
@@ -380,7 +397,8 @@ class Migrator(object):
         question_df = pd.DataFrame.from_records(question_records.fetchall(),columns=question_records.keys())
         orphaned_questions = question_df.ix[~question_df.question_id.isin(survey_question_df.question_id),'question_id']
         question_id_to_delete = [ int(x) for x in orphaned_questions.tolist() ]
-        self.db.execute(question.delete().where(question.c.question_id.in_(question_id_to_delete)))
+        if len(question_id_to_delete) > 0:
+            self.db.execute(question.delete().where(question.c.question_id.in_(question_id_to_delete)))
 
     def survey_question_question_category_df():
         doc = "The survey_question_question_category_df property."
@@ -424,8 +442,11 @@ class Migrator(object):
                 category_id_df['question_category_id'] = existing_ids
                 category_id_df = category_id_df.reset_index()
 
+                category_id_df['question_category_id_in_db'] = True
+
 
                 #Then set new ids
+                category_id_df.ix[category_id_df.question_category_id.isnull(),'question_category_id_in_db'] = False
                 category_id_df.ix[category_id_df.question_category_id.isnull(),'question_category_id'] = [x + self.max_id_for_table('question_category') + 1 for x in range(category_id_df.question_category_id.isnull().sum())]                
 
                 df = df.merge(category_id_df)
@@ -442,7 +463,7 @@ class Migrator(object):
         doc = "The question_category_df property."
         def fget(self):
             if not hasattr(self,'_question_category_df'):
-                self._question_category_df = self.survey_question_question_category_df.ix[:,['question_category','question_category_id']].drop_duplicates()
+                self._question_category_df = self.survey_question_question_category_df.ix[self.survey_question_question_category_df.question_category.notnull(),['question_category','question_category_id','question_category_id_in_db']].drop_duplicates()
             return self._question_category_df
         def fset(self, value):
             self._question_category_df = value

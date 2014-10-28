@@ -2,8 +2,13 @@ from SurveyReportingSystem.db_migration.migrate import Migrator
 from sqlalchemy import create_engine
 import sys
 import os
+import logging
 
-engine = create_engine(sys.argv[1])
+logging.basicConfig(filename='migration.log',level=logging.INFO)
+
+connect_info_file = open(sys.argv[1])
+connect_info = connect_info_file.readline().strip()
+engine = create_engine(connect_info)
 connection = engine.connect()
 folder_for_maps = sys.argv[2]
 surveys_to_migrate = sys.argv[3:]

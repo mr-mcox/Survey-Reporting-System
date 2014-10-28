@@ -67,6 +67,18 @@ question_table = pd.DataFrame(ssq_responses.fetchall())
 question_table.columns = ssq_responses.keys()
 
 #Truncate question title at 100 characters
-question_table.survey_specific_question = question_table.survey_specific_question.map(lambda x: (x[:198] + '..') if len(x) > 200 else x)
+question_table.survey_specific_question = question_table.survey_specific_question.map(lambda x: str(x[:198] + '..') if len(x) > 200 else str(x))
+question_table.survey_specific_question = question_table.survey_specific_question.map(lambda x: str(x))
 
-r_conn.execute(survey_specific_questions.insert(),df_to_dict_array(question_table))
+for survey in survey_codes:
+	try:
+		r_conn.execute(survey_specific_questions.insert(),df_to_dict_array(question_table.ix[question_table.survey == survey]))
+	except:
+		print("Found error\n" + str(sys.exc_info()[0]))
+		for idx, r in question_table.ix[question_table.survey == survey].iterrows():
+			try:
+				# print(str(r['survey_specific_question'])+"\n")
+				print(str(r['survey_specific_question']))
+			except UnicodeEncodeError:
+				print("****Offending row is " + str(r['master_qid']))
+		# raise

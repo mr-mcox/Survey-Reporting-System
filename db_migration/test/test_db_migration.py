@@ -102,7 +102,7 @@ def empty_migrator(empty_db):
 def test_basic_question_category_df(empty_migrator):
     m = empty_migrator
     expected_df = pd.DataFrame({'question_category_id':[1,2],'question_category':['CSI','CALI']})
-    pd.util.testing.assert_frame_equal(m.question_category_df.set_index('question_category').convert_objects(), expected_df.set_index('question_category'))
+    pd.util.testing.assert_frame_equal(m.question_category_df.ix[:,['question_category','question_category_id']].set_index('question_category').convert_objects(), expected_df.set_index('question_category'))
     
 @pytest.fixture
 def migrator_with_ssq_for_survey_question(empty_db):
@@ -568,6 +568,14 @@ def migrator_with_data_already_migrated_and_new_ssq_and_nr(empty_db):
                 ]
     for row in ssq_rows:
         conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+
+    nr_cols = ['cm_pid','survey','survey_specific_qid','response']
+    nr_rows = [
+        (3,'1415F8W','1415F8W-CSI1',5),
+        (4,'1415F8W','1415F8W-F8W2',8),
+    ]
+    for row in nr_rows:
+        conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
     return Migrator(empty_db['engine'],conn)
 
 def test_new_survey_id_creation(migrator_with_data_already_migrated_and_new_ssq_and_nr):
@@ -897,3 +905,40 @@ def test_remove_responses_for_only_one_survey(db_with_incomplete_CALI_but_not_CS
     df = m.response_df
     assert len(df.ix[df.person_id==2].index) == 11
     assert len(df.ix[df.person_id==1].index) == 19
+
+def test_linking_existing_db_records_doesnt_cause_errors_on_migrate(migrator_with_data_already_migrated_and_new_ssq_and_nr):
+    m = migrator_with_data_already_migrated_and_new_ssq_and_nr
+    m.surveys_to_migrate = ['1415F8W']
+    question_category_records = m.db.execute(select([m.table['question_category']]))
+    question_category_df = pd.DataFrame.from_records(question_category_records.fetchall(),columns=question_category_records.keys())
+
+    question_category_mock_file = pd.DataFrame({'question_code':['F8W2','CSI1'],'survey':['1415F8W','1415F8W'],'question_category':['NEWCATEGORY','CSI']})
+    m.question_category_csv = 'sample_file.csv'
+    with patch('pandas.read_csv',return_value=question_category_mock_file) as mock_question_category_csv:
+        m.question_code_question_id_map
+        new_question_category_df = m.survey_question_df.merge(m.question_df, how='outer').merge(m.question_category_df, how='outer').merge(m.survey_df, how='outer')
+    question_category_df.rename(columns={'question_category_id':'old_question_category_id'},inplace=True)
+    df = new_question_category_df.merge(question_category_df)
+    m.migrate_to_new_schema()
+
+def test_remove_response_without_pid(empty_db):
+    conn = empty_db['conn']
+    survey_specific_questions = empty_db['schema']['survey_specific_questions']
+    numerical_responses = empty_db['schema']['numerical_responses']
+    ssq_cols = ['survey_specific_qid','master_qid','survey','confidential','question_type','survey_specific_question']
+    ssq_rows = [
+                ('1415F8W-CSI1','CSI1','1415F8W',1,'7pt_1=SA','This is CSI question 1!'),
+                ]
+    nr_cols = ['cm_pid','survey_specific_qid','response']
+    nr_rows = [
+        (1,'1415F8W-CSI1',1),
+        (None,'1415F8W-CSI1',1),
+
+    ]
+    for row in ssq_rows:
+        conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+    for row in nr_rows:
+        conn.execute(numerical_responses.insert(), {c:v for c,v in zip(nr_cols,row)})
+    m = Migrator(empty_db['engine'],conn)
+    # assert False
+    assert m.response_df.person_id.isnull().sum()==0
