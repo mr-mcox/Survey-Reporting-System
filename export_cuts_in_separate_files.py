@@ -18,7 +18,7 @@ conn = engine.connect()
 db = conn
 retriever = ResponsesRetriever.ResponsesRetriever(db_connection=db)
 print("Starting to retrieve current results")
-results = retriever.retrieve_results_for_survey(survey_code=sys.argv[1])
+results = retriever.retrieve_responses_for_survey(survey_code=sys.argv[1])
 responses_df = pd.DataFrame(results['rows'])
 responses_df.columns = results['column_headings']
 
@@ -27,7 +27,7 @@ if len(sys.argv) > 2:
 	assert os.path.exists('hist_demographics.xlsx'), "hist_demographics.xlsx expected in current folder"
 
 	print("Starting to retrieve historical results")
-	hist_responses = retriever.retrieve_results_for_survey(survey_code=sys.argv[1:])
+	hist_responses = retriever.retrieve_responses_for_survey(survey_code=sys.argv[1:])
 	hist_responses_df = pd.DataFrame(hist_responses['rows'])
 	hist_responses_df.columns = hist_responses['column_headings']
 
