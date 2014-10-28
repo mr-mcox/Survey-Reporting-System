@@ -2,6 +2,9 @@ import pandas as pd
 from sqlalchemy import Table, Column, Integer, String, MetaData, select, create_engine
 import sys
 import numpy as np
+import logging
+
+logging.basicConfig(filename='migration.log',level=logging.INFO)
 
 connect_info_file = open(sys.argv[2])
 connect_info = connect_info_file.readline().strip()
@@ -37,6 +40,7 @@ def df_to_dict_array(df):
         list_of_rows.append(dict(zip(columns,convert_types_for_db(row))))
     return list_of_rows
 
+
 metadata = MetaData()
 #Tables
 numerical_responses = Table('numerical_responses',metadata,
@@ -48,5 +52,7 @@ numerical_responses = Table('numerical_responses',metadata,
 
 
 # df.to_sql('numerical_responses',engine,if_exists='append',index=False)
-
-conn.execute(numerical_responses.insert(),df_to_dict_array(df))
+for survey in df.survey.unique().to_list():
+	logging.info("Importing survey " + survey)
+	conn.execute(numerical_responses.insert(),df_to_dict_array(df.ix[df.survey==survey]))
+	conn.execute(numerical_responses.delete().where(numerical_responses.c.survey == survey))

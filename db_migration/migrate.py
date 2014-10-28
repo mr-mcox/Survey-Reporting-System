@@ -1,7 +1,7 @@
 from sqlalchemy import Table, Column, Integer, String, MetaData, select
 import pandas as pd
 import numpy as np
-from SurveyReportingSystem.NumericOutputCalculator.NumericOutputCalculator import map_responses_to_net_formatted_values
+from SurveyReportingSystem.NumericOutputCalculator.noc_helper import map_responses_to_net_formatted_values
 import logging
 
 class Migrator(object):
@@ -367,13 +367,17 @@ class Migrator(object):
                                                                                                                 'question_id',
                                                                                                                 'question_category_id',]]))
         logging.info("Inserting response records")
-        for survey in self.surveys_to_migrate:
-            logging.info("Inserting response records for survey " + str(survey))
-            response_records = self.response_df.ix[self.response_df.survey == survey,['person_id','survey_question_id','response','converted_net_value']]
-            if len(response_records.index) > 0:
-                self.db.execute(self.table['response'].insert(),df_to_dict_array(response_records))
-            else:
-                logging.info("Survey " + str(survey) +  " has no responses to be recorded")
+        if len(self.surveys_to_migrate) > 0:
+            for survey in self.surveys_to_migrate:
+                logging.info("Inserting response records for survey " + str(survey))
+                response_records = self.response_df.ix[self.response_df.survey == survey,['person_id','survey_question_id','response','converted_net_value']]
+                if len(response_records.index) > 0:
+                    self.db.execute(self.table['response'].insert(),df_to_dict_array(response_records))
+                else:
+                    logging.info("Survey " + str(survey) +  " has no responses to be recorded")
+        else:
+            response_records = self.response_df.ix[:,['person_id','survey_question_id','response','converted_net_value']]
+            self.db.execute(self.table['response'].insert(),df_to_dict_array(response_records))
          
     def remove_old_migrated_data(self):
         survey = self.table['survey']

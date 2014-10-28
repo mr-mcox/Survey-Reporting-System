@@ -230,7 +230,7 @@ Scenario: Compute net formatted values accurately for a variety of question type
 
 
 Scenario: Compute net formatted values accurately for NPS 11 = SA
-	Given raw 7pt questions results
+	Given raw 7pt questions responses
 		| person_id | response | question_type  |
 		| 17        | 1        | 11pt_NPS_11=SA |
 		| 18        | 9        | 11pt_NPS_11=SA |
