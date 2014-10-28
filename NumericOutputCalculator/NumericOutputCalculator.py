@@ -12,8 +12,9 @@ class NumericOutputCalculator(object):
 	def __init__(self, **kwargs):		
 		responses = pd.DataFrame(kwargs.pop('responses',dict())).convert_objects(convert_numeric=True)
 		assert not responses.empty
+		self.responses_transformed = kwargs.pop('responses_transformed',False)
 		if 'net_formatted_value' not in responses.columns or responses['net_formatted_value'].notnull().sum() == 0:
-			responses = map_responses_to_net_formatted_values(responses)
+			responses = map_responses_to_net_formatted_values(responses,self.responses_transformed)
 		assert responses.net_formatted_value.notnull().sum() > 0
 		self.responses = responses
 		self.demographic_data = kwargs.pop('demographic_data',pd.DataFrame())

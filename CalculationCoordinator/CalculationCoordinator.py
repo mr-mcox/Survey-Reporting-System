@@ -53,7 +53,7 @@ class CalculationCoordinator(object):
 	def compute_aggregation(self,**kwargs):
 		responses = kwargs.pop('responses',self.responses)
 		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
-		calculator = kwargs.pop('calculator',NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data))
+		calculator = kwargs.pop('calculator',NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data,responses_transformed=True))
 		assert type(self.result_types) == list
 		orig_cuts = kwargs.pop('cut_demographic',None)
 		if type(orig_cuts) != list:
@@ -78,7 +78,7 @@ class CalculationCoordinator(object):
 	def compute_significance(self,**kwargs):
 		responses = kwargs.pop('responses',self.responses)
 		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
-		calculator = kwargs.pop('calculator',NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data))
+		calculator = kwargs.pop('calculator',NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data,responses_transformed=True))
 		assert type(self.result_types) == list
 		orig_cuts = kwargs.pop('cut_demographic',None)
 		if type(orig_cuts) != list:
@@ -287,7 +287,7 @@ class CalculationCoordinator(object):
 			responses = self.hist_responses
 			demographic_data = self.hist_demographic_data
 
-		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
+		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data,responses_transformed=True)
 		for i, cut_set in enumerate(cut_sets):
 			print("\rCompleted {0:.0f} % of basic computations. Currently working on {1}".format(i/len(cut_sets)*100,str(cut_set)),end=" ")
 
@@ -335,7 +335,7 @@ class CalculationCoordinator(object):
 		if for_historical:
 			responses = self.hist_responses
 			demographic_data = self.hist_demographic_data
-		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
+		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data,responses_transformed=True)
 		for i, cut_set in enumerate(cut_sets):
 			# logging.debug("Cut set is " + str(cut_set))
 			print("\rCompleted {0:.0f} % of basic computations. Currently working on {1}".format(i/len(cut_sets)*100,str(cut_set)),end=" ")
@@ -410,7 +410,7 @@ class CalculationCoordinator(object):
 		if for_historical:
 			responses = self.hist_responses
 			demographic_data = self.hist_demographic_data
-		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
+		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data,responses_transformed=True)
 		for i, cut_set in enumerate(cut_sets):
 			df = pd.DataFrame()
 			print("\rCompleted {0:.0f} % of significance computations. Currently working on {1}".format(i/len(cut_sets)*100,str(cut_set)),end=" ")
@@ -756,7 +756,7 @@ class CalculationCoordinator(object):
 		#Get responses for dynamic dimensions
 		responses = self.responses
 		demographic_data = self.demographic_data
-		responses_for_menu = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data).responses_with_dimensions		
+		responses_for_menu = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data,responses_transformed=True).responses_with_dimensions		
 		responses_for_menu = responses_for_menu.ix[responses_for_menu.response.notnull(),:]
 		if compute_historical:
 			dimension_titles.append('survey_code')

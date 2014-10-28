@@ -241,3 +241,24 @@ Scenario: Compute net formatted values accurately for NPS 11 = SA
 	Then net formatted value for person_id 18 is 0
 	Then net formatted value for person_id 19 is 1
 	Then net formatted value for person_id 20 is blank
+
+Scenario: When 7pt with 1=Strongly Agree questions are but scales have already been transformed, adjust accordingly
+	Given raw 7pt questions responses
+		| person_id | response | question_type  |
+		| 1         | 1        | 7pt_1=SA       |
+		| 2         | 2        | 7pt_1=SA       |
+		| 3         | 3        | 7pt_1=SA       |
+		| 4         | 4        | 7pt_1=SA       |
+		| 5         | 5        | 7pt_1=SA       |
+		| 6         | 6        | 7pt_1=SA       |
+		| 7         | 7        | 7pt_1=SA       |
+		| 8         |          | 7pt_1=SA       |
+	When NumericOutputCalculator with response_transformed = True is initialized
+	Then net formatted value for person_id 1 is -1
+	Then net formatted value for person_id 2 is -1
+	Then net formatted value for person_id 3 is -1
+	Then net formatted value for person_id 4 is -1
+	Then net formatted value for person_id 5 is 0
+	Then net formatted value for person_id 6 is 1
+	Then net formatted value for person_id 7 is 1
+	Then net formatted value for person_id 8 is blank

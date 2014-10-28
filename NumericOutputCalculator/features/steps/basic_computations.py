@@ -88,6 +88,7 @@ def step(context, person_id, value):
 @given('raw 7pt questions responses')
 def step(context):
     context.numeric_output_calculator = NumericOutputCalculator(responses=import_table_data(context.table))
+    context.responses = import_table_data(context.table)
 
 @when('compute average is run')
 def step(context):
@@ -188,7 +189,12 @@ def step(context,region,survey_code):
 def step(context):
     context.numeric_output_calculator = NumericOutputCalculator(responses=context.responses,demographic_data=context.demographic_data)
 
+
 @then('the display_value including region and gender for question_code 1, result_type "{result_type}" and region "Atlanta", gender "Female" is {value}')
 def step(context,result_type,value):
     print("\n" + str(context.result.set_index(['question_code','result_type'])))
     assert context.result.set_index(['question_code','result_type','region','gender']).ix[(1.0,result_type,'Atlanta','Female'),'aggregation_value'] == float(value)
+
+@when('NumericOutputCalculator with response_transformed = True is initialized')
+def step(context):
+    context.numeric_output_calculator = NumericOutputCalculator(responses=context.responses,responses_transformed=True)
