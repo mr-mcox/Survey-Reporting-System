@@ -1,5 +1,5 @@
 Feature: Accurately compute composite questions like Net Corps Strength and Net Corps Learning
-	Scenario: Compute composite question results for strong percent
+	Scenario: Compute composite question responses for strong percent
 		Given net formatted values
 			| question_code | net_formatted_value |
 			| q1             | 0                   |
@@ -14,7 +14,7 @@ Feature: Accurately compute composite questions like Net Corps Strength and Net 
 		When compute net is run with composite of NQ is q1 and q2
 		Then the display_value for string based question_code NQ is 0.5
 
-	Scenario: Compute composite question results for strong percent and demographics
+	Scenario: Compute composite question responses for strong percent and demographics
 		Given net formatted values
 			| question_code | net_formatted_value | respondent_id |
 			| q1             | 0                   | 1 |
@@ -34,7 +34,7 @@ Feature: Accurately compute composite questions like Net Corps Strength and Net 
 		When compute net is run with composite of NQ is q1 and q2 and region cut
 		Then the regional display_value for string based question_code NQ and region "Atlanta" is 0.25
 
-	Scenario: Compute composite question results for strong count
+	Scenario: Compute composite question responses for strong count
 		Given net formatted values
 			| question_code | net_formatted_value |
 			| q1             | 0                   |
@@ -49,7 +49,7 @@ Feature: Accurately compute composite questions like Net Corps Strength and Net 
 		When compute strong_count is run with composite of NQ is q1 and q2
 		Then the display_value for string based question_code NQ is 1.5
 
-	Scenario: Compute composite question results for sample_size count
+	Scenario: Compute composite question responses for sample_size count
 		Given net formatted values
 			| question_code | net_formatted_value |
 			| q1             | 0                   |

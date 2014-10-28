@@ -15,11 +15,11 @@ import pdb
 class CalculationCoordinator(object):
 	"""docstring for CalculationCoordinator"""
 	def __init__(self, **kwargs):
-		self.results = kwargs.pop('results',None)
+		self.responses = kwargs.pop('responses',None)
 		self.demographic_data = kwargs.pop('demographic_data',None)
 		if self.demographic_data is not None:
 			self.demographic_data = self.demographic_data.set_index('respondent_id').applymap(str).fillna("Missing").reset_index()
-		self.hist_results = kwargs.pop('hist_results',None)
+		self.hist_responses = kwargs.pop('hist_responses',None)
 		self.hist_demographic_data = kwargs.pop('hist_demographic_data',None)
 		if self.hist_demographic_data is not None:
 			self.hist_demographic_data = self.hist_demographic_data.set_index('respondent_id').applymap(str).fillna("Missing").reset_index()
@@ -36,7 +36,7 @@ class CalculationCoordinator(object):
 		self.zero_integer_string = self.format_string.format(0)
 
 		self.compute_historical = False
-		if self.hist_results is not None and self.hist_demographic_data is not None:
+		if self.hist_responses is not None and self.hist_demographic_data is not None:
 			self.compute_historical = True
 
 	def get_aggregation(self,**kwargs):
@@ -51,7 +51,7 @@ class CalculationCoordinator(object):
 
 	# @profile
 	def compute_aggregation(self,**kwargs):
-		responses = kwargs.pop('responses',self.results)
+		responses = kwargs.pop('responses',self.responses)
 		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
 		calculator = kwargs.pop('calculator',NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data))
 		assert type(self.result_types) == list
@@ -76,7 +76,7 @@ class CalculationCoordinator(object):
 
 	# @profile
 	def compute_significance(self,**kwargs):
-		responses = kwargs.pop('responses',self.results)
+		responses = kwargs.pop('responses',self.responses)
 		demographic_data = kwargs.pop('demographic_data',self.demographic_data)
 		calculator = kwargs.pop('calculator',NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data))
 		assert type(self.result_types) == list
@@ -276,15 +276,15 @@ class CalculationCoordinator(object):
 
 	def export_cuts_to_files(self,**kwargs):
 		assert self.config != None
-		self.results = self.remove_questions_not_used(self.results)
-		self.hist_results = self.remove_questions_not_used(self.hist_results)
+		self.responses = self.remove_questions_not_used(self.responses)
+		self.hist_responses = self.remove_questions_not_used(self.hist_responses)
 		for_historical = kwargs.pop('for_historical',False)
 		cut_sets = self.config.cuts_to_be_created(for_historical=for_historical)
 
-		responses = self.results
+		responses = self.responses
 		demographic_data = self.demographic_data
 		if for_historical:
-			responses = self.hist_results
+			responses = self.hist_responses
 			demographic_data = self.hist_demographic_data
 
 		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
@@ -315,9 +315,9 @@ class CalculationCoordinator(object):
 		file_name = kwargs.pop('flush_file',None)
 		if file_name is not None:
 			self.setup_flush_file(file_name)
-		#Remove results for questions not used
-		self.results = self.remove_questions_not_used(self.results)
-		self.hist_results = self.remove_questions_not_used(self.hist_results)
+		#Remove responses for questions not used
+		self.responses = self.remove_questions_not_used(self.responses)
+		self.hist_responses = self.remove_questions_not_used(self.hist_responses)
 
 		# assert type(self.config) == ConfigurationReader.ConfigurationReader
 		all_aggregations = list()
@@ -330,10 +330,10 @@ class CalculationCoordinator(object):
 			self.default_result_type = self.result_types[0]
 		cut_sets = self.config.cuts_to_be_created(for_historical=for_historical)
 		logging.debug("Cut sets for regular cuts are " + str(cut_sets))
-		responses = self.results
+		responses = self.responses
 		demographic_data = self.demographic_data
 		if for_historical:
-			responses = self.hist_results
+			responses = self.hist_responses
 			demographic_data = self.hist_demographic_data
 		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
 		for i, cut_set in enumerate(cut_sets):
@@ -405,10 +405,10 @@ class CalculationCoordinator(object):
 
 		cut_sets = self.config.cuts_to_be_created(for_historical=for_historical)
 		logging.debug("Cut sets for significance are " + str(cut_sets))
-		responses = self.results
+		responses = self.responses
 		demographic_data = self.demographic_data
 		if for_historical:
-			responses = self.hist_results
+			responses = self.hist_responses
 			demographic_data = self.hist_demographic_data
 		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data)
 		for i, cut_set in enumerate(cut_sets):
@@ -753,11 +753,11 @@ class CalculationCoordinator(object):
 		dimension_titles.append('question_code')
 		dimension_titles.append('result_type')
 
-		#Get results for dynamic dimensions
-		responses = self.results
+		#Get responses for dynamic dimensions
+		responses = self.responses
 		demographic_data = self.demographic_data
-		results_for_menu = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data).results_with_dimensions		
-		results_for_menu = results_for_menu.ix[results_for_menu.response.notnull(),:]
+		responses_for_menu = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data).responses_with_dimensions		
+		responses_for_menu = responses_for_menu.ix[responses_for_menu.response.notnull(),:]
 		if compute_historical:
 			dimension_titles.append('survey_code')
 		for dimension_title in dimension_titles:
@@ -782,7 +782,7 @@ class CalculationCoordinator(object):
 				parent_dimension = dynamic_parent_dimension[dimension_title]
 				assert parent_dimension in self.demographic_data.columns, parent_dimension + " not found in demographic data and is needed for dimension " + dimension_title
 				assert dimension_title in self.demographic_data.columns, "Missing dimension " + dimension_title + " in demographic file"
-				dimension_mapping = pd.DataFrame(results_for_menu,columns=[parent_dimension,dimension_title]).drop_duplicates().sort(columns=[parent_dimension,dimension_title])
+				dimension_mapping = pd.DataFrame(responses_for_menu,columns=[parent_dimension,dimension_title]).drop_duplicates().sort(columns=[parent_dimension,dimension_title])
 				i = 0
 				for index, row_items in dimension_mapping.iterrows():
 					if row_items[dimension_title] in integer_mapping:

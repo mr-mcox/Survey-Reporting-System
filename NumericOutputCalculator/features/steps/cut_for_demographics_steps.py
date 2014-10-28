@@ -21,7 +21,7 @@ def step(context):
 
 @when('compute net with cut_demographic = region is run')
 def step(context):
-	context.result = context.numeric_output_calculator.compute_net_results(cut_demographic='region')
+	context.result = context.numeric_output_calculator.compute_net_responses(cut_demographic='region')
 
 @then('the display_value including region for question_code 1 and region "Atlanta" is {value}')
 def step(context, value):
@@ -30,11 +30,11 @@ def step(context, value):
 
 @when('compute net with cut_demographic = region and gender is run')
 def step(context):
-    context.result = context.numeric_output_calculator.compute_net_results(cut_demographic=['region','gender'])
+    context.result = context.numeric_output_calculator.compute_net_responses(cut_demographic=['region','gender'])
 
 @when('compute average with cut_demographic = region is run')
 def step(context):
-	context.result = context.numeric_output_calculator.compute_net_results(cut_demographic=['region'])
+	context.result = context.numeric_output_calculator.compute_net_responses(cut_demographic=['region'])
 
 @then('the display_value including region and gender for question_code 1 and region "Atlanta" gender "Female" is 0.5')
 def step(context):

@@ -13,7 +13,7 @@ Feature: Compute statistical significance via bootstrapping
 		Then compute_aggregation is called for cuts [] and result_type ["sample_size","strong_count","weak_count"]
 
 	Scenario: Generate table of counts to be used for computation
-		Given raw 7pt questions results
+		Given raw 7pt questions responses
 				| respondent_id | question_code | response |
 				| 1             | 1             | 1        |
 				| 2             | 1             | 3        |
@@ -32,7 +32,7 @@ Feature: Compute statistical significance via bootstrapping
 		Then count for region "SoDak" gender "Male" and column "comp_weak_count" is 2
 
 	Scenario: Generate table of counts to be used for computation even when there is only one cut
-		Given raw 7pt questions results
+		Given raw 7pt questions responses
 				| respondent_id | question_code | response |
 				| 1             | 1             | 1        |
 				| 2             | 1             | 7        |
@@ -62,7 +62,7 @@ Feature: Compute statistical significance via bootstrapping
 		Then aggregation_value for region "SoDak" and gender "Male" is "S"
 
 	Scenario: When no_stat_signficance_computation flag is set, don't return anything
-		Given raw 7pt questions results
+		Given raw 7pt questions responses
 				| respondent_id | question_code | response |
 				| 1             | q1             | 1        |
 				| 2             | q1             | 3        |

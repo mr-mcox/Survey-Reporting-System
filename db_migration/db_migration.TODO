@@ -1,0 +1,65 @@
+ ✔ Phase 1: @done (14-10-20 18:28)
+
+Phase 2:
+  ✔ Create more robust mapping of survey titles @done (14-10-20 18:42)
+  ✔ Most recent survey should be external to the script @done (14-10-20 18:56)
+  ✔ converted_net_value needs to apply to other question types @done (14-10-20 19:21)
+  ✔ When survey is specified, only records from that survey show up in the survey_df @done (14-10-21 08:46)
+  ✔ When survey is specified, only records from that survey show up in the question_df @done (14-10-21 08:59)
+  ✔ When survey is specified, only records from that survey show up in the survey_question_df @done (14-10-21 09:01)
+  ✔ When survey is specified, only records from that survey show up in the response_df @done (14-10-21 09:08)
+  ✔ When new survey is migrated, remove records tied to that survey from the survey table @done (14-10-21 10:14)
+  ✔ When new survey is migrated, remove records tied to that survey from the question_survey table @done (14-10-21 10:44)
+  ✔ When new survey is migrated, remove records tied to that survey from the response table @done (14-10-21 10:54)
+  ✔ When new survey is migrated, remove orphaned records from the question table @done (14-10-21 16:47)
+  ✔ survey_df does not set ids that already exist @done (14-10-22 16:21)
+  ✔ question_df does not set ids that already exist @done (14-10-22 16:30)
+  ✔ question_df uses old ids if they match @done (14-10-22 17:02)
+  ✔ survey_question_df does not set ids that already exist @done (14-10-23 10:29)
+  ✔ question_category_df does not set ids that already exist @done (14-10-23 11:36)
+
+person_id:
+  ✔ person_ids mapped based on input file @done (14-10-25 09:08)
+  ✔ cms who are not in valid_pids are thrown out @done (14-10-25 09:16)
+  ✔ cms who are not in valid pids are logged with survey @done (14-10-25 09:37)
+
+response_retriever:
+  ✔ Change givens fixtures to in code fixtures @done (14-10-25 09:57)
+  ✔ Change schema of fixtures to match actual schema @done (14-10-25 10:28)
+
+merge_with_master:
+  ✔ Merge conflict in export_cuts_in_separate_files.py @done (14-10-25 11:14)
+  ☐ Merge conflict in NumericOutputCalculator/NumericOutputCalculator.py
+
+Maybe Later:
+  ☐ Review code smell in question_code_question_id_map
+  ☐ Create record of responses that have been thrown out because they don't have a survey_question_id
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+ ✔ Extract survey code and title from survey_specific_questions @done (14-10-07 17:43) @project(Phase 1)
+ ✔ Assign survey_id and map to survey code @done (14-10-07 18:01) @project(Phase 1)
+ ✔ Write survey title @done (14-10-07 18:11) @project(Phase 1)
+ ✔ Create survey question category map based on question code and asign arbitrary ids @done (14-10-07 18:33) @project(Phase 1)
+ ✔ Create map of question code to question_category_id @done (14-10-07 18:46) @project(Phase 1)
+ ✔ Extract question_code, title, confidential, survey_specific_qid and survey from survey_specific_questions @done (14-10-07 19:12) @project(Phase 1)
+ ✔ Create question_code_survey column, survey_question_id and map @done (14-10-07 19:23) @project(Phase 1)
+ ✔ Pick most recent question title based on most recent survey @done (14-10-07 20:59) @project(Phase 1)
+ ✔ Create question_id and map @done (14-10-07 21:06) @project(Phase 1)
+ ✔ Map question_category_id on survey_question @done (14-10-07 21:20) @project(Phase 1)
+ ✔ Map survey_id on survey_question @done (14-10-07 21:28) @project(Phase 1)
+ ✔ Map question_id on survey_question @done (14-10-07 21:42) @project(Phase 1)
+ ✔ Create question_override title if survey question doesn't match with associated question @done (14-10-07 21:57) @project(Phase 1)
+ ✔ Extract survey_specific_qid, cm_pid, repsonse from numeric_responses @done (14-10-07 22:10) @project(Phase 1)
+ ✔ Map responses based on survey_specific_qid @done (14-10-07 22:23) @project(Phase 1)
+ ✔ Map converted_net_value based on response @done (14-10-07 22:32) @project(Phase 1)
+ ✔ Import survey @done (14-10-07 23:05) @project(Phase 1)
+ ✔ Import survey_question_category @done (14-10-07 23:21) @project(Phase 1)
+ ✔ Import survey_question @done (14-10-07 23:19) @project(Phase 1)
+ ✔ Import question @done (14-10-07 23:15) @project(Phase 1)
+ ✔ Import cm_survey_response @done (14-10-07 23:08) @project(Phase 1)
+ ✔ Update remote DB schema @done (14-10-07 19:01) @project(Phase 1)
+ ✔ survey question category map based on imported csv file @done (14-10-20 16:32) @project(Phase 2)
+ ✘ It looks like nulls for converted_net_value are not being properly mapped. Fix that. @cancelled (14-10-08 10:19) @project(Phase 2)
+ ✘ Double check that question_title_override is working as intended - it appears all blank @cancelled (14-10-08 10:19) @project(Phase 2)
+ ✔ Investigate slowness of migration on dev server and brainstorm ways to mitigate @done (14-10-20 15:26) @project(Phase 2)

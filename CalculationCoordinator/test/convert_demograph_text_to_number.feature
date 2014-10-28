@@ -52,7 +52,7 @@ Feature: In order to allow any text to be used in cutting yet maintain sane sort
 			| 3             | SoDak   | Male   |
 		Given CalcCoordinator result types of net, strong and weak
 		When compute net with cut_demographic = region is run
-		Then result_type of results includes net, strong and weak
+		Then result_type of responses includes net, strong and weak
 
 	Scenario: CalcCoordinator accepts a list with blanks for cuts
 		Given net formatted values

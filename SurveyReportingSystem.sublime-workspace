@@ -4,6 +4,190 @@
 		"selected_items":
 		[
 			[
+				"cm_sur",
+				"cm_survey_question"
+			],
+			[
+				"survey",
+				"survey_question	(local, instance)"
+			],
+			[
+				"sur",
+				"survey_question"
+			],
+			[
+				"is",
+				"is_confidential"
+			],
+			[
+				"que",
+				"question_code"
+			],
+			[
+				"res",
+				"respondent_id"
+			],
+			[
+				"resp",
+				"response"
+			],
+			[
+				"call",
+				"assert_called_with"
+			],
+			[
+				"leg",
+				"legal_person_ids	(local, instance)"
+			],
+			[
+				"legal",
+				"legal_person_ids_csv"
+			],
+			[
+				"new",
+				"new_person_id"
+			],
+			[
+				"has",
+				"hasattr"
+			],
+			[
+				"con",
+				"convert_objects"
+			],
+			[
+				"cate",
+				"category_id_df"
+			],
+			[
+				"question",
+				"question_category"
+			],
+			[
+				"que_cat_",
+				"question_category_id"
+			],
+			[
+				"que_ca",
+				"question_category_id"
+			],
+			[
+				"question_cat",
+				"question_category_id"
+			],
+			[
+				"quest",
+				"question_code"
+			],
+			[
+				"new_",
+				"new_value"
+			],
+			[
+				"set",
+				"set_index"
+			],
+			[
+				"qe",
+				"question_code"
+			],
+			[
+				"que_id",
+				"question_id"
+			],
+			[
+				"max",
+				"max_survey_id	(local, instance)"
+			],
+			[
+				"qu",
+				"question_df"
+			],
+			[
+				"conver",
+				"converted_net_value"
+			],
+			[
+				"surve",
+				"survey_specific_questions"
+			],
+			[
+				"survey_qu",
+				"survey_question"
+			],
+			[
+				"conn",
+				"connect"
+			],
+			[
+				"ex",
+				"execute"
+			],
+			[
+				"exp",
+				"expected_columns"
+			],
+			[
+				"num",
+				"numerical_responses"
+			],
+			[
+				"quest_ov",
+				"question_title_override"
+			],
+			[
+				"su",
+				"survey_question_df"
+			],
+			[
+				"q",
+				"question_title"
+			],
+			[
+				"question_t",
+				"question_title_override"
+			],
+			[
+				"survey_que",
+				"survey_question_df"
+			],
+			[
+				"survey_question",
+				"survey_question_df"
+			],
+			[
+				"questio",
+				"question_title"
+			],
+			[
+				"sur_id",
+				"survey_question_id"
+			],
+			[
+				"from",
+				"from_records"
+			],
+			[
+				"em",
+				"empty_db"
+			],
+			[
+				"emp",
+				"empty_migrator"
+			],
+			[
+				"surv",
+				"survey_title"
+			],
+			[
+				"mig",
+				"migrator_with_ssq_for_survey"
+			],
+			[
+				"ssq",
+				"survey_specific_questions"
+			],
+			[
 				"compos",
 				"composite_questions"
 			],
@@ -32,24 +216,8 @@
 				"calculator"
 			],
 			[
-				"num",
-				"num_rows"
-			],
-			[
-				"new",
-				"new_values"
-			],
-			[
-				"new_",
-				"new_values"
-			],
-			[
 				"list",
 				"list_of_rows	(local, instance)"
-			],
-			[
-				"que",
-				"question_table"
 			],
 			[
 				"re",
@@ -118,10 +286,6 @@
 			[
 				"app",
 				"append"
-			],
-			[
-				"question",
-				"question_code"
 			],
 			[
 				"assT",
@@ -206,10 +370,6 @@
 			[
 				"dem",
 				"demographic_data"
-			],
-			[
-				"res",
-				"results"
 			],
 			[
 				"agg",
@@ -354,44 +514,52 @@
 			[
 				"integer",
 				"integer_strings"
-			],
-			[
-				"retun",
-				"return_value"
-			],
-			[
-				"sor",
-				"sorted_labels"
-			],
-			[
-				"inte",
-				"integer_string"
-			],
-			[
-				"Di",
-				"Dimensions"
-			],
-			[
-				"title",
-				"title"
-			],
-			[
-				"net_",
-				"net_formatted_values"
 			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"file": "db_migration/db_migration.TODO",
+			"settings":
+			{
+				"buffer_size": 4621,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "ResponsesRetriever/test/retrieve_numeric_results.feature",
+			"settings":
+			{
+				"buffer_size": 1456,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "ResponsesRetriever/test/test_retrieve_numeric_results_steps.py",
+			"settings":
+			{
+				"buffer_size": 6633,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "ResponsesRetriever/ResponsesRetriever.py",
+			"settings":
+			{
+				"buffer_size": 3090,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 392.0,
+		"height": 167.0,
 		"selected_items":
 		[
 			[
-				"git",
+				"git com",
 				"Git: Commit"
 			],
 			[
@@ -399,20 +567,52 @@
 				"Git: Add..."
 			],
 			[
-				"git com",
+				"git ",
 				"Git: Commit"
+			],
+			[
+				"conv",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"git ad",
+				"Git: Add..."
 			],
 			[
 				"git push",
 				"Git: Push"
 			],
 			[
+				"git status",
+				"Git: Status"
+			],
+			[
+				"alig",
+				"AlignTab"
+			],
+			[
 				"git comm",
 				"Git: Commit"
 			],
 			[
-				"git status",
-				"Git: Status"
+				"git qu",
+				"Git: Quick Commit"
+			],
+			[
+				"git co",
+				"Git: Commit"
+			],
+			[
+				"space",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"spac",
+				"FindKeyConflicts: Single Package Conflicts"
+			],
+			[
+				"git",
+				"Git: Commit"
 			],
 			[
 				"git add .",
@@ -421,10 +621,6 @@
 			[
 				"cucu",
 				"Gherkin/Cucumber: Format"
-			],
-			[
-				"git ad",
-				"Git: Add..."
 			],
 			[
 				"task",
@@ -441,10 +637,6 @@
 			[
 				"git sat",
 				"Git: Status"
-			],
-			[
-				"git co",
-				"Git: Commit"
 			],
 			[
 				"gher",
@@ -475,7 +667,7 @@
 				"Set Syntax: JavaScript"
 			]
 		],
-		"width": 467.0
+		"width": 602.0
 	},
 	"console":
 	{
@@ -492,72 +684,58 @@
 	},
 	"file_history":
 	[
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResponsesRetriever/ResponsesRetriever.py",
-		"/Users/mcox/Dropbox/MDIS/tmp/test_date_copy/docProps/app.xml",
-		"/Users/mcox/Dropbox/MDIS/tmp/test_date_copy/[Content_Types].xml",
-		"/Users/mcox/Dropbox/MDIS/tmp/v_cards/vCards.csv",
-		"/opt/local/etc/odbc.ini",
-		"/opt/local/etc/freetds/freetds.conf",
-		"/Users/mcox/.bash_profile",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic.ini",
-		"/opt/local/etc/odbcinst.ini",
-		"/private/tmp/pip_build_root/pyodbc/setup.py",
-		"/Users/mcox/Dropbox/MDIS/tmp/free_tds.conf",
-		"/Users/mcox/.odbc.ini",
-		"/etc/odbc.ini",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/38f83803a29_create_basic_respons.py",
-		"/Users/mcox/Dropbox/MDIS/tmp/v_cards/list_for_art_exhibits_1_excel.csv",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/ResultsRetriever.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/compute_results.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/create_pilot_dashboard.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/dump_results.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/export_cuts_in_separate_files.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/NumericOutputCalculator.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/features/steps/retetrieve_numeric_results_steps.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/SurveyReportingSystem.sublime-workspace",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/convert_demograph_text_to_number.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writer_test.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/include_specified_question.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/output_dimension_value_combinations.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/test_assemble_cuts_from_config_reader.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/test_calcuation_coordinator.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/test_pilot_cms.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/test/for_excel_steps.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/test/load_cut_definitions_steps.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/28726eb67b4_multiple_changes_for_usage_in_bobj.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/syncronize_survey_specific_questions.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/developmet.TODO",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/computations_for_categorical_questions.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_composite_questions.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_net_strong_weak_average.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_sample_size.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_statistical_signficance.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/cut_for_demographics.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/join_on_survey_code_when_available.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/remove_results_for_fewer_than_5.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps/basic_computations.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps/cut_for_demographics_steps.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/features/retrieve_numeric_results.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/test_data/debug.log",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/test_get_mapping_by_dimension.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/DimensionsImporter/test/test_import_flat_file_steps.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/DimensionsImporter/DimensionsImporter.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/assemble_cuts_from_config_reader.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/test_excel_helper.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writing_utilities_test.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/NumericOutputCalculator.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/db_migration/migrate.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/db_migration/test/test_db_migration.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResponsesRetriever/test/retrieve_numeric_results.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResponsesRetriever/ResponsesRetriever.py",
+		"/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1415F8W/config.yaml",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/migrate_db.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/db_migration/db_migration.TODO",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/2f9a751d0c9_rename_question_indicies_table_to_.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/28726eb67b4_multiple_changes_for_usage_in_bobj.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/1db95820760_stage_survey_tables_included_in_.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/265cf2450cf_drop_parent_questions_table.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/413dc5087a3_trying_to_change_autoincrement_of_.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/4085b989a16_double_length_of_survey_specific_qid_.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/syncronize_survey_specific_questions.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic.ini",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/3a5a97f7fe3_add_question_type_fi.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/4119a32d65b_several_column_name_changes.py",
+		"/Users/mcox/Library/Application Support/Sublime Text 2/Packages/Git/Git.sublime-settings",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/3018942e76f_add_survey_specific_question_to_survey_.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/developmet.TODO",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/compute_results.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/Lookups.xlsx",
+		"/opt/local/etc/freetds/freetds.conf",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/features/steps/retetrieve_numeric_results_steps.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/ResultsRetriever.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps/basic_computations.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_composite_questions.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/create_pilot_dashboard.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/test_excel_helper.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writer_test.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py",
 		"/Users/mcox/Dropbox/MDIS/tmp/migrate_old_survey_db_format_to_new.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/SurveyReportingSystem.sublime-workspace",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/dump_results.py",
 		"/Users/mcox/Dropbox/MDIS/Institute_Dashboards/2014_institute/jump_rope_reports/student_achievement_and_attendance_report_computations.py",
 		"/Users/mcox/Dropbox/MDIS/Survey_Dashboards/PilotIdTransformation/pilot_id_parser.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/ConfigurationReader.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/test/for_excel_export.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/test_calcuation_coordinator.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/test/for_excel_steps.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/__main__.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/surveys.csv",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/assemble_cuts_from_config_reader.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/.DS_Store",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/load_cut_definitions_steps.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/add_pilot_cms_steps.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/add_pilot_cms.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/computations_for_categorical_questions.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/remove_results_for_fewer_than_5.feature",
 		"/Users/mcox/Dropbox/MDIS/tmp/Development.6.4.14/Development/config.yaml",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/test_data/execution_demonstration.py",
 		"/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1314EYS/dashboard_creation.pl",
@@ -584,6 +762,7 @@
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/mdis_db_migration/.gitignore",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/execution_demonstration.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/demonstration_yaml.yaml",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/database/alembic/versions/38f83803a29_create_basic_respons.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/steps/calcuation_coordinator_steps.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/convert_demograph_text_to_number.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/SurveyReportingSystem.sublime-project",
@@ -593,11 +772,13 @@
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/load_cut_definitions.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/dimensions_by_cut_title_steps.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/dimensions_by_cut_title.feature",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/features/retrieve_numeric_results.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/excel_helper.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/for_excel_export.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/steps/get_mapping_by_dimension_steps.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/get_mapping_by_dimension.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/for_excel_steps.py",
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_net_strong_weak_average.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/PythonSurveyReportingSystem/NumericOutputCalculator/__init__.py",
 		"/Users/mcox/Library/Application Support/Sublime Text 2/Packages/SideBarEnhancements/messages/11.13.2012.1305.0.txt",
 		"/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1314F8W/Supporting_scripts/for_progress_report/config.yaml",
@@ -623,21 +804,113 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b",
-			"\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b\n",
-			"\n",
-			"skellam",
-			"\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b",
-			"[^\\w]+\\@[^\\w]",
-			"[^\\w]+@[^\\w]",
-			"[^\\w]",
-			"6-12",
-			"Meetings placeholder week of",
-			"Short term tasks",
-			"6-12",
-			"Meetings placeholder",
-			"Results",
-			"results",
+			"ResponsesRetriever",
+			"CalculationCoordinator",
+			"survey",
+			"survey_question",
+			"question",
+			"questions",
+			"responses",
+			"surveys",
+			"question_id",
+			"respondent_id",
+			"surveys_table",
+			"questions_table",
+			"responses_table",
+			"given",
+			"questions",
+			"responses",
+			"log",
+			"result_df",
+			"log",
+			"cm_map",
+			"nr",
+			"migrate_to_new_schema",
+			"migrator_with_ssq_and_nr_for_response",
+			"question",
+			"1415F8W",
+			"questions_to_migrate",
+			"patch",
+			"question",
+			"question_",
+			"question",
+			"question_records",
+			"    question_category_mock_file = pd.DataFrame({'question_code':['F8W2','CSI1'],'survey':['1415F8W','1415F8W'],'question_category':['NEWCATEGORY','CSI']})\ntest_migrate_question_category_table_to_new_schema",
+			"    question_category_mock_file = pd.DataFrame({'question_code':['F8W2','CSI1'],'survey':['1415F8W','1415F8W'],'question_category':['NEWCATEGORY','CSI']})\n    question_category_mock_file = pd.DataFrame({'question_code':['F8W2','CSI1'],'survey':['1415F8W','1415F8W'],'question_category':['NEWCATEGORY','CSI']})\nquestion_",
+			"question_",
+			"question_df",
+			"question",
+			"question_category",
+			"survey_question",
+			"question",
+			"CSI1",
+			"CALI",
+			"max_survey_id",
+			"survey",
+			"question",
+			"survey",
+			"question",
+			"survey",
+			"2014Inst-EIS",
+			"survey_question",
+			"survey_question_id_records",
+			"df_to_dict_array",
+			"DENTITY_INSERT",
+			"survey",
+			"survey_question",
+			"question",
+			"survey_question",
+			"question",
+			"response",
+			"')",
+			"response",
+			"Migrator(conn)",
+			"self.db",
+			"records",
+			"select",
+			"question",
+			"r.",
+			"r",
+			"sq",
+			"survey_specific_questions",
+			"ssq",
+			"question_df",
+			"migrator_with_ssq_for_survey_question",
+			"s",
+			"survey_id",
+			"test_map_of_survey_id_on_survey_question",
+			"survey_df",
+			"survey_id",
+			"nan",
+			"is_NaN",
+			"category",
+			"survey_question_df",
+			"survey_question_code_survey_question_id_map",
+			"survey_question_df",
+			"migrator_with_ssq_for_survey_question",
+			"_survey_id_survey_code_map",
+			"survey_df",
+			"from_records",
+			"',\n",
+			"from_records",
+			"expected_df",
+			"expected_columns",
+			"question_type",
+			"),\n",
+			"CSI1",
+			"2014Inst-EIS",
+			"'CSI'",
+			"expected_df",
+			"survey",
+			"survey_df",
+			"empty_db",
+			"survey_",
+			"numerical_responses",
+			"question_category",
+			"numerical_responses",
+			"response",
+			"numerical_responses",
+			"survey_id",
 			", ",
 			"Survey!1",
 			"primary_key=True",
@@ -658,121 +931,26 @@
 			"zero",
 			"next_column_to_use",
 			"highest_column",
-			"print",
-			"rc_to_range",
-			"test_writing_menu_translations",
-			"menu_i+menu_start,",
-			"menu_i+menu_start",
-			"row=0,column=0",
-			"'",
-			"’",
-			"Date",
-			"cuts_4",
-			"results",
-			"cuts_4",
-			"cuts_3",
-			"menu",
-			"cuts_2",
-			"cuts",
-			"basic_static_cuts",
-			"ConfigurationReader",
-			"for_excel_export.feature",
-			"context.",
-			"coordinator_with_net_formatted_values",
-			"corps",
-			",",
-			"'",
-			"convert_types_for_db",
-			"df_to_dict_array",
-			"local",
-			"engine_1",
-			"local",
-			"categorical_calculation_samp_size",
-			"sample_size",
-			"blank",
-			"result_TYPE",
-			"signif",
-			"stat",
-			"add_pilot_cuts",
-			"pilot",
-			"rows writt",
-			"hist_results",
-			"survey",
-			"question_map",
-			"numerical_responses",
-			"reflection",
-			"Duplicate",
-			"historical",
-			"calculato",
-			"dynamic_parent_dimension",
-			"dynamic",
-			"there is not a row",
-			"value",
-			"results",
-			"src_ws_name",
-			"dest_wb",
-			"get",
-			"ws1",
-			"WB1",
-			"wb1",
-			"get_active",
-			"get_integer_string_mapping",
-			"mappings_to_output",
-			"row_heading",
-			"loggin.debug",
-			"loggin.deb",
-			"zero_integer_string",
-			"replace_dimensions_with_integers",
-			"adjust_zero_padding_of_heading",
-			"create_row_column_headers",
-			"adjust_zero_padding_of_heading",
-			"return_table",
-			"all_aggregations",
-			"apply",
-			"format_string",
-			" \n",
-			"adjust_zero_padding_of_heading",
-			"pass",
-			"results for",
-			"dimension_integer_mapping",
-			"get_highest_row",
-			"default_menu",
-			"cuts_head",
-			"cuts",
-			"default_menu",
-			"cuts",
-			"cuts_config",
-			"dv_ws",
-			"cuts",
-			"disp_value_row_head",
-			"dis_value_cuts_headvalues",
-			"dis_value_values",
-			"disp_valuecuts_config_col_head",
-			"E5",
-			"B2",
-			"end_col"
+			"print"
 		],
-		"highlight": false,
+		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": true,
+		"regex": false,
 		"replace_history":
 		[
-			"0.75-1.5",
-			"Analysis/Prototype Fridays",
-			"Email management",
-			"3.5-4.5",
-			"4-8",
-			"Short term tasks",
-			"Responses",
-			"responses",
+			"question",
+			"response",
+			"survey",
+			"surveys_to_migrate",
+			"Migrator(empty_db['engine'],conn)",
 			"\\n",
 			"surveyProd1!",
 			"Survey!1",
 			"\"",
 			""
 		],
-		"reverse": true,
+		"reverse": false,
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,
@@ -781,14 +959,905 @@
 	"groups":
 	[
 		{
+			"selected": 2,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "db_migration/db_migration.TODO",
+					"settings":
+					{
+						"buffer_size": 4621,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1918,
+								1918
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublime_auto_complete": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/PlainTasks/PlainTasks.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "ResponsesRetriever/test/retrieve_numeric_results.feature",
+					"settings":
+					{
+						"buffer_size": 1456,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								69,
+								69
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublime_auto_complete": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Cucumber/Cucumber Plain Text Feature.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "ResponsesRetriever/test/test_retrieve_numeric_results_steps.py",
+					"settings":
+					{
+						"buffer_size": 6633,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4653,
+								4653
+							],
+							[
+								5145,
+								5145
+							],
+							[
+								5666,
+								5666
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublime_auto_complete": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1145.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "ResponsesRetriever/ResponsesRetriever.py",
+					"settings":
+					{
+						"buffer_size": 3090,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								327,
+								327
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublime_auto_complete": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 0.0
+		"height": 34.0
 	},
 	"input":
 	{

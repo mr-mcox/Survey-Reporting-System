@@ -50,7 +50,8 @@ survey_specific_questions = Table('survey_specific_questions',metadata,
 							Column('master_qid',String),
 							Column('survey',String),
 							Column('confidential',Integer),
-							Column('question_type',String)
+							Column('question_type',String),
+							Column('survey_specific_question',String),
 							)
 
 
@@ -60,9 +61,24 @@ for code in survey_codes:
 	#Remove old questions on the remote database
 	r_conn.execute(survey_specific_questions.delete().where(survey_specific_questions.c.survey==code))
 
-ssq_results = l_conn.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(survey_codes)))
+ssq_responses = l_conn.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(survey_codes)))
 
-question_table = pd.DataFrame(ssq_results.fetchall())
-question_table.columns = ssq_results.keys()
+question_table = pd.DataFrame(ssq_responses.fetchall())
+question_table.columns = ssq_responses.keys()
 
-r_conn.execute(survey_specific_questions.insert(),df_to_dict_array(question_table))
+#Truncate question title at 100 characters
+question_table.survey_specific_question = question_table.survey_specific_question.map(lambda x: str(x[:198] + '..') if len(x) > 200 else str(x))
+question_table.survey_specific_question = question_table.survey_specific_question.map(lambda x: str(x))
+
+for survey in survey_codes:
+	try:
+		r_conn.execute(survey_specific_questions.insert(),df_to_dict_array(question_table.ix[question_table.survey == survey]))
+	except:
+		print("Found error\n" + str(sys.exc_info()[0]))
+		for idx, r in question_table.ix[question_table.survey == survey].iterrows():
+			try:
+				# print(str(r['survey_specific_question'])+"\n")
+				print(str(r['survey_specific_question']))
+			except UnicodeEncodeError:
+				print("****Offending row is " + str(r['master_qid']))
+		# raise

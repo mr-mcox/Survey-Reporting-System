@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 from SurveyReportingSystem.CalculationCoordinator import CalculationCoordinator
 from SurveyReportingSystem.ConfigurationReader import ConfigurationReader
-from SurveyReportingSystem.ResultsRetriever import ResultsRetriever
+from SurveyReportingSystem.ResponsesRetriever import ResponsesRetriever
 import logging
 import os
 import csv
@@ -19,15 +19,15 @@ engine = create_engine(connect_info)
 
 conn = engine.connect()
 db = conn
-retriever = ResultsRetriever.ResultsRetriever(db_connection=db)
-print("Starting to retrieve current results")
-results = retriever.retrieve_results_for_survey(survey_code=sys.argv[1])
-results_df = pd.DataFrame(results['rows'])
-results_df.columns = results['column_headings']
+retriever = ResponsesRetriever.ResponsesRetriever(db_connection=db)
+print("Starting to retrieve current responses")
+responses = retriever.retrieve_responses_for_survey(survey_code=sys.argv[1])
+responses_df = pd.DataFrame(responses['rows'])
+responses_df.columns = responses['column_headings']
 
 for_historical = False	
 print("Starting calculations")
-calc = CalculationCoordinator.CalculationCoordinator(results=results_df,
+calc = CalculationCoordinator.CalculationCoordinator(responses=responses_df,
 													demographic_data=pd.read_excel('demographics.xlsx',sheetname="Sheet1"),
 													config = config)
 #Read pilot data

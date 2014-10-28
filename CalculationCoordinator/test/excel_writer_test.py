@@ -16,7 +16,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		wb.create_named_range('disp_value_col_head',ws,'$A$1')
 		ws.title = "ExistingData"
 		wb.save('test_file.xlsx')
-		coordinator = CalculationCoordinator.CalculationCoordinator()#results=pd.DataFrame({'response':[1],'respondent_id':[1]})
+		coordinator = CalculationCoordinator.CalculationCoordinator()#responses=pd.DataFrame({'response':[1],'respondent_id':[1]})
 		coordinator.compute_historical = True
 		self.mapping_values = ['dos','uno','tres']
 		self.mapping_integers = ['2','1','3']
@@ -28,8 +28,8 @@ class WriteExcelTestCase(unittest.TestCase):
 		config_reader = ConfigurationReader.ConfigurationReader()
 		config_reader.config['excel_template_file'] = 'test_file.xlsx'
 		config_reader.config['cut_menu_order'] = ['Region','Subject','Grade']
-		self.cuts_for_excel_menu_results = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None'],['Gender', 'static', 'Gender', 'Region', 'Corps']]
-		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_results,'historical':[['Region', 'static', 'Region', 'Corps','None']],'cuts_2':[],'cuts_3':[],'cuts_4':[],'cuts_5':[]}
+		self.cuts_for_excel_menu_responses = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None'],['Gender', 'static', 'Gender', 'Region', 'Corps']]
+		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_responses,'historical':[['Region', 'static', 'Region', 'Corps','None']],'cuts_2':[],'cuts_3':[],'cuts_4':[],'cuts_5':[]}
 		config_reader.cuts_for_excel_menu = mock.MagicMock(side_effect= lambda **arg: return_for_cuts_for_excel_menu[arg['menu']])
 		coordinator.config = config_reader
 
@@ -95,7 +95,7 @@ class WriteExcelTestCase(unittest.TestCase):
 
 		#Set up demographics for dynamic columns
 		coordinator.demographic_data = pd.DataFrame({'respondent_id':[1,2,3],'region':['Atlanta','Atlanta','SoDak'],'GenderC':['male','female','female']})
-		coordinator.results = pd.DataFrame({'respondent_id':[1,2,3],'response':[1,2,1]})
+		coordinator.responses = pd.DataFrame({'respondent_id':[1,2,3],'response':[1,2,1]})
 		coordinator.compute_significance_from_config = mock.MagicMock(return_value=master_siginificance)
 		coordinator.export_to_excel()
 		self.coordinator = coordinator
@@ -105,7 +105,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		for i in range(2):
 			row_values = [str(ws.cell(row=i+1,column=j+1).value) for j in range(5)]
 			row_matches_expected = False
-			for expected_row in self.cuts_for_excel_menu_results:
+			for expected_row in self.cuts_for_excel_menu_responses:
 				if expected_row == row_values:
 					row_matches_expected = True
 			print(row_values)

@@ -17,7 +17,7 @@ def test_store_cuts_by_tuple():
 @given(re.compile('net formatted values\n(?P<text_table>.+)', re.DOTALL))
 def coordinator_with_net_formatted_values(text_table):
 	coordinator = CalculationCoordinator.CalculationCoordinator()
-	coordinator.results = pd.DataFrame(import_table_data(text_table))
+	coordinator.responses = pd.DataFrame(import_table_data(text_table))
 	return coordinator
 
 @given(re.compile('demographic data passed to coordinator\n(?P<text_table>.+)', re.DOTALL))
@@ -39,8 +39,8 @@ def computation_generated_length_2(coordinator_with_net_formatted_values):
 
 @then('the display_value including region for question_code 1 and region "Atlanta" is 0.5')
 def check_Atlanta_result_for_question_code_1(coordinator_with_net_formatted_values):
-	results = coordinator_with_net_formatted_values.get_aggregation(cuts='region')
-	assert results.set_index(['question_code','region']).loc[(1,'Atlanta'),'aggregation_value'] == 0.5
+	responses = coordinator_with_net_formatted_values.get_aggregation(cuts='region')
+	assert responses.set_index(['question_code','region']).loc[(1,'Atlanta'),'aggregation_value'] == 0.5
 
 @scenario('convert_demograph_text_to_number.feature', 'Identify all demographic columns across multiple cuts')
 def test_identify_demographic_columns_across_multiple_cuts():
@@ -60,19 +60,19 @@ def computation_cut_by_region():
 
 @when('replace_dimensions_with_integers for both computations is run')
 def replace_dimensions_with_integers_for_computations(generic_coordinator, computation_cut_by_gender, computation_cut_by_region):
-	results = [generic_coordinator.replace_dimensions_with_integers(computation_cut_by_gender), generic_coordinator.replace_dimensions_with_integers(computation_cut_by_region)]
+	responses = [generic_coordinator.replace_dimensions_with_integers(computation_cut_by_gender), generic_coordinator.replace_dimensions_with_integers(computation_cut_by_region)]
 
 @then('columns of computations_generated are strings with filled numbers')
 def check_columns_are_string_filled_numbers(generic_coordinator, computation_cut_by_gender, computation_cut_by_region):
-	results = [generic_coordinator.replace_dimensions_with_integers(computation_cut_by_gender), generic_coordinator.replace_dimensions_with_integers(computation_cut_by_region)]
-	for df in results:
+	responses = [generic_coordinator.replace_dimensions_with_integers(computation_cut_by_gender), generic_coordinator.replace_dimensions_with_integers(computation_cut_by_region)]
+	for df in responses:
 		for column in df.columns:
 			if column != 'aggregation_value':
 				for value in df[column].unique():
 					assert type(value) == str
 					assert re.search('^\d+$',value) != None
 	values = list()
-	for df in results:
+	for df in responses:
 		for column in df.columns:
 			print(df)
 			if column != 'aggregation_value':
@@ -127,10 +127,10 @@ def test_multiple_result_types_simultaneously():
 def result_types_of_net_strong_weak(coordinator_with_net_formatted_values):
 	coordinator_with_net_formatted_values.result_types = ['net','strong','weak']
 
-@then('result_type of results includes net, strong and weak')
+@then('result_type of responses includes net, strong and weak')
 def check_result_type_includes_net_strong_weak(coordinator_with_net_formatted_values):
-	results = coordinator_with_net_formatted_values.get_aggregation(cuts='region')
-	assert set(results.result_type.unique()) == {'net','strong','weak'}
+	responses = coordinator_with_net_formatted_values.get_aggregation(cuts='region')
+	assert set(responses.result_type.unique()) == {'net','strong','weak'}
 
 @scenario('convert_demograph_text_to_number.feature', "CalcCoordinator accepts a list with blanks for cuts")
 def test_accepts_list_with_blanks_for_cuts():
@@ -142,8 +142,8 @@ def compute_aggreatoin_with_cut_demographic_cut_by_gender_region(coordinator_wit
 
 @then('the display_value including region for question_code 1 and region "Atlanta" and gender "Female" is 0.5')
 def check_display_value_for_Atlanta_and_Female(coordinator_with_net_formatted_values):
-	results = coordinator_with_net_formatted_values.get_aggregation(cuts=['gender','region'])
-	assert results.set_index(['question_code','region','gender']).loc[(1,'Atlanta','Female'),'aggregation_value'] == 0.5
+	responses = coordinator_with_net_formatted_values.get_aggregation(cuts=['gender','region'])
+	assert responses.set_index(['question_code','region','gender']).loc[(1,'Atlanta','Female'),'aggregation_value'] == 0.5
 
 @scenario('convert_demograph_text_to_number.feature', "Assemble row and column headings for a simple case")
 def test_assemble_row_column_headings():
@@ -182,7 +182,7 @@ def test_add_combination_of_values():
 def ensure_combination_for_every_set_of_demographics_is_true(coordinator_with_net_formatted_values):
 	coordinator_with_net_formatted_values.ensure_combination_for_every_set_of_demographics = True
 
-@then('compute net with cut_demographic = region and gender is run results in row with SoDak and Female')
+@then('compute net with cut_demographic = region and gender is run responses in row with SoDak and Female')
 def check_row_with_SoDak_and_Female(coordinator_with_net_formatted_values):
 	coordinator_with_net_formatted_values.result_types =['net']
 	res = coordinator_with_net_formatted_values.compute_aggregation(cut_demographic=['region','gender']).set_index(['region','gender'])
@@ -204,7 +204,7 @@ def gender_ethnicty_is_dynamic(coordinator_with_net_formatted_values):
 																		dimension_with_dynamic_type,
 																		])
 
-@then('compute net with cut_demographic = region and gender is run results in no rows with SoDak and Female')
+@then('compute net with cut_demographic = region and gender is run responses in no rows with SoDak and Female')
 def check_no_row_with_SoDak_and_Female(coordinator_with_net_formatted_values):
 	coordinator_with_net_formatted_values.result_types =['net']
 	res = coordinator_with_net_formatted_values.compute_aggregation(cut_demographic=['region','gender']).set_index(['region','gender'])
@@ -214,7 +214,7 @@ def check_no_row_with_SoDak_and_Female(coordinator_with_net_formatted_values):
 def test_include_some_dimensions_for_dynamic():
 	pass
 
-@then('compute net with cut_demographic = region and gender is run results in a row with 2013 and Female')
+@then('compute net with cut_demographic = region and gender is run responses in a row with 2013 and Female')
 def check_for_2013_and_female(coordinator_with_net_formatted_values):
 	coordinator_with_net_formatted_values.result_types =['net']
 	res = coordinator_with_net_formatted_values.compute_aggregation(cut_demographic=['corps','gender']).set_index(['corps','gender'])
@@ -228,8 +228,8 @@ def step(context,heading):
 def step(generic_coordinator,heading,expected_value):
 	assert generic_coordinator.adjust_zero_padding_of_heading(heading) == expected_value
 
-@scenario('output_dimension_value_combinations.feature', "When there is a row in the demographics file but no row in the results and the dimension is dynamic, don't include the row")
-def test_row_in_demographics_but_not_results():
+@scenario('output_dimension_value_combinations.feature', "When there is a row in the demographics file but no row in the responses and the dimension is dynamic, don't include the row")
+def test_row_in_demographics_but_not_responses():
 	pass
 
 def import_table_data(text_table):

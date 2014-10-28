@@ -50,7 +50,7 @@ Scenario: When net formatted values are provided for multiple questions, output 
 		Then the display_value for question_code 2 is -1
 
 Scenario: When 7pt with 1=Strongly Agree questions are given, net formatted values are appropriately computed
-	Given raw 7pt questions results
+	Given raw 7pt questions responses
 		| person_id | response |
 		| 1         | 7        |
 		| 2         | 6        |
@@ -71,7 +71,7 @@ Scenario: When 7pt with 1=Strongly Agree questions are given, net formatted valu
 	Then net formatted value for person_id 8 is blank
 
 Scenario: When 7pt with 1=Strongly Agree questions are given, net is accurately computed
-	Given raw 7pt questions results
+	Given raw 7pt questions responses
 		| question_code | response |
 		| 1             | 1        |
 		| 1             | 1        |
@@ -81,7 +81,7 @@ Scenario: When 7pt with 1=Strongly Agree questions are given, net is accurately 
 	Then the display_value for question_code 1 is 0.25
 
 Scenario: When 7pt with 1=Strongly Agree questions are given, average is accurately computed
-	Given raw 7pt questions results
+	Given raw 7pt questions responses
 		| question_code | response |
 		| 1             | 1        |
 		| 1             | 1        |
@@ -139,7 +139,7 @@ Scenario: When net formatted values are provided for a question, output weak_cou
 	Then the display_value for question_code 1 is 1
 
 Scenario: Compute net formatted values accurately for a variety of question types
-	Given raw 7pt questions results
+	Given raw 7pt questions responses
 		| person_id | response | question_type  |
 		| 1         | 7        | 7pt_1=SA       |
 		| 2         | 3        | 7pt_1=SA       |
@@ -184,7 +184,7 @@ Scenario: Compute net formatted values accurately for a variety of question type
 	Then net formatted value for person_id 20 is blank
 
 Scenario: Compute net formatted values accurately for a variety of question types
-	Given raw 7pt questions results
+	Given raw 7pt questions responses
 		| person_id | response | question_type  |
 		| 1         | 7        | 7pt_1=SA       |
 		| 2         | 3        | 7pt_1=SA       |
@@ -230,7 +230,7 @@ Scenario: Compute net formatted values accurately for a variety of question type
 
 
 Scenario: Compute net formatted values accurately for NPS 11 = SA
-	Given raw 7pt questions results
+	Given raw 7pt questions responses
 		| person_id | response | question_type  |
 		| 17        | 1        | 11pt_NPS_11=SA |
 		| 18        | 9        | 11pt_NPS_11=SA |

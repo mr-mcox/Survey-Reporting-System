@@ -5,6 +5,7 @@ import pdb
 from scipy.stats import poisson, skellam
 import copy
 import gc
+from SurveyReportingSystem.NumericOutputCalculator.noc_helper import map_responses_to_net_formatted_values
 
 class NumericOutputCalculator(object):
 
@@ -12,63 +13,33 @@ class NumericOutputCalculator(object):
 		responses = pd.DataFrame(kwargs.pop('responses',dict())).convert_objects(convert_numeric=True)
 		assert not responses.empty
 		if 'net_formatted_value' not in responses.columns or responses['net_formatted_value'].notnull().sum() == 0:
-			responses['net_formatted_value'] = np.nan
-			if 'question_type' in responses.columns:
-				#Map NFVs
-				map_7pt_SA_to_net = {7:-1,6:-1,5:-1,4:-1,3:0,2:1,1:1}
-				responses.ix[responses.question_type == '7pt_1=SA','net_formatted_value'] = responses.ix[responses.question_type == '7pt_1=SA','response'].map(map_7pt_SA_to_net)
-				map_10pt_SA_to_net = {10:-1,9:-1,8:-1,7:-1,6:-1,5:-1,4:0,3:0,2:1,1:1}
-				responses.ix[responses.question_type == '10pt_NPS_1=SA','net_formatted_value'] = responses.ix[responses.question_type == '10pt_NPS_1=SA','response'].map(map_10pt_SA_to_net)
-				map_7pt_7_SA_to_net = {7:1,6:1,5:0,4:-1,3:-1,2:-1,1:-1}
-				responses.ix[responses.question_type == '7pt_7=SA','net_formatted_value'] = responses.ix[responses.question_type == '7pt_7=SA','response'].map(map_7pt_7_SA_to_net)
-				map_11pt_NPS_1_SA_to_net = {11:-1,10:-1,9:-1,8:-1,7:-1,6:-1,5:-1,4:0,3:0,2:1,1:1}
-				responses.ix[responses.question_type == '11pt_NPS_1=SA','net_formatted_value'] = responses.ix[responses.question_type == '11pt_NPS_1=SA','response'].map(map_11pt_NPS_1_SA_to_net)
-				map_11pt_NPS_11_SA_to_net = {1:-1,2:-1,3:-1,4:-1,5:-1,6:-1,7:-1,8:0,9:0,10:1,11:1}
-				responses.ix[responses.question_type == '11pt_NPS_11=SA','net_formatted_value'] = responses.ix[responses.question_type == '11pt_NPS_11=SA','response'].map(map_11pt_NPS_11_SA_to_net)
-				map_10pt_NPS_10_SA_to_net = {10:1,9:1,8:0,7:0,6:-1,5:-1,4:-1,3:-1,2:-1,1:-1}
-				responses.ix[responses.question_type == '10pt_NPS_10=SA','net_formatted_value'] = responses.ix[responses.question_type == '10pt_NPS_10=SA','response'].map(map_10pt_NPS_10_SA_to_net)
-				
-				#Map responses
-				responses.ix[(responses.question_type == '7pt_1=SA') & (responses.response > 7 ),'response'] = np.nan
-				responses.ix[(responses.question_type == '7pt_1=SA'),'response'] = 8 - responses.ix[(responses.question_type == '7pt_1=SA'),'response']
-				responses.ix[(responses.question_type == '10pt_NPS_1=SA') & (responses.response > 10 ),'response'] = np.nan
-				responses.ix[(responses.question_type == '10pt_NPS_1=SA'),'response'] = 11 - responses.ix[(responses.question_type == '10pt_NPS_1=SA'),'response']
-				responses.ix[(responses.question_type == '11pt_NPS_1=SA') & (responses.response > 11 ),'response'] = np.nan
-				responses.ix[(responses.question_type == '11pt_NPS_1=SA'),'response'] = 12 - responses.ix[(responses.question_type == '11pt_NPS_1=SA'),'response'] -1
-				responses.ix[(responses.question_type == '11pt_NPS_11=SA') & (responses.response > 11 ),'response'] = np.nan
-				responses.ix[(responses.question_type == '11pt_NPS_11=SA'),'response'] = responses.ix[(responses.question_type == '11pt_NPS_11=SA'),'response'] -1
-				responses.ix[(responses.question_type == '7pt_7=SA') & (responses.response > 7 ),'response'] = np.nan
-				responses.ix[(responses.question_type == '10pt_NPS_10=SA') & (responses.response > 10 ),'response'] = np.nan
-
-			else:
-				map_7pt_SA_to_net = {8:None,7:-1,6:-1,5:-1,4:-1,3:0,2:1,1:1}
-				responses['net_formatted_value'] = responses.response.map(map_7pt_SA_to_net)
+			responses = map_responses_to_net_formatted_values(responses)
 		assert responses.net_formatted_value.notnull().sum() > 0
 		self.responses = responses
 		self.demographic_data = kwargs.pop('demographic_data',pd.DataFrame())
-		self._results_with_dimensions = pd.DataFrame()
+		self._responses_with_dimensions = pd.DataFrame()
 		# self.question_types_to_compute_significance_for = {'7pt_1=SA','10pt_NPS_1=SA','7pt_7=SA','11pt_NPS_1=SA','10pt_NPS_10=SA'}
 
-	def results_with_dimensions():
-		doc = "The results_with_dimensions property."
+	def responses_with_dimensions():
+		doc = "The responses_with_dimensions property."
 		def fget(self):
 			if self.demographic_data.empty:
 				return self.responses
 			else:
-				if self._results_with_dimensions.empty:
+				if self._responses_with_dimensions.empty:
 					assert 'respondent_id' in self.responses, "Expected respondent_id column in responses"
 					assert 'respondent_id' in self.demographic_data, "Expected respondent_id column in demographic_data"
 					if 'survey_code' in self.demographic_data.columns and 'survey_code' in self.responses.columns:
-						self._results_with_dimensions = self.responses.set_index(['respondent_id','survey_code']).join(self.demographic_data.set_index(['respondent_id','survey_code']), how = 'outer').reset_index()
+						self._responses_with_dimensions = self.responses.set_index(['respondent_id','survey_code']).join(self.demographic_data.set_index(['respondent_id','survey_code']), how = 'outer').reset_index()
 					else:
-						self._results_with_dimensions = self.responses.set_index('respondent_id').join(self.demographic_data.set_index('respondent_id'), how = 'outer').reset_index()
-				return self._results_with_dimensions
+						self._responses_with_dimensions = self.responses.set_index('respondent_id').join(self.demographic_data.set_index('respondent_id'), how = 'outer').reset_index()
+				return self._responses_with_dimensions
 		def fset(self, value):
-			self._results_with_dimensions = value
+			self._responses_with_dimensions = value
 		def fdel(self):
-			del self._results_with_dimensions
+			del self._responses_with_dimensions
 		return locals()
-	results_with_dimensions = property(**results_with_dimensions())
+	responses_with_dimensions = property(**responses_with_dimensions())
 
 	# @profile
 	def compute_aggregation(self,**kwargs):
@@ -104,18 +75,18 @@ class NumericOutputCalculator(object):
 			cut_groupings = cut_groupings + cut_demographic_list
 
 		columns_to_keep = copy.deepcopy(cut_groupings)
-		# nfv = self.results_with_dimensions.copy()
-		results_columns = self.results_with_dimensions.columns
-		if 'net_formatted_value' in results_columns:
+		# nfv = self.responses_with_dimensions.copy()
+		responses_columns = self.responses_with_dimensions.columns
+		if 'net_formatted_value' in responses_columns:
 			columns_to_keep.append('net_formatted_value')
-		if 'response' in results_columns:
+		if 'response' in responses_columns:
 			columns_to_keep.append('response')
-		if 'is_confidential' in results_columns:
+		if 'is_confidential' in responses_columns:
 			columns_to_keep.append('is_confidential')
-		if 'question_type' in results_columns:
+		if 'question_type' in responses_columns:
 			columns_to_keep.append('question_type')
-		nfv = self.results_with_dimensions.loc[:,columns_to_keep]
-		# logging.debug("Results with dimensions for cut_demographic " + str(cut_demographic) + " are\n" + str(nfv.head()))
+		nfv = self.responses_with_dimensions.loc[:,columns_to_keep]
+		# logging.debug("Responses with dimensions for cut_demographic " + str(cut_demographic) + " are\n" + str(nfv.head()))
 
 		aggregation_calulations_list = list()
 		for result_type in result_types:
@@ -126,7 +97,7 @@ class NumericOutputCalculator(object):
 			aggregation_calulation = pd.DataFrame()
 			if result_type == 'net':
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
-				# logging.debug("Net results are\n" + str(aggregation_calulation.head()))
+				# logging.debug("Net responses are\n" + str(aggregation_calulation.head()))
 			if result_type == 'strong':
 				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != 1),'net_formatted_value'] = 0
 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()
@@ -166,12 +137,12 @@ class NumericOutputCalculator(object):
 				categorical_calculation.aggregation_value = categorical_calculation.aggregation_value / categorical_calculation.sample_size
 				categorical_calculation.result_type = categorical_calculation.result_type.astype(int).astype(str)
 
-		all_results = pd.concat(aggregation_calulations_list + [categorical_calculation, cat_display_samp_size])
+		all_responses = pd.concat(aggregation_calulations_list + [categorical_calculation, cat_display_samp_size])
 		#Determine which questions have fewer than 5 respondents and are confidential
-		if 'is_confidential' in all_results.columns:
-			all_results = all_results.set_index(cut_groupings)
+		if 'is_confidential' in all_responses.columns:
+			all_responses = all_responses.set_index(cut_groupings)
 			nfv = nfv.set_index(cut_groupings)
-			less_than_5_sample_size_index = all_results.ix[(all_results.result_type=='sample_size') & (all_results.aggregation_value < 5)].index
+			less_than_5_sample_size_index = all_responses.ix[(all_responses.result_type=='sample_size') & (all_responses.aggregation_value < 5)].index
 			confidential_questions_df = pd.DataFrame(nfv.reset_index(),columns=['question_code','is_confidential'])
 			confidential_questions = confidential_questions_df.ix[confidential_questions_df.is_confidential==1,'question_code'].unique().tolist()
 			if composite_questions is not None:
@@ -181,15 +152,15 @@ class NumericOutputCalculator(object):
 					if len( set(questions) & set(confidential_questions)) >= 1:
 						confidential_questions.append(index)
 				# confidential_questions = confidential_questions + [key for key in composite_questions.keys()]
-			confidential_questions_index = all_results.reset_index().ix[all_results.reset_index().question_code.isin(confidential_questions)].set_index(cut_groupings).index.tolist()
-			all_results.ix[all_results.index.isin(less_than_5_sample_size_index) & all_results.index.isin(confidential_questions_index) & (all_results.result_type != 'sample_size'),'aggregation_value'] = np.nan
-			all_results = all_results.reset_index()
+			confidential_questions_index = all_responses.reset_index().ix[all_responses.reset_index().question_code.isin(confidential_questions)].set_index(cut_groupings).index.tolist()
+			all_responses.ix[all_responses.index.isin(less_than_5_sample_size_index) & all_responses.index.isin(confidential_questions_index) & (all_responses.result_type != 'sample_size'),'aggregation_value'] = np.nan
+			all_responses = all_responses.reset_index()
 
 		#Return just required columns
 		return_columns = cut_groupings + ['aggregation_value','result_type']
-		# logging.debug("Data returned is\n" + str(pd.DataFrame(all_results,columns=return_columns).head()))
+		# logging.debug("Data returned is\n" + str(pd.DataFrame(all_responses,columns=return_columns).head()))
 		gc.collect()
-		return pd.DataFrame(all_results,columns=return_columns)
+		return pd.DataFrame(all_responses,columns=return_columns)
 
 	def add_composite_question_calculation(self,composite_questions,aggregation_calulation,cut_demographic_list):
 		# logging.debug("Adding composite questions for " + str(composite_questions))
@@ -207,19 +178,19 @@ class NumericOutputCalculator(object):
 		return aggregation_calulation
 
 
-	def compute_net_results(self,**kwargs):
+	def compute_net_responses(self,**kwargs):
 		return self.compute_aggregation(result_type='net',**kwargs)
 
-	def compute_strong_results(self,**kwargs):
+	def compute_strong_responses(self,**kwargs):
 		return self.compute_aggregation(result_type='strong',**kwargs)
 		
-	def compute_weak_results(self,**kwargs):
+	def compute_weak_responses(self,**kwargs):
 		return self.compute_aggregation(result_type='weak',**kwargs)
 
-	def compute_average_results(self,**kwargs):
+	def compute_average_responses(self,**kwargs):
 		return self.compute_aggregation(result_type='raw_average',**kwargs)
 
-	def compute_sample_size_results(self,**kwargs):
+	def compute_sample_size_responses(self,**kwargs):
 		return self.compute_aggregation(result_type='sample_size',**kwargs)
 
 	def aggregations_for_net_significance(self,**kwargs):
@@ -231,9 +202,9 @@ class NumericOutputCalculator(object):
 		if cuts[0] == 'survey_code':
 			comparison_cuts = ['survey_code'] + cuts[2:]
 
-		base_results = self.compute_aggregation(cut_demographic=cuts,result_type=["sample_size","strong_count","weak_count"],**kwargs)
-		comparison_results = self.compute_aggregation(cut_demographic=comparison_cuts,result_type=["sample_size","strong_count","weak_count"],**kwargs)
-		return (cuts, comparison_cuts,base_results,comparison_results)
+		base_responses = self.compute_aggregation(cut_demographic=cuts,result_type=["sample_size","strong_count","weak_count"],**kwargs)
+		comparison_responses = self.compute_aggregation(cut_demographic=comparison_cuts,result_type=["sample_size","strong_count","weak_count"],**kwargs)
+		return (cuts, comparison_cuts,base_responses,comparison_responses)
 
 
 	# @profile
@@ -247,26 +218,26 @@ class NumericOutputCalculator(object):
 			blank_df['result_type'] = 'significance_value'
 			return blank_df
 
-		cuts, comparison_cuts, base_results, comparison_results = self.aggregations_for_net_significance(cuts=cuts,**kwargs)
+		cuts, comparison_cuts, base_responses, comparison_responses = self.aggregations_for_net_significance(cuts=cuts,**kwargs)
 
 		if no_stat_significance_computation:
-			df_with_no_results = self.compute_aggregation(cut_demographic=cuts,result_type='sample_size',**kwargs)
-			df_with_no_results['result_type'] = 'significance_value'
-			df_with_no_results['aggregation_value'] = ''
-			df_with_no_results.set_index(cuts+['question_code'])
-			return df_with_no_results
-		base_results = base_results.ix[base_results['result_type'].isin(["sample_size","strong_count","weak_count"])]
-		base_results = base_results.drop_duplicates(cols=cuts + ['question_code','result_type'],take_last=False).set_index(cuts + ['question_code','result_type'])
-		base_results = pd.Series(base_results['aggregation_value'],index = base_results.index).unstack()
-		comparison_results = comparison_results.ix[comparison_results['result_type'].isin(["sample_size","strong_count","weak_count"])]
-		comparison_results = comparison_results.drop_duplicates(cols=comparison_cuts + ['question_code','result_type'],take_last=False).set_index(comparison_cuts  + ['question_code','result_type'])
-		comparison_results = pd.Series(comparison_results['aggregation_value'],index = comparison_results.index).unstack()
-		comparison_results = comparison_results.rename(columns={'sample_size':'comp_sample_size',
+			df_with_no_responses = self.compute_aggregation(cut_demographic=cuts,result_type='sample_size',**kwargs)
+			df_with_no_responses['result_type'] = 'significance_value'
+			df_with_no_responses['aggregation_value'] = ''
+			df_with_no_responses.set_index(cuts+['question_code'])
+			return df_with_no_responses
+		base_responses = base_responses.ix[base_responses['result_type'].isin(["sample_size","strong_count","weak_count"])]
+		base_responses = base_responses.drop_duplicates(cols=cuts + ['question_code','result_type'],take_last=False).set_index(cuts + ['question_code','result_type'])
+		base_responses = pd.Series(base_responses['aggregation_value'],index = base_responses.index).unstack()
+		comparison_responses = comparison_responses.ix[comparison_responses['result_type'].isin(["sample_size","strong_count","weak_count"])]
+		comparison_responses = comparison_responses.drop_duplicates(cols=comparison_cuts + ['question_code','result_type'],take_last=False).set_index(comparison_cuts  + ['question_code','result_type'])
+		comparison_responses = pd.Series(comparison_responses['aggregation_value'],index = comparison_responses.index).unstack()
+		comparison_responses = comparison_responses.rename(columns={'sample_size':'comp_sample_size',
 																'strong_count':'comp_strong_count',
 																'weak_count':'comp_weak_count'})
-		# logging.debug('Base results are\n' + str(base_results.head()))
-		# logging.debug('comparison_results are\n' + str(comparison_results.head()))
-		self.counts_for_significance = base_results.reset_index().set_index(comparison_cuts + ['question_code']).join(comparison_results).reset_index().set_index(cuts + ['question_code'])
+		# logging.debug('Base responses are\n' + str(base_responses.head()))
+		# logging.debug('comparison_responses are\n' + str(comparison_responses.head()))
+		self.counts_for_significance = base_responses.reset_index().set_index(comparison_cuts + ['question_code']).join(comparison_responses).reset_index().set_index(cuts + ['question_code'])
 		return self.bootstrap_result_from_frequency_table(self.counts_for_significance)
 
 	# @profile
@@ -275,12 +246,12 @@ class NumericOutputCalculator(object):
 		df = freq_table
 		bootstrap_samples = 5000
 		logging.debug('freq_table is\n' + str(df.head()))
-		#Testing results for NCS
+		#Testing responses for NCS
 		# df_test = df.copy()
 		# df_test = df_test.reset_index()
-		# logging.debug("Sample of results for NCS freq_table\n" + str(df_test.ix[df_test['question_code']=='NCS',:].head()))
-		# logging.debug("Sample of results for CSI1 freq_table\n" + str(df_test.ix[df_test['question_code']=='CSI1',:].head()))
-		#End testing results
+		# logging.debug("Sample of responses for NCS freq_table\n" + str(df_test.ix[df_test['question_code']=='NCS',:].head()))
+		# logging.debug("Sample of responses for CSI1 freq_table\n" + str(df_test.ix[df_test['question_code']=='CSI1',:].head()))
+		#End testing responses
 		assert {'sample_size','strong_count','weak_count','comp_sample_size','comp_strong_count','comp_weak_count'} <= set(df.columns)
 		df['aggregation_value'] = ''
 		df['result_type'] = 'significance_value'

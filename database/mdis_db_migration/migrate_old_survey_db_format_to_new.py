@@ -29,7 +29,7 @@ engine_1 = create_engine(connect_info)
 conn_1 = engine_1.connect()
 
 #Connecting to new db
-results = Table('results',metadata,
+responses = Table('responses',metadata,
 			Column('respondent_id', Integer),
 			Column('survey_id', Integer, ForeignKey('surveys.id')),
 			Column('question_id', Integer, ForeignKey('questions.id')),
@@ -52,19 +52,19 @@ conn_2 = engine_2.connect()
 
 #Remove foreign key constraints
 # insp = reflection.Inspector.from_engine(engine_2)
-# foreign_keys_on_results_table = insp.get_foreign_keys('results')
+# foreign_keys_on_responses_table = insp.get_foreign_keys('responses')
 # ctx = MigrationContext.configure(conn_2)
 # alembic_op = Operations(ctx)
-# for fk in foreign_keys_on_results_table:
-# 	alembic_op.drop_constraint(fk['name'],'results')
+# for fk in foreign_keys_on_responses_table:
+# 	alembic_op.drop_constraint(fk['name'],'responses')
 
 #Import from local DB
 survey_codes = sys.argv[3:]
 				
-ssq_results = conn_1.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(survey_codes)))
+ssq_responses = conn_1.execute(select([survey_specific_questions],survey_specific_questions.c.survey.in_(survey_codes)))
 
-question_table = pd.DataFrame(ssq_results.fetchall())
-question_table.columns = ssq_results.keys()
+question_table = pd.DataFrame(ssq_responses.fetchall())
+question_table.columns = ssq_responses.keys()
 
 #Read data
 # responses = pd.read_csv('numerical_responses.csv')
@@ -73,7 +73,7 @@ question_table.columns = ssq_results.keys()
 #Delete data for surveys that already exist
 for code in survey_codes:
 	survey_id = conn_2.execute(select([surveys.c.id]).where(surveys.c.survey_code==code)).scalar()
-	conn_2.execute(results.delete().where(results.c.survey_id==survey_id))
+	conn_2.execute(responses.delete().where(responses.c.survey_id==survey_id))
 	conn_2.execute(surveys.delete().where(surveys.c.id==survey_id))
 	conn_2.execute(questions.delete().where(questions.c.survey_id==survey_id))
 
@@ -133,11 +133,11 @@ def convert_types_for_db(values):
 		new_values.append(new_value)
 	return new_values
 
-print("Inserting new results")
+print("Inserting new responses")
 try:
 	conn_2.execute(surveys.insert(),df_to_dict_array(surveys_for_db))
 except:
-	print("Unexpected error when inserting new results:", sys.exc_info()[1])
+	print("Unexpected error when inserting new responses:", sys.exc_info()[1])
 
 question_rows = df_to_dict_array(questions_for_db)
 for i, row in enumerate(question_rows):
@@ -148,31 +148,31 @@ for i, row in enumerate(question_rows):
 # except:
 # 	pdb.set_trace()
 
-#Fetch and modify results
+#Fetch and modify responses
 for survey in survey_codes:
-	print("Inserting results for survey " + survey)
-	nr_results = conn_1.execute(select([numerical_responses]).where(numerical_responses.c.survey == survey))
-	responses = pd.DataFrame(nr_results.fetchall())
-	responses.columns = nr_results.keys()
+	print("Inserting responses for survey " + survey)
+	nr_responses = conn_1.execute(select([numerical_responses]).where(numerical_responses.c.survey == survey))
+	responses = pd.DataFrame(nr_responses.fetchall())
+	responses.columns = nr_responses.keys()
 
 	#Map survey id and question id onto survey responses
 	responses['question_id'] = responses.survey_specific_qid.map(question_map)
 	responses['survey_id'] = responses.survey.map(survey_map) 
 	responses = responses.rename(columns={'cm_pid':'respondent_id'})
 
-	#Create results table
-	results_for_db = pd.DataFrame(responses,columns=['respondent_id','survey_id','question_id','response'])
+	#Create responses table
+	responses_for_db = pd.DataFrame(responses,columns=['respondent_id','survey_id','question_id','response'])
 
-	conn_2.execute(results.insert(),df_to_dict_array(results_for_db))
+	conn_2.execute(responses.insert(),df_to_dict_array(responses_for_db))
 
-# result_rows = df_to_dict_array(results_for_db)
+# result_rows = df_to_dict_array(responses_for_db)
 # num_rows = len(result_rows)
 
 # for i, row in enumerate(result_rows):
-# 	conn_2.execute(results.insert(),row)
+# 	conn_2.execute(responses.insert(),row)
 # 	print("\rInserting result " + str(i) + " of " + str(num_rows), end = " " )
 
 #Add foreign keys back
-# for fk in foreign_keys_on_results_table:
-# 	alembic_op.create_foreign_key(fk['name'],'results',fk['referred_table'],fk['constrained_columns'],fk['referred_columns'])
+# for fk in foreign_keys_on_responses_table:
+# 	alembic_op.create_foreign_key(fk['name'],'responses',fk['referred_table'],fk['constrained_columns'],fk['referred_columns'])
 

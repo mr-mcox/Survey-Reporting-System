@@ -1,4 +1,4 @@
-Feature: Only include results for specified questions
+Feature: Only include responses for specified questions
 Scenario: Only include questions specified
 	Given net formatted values
 		| respondent_id | question_code | response |
