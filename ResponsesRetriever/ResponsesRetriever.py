@@ -43,9 +43,9 @@ class ResponsesRetriever(object):
         assert survey_code != [None]
         sq = (select([survey],use_labels=True).where(survey.c.survey_code.in_(survey_code))).alias('sq')
         if len(survey_code) > 1:
-            select_response = select([response, question.c.question_code,survey_question.c.is_confidential,survey_question.c.question_type, sq.c.cm_survey_survey_code.label('survey_code')]).select_from(response.join(survey_question).join(question).join(sq))
+            select_response = select([response.c.person_id.label('respondent_id'), response.c.response, question.c.question_code,survey_question.c.is_confidential,survey_question.c.question_type, sq.c.cm_survey_survey_code.label('survey_code')]).select_from(response.join(survey_question).join(question).join(sq))
         else:
-            select_response = select([response, question.c.question_code,survey_question.c.is_confidential,survey_question.c.question_type]).select_from(response.join(survey_question).join(question).join(select([survey],use_labels=True).where(survey.c.survey_code.in_(survey_code)).alias('sq')))
+            select_response = select([response.c.person_id.label('respondent_id'), response.c.response, question.c.question_code,survey_question.c.is_confidential,survey_question.c.question_type]).select_from(response.join(survey_question).join(question).join(select([survey],use_labels=True).where(survey.c.survey_code.in_(survey_code)).alias('sq')))
         logging.debug('retrieve_response_for_survey query:\n' + str(select_response))
         response = self.db_connection.execute(select_response)
         return  {'rows':response.fetchall(),'column_headings':response.keys()}
