@@ -351,21 +351,27 @@ class Migrator(object):
             self.db.execute(self.table['response'].delete())
         logging.info("Inserting survey records")
         self.db.execute(self.table['survey'].insert(),df_to_dict_array(self.survey_df.ix[:,['survey_id','survey_code','survey_title']]))
-        logging.info("Inserting question records")
-        self.db.execute(self.table['question'].insert(),df_to_dict_array(self.question_df.ix[~self.question_df.question_id_in_db,['question_id','question_title','question_code']]))
+        question_category_records = self.question_df.ix[~self.question_df.question_id_in_db,['question_id','question_title','question_code']]
+        if len(question_category_records.index) > 0:
+            logging.info("Inserting question records")
+            self.db.execute(self.table['question'].insert(),df_to_dict_array(question_category_records))
         question_category_records = self.question_category_df.ix[~self.question_category_df.question_category_id_in_db,['question_category_id','question_category']]
         if len(question_category_records.index) > 0:
             logging.info("Inserting question_category records")
             self.db.execute(self.table['question_category'].insert(),df_to_dict_array(question_category_records))
         logging.info("Inserting survey_question records")
         self.question_code_question_id_map #Also code smell
-        self.db.execute(self.table['survey_question'].insert(),df_to_dict_array(self.survey_question_df.ix[:,['survey_question_id',
-                                                                                                                'survey_id',
-                                                                                                                'is_confidential',
-                                                                                                                'question_type',
-                                                                                                                'question_title_override',
-                                                                                                                'question_id',
-                                                                                                                'question_category_id',]]))
+        survey_question_records = self.survey_question_df.ix[:,['survey_question_id',
+                                                                'survey_id',
+                                                                'is_confidential',
+                                                                'question_type',
+                                                                'question_title_override',
+                                                                'question_id',
+                                                                'question_category_id',]]
+        if len(survey_question_records) > 0:
+            self.db.execute(self.table['survey_question'].insert(),df_to_dict_array(survey_question_records))
+        else:
+            logging.info("No new survey questions were recorded")
         logging.info("Inserting response records")
         if len(self.surveys_to_migrate) > 0:
             for survey in self.surveys_to_migrate:
