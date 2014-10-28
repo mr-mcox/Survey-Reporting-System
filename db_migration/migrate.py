@@ -269,6 +269,7 @@ class Migrator(object):
                     cm_map = pd.read_csv(self.cm_id_map_csv)
                     assert 'person_id' in cm_map
                     assert 'survey' in cm_map
+                    assert 'new_person_id' in cm_map
                     assert 'person_id' in df
                     assert 'survey' in df
                     cms_to_map = df.merge(cm_map)
@@ -368,7 +369,11 @@ class Migrator(object):
         logging.info("Inserting response records")
         for survey in self.surveys_to_migrate:
             logging.info("Inserting response records for survey " + str(survey))
-            self.db.execute(self.table['response'].insert(),df_to_dict_array(self.response_df.ix[self.response_df.survey == survey,['person_id','survey_question_id','response','converted_net_value']]))
+            response_records = self.response_df.ix[self.response_df.survey == survey,['person_id','survey_question_id','response','converted_net_value']]
+            if len(response_records.index) > 0:
+                self.db.execute(self.table['response'].insert(),df_to_dict_array(response_records))
+            else:
+                logging.info("Survey " + str(survey) +  " has no responses to be recorded")
          
     def remove_old_migrated_data(self):
         survey = self.table['survey']
