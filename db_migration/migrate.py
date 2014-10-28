@@ -251,7 +251,6 @@ class Migrator(object):
 
     def response_df():
         doc = "The response_df property."
-        # @profile
         def fget(self):
             if not hasattr(self,'_response_df'):
                 records = None
@@ -260,7 +259,6 @@ class Migrator(object):
                     records = self.db.execute(select([nr]).where(nr.c.survey.in_(self.surveys_to_migrate)))
                 else:
                     records = self.db.execute(select([nr]))
-                # records = self.db.execute(select([self.table['numerical_responses']]))
                 df = pd.DataFrame.from_records(records.fetchall(),columns=records.keys()).rename(columns={'cm_pid':'person_id'})
                 survey_specific_qid_question_id_map = dict(zip(self.survey_question_df.survey_specific_qid.tolist(),
                                                                             self.survey_question_df.survey_question_id.tolist()))
@@ -277,8 +275,8 @@ class Migrator(object):
                     df.ix[df.index.isin(cms_to_map.index),'person_id'] = cms_to_map.new_person_id
 
                 #Remove duplicate records
-                df = df.groupby(['person_id','survey_question_id']).min().reset_index()
-                df = df.ix[df.survey_question_id.notnull()]#Change this behaviour later
+                df.drop_duplicates(['person_id','survey_question_id'],inplace=True)
+                df = df.ix[df.survey_question_id.notnull() & df.person_id.notnull()]#Change this behaviour later
 
                 #Remove illegal person_ids
                 if hasattr(self,'legal_person_ids_csv') and self.legal_person_ids_csv is not None:
@@ -368,7 +366,7 @@ class Migrator(object):
                                                                                                                 'question_id',
                                                                                                                 'question_category_id',]]))
         logging.info("Inserting response records")
-        for survey in self.response_df.survey.unique().tolist():
+        for survey in self.surveys_to_migrate:
             logging.info("Inserting response records for survey " + str(survey))
             self.db.execute(self.table['response'].insert(),df_to_dict_array(self.response_df.ix[self.response_df.survey == survey,['person_id','survey_question_id','response','converted_net_value']]))
          

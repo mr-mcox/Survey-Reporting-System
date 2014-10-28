@@ -12,6 +12,7 @@ engine = create_engine(connect_info)
 connection = engine.connect()
 folder_for_maps = sys.argv[2]
 surveys_to_migrate = sys.argv[3:]
+# print("surveys_to_migrate are " + str(surveys_to_migrate))
 
 question_category_csv = os.path.join(folder_for_maps,'question_category.csv')
 assert os.path.exists(question_category_csv), "question_category.csv expected in folder " + folder_for_maps
