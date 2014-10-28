@@ -52,7 +52,7 @@ numerical_responses = Table('numerical_responses',metadata,
 
 
 # df.to_sql('numerical_responses',engine,if_exists='append',index=False)
-for survey in df.survey.unique().to_list():
+for survey in df.survey.unique().tolist():
 	logging.info("Importing survey " + survey)
 	conn.execute(numerical_responses.insert(),df_to_dict_array(df.ix[df.survey==survey]))
 	conn.execute(numerical_responses.delete().where(numerical_responses.c.survey == survey))
