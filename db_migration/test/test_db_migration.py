@@ -942,3 +942,20 @@ def test_remove_response_without_pid(empty_db):
     m = Migrator(empty_db['engine'],conn)
     # assert False
     assert m.response_df.person_id.isnull().sum()==0
+
+def test_alter_cm_id_based_on_input_map_and_do_not_later_remove(migrator_with_ssq_and_nr_for_id_replacement):
+    m = migrator_with_ssq_and_nr_for_id_replacement
+    cm_map_mock_file = pd.DataFrame({'person_id':[560],'survey':['1314EYS'],'new_person_id':[503]})
+    legal_cm_mock_file = pd.DataFrame({'person_id':[503]})
+    m.cm_id_map_csv = 'sample_file.csv'
+    m.legal_person_ids_csv = 'sample_file.csv'
+    with patch('SurveyReportingSystem.db_migration.migrate.Migrator.read_cm_id_map',return_value=cm_map_mock_file) as mock_cm_map_csv:
+        with patch('SurveyReportingSystem.db_migration.migrate.Migrator.read_legal_person_ids',return_value=legal_cm_mock_file) as mock_legal_person_ids:
+            response_df = m.response_df
+
+    nr_records = m.db.execute(select([m.table['numerical_responses']]))
+    nr_df = pd.DataFrame.from_records(nr_records.fetchall(),columns=nr_records.keys())
+
+    df = nr_df.merge(cm_map_mock_file)
+    for value in df.new_person_id.values:
+        assert value in response_df.person_id.values

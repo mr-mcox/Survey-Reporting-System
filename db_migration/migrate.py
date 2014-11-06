@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from SurveyReportingSystem.NumericOutputCalculator.noc_helper import map_responses_to_net_formatted_values
 import logging
+import pdb
 
 class Migrator(object):
     """docstring for migrate"""
@@ -249,6 +250,12 @@ class Migrator(object):
         return locals()
     question_code_question_id_map = property(**question_code_question_id_map())
 
+    def read_cm_id_map(self):
+        return pd.read_csv(self.cm_id_map_csv)
+
+    def read_legal_person_ids(self):
+        return pd.read_csv(self.legal_person_ids_csv)
+
     def response_df():
         doc = "The response_df property."
         def fget(self):
@@ -266,14 +273,15 @@ class Migrator(object):
 
                 #Map ids
                 if hasattr(self,'cm_id_map_csv') and self.cm_id_map_csv is not None:
-                    cm_map = pd.read_csv(self.cm_id_map_csv)
+                    cm_map = self.read_cm_id_map()
                     assert 'person_id' in cm_map
                     assert 'survey' in cm_map
                     assert 'new_person_id' in cm_map
                     assert 'person_id' in df
                     assert 'survey' in df
-                    cms_to_map = df.merge(cm_map)
-                    df.ix[df.index.isin(cms_to_map.index),'person_id'] = cms_to_map.new_person_id
+                    df = df.merge(cm_map, how='left')
+                    if 'new_person_id' in df.columns:
+                        df.ix[df.new_person_id.notnull(),'person_id'] = df.ix[df.new_person_id.notnull(),'new_person_id']
 
                 #Remove duplicate records
                 df.drop_duplicates(['person_id','survey_question_id'],inplace=True)
@@ -281,7 +289,7 @@ class Migrator(object):
 
                 #Remove illegal person_ids
                 if hasattr(self,'legal_person_ids_csv') and self.legal_person_ids_csv is not None:
-                    legal_person_ids = pd.read_csv(self.legal_person_ids_csv)
+                    legal_person_ids = self.read_legal_person_ids()
                     #Log ids removed
                     cms_to_remove = df.ix[~df.person_id.isin(legal_person_ids.person_id),['person_id','survey']].drop_duplicates()
                     for row in cms_to_remove.itertuples(index=False):
@@ -327,7 +335,7 @@ class Migrator(object):
 
                 #Map converted_net_value
                 df = df.set_index('survey_question_id').join(self.survey_question_df.set_index('survey_question_id').ix[:,'question_type']).reset_index()
-                df = map_responses_to_net_formatted_values(df).convert_objects()
+                df = map_responses_to_net_formatted_values(df,responses_transformed=False).convert_objects()
                 df['converted_net_value'] = df.net_formatted_value
 
                 self._response_df = df
