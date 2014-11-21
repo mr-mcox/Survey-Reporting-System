@@ -959,3 +959,18 @@ def test_alter_cm_id_based_on_input_map_and_do_not_later_remove(migrator_with_ss
     df = nr_df.merge(cm_map_mock_file)
     for value in df.new_person_id.values:
         assert value in response_df.person_id.values
+
+def test_migration_modifies_question_types_as_expected(empty_db):
+    conn = empty_db['conn']
+    survey_specific_questions = empty_db['schema']['survey_specific_questions']
+    ssq_cols = ['survey_specific_qid','master_qid','survey','confidential','question_type']
+
+    ssq_rows = [
+        ('1415F8W-CLI1','CLI1','1415F8W',1,'7pt_Net_1=SA'),
+        ('1415F8W-CLI2','CLI2','1415F8W',1,'7pt_NCS_1=SA'),
+        ('1415F8W-CLI3','CLI3','1415F8W',1,'7pt_NCS_7=SA'),
+    ]
+    for row in ssq_rows:
+        conn.execute(survey_specific_questions.insert(), {c:v for c,v in zip(ssq_cols,row)})
+    m = Migrator(empty_db['engine'],conn)
+    assert (m.survey_question_df.question_type.isin(['7pt_1=SA','7pt_7=SA'])).all()

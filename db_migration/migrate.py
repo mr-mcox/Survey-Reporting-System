@@ -160,6 +160,10 @@ class Migrator(object):
                 df['survey_question_id'] = [i + + self.max_id_for_table('survey_question') + 1 for i in range(len(df.index))]
                 df['survey_id'] = df.survey.map(self.survey_id_survey_code_map)
                 df['question_title_override'] = None
+                #Fix question_types
+                df.ix[df.question_type == '7pt_Net_1=SA','question_type'] = '7pt_1=SA'
+                df.ix[df.question_type == '7pt_NCS_1=SA','question_type'] = '7pt_1=SA'
+                df.ix[df.question_type == '7pt_NCS_7=SA','question_type'] = '7pt_7=SA'
                 #Add question category id
                 df = df.merge(self.survey_question_question_category_df, how='left')
                 self._survey_question_df = df.rename(columns={'confidential':'is_confidential'})

@@ -6,3 +6,5 @@ test_file.xlsx
 *.csv
 test_data/
 alembic.ini
+*.xlsx
+*.sublime-workspace
