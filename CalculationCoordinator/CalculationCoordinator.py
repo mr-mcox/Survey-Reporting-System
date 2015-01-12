@@ -711,35 +711,36 @@ class CalculationCoordinator(object):
 		menu = self.config.cuts_for_excel_menu(menu='historical')
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
-			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu
+			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
 		lookup_wb.create_named_range('cuts_historical',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
 		#Add cut menu 2 and 3
-		menu_start = ws.get_highest_row()
+		menu_start = ws.get_highest_row()+1
 		menu = self.config.cuts_for_excel_menu(menu='cuts_2')
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
-			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu
+			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
 		lookup_wb.create_named_range('cuts_2',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
-		menu_start = ws.get_highest_row()
+
+		menu_start = ws.get_highest_row()+1
 		menu = self.config.cuts_for_excel_menu(menu='cuts_3')
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
-			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu
+			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
 		lookup_wb.create_named_range('cuts_3',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
-		menu_start = ws.get_highest_row()
+		menu_start = ws.get_highest_row()+1
 		menu = self.config.cuts_for_excel_menu(menu='cuts_4')
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
-			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu
+			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
 		lookup_wb.create_named_range('cuts_4',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
-		menu_start = ws.get_highest_row()
+		menu_start = ws.get_highest_row()+1
 		menu = self.config.cuts_for_excel_menu(menu='cuts_5')
 		menu_length = len(menu)
 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):
-			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu
+			ws.cell(row=menu_i+menu_start, column = highest_column).value = cut_menu
 		lookup_wb.create_named_range('cuts_5',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))
 
 

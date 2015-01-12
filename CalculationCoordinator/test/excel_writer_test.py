@@ -29,7 +29,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		config_reader.config['excel_template_file'] = 'test_file.xlsx'
 		config_reader.config['cut_menu_order'] = ['Region','Subject','Grade']
 		self.cuts_for_excel_menu_responses = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None'],['Gender', 'static', 'Gender', 'Region', 'Corps']]
-		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_responses,'historical':[['Region', 'static', 'Region', 'Corps','None']],'cuts_2':[],'cuts_3':[],'cuts_4':[],'cuts_5':[]}
+		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_responses,'historical':[['Region', 'static', 'Region', 'Corps','None']],'cuts_2':[['Gender', 'static', 'Gender', 'Region', 'Corps']],'cuts_3':[],'cuts_4':[],'cuts_5':[]}
 		config_reader.cuts_for_excel_menu = mock.MagicMock(side_effect= lambda **arg: return_for_cuts_for_excel_menu[arg['menu']])
 		coordinator.config = config_reader
 
@@ -118,6 +118,11 @@ class WriteExcelTestCase(unittest.TestCase):
 		assert ws.cell(row=2,column=6).value == "Grade"
 		assert ws.cell(row=3,column=6).value == "Gender"
 
+	def test_other_cuts_menu(self):
+		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
+		assert ws.cell(row=4,column=6).value == "Region"
+		assert ws.cell(row=5,column=6).value == "Gender"
+
 	def test_writing_menu_translations(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')
 		assert ws.cell(row=1,column=7).value == "Gender"
@@ -155,28 +160,28 @@ class WriteExcelTestCase(unittest.TestCase):
 		column_headings = [str(ws.cell(row=1,column=i+2).value) for i in range(ws.get_highest_column()-1)]
 		self.assertEqual(set(column_headings), {'2;3','2;4'}) 
 		row_headings = [str(ws.cell(row=i+2,column=1).value) for i in range(ws.get_highest_row()-1)]
-		self.assertEqual(set(row_headings), {'0.0','1.0'})
+		self.assertEqual(set(row_headings), {'0','1'})
 
 	def test_write_significance_values(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'SignificanceValues')
 		column_headings = [str(ws.cell(row=1,column=i+2).value) for i in range(ws.get_highest_column()-1)]
 		self.assertEqual(set(column_headings), {'2;3','2;4'}) 
 		row_headings = [str(ws.cell(row=i+2,column=1).value) for i in range(ws.get_highest_row()-1)]
-		self.assertEqual(set(row_headings), {'0.0','1.0'})
+		self.assertEqual(set(row_headings), {'0','1'})
 
 	def test_write_hist_master_as_excel(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'HistDisplayValues')
 		column_headings = [str(ws.cell(row=1,column=i+2).value) for i in range(ws.get_highest_column()-1)]
 		self.assertEqual(set(column_headings), {'2;3','2;4'}) 
 		row_headings = [str(ws.cell(row=i+2,column=1).value) for i in range(ws.get_highest_row()-1)]
-		self.assertEqual(set(row_headings), {'0.0','1.0'})
+		self.assertEqual(set(row_headings), {'0','1'})
 
 	def test_write_hist_significance_values(self):
 		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'HistSignificanceValues')
 		column_headings = [str(ws.cell(row=1,column=i+2).value) for i in range(ws.get_highest_column()-1)]
 		self.assertEqual(set(column_headings), {'2;3','2;4'}) 
 		row_headings = [str(ws.cell(row=i+2,column=1).value) for i in range(ws.get_highest_row()-1)]
-		self.assertEqual(set(row_headings), {'0.0','1.0'})
+		self.assertEqual(set(row_headings), {'0','1'})
 
 	def test_named_ranges_on_display_values(self):
 		wb = load_workbook(filename = r'test_file.xlsx')
@@ -227,6 +232,7 @@ class WriteExcelTestCase(unittest.TestCase):
 		self.assertTrue( 'cuts_head' in range_names)
 		self.assertEqual( wb.get_named_range('cuts').destinations[0][1],'$F$1:$F$3')
 		self.assertEqual( wb.get_named_range('cuts_historical').destinations[0][1],'$F$4:$F$4')
+		self.assertEqual( wb.get_named_range('cuts_2').destinations[0][1],'$F$5:$F$5')
 		self.assertEqual( wb.get_named_range('cuts_config').destinations[0][1],'$A$1:$E$3')
 		self.assertEqual( wb.get_named_range('default_menu').destinations[0][1],'$F$2:$F$1001')
 		self.assertEqual( wb.get_named_range('default_mapping').destinations[0][1],'$F$2:$G$1001')
