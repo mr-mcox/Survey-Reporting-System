@@ -78,3 +78,10 @@ Feature: Compute statistical significance via bootstrapping
 			| 5             | SoDak   | Female |
 		When bootstrap_net_significance is called for cut ["gender","region"] with no_stat_significance_computation = True
 		Then statistical significance aggregation_value for region "Atlanta" and gender "Female" is blank
+
+	Scenario: When a small population is identical to the comparison population, the aggregation value should be S
+		Given statistical significance frequency table for cut region and gender
+			| region  | gender | sample_size | strong_count | weak_count | comp_sample_size | comp_strong_count | comp_weak_count | question_code |
+			| SoDak   | Male   | 3           | 2            | 0          | 3                | 2                 | 0               | 1             |
+		When bootstrap_result_from_frequency_table is run
+		Then aggregation_value for region "SoDak" and gender "Male" is "S"

@@ -542,6 +542,40 @@
 				"buffer_size": 49220,
 				"line_ending": "Unix"
 			}
+		},
+		{
+			"file": "CalculationCoordinator/test/excel_writer_test.py",
+			"settings":
+			{
+				"buffer_size": 15203,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 1 file for \"cut_2\"\n\nUnable to open /Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem\n0 matches across 0 files\n\n\nSearching 134 files for \"cut_2\"\n\n0 matches across 0 files\n\n\nSearching 134 files for \"cut_\"\n\n/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py:\n   27  		self.computations_generated = dict()\n   28  		self.result_types = kwargs.pop('result_types',['net'])\n   29: 		self.labels_for_cut_dimensions = dict()\n   30: 		self.integers_for_cut_dimensions = dict()\n   31  		self.max_integer_used_for_integer_string = 1\n   32  		self.zero_integer_string = '0'\n   ..\n   56  		calculator = kwargs.pop('calculator',NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data,responses_transformed=True))\n   57  		assert type(self.result_types) == list\n   58: 		orig_cuts = kwargs.pop('cut_demographic',None)\n   59  		if type(orig_cuts) != list:\n   60  			orig_cuts = [orig_cuts]\n   61  		cuts = [cut for cut in orig_cuts if cut != None]\n   62  \n   63: 		calculations = calculator.compute_aggregation(result_type=self.result_types,cut_demographic=cuts,**kwargs)\n   64  		gc.collect()\n   65  \n   ..\n   81  		calculator = kwargs.pop('calculator',NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data,responses_transformed=True))\n   82  		assert type(self.result_types) == list\n   83: 		orig_cuts = kwargs.pop('cut_demographic',None)\n   84  		if type(orig_cuts) != list:\n   85  			orig_cuts = [orig_cuts]\n   ..\n  130  			cur_cut = cuts[i+1]\n  131  			assert cur_cut in demographic_data\n  132: 			cur_cut_values = demographic_data[cur_cut].unique().tolist()\n  133  			value_set_for_cut = list()\n  134: 			for value in cur_cut_values:\n  135  				list_to_add_onto = copy.deepcopy(master_list_of_demographics)\n  136  				for item in list_to_add_onto:\n  ...\n  161  \n  162  		#Add new rows where necessary\n  163: 		# df_with_cut_index = df.copy().set_index(cuts)\n  164  		all_value_sets = pd.DataFrame(list(master_list_of_demographics))\n  165  		if len(master_list_of_demographics) == 0:\n  ...\n  174  			df_with_additional_rows.question_code.fillna(first_question_code,inplace=True)\n  175  			# for value_set in master_list_of_demographics:\n  176: 			# 	if df_with_cut_index.index.isin([tuple(value_set)]).sum()== 0:\n  177  			# 		dict_for_df = dict()\n  178  			# 		dict_for_df['result_type'] = [first_result_type]\n  ...\n  191  		assert 'level_0' not in df.columns\n  192  \n  193: 		values_by_column = self.integers_for_cut_dimensions\n  194  		#Collect all values by column\n  195  		for column in df.columns:\n  ...\n  227  			for label, integer in value_dict.items():\n  228  				mapping[integer] = label\n  229: 		self.labels_for_cut_dimensions = integer_strings_by_column\n  230: 		self.integers_for_cut_dimensions = values_by_column\n  231  		self.dimension_integer_mapping = {\n  232  			'integers': sorted(mapping.keys()),\n  ...\n  240  		if self.config is not None and dimension == self.config.default_dimension_title:\n  241  			return {'integer_strings':[],'labels':[]}\n  242: 		assert dimension in self.labels_for_cut_dimensions, \"Dimension \" + dimension + \" not present\"\n  243: 		mapping_as_dict = self.labels_for_cut_dimensions[dimension]\n  244  		sorted_labels = sorted(mapping_as_dict.keys())\n  245  		return {'integer_strings':[mapping_as_dict[label] for label in sorted_labels],'labels':sorted_labels}\n  ...\n  280  		self.hist_responses = self.remove_questions_not_used(self.hist_responses)\n  281  		for_historical = kwargs.pop('for_historical',False)\n  282: 		cut_sets = self.config.cuts_to_be_created(for_historical=for_historical)\n  283  \n  284  		responses = self.responses\n  ...\n  289  \n  290  		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data,responses_transformed=True)\n  291: 		for i, cut_set in enumerate(cut_sets):\n  292: 			print(\"\\rCompleted {0:.0f} % of basic computations. Currently working on {1}\".format(i/len(cut_sets)*100,str(cut_set)),end=\" \")\n  293  \n  294  			df = pd.DataFrame()\n  295  			if 'composite_questions' in self.config.config:\n  296: 				df = self.compute_aggregation(cut_demographic=cut_set,\n  297  												composite_questions=self.config.config['composite_questions'],\n  298  												calculator=calculator,\n  ...\n  300  												)\n  301  			else:\n  302: 				df = self.compute_aggregation(cut_demographic=cut_set,\n  303  												calculator=calculator,\n  304  												demographic_data=demographic_data,\n  305  												)\n  306: 			file_name = \"cut_\" + str(i+1) + \".csv\"\n  307  			df.to_csv(file_name)\n  308  			gc.collect()\n  ...\n  329  			self.result_types = self.config.config['result_types']\n  330  			self.default_result_type = self.result_types[0]\n  331: 		cut_sets = self.config.cuts_to_be_created(for_historical=for_historical)\n  332: 		logging.debug(\"Cut sets for regular cuts are \" + str(cut_sets))\n  333  		responses = self.responses\n  334  		demographic_data = self.demographic_data\n  ...\n  337  			demographic_data = self.hist_demographic_data\n  338  		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data,responses_transformed=True)\n  339: 		for i, cut_set in enumerate(cut_sets):\n  340: 			# logging.debug(\"Cut set is \" + str(cut_set))\n  341: 			print(\"\\rCompleted {0:.0f} % of basic computations. Currently working on {1}\".format(i/len(cut_sets)*100,str(cut_set)),end=\" \")\n  342  			df = pd.DataFrame()\n  343  			if 'composite_questions' in self.config.config:\n  344: 				df = self.compute_aggregation(cut_demographic=cut_set,\n  345  												composite_questions=self.config.config['composite_questions'],\n  346  												calculator=calculator,\n  ...\n  348  												)\n  349  			else:\n  350: 				df = self.compute_aggregation(cut_demographic=cut_set,\n  351  												calculator=calculator,\n  352  												demographic_data=demographic_data,\n  ...\n  363  			\n  364  			df = self.replace_dimensions_with_integers(df)\n  365: 			df = self.create_row_column_headers(df,cuts=cut_set)\n  366  			if file_name is not None:\n  367  				self.flush_aggregation_to_file(file_name,pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))\n  ...\n  404  			 no_stat_significance_computation = True\n  405  \n  406: 		cut_sets = self.config.cuts_to_be_created(for_historical=for_historical)\n  407: 		logging.debug(\"Cut sets for significance are \" + str(cut_sets))\n  408  		responses = self.responses\n  409  		demographic_data = self.demographic_data\n  ...\n  412  			demographic_data = self.hist_demographic_data\n  413  		calculator = NumericOutputCalculator.NumericOutputCalculator(responses=responses,demographic_data=demographic_data,responses_transformed=True)\n  414: 		for i, cut_set in enumerate(cut_sets):\n  415  			df = pd.DataFrame()\n  416: 			print(\"\\rCompleted {0:.0f} % of significance computations. Currently working on {1}\".format(i/len(cut_sets)*100,str(cut_set)),end=\" \")\n  417  			if 'composite_questions' in self.config.config:\n  418: 				df = self.compute_significance(cut_demographic=cut_set,\n  419  											composite_questions=self.config.config['composite_questions'],\n  420  											no_stat_significance_computation=no_stat_significance_computation,\n  ...\n  423  											)\n  424  			else:\n  425: 				df = self.compute_significance(cut_demographic=cut_set, \n  426  												no_stat_significance_computation=no_stat_significance_computation,\n  427  												calculator = calculator,\n  ...\n  439  			# df = df.ix[df.question_code.isin(questions_to_show),:]\n  440  			df = self.replace_dimensions_with_integers(df)\n  441: 			df = self.create_row_column_headers(df,cuts=cut_set)\n  442  			if file_name is not None:\n  443  				self.flush_aggregation_to_file(file_name,pd.DataFrame(df,columns=['row_heading','column_heading','aggregation_value']))\n  ...\n  693  		cuts_menus = self.config.cuts_for_excel_menu(menu=None)\n  694  		max_menu_length = max([len(menu) for menu in cuts_menus])\n  695: 		for menu_i, cut_menu in enumerate(cuts_menus):\n  696: 			for col_i, item in enumerate(cut_menu):\n  697  				ws.cell(row=menu_i +1, column = col_i +1).value = item\n  698  \n  ...\n  703  		\n  704  		highest_column = ws.get_highest_column() + 1\n  705: 		for menu_i, cut_menu in enumerate(self.cut_menu_order(cuts_menus)):\n  706: 			ws.cell(row=menu_i +1, column = highest_column).value = cut_menu\n  707  		lookup_wb.create_named_range('cuts',ws,self.rc_to_range(row=1,col=highest_column,width=1,height=range_height + 1))\n  708  \n  ...\n  711  		menu = self.config.cuts_for_excel_menu(menu='historical')\n  712  		menu_length = len(menu)\n  713: 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):\n  714: 			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu\n  715  		lookup_wb.create_named_range('cuts_historical',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))\n  716  \n  ...\n  719  		menu = self.config.cuts_for_excel_menu(menu='cuts_2')\n  720  		menu_length = len(menu)\n  721: 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):\n  722: 			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu\n  723  		lookup_wb.create_named_range('cuts_2',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))\n  724  		menu_start = ws.get_highest_row()\n  725  		menu = self.config.cuts_for_excel_menu(menu='cuts_3')\n  726  		menu_length = len(menu)\n  727: 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):\n  728: 			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu\n  729  		lookup_wb.create_named_range('cuts_3',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))\n  730  \n  ...\n  732  		menu = self.config.cuts_for_excel_menu(menu='cuts_4')\n  733  		menu_length = len(menu)\n  734: 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):\n  735: 			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu\n  736  		lookup_wb.create_named_range('cuts_4',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))\n  737  \n  ...\n  739  		menu = self.config.cuts_for_excel_menu(menu='cuts_5')\n  740  		menu_length = len(menu)\n  741: 		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):\n  742: 			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu\n  743  		lookup_wb.create_named_range('cuts_5',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))\n  744  \n  ...\n  846  		print(\"\\nExported dashboard\")\n  847  \n  848: 	def cut_menu_order(self, cuts_menus):\n  849  		#Determine default menu order\n  850  		if len(cuts_menus) == 0:\n  851  			return cuts_menus\n  852  		default_order_by_menu = {}\n  853: 		cut_menus_order = {cut_menu[0]: 0 for cut_menu in cuts_menus}\n  854: 		if 'cut_menu_order' in self.config.config:\n  855: 			default_order_by_menu = {menu_title: order for (order, menu_title) in enumerate(self.config.config['cut_menu_order'])}\n  856  			logging.debug('Default order by menu is ' + str(default_order_by_menu))\n  857: 			cut_menus_order = {cut_menu: self.menu_order(cut_menu, default_order_by_menu) for cut_menu in cut_menus_order}\n  858: 		sorted_cut_menus = sorted(cut_menus_order,key=lambda cut: cut_menus_order[cut])\n  859: 		logging.debug('Sorted menu is ' + str(sorted_cut_menus))\n  860: 		return sorted_cut_menus\n  861  \n  862  	def menu_order(self, menu_item, default_menu_order):\n\n/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/convert_demograph_text_to_number.feature:\n   12  			| 2             | Atlanta | Female |\n   13  			| 3             | SoDak   | Male   |\n   14: 		When compute net with cut_demographic = region and gender is run\n   15: 		When compute net with cut_demographic = region is run\n   16  		Then computations_generated has a length of 2\n   17  		Then the display_value including region for question_code 1 and region \"Atlanta\" is 0.5\n   ..\n   52  			| 3             | SoDak   | Male   |\n   53  		Given CalcCoordinator result types of net, strong and weak\n   54: 		When compute net with cut_demographic = region is run\n   55  		Then result_type of responses includes net, strong and weak\n   56  \n   ..\n   66  			| 2             | Atlanta | Female |\n   67  			| 3             | SoDak   | Male   |\n   68: 		When compute aggregation with cut_demographic = [gender,None,region] is run\n   69  		Then the display_value including region for question_code 1 and region \"Atlanta\" and gender \"Female\" is 0.5\n   70  \n\n/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writer_test.py:\n   22  		self.mapping_integers = ['2','1','3']\n   23  		self.mapping_dict = dict(zip(self.mapping_integers,self.mapping_values))\n   24: 		self.labels_for_cut_dimensions = {\n   25  											'gender':{'male':'0','female':'1'},\n   26  											'region':{'Atlanta':'2','SoDak':'3'}\n   ..\n   28  		config_reader = ConfigurationReader.ConfigurationReader()\n   29  		config_reader.config['excel_template_file'] = 'test_file.xlsx'\n   30: 		config_reader.config['cut_menu_order'] = ['Region','Subject','Grade']\n   31  		self.cuts_for_excel_menu_responses = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None'],['Gender', 'static', 'Gender', 'Region', 'Corps']]\n   32  		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_responses,'historical':[['Region', 'static', 'Region', 'Corps','None']],'cuts_2':[],'cuts_3':[],'cuts_4':[],'cuts_5':[]}\n   ..\n   72  		coordinator.dimension_integer_mapping = {'values': self.mapping_values,'integers':self.mapping_integers}\n   73  		coordinator.excel_dashboard_file = 'test_file.xlsx'\n   74: 		coordinator.labels_for_cut_dimensions = self.labels_for_cut_dimensions\n   75  		master_aggregation = pd.DataFrame({\n   76  				'row_heading':['0','0','1','1'],\n   ..\n  101  		self.coordinator = coordinator\n  102  \n  103: 	def test_writing_cut_config(self):\n  104  		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')\n  105  		for i in range(2):\n  ...\n  113  			self.assertTrue(row_matches_expected)\n  114  \n  115: 	def test_cut_menu_order(self):\n  116  		ws = load_workbook(filename = r'test_file.xlsx').get_sheet_by_name(name = 'Lookups')\n  117  		assert ws.cell(row=1,column=6).value == \"Region\"\n\n/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/export_cuts_to_seperate_files.feature:\n   15  		Given a config reader that returns [\"region\",\"gender\"]\n   16  		When export_cuts_to_files is run\n   17: 		Then there is a csv file named \"cut_1.csv\" that has region and gender columns\n\n/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/output_dimension_value_combinations.feature:\n   12  			| 3             | SoDak   | Male   |\n   13  		When ensure_combination_for_every_set_of_demographics is True\n   14: 		Then compute net with cut_demographic = region and gender is run responses in row with SoDak and Female\n   15  \n   16  	Scenario: When a combination of values would not be shown for a cut because no values exist, and the dimension type is 'dynamic', don't include that cut\n   ..\n   27  		Given the gender ethnicity is \"dynamic\" with \"dynamic_parent_dimension\" of \"region\"\n   28  		When ensure_combination_for_every_set_of_demographics is True\n   29: 		Then compute net with cut_demographic = region and gender is run responses in no rows with SoDak and Female\n   30  \n   31  \n   ..\n   42  		Given the gender ethnicity is \"dynamic\" with \"dynamic_parent_dimension\" of \"region\"\n   43  		When ensure_combination_for_every_set_of_demographics is True\n   44: 		Then compute net with cut_demographic = region and gender is run responses in no rows with SoDak and Female\n   45  \n   46  	Scenario: When a combination of values would not be shown for a cut because no values exist, and the dimension type is 'dynamic' but parent dimension isn't in the cut, there should be a row \n   ..\n   57  		Given the gender ethnicity is \"dynamic\" with \"dynamic_parent_dimension\" of \"region\"\n   58  		When ensure_combination_for_every_set_of_demographics is True\n   59: 		Then compute net with cut_demographic = region and gender is run responses in a row with 2013 and Female\n   60  \n\n/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/test_assemble_cuts_from_config_reader.py:\n   51  	coordinator_with_net_formatted_values.export_cuts_to_files()\n   52  \n   53: @then('there is a csv file named \"cut_1.csv\" that has region and gender columns')\n   54: def read_csv_file_named_cut_1(coordinator_with_net_formatted_values):\n   55: 	result = pd.read_csv('cut_1.csv')\n   56  	assert {'region','gender'} <= set(result.columns)\n   57: 	os.remove('cut_1.csv')\n   58  \n   59  # @given('the no_stat_significance_computation flag set')\n   ..\n   75  # 	#No longer works because we can pass dfs. Don't want to take the time to re-work\n   76  # 	# print(context.coordinator.compute_significance.mock_calls)\n   77: # 	# context.coordinator.compute_significance.assert_any_call(no_stat_significance_computation=True, cut_demographic=['region', None])\n   78  #\n   79  \n\n/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/test_calcuation_coordinator.py:\n   25  	coordinator_with_net_formatted_values.demographic_data = pd.DataFrame(import_table_data(text_table))\n   26  \n   27: @when('compute net with cut_demographic = region is run')\n   28  def compute_net_with_region(coordinator_with_net_formatted_values):\n   29: 	coordinator_with_net_formatted_values.compute_aggregation(cut_demographic='region')\n   30  \n   31: @when('compute net with cut_demographic = region and gender is run')\n   32  def compute_net_with_region_and_gender(coordinator_with_net_formatted_values):\n   33  	coordinator_with_net_formatted_values.result_types =['net']\n   34: 	coordinator_with_net_formatted_values.compute_aggregation(cut_demographic=['region','gender'])\n   35  \n   36  @then('computations_generated has a length of 2')\n   ..\n   52  \n   53  @given('computations generated with a cut by gender')\n   54: def computation_cut_by_gender():\n   55  	return pd.DataFrame({'question_code':[0,1,1],'gender':['Male','Female',\"Male\"]})\n   56  \n   57  @given('computations generated with a cut by region')\n   58: def computation_cut_by_region():\n   59  	return pd.DataFrame({'question_code':[0,1,1],'region':['Atlanta','Atlanta',\"SoDak\"]})\n   60  \n   61  @when('replace_dimensions_with_integers for both computations is run')\n   62: def replace_dimensions_with_integers_for_computations(generic_coordinator, computation_cut_by_gender, computation_cut_by_region):\n   63: 	responses = [generic_coordinator.replace_dimensions_with_integers(computation_cut_by_gender), generic_coordinator.replace_dimensions_with_integers(computation_cut_by_region)]\n   64  \n   65  @then('columns of computations_generated are strings with filled numbers')\n   66: def check_columns_are_string_filled_numbers(generic_coordinator, computation_cut_by_gender, computation_cut_by_region):\n   67: 	responses = [generic_coordinator.replace_dimensions_with_integers(computation_cut_by_gender), generic_coordinator.replace_dimensions_with_integers(computation_cut_by_region)]\n   68  	for df in responses:\n   69  		for column in df.columns:\n   ..\n  100  \n  101  @then('there is a mapping of the values back to numbers')\n  102: def check_mapping_back_to_numbers(generic_coordinator, computation_cut_by_gender, computation_cut_by_region):\n  103  	mapping = generic_coordinator.dimension_integer_mapping\n  104  	assert {'Male','Atlanta'} <= set(mapping['values'])\n  ...\n  111  @then('the values column corresponds with the appropriate integer strings')\n  112  def check_values_column_corresponds_to_integers(generic_coordinator):\n  113: 	values_by_column = generic_coordinator.labels_for_cut_dimensions\n  114  	dim = generic_coordinator.dimension_integer_mapping\n  115  	integers = dim['integers']\n  ...\n  137      pass\n  138  \n  139: @when('compute aggregation with cut_demographic = [gender,None,region] is run')\n  140: def compute_aggreatoin_with_cut_demographic_cut_by_gender_region(coordinator_with_net_formatted_values):\n  141: 	coordinator_with_net_formatted_values.compute_aggregation(cut_demographic=['gender',None,'region'])\n  142  \n  143  @then('the display_value including region for question_code 1 and region \"Atlanta\" and gender \"Female\" is 0.5')\n  ...\n  183  	coordinator_with_net_formatted_values.ensure_combination_for_every_set_of_demographics = True\n  184  \n  185: @then('compute net with cut_demographic = region and gender is run responses in row with SoDak and Female')\n  186  def check_row_with_SoDak_and_Female(coordinator_with_net_formatted_values):\n  187  	coordinator_with_net_formatted_values.result_types =['net']\n  188: 	res = coordinator_with_net_formatted_values.compute_aggregation(cut_demographic=['region','gender']).set_index(['region','gender'])\n  189  	assert res.index.isin([('SoDak','Female')]).sum() > 0\n  190  \n  ...\n  205  																		])\n  206  \n  207: @then('compute net with cut_demographic = region and gender is run responses in no rows with SoDak and Female')\n  208  def check_no_row_with_SoDak_and_Female(coordinator_with_net_formatted_values):\n  209  	coordinator_with_net_formatted_values.result_types =['net']\n  210: 	res = coordinator_with_net_formatted_values.compute_aggregation(cut_demographic=['region','gender']).set_index(['region','gender'])\n  211  	assert res.index.isin([('SoDak','Female')]).sum() == 0\n  212  \n  ...\n  215  	pass\n  216  \n  217: @then('compute net with cut_demographic = region and gender is run responses in a row with 2013 and Female')\n  218  def check_for_2013_and_female(coordinator_with_net_formatted_values):\n  219  	coordinator_with_net_formatted_values.result_types =['net']\n  220: 	res = coordinator_with_net_formatted_values.compute_aggregation(cut_demographic=['corps','gender']).set_index(['corps','gender'])\n  221  	assert res.index.isin([(2013.0,'Female')]).sum() > 0\n  222  \n\n/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/test_get_mapping_by_dimension.py:\n    9  def calculation_coordinator_with_integer_label_mapping():\n   10  	cc = CalculationCoordinator.CalculationCoordinator()\n   11: 	cc.labels_for_cut_dimensions = {'Region':{'Atlanta':'01','SoDak':'02'},'Gender':{'Male':'03','Female':'04'}}\n   12  	return cc\n   13  \n\n/Users/mcox/Code/Python/SurveyReportingSystem/ConfigurationReader/ConfigurationReader.py:\n   21  	def cuts_to_be_created(self,**kwargs):\n   22  		for_historical = kwargs.pop('for_historical',False)\n   23: 		all_cut_fields = []\n   24  		config = self.config\n   25  		assert 'cuts' in self.config\n   26  		assert type(config['cuts']) == dict\n   27  \n   28: 		for cut_title, cut in self.cuts.items():\n   29  			assert type(cut.dimensions) == list\n   30  			number_of_levels = len(cut.dimensions)\n   31  			zero_fill = [None for x in range(self.default_number_of_levels - number_of_levels )]\n   32  			if for_historical:\n   33: 				if 'cut_menus' not in cut.config_data or 'historical' not in cut.config_data['cut_menus']:\n   34  					continue\n   35  			for i in range(2**number_of_levels):\n   ..\n   56  							item.append(None)\n   57  				for item in list_of_levels_for_this_variation:\n   58: 					all_cut_fields.append(item + zero_fill)\n   59  \n   60  		#Trim down to just the necessary cuts\n   61: 		all_cut_fields = {tuple(cut) for cut in all_cut_fields}\n   62: 		all_cut_fields = [list(cut) for cut in all_cut_fields]\n   63: 		return all_cut_fields\n   64  \n   65  	def cuts_for_excel_menu(self,**kwargs):\n   66: 		cut_list = list()\n   67  		menu = kwargs.pop('menu',None)\n   68  		all_dimensions = {dimension.title: dimension for dimension in self.all_dimensions()}\n   69: 		for cut_name, cut in self.cuts.items():\n   70: 			if menu is not None and ('cut_menus' not in cut.config_data or menu not in cut.config_data['cut_menus']):\n   71  				continue\n   72  			assert type(cut) == Cut\n   ..\n   75  			if number_of_levels < self.default_number_of_levels:\n   76  				dimension_titles = dimension_titles + [self.default_dimension_title for i in range(self.default_number_of_levels - number_of_levels)]\n   77: 			cut_list.append([cut.title, all_dimensions[dimension_titles[0]].dimension_type] + dimension_titles)\n   78: 		return cut_list\n   79  \n   80  	def create_dimension(self, title, **kwargs):\n   ..\n  110  				assert 'cuts' in config\n  111  				assert type(config['cuts']) == dict\n  112: 				for cut_title, cut in config['cuts'].items():\n  113: 					cuts[cut_title] = Cut(title=cut_title,config_object=self, config_data = cut)\n  114  				self._cuts = cuts\n  115  			return self._cuts\n  ...\n  140  		#Add to main cuts\n  141  		cuts = self.cuts\n  142: 		for cut_title, cut in mock_config['cuts'].items():\n  143: 			cuts[cut_title] = Cut(title=cut_title,config_object=self, config_data = cut)\n  144  		self.cuts = cuts\n  145  \n  ...\n  156  				if config_object != None:\n  157  					assert type(config_object) == ConfigurationReader\n  158: 					cut_dimensions = list()\n  159  					for dimension_name in config_data['dimensions']:\n  160: 						cut_dimensions.append(config_object.create_dimension(dimension_name))\n  161  \n  162: 					self.dimensions = cut_dimensions\n  163  				else:\n  164  					self.dimensions = [Dimension(title=x) for x in config_data['dimensions']]\n\n/Users/mcox/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/add_pilot_cms_steps.py:\n   18  	cuts = context.reader.cuts\n   19  	assert 'pilot_1' in cuts\n   20: 	cut_dimensions = [dimension.title for dimension in cuts['pilot_1'].dimensions]\n   21: 	assert cut_dimensions == ['pilot_1','Select Region Below', 'Corps']\n   22  \n   23  @then('there is a dimension called \"pilot_1\" that has composite dimensions \"pilot_1-Target Group\" and \"pilot_1-All CMs\"')\n\n/Users/mcox/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/for_excel_steps.py:\n   36  	context.reader.config = {'cuts':{\n   37  							'Grade': {'dimensions':['Grade','Region','Corps']},\n   38: 							'Region':{'dimensions':['Region','Corps','Something'],'cut_menus':['historical']}\n   39  							},\n   40  							'dimensions':\n\n/Users/mcox/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/load_cut_definitions_steps.py:\n   72  def step(context):\n   73  	assert len(list(context.cuts.keys())) == 2\n   74: 	for cut_title, cut in context.cuts.items():\n   75  		assert type(cut) == Cut\n   76  \n   77  @given('a cut object with config information')\n   78  def step(context):\n   79: 	context.cut_config_data = {'title': 'Region',\n   80  								'dimensions':['region','corps']}\n   81  \n   82  @when('the cut object is created')\n   83  def step(context):\n   84: 	context.cut = Cut(config_data=context.cut_config_data)\n   85  \n   86  @then('it has dimension objects that correspond to the dimensions in the config object')\n   ..\n  303  	context.reader.config = {'cuts':{\n  304  	'Ethnicity': {'dimensions':['ethnicity']},\n  305: 	'Region':{'dimensions':['region'],'cut_menus':['historical']}\n  306  	}\n  307  	}\n\n/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/computations_for_categorical_questions.feature:\n   30  			| 4             | Atlanta | Female |\n   31  			| 5             | Atlanta | Female |\n   32: 		When compute net with cut_demographic = region and gender is run\n   33  		Then the display_value including region and gender for question_code 1, result_type \"1\" and region \"Atlanta\", gender \"Female\" is 0.5\n\n/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/cut_for_demographics.feature:\n   12  			| 2             | Atlanta |\n   13  			| 3             | SoDak   |\n   14: 		When compute net with cut_demographic = region is run\n   15  		Then the display_value including region for question_code 1 and region \"Atlanta\" is 0.5\n   16  \n   ..\n   26  			| 2             | Atlanta | Female |\n   27  			| 3             | SoDak   | Male   |\n   28: 		When compute net with cut_demographic = region and gender is run\n   29  		Then the display_value including region and gender for question_code 1 and region \"Atlanta\" gender \"Female\" is 0.5\n   30  \n   ..\n   40  			| 2             | Atlanta | Female |\n   41  			| 3             | SoDak   | Male   |\n   42: 		When compute net with cut_demographic = region is run\n   43  		Then the only columns returned are question_code, region, aggregation_value, result_type\n   44  \n   ..\n   55  		| 2             | Atlanta | Female |\n   56  		| 3             | SoDak   | Male   |\n   57: 	When compute average with cut_demographic = region is run\n   58  	Then the display_value including region for question_code 1 and region \"Atlanta\" is 1\n   59  \n\n/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/remove_results_for_fewer_than_5.feature:\n   52  			| 6             | SoDak   |\n   53  			| 7             | SoDak   |\n   54: 		When compute net with cut_demographic = region is run\n   55  		Then the regional \"net\" display_value for question_code \"1\" and region \"Atlanta\" is 0\n   56  		Then the regional \"net\" display_value for question_code \"1\" and region \"SoDak\" is blank\n\n/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps/basic_computations.py:\n  163  @when('compute net is run with composite of NQ is q1 and q2 and region cut')\n  164  def step(context):\n  165:     context.result = context.numeric_output_calculator.compute_net_responses(cut_demographic = 'region', composite_questions = {'NQ':['q1','q2']})\n  166  \n  167  @when('compute {result_type} is run with composite of NQ is q1 and q2')\n\n/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps/cut_for_demographics_steps.py:\n   20  	context.demographic_data = context.numeric_output_calculator.demographic_data = pd.DataFrame(import_table_data(context.table))\n   21  \n   22: @when('compute net with cut_demographic = region is run')\n   23  def step(context):\n   24: 	context.result = context.numeric_output_calculator.compute_net_responses(cut_demographic='region')\n   25  \n   26  @then('the display_value including region for question_code 1 and region \"Atlanta\" is {value}')\n   ..\n   29  	assert context.result.set_index(['question_code','region']).loc[(1,'Atlanta'),'aggregation_value'] == float(value)\n   30  \n   31: @when('compute net with cut_demographic = region and gender is run')\n   32  def step(context):\n   33:     context.result = context.numeric_output_calculator.compute_net_responses(cut_demographic=['region','gender'])\n   34  \n   35: @when('compute average with cut_demographic = region is run')\n   36  def step(context):\n   37: 	context.result = context.numeric_output_calculator.compute_net_responses(cut_demographic=['region'])\n   38  \n   39  @then('the display_value including region and gender for question_code 1 and region \"Atlanta\" gender \"Female\" is 0.5')\n\n/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps/statistical_significance_steps.py:\n   31  @then('compute_aggregation is called for cuts [\"ethnicity\",\"region\",\"corps\"] and result_type [\"sample_size\",\"strong_count\",\"weak_count\"]')\n   32  def step(context):\n   33: 	context.calc.compute_aggregation.assert_any_call(cut_demographic=[\"ethnicity\",\"region\",\"corps\"], result_type=[\"sample_size\",\"strong_count\",\"weak_count\"])\n   34  \n   35  @then('compute_aggregation is called for cuts [\"region\",\"corps\"] and result_type [\"sample_size\",\"strong_count\",\"weak_count\"]')\n   36  def step(context):\n   37: 	context.calc.compute_aggregation.assert_any_call(cut_demographic=[\"region\",\"corps\"], result_type=[\"sample_size\",\"strong_count\",\"weak_count\"])\n   38  \n   39  @when('aggregations_for_net_significance is called for cut [\"region\"]')\n   ..\n   43  @then('compute_aggregation is called for cuts [\"region\"] and result_type [\"sample_size\",\"strong_count\",\"weak_count\"]')\n   44  def step(context):\n   45: 	context.calc.compute_aggregation.assert_any_call(cut_demographic=[\"region\"], result_type=[\"sample_size\",\"strong_count\",\"weak_count\"])\n   46  \n   47  @then('compute_aggregation is called for cuts [] and result_type [\"sample_size\",\"strong_count\",\"weak_count\"]')\n   48  def step(context):\n   49: 	context.calc.compute_aggregation.assert_any_call(cut_demographic=[], result_type=[\"sample_size\",\"strong_count\",\"weak_count\"])\n   50  \n   51  @when('bootstrap_net_significance is called for cut [\"gender\",\"region\"]')\n\n/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/NumericOutputCalculator.py:\n   45  	# @profile\n   46  	def compute_aggregation(self,**kwargs):\n   47: 		cut_demographic = kwargs.pop('cut_demographic', None)\n   48  		result_type = kwargs.pop('result_type',None)\n   49  		composite_questions = kwargs.pop('composite_questions',None)\n   ..\n   59  			result_types.append('sample_size')\n   60  \n   61: 		if type(cut_demographic) == list:\n   62: 			for cut in cut_demographic:\n   63  				if cut != []:\n   64  					assert cut in self.demographic_data.columns, \"Expected \" + cut + \" to be a header in demographics, but it isn't there\"\n   65: 		elif cut_demographic != None:\n   66: 			assert cut_demographic in self.demographic_data.columns\n   67  \n   68: 		cut_groupings = ['question_code']\n   69: 		cut_demographic_list = []\n   70: 		if cut_demographic != None:\n   71: 			assert type(cut_demographic) == str or type(cut_demographic) == list\n   72: 			if type(cut_demographic) == str:\n   73: 				cut_demographic_list = [cut_demographic]\n   74  			else:\n   75: 				cut_demographic_list = cut_demographic\n   76: 			cut_groupings = cut_groupings + cut_demographic_list\n   77  \n   78: 		columns_to_keep = copy.deepcopy(cut_groupings)\n   79  		# nfv = self.responses_with_dimensions.copy()\n   80  		responses_columns = self.responses_with_dimensions.columns\n   ..\n   88  			columns_to_keep.append('question_type')\n   89  		nfv = self.responses_with_dimensions.loc[:,columns_to_keep]\n   90: 		# logging.debug(\"Responses with dimensions for cut_demographic \" + str(cut_demographic) + \" are\\n\" + str(nfv.head()))\n   91  \n   92  		aggregation_calulations_list = list()\n   93  		for result_type in result_types:\n   94  			nfv_copy = nfv.copy()\n   95: 			# logging.debug(\"Computing aggregation for result type \"+ result_type + \" and cuts \"+ str(cut_groupings))\n   96  			# logging.debug(\"Responses columns are \" + str(nfv))\n   97  			assert result_type in {'net','strong','weak','raw_average','sample_size','strong_count','weak_count'}, \"No calculation defined for result_type \" + result_type\n   98  			aggregation_calulation = pd.DataFrame()\n   99  			if result_type == 'net':\n  100: 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()\n  101  				# logging.debug(\"Net responses are\\n\" + str(aggregation_calulation.head()))\n  102  			if result_type == 'strong':\n  103  				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != 1),'net_formatted_value'] = 0\n  104: 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()\n  105  			if result_type == 'strong_count':\n  106  				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != 1),'net_formatted_value'] = 0\n  107: 				aggregation_calulation = nfv_copy.groupby(cut_groupings).sum().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()\n  108  			if result_type == 'weak':\n  109  				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != -1),'net_formatted_value'] = 0\n  110  				nfv_copy.net_formatted_value = nfv_copy.net_formatted_value * -1\n  111: 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()\n  112  			if result_type == 'weak_count':\n  113  				nfv_copy.ix[nfv_copy.net_formatted_value.notnull() & (nfv_copy.net_formatted_value != -1),'net_formatted_value'] = 0\n  114  				nfv_copy.net_formatted_value = nfv_copy.net_formatted_value * -1\n  115: 				aggregation_calulation = nfv_copy.groupby(cut_groupings).sum().rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()\n  116  			if result_type == 'raw_average':\n  117  				assert 'response' in nfv_copy.columns\n  118: 				aggregation_calulation = nfv_copy.groupby(cut_groupings).mean().rename(columns={'response':'aggregation_value'}).reset_index()\n  119  			if result_type == 'sample_size':\n  120: 				aggregation_calulation = nfv_copy.ix[nfv_copy.net_formatted_value.notnull(),:].groupby(cut_groupings).aggregate(len).rename(columns={'net_formatted_value':'aggregation_value'}).reset_index()\n  121: 			aggregation_calulation = self.add_composite_question_calculation(composite_questions,aggregation_calulation,cut_demographic_list)\n  122  			aggregation_calulation['result_type'] = result_type\n  123  			aggregation_calulations_list.append(aggregation_calulation)\n  ...\n  129  			question_types = nfv.question_type.unique()\n  130  			if 'Categorical_response' in question_types or 'Ordered_response' in question_types:\n  131: 				categorical_calculation = nfv.ix[nfv.question_type.isin(['Categorical_response','Ordered_response'])].groupby(cut_groupings + ['response']).aggregate(len).reset_index().rename(columns={'question_type':'aggregation_value','response':'result_type'})\n  132: 				categorical_calculation_samp_size = categorical_calculation.groupby(cut_groupings).sum().rename(columns={'aggregation_value':'sample_size'})['sample_size']\n  133: 				cat_display_samp_size = categorical_calculation.groupby(cut_groupings).sum().rename(columns={'aggregation_value':'aggregation_value'})['aggregation_value']\n  134  				cat_display_samp_size = pd.DataFrame(cat_display_samp_size)\n  135  				cat_display_samp_size['result_type'] = 'sample_size'\n  136  				cat_display_samp_size = cat_display_samp_size.reset_index()\n  137: 				categorical_calculation = categorical_calculation.set_index(cut_groupings).join(categorical_calculation_samp_size).reset_index()\n  138  				categorical_calculation.aggregation_value = categorical_calculation.aggregation_value / categorical_calculation.sample_size\n  139  				categorical_calculation.result_type = categorical_calculation.result_type.astype(int).astype(str)\n  ...\n  142  		#Determine which questions have fewer than 5 respondents and are confidential\n  143  		if 'is_confidential' in all_responses.columns:\n  144: 			all_responses = all_responses.set_index(cut_groupings)\n  145: 			nfv = nfv.set_index(cut_groupings)\n  146  			less_than_5_sample_size_index = all_responses.ix[(all_responses.result_type=='sample_size') & (all_responses.aggregation_value < 5)].index\n  147  			confidential_questions_df = pd.DataFrame(nfv.reset_index(),columns=['question_code','is_confidential'])\n  ...\n  154  						confidential_questions.append(index)\n  155  				# confidential_questions = confidential_questions + [key for key in composite_questions.keys()]\n  156: 			confidential_questions_index = all_responses.reset_index().ix[all_responses.reset_index().question_code.isin(confidential_questions)].set_index(cut_groupings).index.tolist()\n  157  			all_responses.ix[all_responses.index.isin(less_than_5_sample_size_index) & all_responses.index.isin(confidential_questions_index) & (all_responses.result_type != 'sample_size'),'aggregation_value'] = np.nan\n  158  			all_responses = all_responses.reset_index()\n  159  \n  160  		#Return just required columns\n  161: 		return_columns = cut_groupings + ['aggregation_value','result_type']\n  162  		# logging.debug(\"Data returned is\\n\" + str(pd.DataFrame(all_responses,columns=return_columns).head()))\n  163  		gc.collect()\n  164  		return pd.DataFrame(all_responses,columns=return_columns)\n  165  \n  166: 	def add_composite_question_calculation(self,composite_questions,aggregation_calulation,cut_demographic_list):\n  167  		# logging.debug(\"Adding composite questions for \" + str(composite_questions))\n  168  		if composite_questions is not None:\n  169  			for question, components in composite_questions.items():\n  170  				composite_computation = pd.DataFrame()\n  171: 				if len(cut_demographic_list) == 0:\n  172  					assert 'aggregation_value' in aggregation_calulation.columns, \"Missing aggregation_value \" + str(aggregation_calulation)\n  173  					composite_output = aggregation_calulation.ix[aggregation_calulation.question_code.isin(components)].mean()['aggregation_value']\n  174  					aggregation_calulation = pd.concat([aggregation_calulation,pd.DataFrame({'question_code':[question],'aggregation_value':[composite_output]})])\n  175  				else:\n  176: 					composite_computation = aggregation_calulation.ix[aggregation_calulation.question_code.isin(components)].groupby(cut_demographic_list).mean().reset_index()\n  177  					composite_computation['question_code'] = question\n  178  					aggregation_calulation = pd.concat([aggregation_calulation,composite_computation])\n  ...\n  204  			comparison_cuts = ['survey_code'] + cuts[2:]\n  205  \n  206: 		base_responses = self.compute_aggregation(cut_demographic=cuts,result_type=[\"sample_size\",\"strong_count\",\"weak_count\"],**kwargs)\n  207: 		comparison_responses = self.compute_aggregation(cut_demographic=comparison_cuts,result_type=[\"sample_size\",\"strong_count\",\"weak_count\"],**kwargs)\n  208  		return (cuts, comparison_cuts,base_responses,comparison_responses)\n  209  \n  ...\n  223  \n  224  		if no_stat_significance_computation:\n  225: 			df_with_no_responses = self.compute_aggregation(cut_demographic=cuts,result_type='sample_size',**kwargs)\n  226  			df_with_no_responses['result_type'] = 'significance_value'\n  227  			df_with_no_responses['aggregation_value'] = ''\n\n/Users/mcox/Code/Python/SurveyReportingSystem/SurveyReportingSystem.sublime-workspace:\n  338  			[\n  339  				\"cut\",\n  340: 				\"cut_demographic\"\n  341  			],\n  342  			[\n  ...\n  374  			[\n  375  				\"cur_\",\n  376: 				\"cur_cut_values\"\n  377  			],\n  378  			[\n  ...\n  742  		\"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/assemble_cuts_from_config_reader.feature\",\n  743  		\"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/.DS_Store\",\n  744: 		\"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/load_cut_definitions_steps.py\",\n  745  		\"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/add_pilot_cms_steps.py\",\n  746  		\"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/add_pilot_cms.feature\",\n  ...\n  779  		\"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/assemble_cuts_from_config_reader.feature\",\n  780  		\"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/export_to_grid.feature\",\n  781: 		\"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/load_cut_definitions.feature\",\n  782: 		\"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/dimensions_by_cut_title_steps.py\",\n  783: 		\"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/dimensions_by_cut_title.feature\",\n  784  		\"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/features/retrieve_numeric_results.feature\",\n  785  		\"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/excel_helper.feature\",\n  ...\n 1714  			[\n 1715  				\"config/ste\",\n 1716: 				\"ConfigurationReader/features/steps/load_cut_definitions_steps.py\"\n 1717  			],\n 1718  			[\n\n/Users/mcox/Code/Python/SurveyReportingSystem/test_data/mys_yaml.yaml:\n    2  cuts:\n    3      Summary:\n    4:         cut_menus:\n    5              - historical\n    6          dimensions:\n    .\n   10  all_cuts:\n   11      Summary:\n   12:         cut_menus:\n   13              - historical\n   14          dimensions:\n   ..\n   17              - corps\n   18      Sub-Region:\n   19:         cut_menus:\n   20              - historical\n   21          dimensions:\n   ..\n   24              - corps\n   25      Ethnicity:\n   26:         cut_menus:\n   27              - historical\n   28          dimensions:\n   ..\n   61              - corps\n   62      Sub-Region:\n   63:         cut_menus:\n   64              - historical\n   65          dimensions:\n   ..\n  407      - MentalHealth2\n  408      - MentalHealth3\n  409: cut_menu_order:\n  410      - Summary\n  411      - Sub-Region\n\n238 matches across 21 files\n\n\nSearching 134 files for \"cuts_2\"\n\n/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py:\n  717  		#Add cut menu 2 and 3\n  718  		menu_start = ws.get_highest_row()\n  719: 		menu = self.config.cuts_for_excel_menu(menu='cuts_2')\n  720  		menu_length = len(menu)\n  721  		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):\n  722  			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu\n  723: 		lookup_wb.create_named_range('cuts_2',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))\n  724  		menu_start = ws.get_highest_row()\n  725  		menu = self.config.cuts_for_excel_menu(menu='cuts_3')\n\n/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writer_test.py:\n   30  		config_reader.config['cut_menu_order'] = ['Region','Subject','Grade']\n   31  		self.cuts_for_excel_menu_responses = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None'],['Gender', 'static', 'Gender', 'Region', 'Corps']]\n   32: 		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_responses,'historical':[['Region', 'static', 'Region', 'Corps','None']],'cuts_2':[],'cuts_3':[],'cuts_4':[],'cuts_5':[]}\n   33  		config_reader.cuts_for_excel_menu = mock.MagicMock(side_effect= lambda **arg: return_for_cuts_for_excel_menu[arg['menu']])\n   34  		coordinator.config = config_reader\n\n3 matches across 2 files\n\n\nSearching 134 files for \"cuts_2\"\n\n/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py:\n  717  		#Add cut menu 2 and 3\n  718  		menu_start = ws.get_highest_row()\n  719: 		menu = self.config.cuts_for_excel_menu(menu='cuts_2')\n  720  		menu_length = len(menu)\n  721  		for menu_i, cut_menu in enumerate(self.cut_menu_order(menu)):\n  722  			ws.cell(row=menu_i+menu_start+1, column = highest_column).value = cut_menu\n  723: 		lookup_wb.create_named_range('cuts_2',ws,self.rc_to_range(row=menu_start,col=highest_column,width=1,height=menu_length))\n  724  		menu_start = ws.get_highest_row()\n  725  		menu = self.config.cuts_for_excel_menu(menu='cuts_3')\n\n/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writer_test.py:\n   30  		config_reader.config['cut_menu_order'] = ['Region','Subject','Grade']\n   31  		self.cuts_for_excel_menu_responses = [['Grade', 'static', 'Grade', 'Region', 'Corps'], ['Region', 'static', 'Region', 'Corps','None'],['Gender', 'static', 'Gender', 'Region', 'Corps']]\n   32: 		return_for_cuts_for_excel_menu = {None:self.cuts_for_excel_menu_responses,'historical':[['Region', 'static', 'Region', 'Corps','None']],'cuts_2':[],'cuts_3':[],'cuts_4':[],'cuts_5':[]}\n   33  		config_reader.cuts_for_excel_menu = mock.MagicMock(side_effect= lambda **arg: return_for_cuts_for_excel_menu[arg['menu']])\n   34  		coordinator.config = config_reader\n\n3 matches across 2 files\n",
+			"settings":
+			{
+				"buffer_size": 47679,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "CalculationCoordinator/CalculationCoordinator.py",
+			"settings":
+			{
+				"buffer_size": 49464,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "export_cuts_in_separate_files.py",
+			"settings":
+			{
+				"buffer_size": 1996,
+				"line_ending": "Unix"
+			}
 		}
 	],
 	"build_system": "",
@@ -559,12 +593,12 @@
 				"Git: Commit"
 			],
 			[
-				"git comm",
-				"Git: Commit"
-			],
-			[
 				"git add",
 				"Git: Add..."
+			],
+			[
+				"git comm",
+				"Git: Commit"
 			],
 			[
 				"git ",
@@ -676,6 +710,7 @@
 	},
 	"file_history":
 	[
+		"/Users/mcox/Code/Python/SurveyReportingSystem/compute_results.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/.gitignore",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration/import_dump_to_nr_table.py",
 		"/Users/mcox/.odbc.ini",
@@ -801,6 +836,7 @@
 		"height": 0.0,
 		"where_history":
 		[
+			"/Users/mcox/Code/Python/SurveyReportingSystem",
 			"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem",
 			"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem,C:\\Users\\mcox\\Dropbox\\MDIS\\Code\\Python\\SurveyReportingSystem",
 			"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem"
@@ -811,6 +847,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"menu_start+1",
+			"historical",
+			"cuts_2",
+			"cuts_",
+			"cuts_2",
+			"cut_",
+			"cut_2",
+			"cut_",
+			"{'0.0','1.0'}",
 			"7pt",
 			"/opt/local/lib/libtdsodbc.so",
 			"yaml",
@@ -929,16 +974,7 @@
 			"numerical_responses",
 			"response",
 			"numerical_responses",
-			"survey_id",
-			", ",
-			"Survey!1",
-			"primary_key=True",
-			"add_composite_question_calculation",
-			"composit",
-			"surveyProd1!",
-			"row",
-			"sys",
-			"isql"
+			"survey_id"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -966,7 +1002,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -1185,7 +1221,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 664.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1405,7 +1441,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1385.0,
+						"translation.y": 1590.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1626,7 +1662,1787 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 15583.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "CalculationCoordinator/test/excel_writer_test.py",
+					"settings":
+					{
+						"buffer_size": 15203,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12733,
+								12733
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublime_auto_complete": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2854.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"settings":
+					{
+						"buffer_size": 47679,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										454,
+										458
+									],
+									[
+										505,
+										509
+									],
+									[
+										887,
+										891
+									],
+									[
+										1132,
+										1136
+									],
+									[
+										1457,
+										1461
+									],
+									[
+										1646,
+										1650
+									],
+									[
+										1767,
+										1771
+									],
+									[
+										1965,
+										1969
+									],
+									[
+										2305,
+										2309
+									],
+									[
+										2559,
+										2563
+									],
+									[
+										2767,
+										2771
+									],
+									[
+										2837,
+										2841
+									],
+									[
+										3154,
+										3158
+									],
+									[
+										3255,
+										3259
+									],
+									[
+										3607,
+										3611
+									],
+									[
+										3906,
+										3910
+									],
+									[
+										3927,
+										3931
+									],
+									[
+										4039,
+										4043
+									],
+									[
+										4057,
+										4061
+									],
+									[
+										4213,
+										4217
+									],
+									[
+										4229,
+										4233
+									],
+									[
+										4446,
+										4450
+									],
+									[
+										4462,
+										4466
+									],
+									[
+										4611,
+										4615
+									],
+									[
+										4829,
+										4833
+									],
+									[
+										4964,
+										4968
+									],
+									[
+										5291,
+										5295
+									],
+									[
+										5312,
+										5316
+									],
+									[
+										5369,
+										5373
+									],
+									[
+										5480,
+										5484
+									],
+									[
+										5498,
+										5502
+									],
+									[
+										5646,
+										5650
+									],
+									[
+										5662,
+										5666
+									],
+									[
+										5879,
+										5883
+									],
+									[
+										5895,
+										5899
+									],
+									[
+										6128,
+										6132
+									],
+									[
+										6378,
+										6382
+									],
+									[
+										6513,
+										6517
+									],
+									[
+										6840,
+										6844
+									],
+									[
+										6861,
+										6865
+									],
+									[
+										7010,
+										7014
+									],
+									[
+										7028,
+										7032
+									],
+									[
+										7147,
+										7151
+									],
+									[
+										7163,
+										7167
+									],
+									[
+										7422,
+										7426
+									],
+									[
+										7438,
+										7442
+									],
+									[
+										7762,
+										7766
+									],
+									[
+										8097,
+										8101
+									],
+									[
+										8171,
+										8175
+									],
+									[
+										8347,
+										8351
+									],
+									[
+										8374,
+										8378
+									],
+									[
+										8469,
+										8473
+									],
+									[
+										8737,
+										8741
+									],
+									[
+										8764,
+										8768
+									],
+									[
+										8863,
+										8867
+									],
+									[
+										9142,
+										9146
+									],
+									[
+										9169,
+										9173
+									],
+									[
+										9268,
+										9272
+									],
+									[
+										9567,
+										9571
+									],
+									[
+										9594,
+										9598
+									],
+									[
+										9693,
+										9697
+									],
+									[
+										9963,
+										9967
+									],
+									[
+										9990,
+										9994
+									],
+									[
+										10089,
+										10093
+									],
+									[
+										10359,
+										10363
+									],
+									[
+										10386,
+										10390
+									],
+									[
+										10485,
+										10489
+									],
+									[
+										10697,
+										10701
+									],
+									[
+										10877,
+										10881
+									],
+									[
+										10896,
+										10900
+									],
+									[
+										10915,
+										10919
+									],
+									[
+										10952,
+										10956
+									],
+									[
+										11101,
+										11105
+									],
+									[
+										11212,
+										11216
+									],
+									[
+										11231,
+										11235
+									],
+									[
+										11257,
+										11261
+									],
+									[
+										11294,
+										11298
+									],
+									[
+										11306,
+										11310
+									],
+									[
+										11339,
+										11343
+									],
+									[
+										11358,
+										11362
+									],
+									[
+										11390,
+										11394
+									],
+									[
+										11466,
+										11470
+									],
+									[
+										11501,
+										11505
+									],
+									[
+										11822,
+										11826
+									],
+									[
+										11896,
+										11900
+									],
+									[
+										12232,
+										12236
+									],
+									[
+										12480,
+										12484
+									],
+									[
+										12902,
+										12906
+									],
+									[
+										13206,
+										13210
+									],
+									[
+										13855,
+										13859
+									],
+									[
+										13888,
+										13892
+									],
+									[
+										14071,
+										14075
+									],
+									[
+										14290,
+										14294
+									],
+									[
+										14725,
+										14729
+									],
+									[
+										15040,
+										15044
+									],
+									[
+										15492,
+										15496
+									],
+									[
+										15795,
+										15799
+									],
+									[
+										16289,
+										16293
+									],
+									[
+										16615,
+										16619
+									],
+									[
+										16694,
+										16698
+									],
+									[
+										16770,
+										16774
+									],
+									[
+										16859,
+										16863
+									],
+									[
+										17220,
+										17224
+									],
+									[
+										17526,
+										17530
+									],
+									[
+										17701,
+										17705
+									],
+									[
+										17766,
+										17770
+									],
+									[
+										18031,
+										18035
+									],
+									[
+										18231,
+										18235
+									],
+									[
+										18429,
+										18433
+									],
+									[
+										18720,
+										18724
+									],
+									[
+										18747,
+										18751
+									],
+									[
+										18849,
+										18853
+									],
+									[
+										18930,
+										18934
+									],
+									[
+										19120,
+										19124
+									],
+									[
+										19147,
+										19151
+									],
+									[
+										19249,
+										19253
+									],
+									[
+										19330,
+										19334
+									],
+									[
+										19563,
+										19567
+									],
+									[
+										19590,
+										19594
+									],
+									[
+										19954,
+										19958
+									],
+									[
+										20133,
+										20137
+									],
+									[
+										20216,
+										20220
+									],
+									[
+										20232,
+										20236
+									],
+									[
+										20359,
+										20363
+									],
+									[
+										20675,
+										20679
+									],
+									[
+										20982,
+										20986
+									],
+									[
+										21193,
+										21197
+									],
+									[
+										21507,
+										21511
+									],
+									[
+										21704,
+										21708
+									],
+									[
+										22006,
+										22010
+									],
+									[
+										22398,
+										22402
+									],
+									[
+										22731,
+										22735
+									],
+									[
+										22881,
+										22885
+									],
+									[
+										23152,
+										23156
+									],
+									[
+										23226,
+										23230
+									],
+									[
+										23419,
+										23423
+									],
+									[
+										23523,
+										23527
+									],
+									[
+										23563,
+										23567
+									],
+									[
+										23588,
+										23592
+									],
+									[
+										23627,
+										23631
+									],
+									[
+										23659,
+										23663
+									],
+									[
+										23735,
+										23739
+									],
+									[
+										23900,
+										23904
+									],
+									[
+										23972,
+										23976
+									],
+									[
+										24038,
+										24042
+									],
+									[
+										24330,
+										24334
+									],
+									[
+										24446,
+										24450
+									],
+									[
+										24619,
+										24623
+									],
+									[
+										24678,
+										24682
+									],
+									[
+										24701,
+										24705
+									],
+									[
+										24879,
+										24883
+									],
+									[
+										24941,
+										24945
+									],
+									[
+										24964,
+										24968
+									],
+									[
+										25164,
+										25168
+									],
+									[
+										25262,
+										25266
+									],
+									[
+										25370,
+										25374
+									],
+									[
+										25670,
+										25674
+									],
+									[
+										25764,
+										25768
+									],
+									[
+										26241,
+										26245
+									],
+									[
+										26515,
+										26519
+									],
+									[
+										26692,
+										26696
+									],
+									[
+										26900,
+										26904
+									],
+									[
+										27163,
+										27167
+									],
+									[
+										27463,
+										27467
+									],
+									[
+										27865,
+										27869
+									],
+									[
+										28133,
+										28137
+									],
+									[
+										28439,
+										28443
+									],
+									[
+										28709,
+										28713
+									],
+									[
+										29071,
+										29075
+									],
+									[
+										29598,
+										29602
+									],
+									[
+										30046,
+										30050
+									],
+									[
+										30187,
+										30191
+									],
+									[
+										30492,
+										30496
+									],
+									[
+										30647,
+										30651
+									],
+									[
+										30727,
+										30731
+									],
+									[
+										30868,
+										30872
+									],
+									[
+										31380,
+										31384
+									],
+									[
+										31710,
+										31714
+									],
+									[
+										32105,
+										32109
+									],
+									[
+										32399,
+										32403
+									],
+									[
+										32740,
+										32744
+									],
+									[
+										32770,
+										32774
+									],
+									[
+										32994,
+										32998
+									],
+									[
+										33041,
+										33045
+									],
+									[
+										33228,
+										33232
+									],
+									[
+										33270,
+										33274
+									],
+									[
+										33336,
+										33340
+									],
+									[
+										33379,
+										33383
+									],
+									[
+										33417,
+										33421
+									],
+									[
+										33464,
+										33468
+									],
+									[
+										33496,
+										33500
+									],
+									[
+										33539,
+										33543
+									],
+									[
+										33575,
+										33579
+									],
+									[
+										33599,
+										33603
+									],
+									[
+										33643,
+										33647
+									],
+									[
+										33666,
+										33670
+									],
+									[
+										33692,
+										33696
+									],
+									[
+										33708,
+										33712
+									],
+									[
+										33724,
+										33728
+									],
+									[
+										33794,
+										33798
+									],
+									[
+										34113,
+										34117
+									],
+									[
+										34137,
+										34141
+									],
+									[
+										34413,
+										34417
+									],
+									[
+										34799,
+										34803
+									],
+									[
+										35200,
+										35204
+									],
+									[
+										35520,
+										35524
+									],
+									[
+										35908,
+										35912
+									],
+									[
+										36303,
+										36307
+									],
+									[
+										36543,
+										36547
+									],
+									[
+										36769,
+										36773
+									],
+									[
+										36991,
+										36995
+									],
+									[
+										37421,
+										37425
+									],
+									[
+										37638,
+										37642
+									],
+									[
+										37793,
+										37797
+									],
+									[
+										38170,
+										38174
+									],
+									[
+										38682,
+										38686
+									],
+									[
+										38727,
+										38731
+									],
+									[
+										39322,
+										39326
+									],
+									[
+										39696,
+										39700
+									],
+									[
+										40052,
+										40056
+									],
+									[
+										40342,
+										40346
+									],
+									[
+										40940,
+										40944
+									],
+									[
+										41260,
+										41264
+									],
+									[
+										41404,
+										41408
+									],
+									[
+										41704,
+										41708
+									],
+									[
+										42017,
+										42021
+									],
+									[
+										42112,
+										42116
+									],
+									[
+										42508,
+										42512
+									],
+									[
+										43165,
+										43169
+									],
+									[
+										43309,
+										43313
+									],
+									[
+										43442,
+										43446
+									],
+									[
+										43811,
+										43815
+									],
+									[
+										43982,
+										43986
+									],
+									[
+										44110,
+										44114
+									],
+									[
+										44251,
+										44255
+									],
+									[
+										44391,
+										44395
+									],
+									[
+										44532,
+										44536
+									],
+									[
+										44669,
+										44673
+									],
+									[
+										45019,
+										45025
+									],
+									[
+										45256,
+										45262
+									],
+									[
+										45969,
+										45975
+									],
+									[
+										46479,
+										46485
+									],
+									[
+										46716,
+										46722
+									],
+									[
+										47429,
+										47435
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								46221,
+								46221
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"detect_indentation": false,
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"output_tag": 5,
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"sublime_auto_complete": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 12244.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "CalculationCoordinator/CalculationCoordinator.py",
+					"settings":
+					{
+						"buffer_size": 49464,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								36549,
+								36549
+							],
+							[
+								36966,
+								36966
+							],
+							[
+								37350,
+								37350
+							],
+							[
+								37734,
+								37734
+							],
+							[
+								38118,
+								38118
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublime_auto_complete": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 10165.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "export_cuts_in_separate_files.py",
+					"settings":
+					{
+						"buffer_size": 1996,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

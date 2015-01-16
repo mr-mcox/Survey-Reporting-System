@@ -256,7 +256,6 @@ class NumericOutputCalculator(object):
 		assert {'sample_size','strong_count','weak_count','comp_sample_size','comp_strong_count','comp_weak_count'} <= set(df.columns)
 		df['aggregation_value'] = ''
 		df['result_type'] = 'significance_value'
-		df.ix[df.sample_size < 5,'aggregation_value'] = 'S'
 		df['pop_1_sample_size'] = df.comp_sample_size - df.sample_size
 		df['pop_1_strong_count'] = df.comp_strong_count - df.strong_count
 		df['pop_1_weak_count'] = df.comp_weak_count - df.weak_count
@@ -264,6 +263,7 @@ class NumericOutputCalculator(object):
 		df['pop_2_strong_count'] = df.strong_count
 		df['pop_2_weak_count'] = df.weak_count
 		df.ix[df.pop_1_sample_size == 0,'aggregation_value'] = 'N'#Meaning that subset is identical to the comparison
+		df.ix[df.sample_size < 5,'aggregation_value'] = 'S'
 
 		df_no_agg_value = df.ix[df.aggregation_value == '',:]
 		# dist_1 = pd.DataFrame(poisson.ppf(0.75,df_no_agg_value.pop_2_strong_count), index = df_no_agg_value.index)
