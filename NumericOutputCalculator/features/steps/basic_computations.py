@@ -198,3 +198,12 @@ def step(context,result_type,value):
 @when('NumericOutputCalculator with response_transformed = True is initialized')
 def step(context):
     context.numeric_output_calculator = NumericOutputCalculator(responses=context.responses,responses_transformed=True)
+
+@then('response value for person_id {person_id} is {value}')
+def step(context, person_id, value):
+    nfv = context.numeric_output_calculator.responses
+    value_column = 'response'
+    if value == 'blank':
+        assert np.isnan(nfv.set_index('person_id').loc[int(person_id),value_column])
+    else:
+        assert nfv.set_index('person_id').loc[int(person_id),value_column] == int(value)

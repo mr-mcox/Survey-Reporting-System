@@ -262,3 +262,38 @@ Scenario: When 7pt with 1=Strongly Agree questions are but scales have already b
 	Then net formatted value for person_id 6 is 1
 	Then net formatted value for person_id 7 is 1
 	Then net formatted value for person_id 8 is blank
+
+Scenario: When 11pt_NPS_1=SA questions are but scales have already been transformed, adjust accordingly
+	Given raw 7pt questions responses
+		| person_id | response | question_type       |
+		| 1         | 10       | 11pt_NPS_1=SA       |
+		| 2         | 8        | 11pt_NPS_1=SA       |
+		| 3         | 0        | 11pt_NPS_1=SA       |
+		| 4         |          | 11pt_NPS_1=SA       |
+	When NumericOutputCalculator with response_transformed = True is initialized
+	Then net formatted value for person_id 1 is 1
+	Then net formatted value for person_id 2 is 0
+	Then net formatted value for person_id 3 is -1
+	Then net formatted value for person_id 4 is blank
+
+Scenario: Transform responses for 11pt_NPS_11=SA questions so that first value is 0
+	Given raw 7pt questions responses
+		| person_id | response | question_type        |
+		| 1         | 11       | 11pt_NPS_11=SA       |
+		| 2         | 1        | 11pt_NPS_11=SA       |
+	When NumericOutputCalculator is initialized
+	Then response value for person_id 1 is 10
+	Then response value for person_id 2 is 0
+
+Scenario: When 11pt_NPS_11=SA questions are but scales have already been transformed, adjust accordingly
+	Given raw 7pt questions responses
+		| person_id | response | question_type       |
+		| 1         | 10       | 11pt_NPS_11=SA       |
+		| 2         | 8        | 11pt_NPS_11=SA       |
+		| 3         | 0        | 11pt_NPS_11=SA       |
+		| 4         |          | 11pt_NPS_11=SA       |
+	When NumericOutputCalculator with response_transformed = True is initialized
+	Then net formatted value for person_id 1 is 1
+	Then net formatted value for person_id 2 is 0
+	Then net formatted value for person_id 3 is -1
+	Then net formatted value for person_id 4 is blank

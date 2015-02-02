@@ -287,10 +287,12 @@ class Migrator(object):
                     if 'new_person_id' in df.columns:
                         df.ix[df.new_person_id.notnull(),'person_id'] = df.ix[df.new_person_id.notnull(),'new_person_id']
 
+                pdb.set_trace()
                 #Remove duplicate records
                 df.drop_duplicates(['person_id','survey_question_id'],inplace=True)
                 df = df.ix[df.survey_question_id.notnull() & df.person_id.notnull()]#Change this behaviour later
 
+                pdb.set_trace()
                 #Remove illegal person_ids
                 if hasattr(self,'legal_person_ids_csv') and self.legal_person_ids_csv is not None:
                     legal_person_ids = self.read_legal_person_ids()
@@ -300,6 +302,7 @@ class Migrator(object):
                         logging.info('person_id ' + str(row[0]) + ' removed from survey ' + row[1])
                     df = df.ix[df.person_id.isin(legal_person_ids.person_id)]
 
+                pdb.set_trace()
                 #Remove incomplete CSI
                 if hasattr(self,'clean_CSI') and self.clean_CSI:
                     if 'question_category' not in df.columns:
@@ -318,7 +321,7 @@ class Migrator(object):
                     if len(cm_to_remove.index) > 0:
                         df = df.set_index(['person_id','survey','question_category'])                   
                         df = df.ix[(~df.index.isin(cm_to_remove.index))].reset_index()
-
+                pdb.set_trace()
                 #Remove incomplete CALI
                 if hasattr(self,'clean_CALI') and self.clean_CALI:
                     if 'question_category' not in df.columns:
@@ -342,6 +345,7 @@ class Migrator(object):
                 df = map_responses_to_net_formatted_values(df,responses_transformed=False).convert_objects()
                 df['converted_net_value'] = df.net_formatted_value
 
+                pdb.set_trace()
                 self._response_df = df
             return self._response_df
         def fset(self, value):
