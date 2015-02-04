@@ -7,11 +7,24 @@ import logging
 import os
 import csv
 import pdb
-import sys
+import argparse
 
-logging.basicConfig(filename='debug.log',level=logging.WARNING)
+parser = argparse.ArgumentParser()
+parser.add_argument("surveys", type=str,
+                    help="list of survey codes to use",
+                    nargs='*')
+parser.add_argument("-c", "--config", type=str,
+                    help="the config file to use")
+args = parser.parse_args()
 
-config = ConfigurationReader.ConfigurationReader(config_file='config.yaml')
+logging.basicConfig(filename='debug.log', level=logging.WARNING)
+
+config_file = 'config.yaml'
+if args.config is not None:
+    print("Using config file " + args.config)
+    config_file = args.config
+
+config = ConfigurationReader.ConfigurationReader(config_file=config_file)
 
 connect_info = 'mssql+pyodbc://survey_user:surveyProd1!@tpsd_survey'
 
@@ -21,7 +34,8 @@ conn = engine.connect()
 db = conn
 retriever = ResponsesRetriever.ResponsesRetriever(db_connection=db)
 print("Starting to retrieve current responses")
-responses = retriever.retrieve_responses_for_survey(survey_code=sys.argv[1])
+responses = retriever.retrieve_responses_for_survey(
+    survey_code=args.surveys[0])
 responses_df = pd.DataFrame(responses['rows'])
 responses_df.columns = responses['column_headings']
 
