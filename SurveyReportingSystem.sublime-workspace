@@ -531,9 +531,21 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 147.0,
+		"height": 87.0,
 		"selected_items":
 		[
+			[
+				"git push",
+				"Git: Push"
+			],
+			[
+				"git com",
+				"Git: Commit"
+			],
+			[
+				"git add",
+				"Git: Add..."
+			],
 			[
 				"git pus",
 				"Git: Push"
@@ -543,20 +555,8 @@
 				"Git: Commit"
 			],
 			[
-				"git add",
-				"Git: Add..."
-			],
-			[
 				"con",
 				"Indentation: Convert to Spaces"
-			],
-			[
-				"git push",
-				"Git: Push"
-			],
-			[
-				"git com",
-				"Git: Commit"
 			],
 			[
 				"git comm",
@@ -651,7 +651,7 @@
 				"Set Syntax: JavaScript"
 			]
 		],
-		"width": 593.0
+		"width": 512.0
 	},
 	"console":
 	{
@@ -674,18 +674,24 @@
 	[
 		"/Users/mcox/Code/Python/SurveyReportingSystem",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration/test",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps"
 	],
 	"file_history":
 	[
+		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration/migrate.py",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_net_strong_weak_average.feature",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps/basic_computations.py",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration/test/test_db_migration.py",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/migrate_db.py",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/noc_helper.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/NumericOutputCalculator.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_statistical_signficance.feature",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/export_cuts_in_separate_files.py",
-		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration/migrate.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
-		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration/test/test_db_migration.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writer_test.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py",
 		"/Users/mcox/Box Sync/Surveys/1415MYS/design_setup/config_files/config.yaml",
@@ -803,8 +809,7 @@
 		"/Users/mcox/Dropbox/MDIS/Code/PythonSurveyReportingSystem/NumericOutputCalculator/__init__.py",
 		"/Users/mcox/Library/Application Support/Sublime Text 2/Packages/SideBarEnhancements/messages/11.13.2012.1305.0.txt",
 		"/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1314F8W/Supporting_scripts/for_progress_report/config.yaml",
-		"/Users/mcox/Dropbox/MDIS/Code/PythonCMContinuumET/Transform/features/determine_errant_records.feature",
-		"/Users/mcox/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings"
+		"/Users/mcox/Dropbox/MDIS/Code/PythonCMContinuumET/Transform/features/determine_errant_records.feature"
 	],
 	"find":
 	{
@@ -826,6 +831,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"set_trace",
+			"clean",
+			"clean_CALI",
 			"menu_start+1",
 			"historical",
 			"cuts_2",
@@ -950,10 +958,7 @@
 			"survey_",
 			"numerical_responses",
 			"question_category",
-			"numerical_responses",
-			"response",
-			"numerical_responses",
-			"survey_id"
+			"numerical_responses"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1093,10 +1098,11 @@
 							"codeintel_tooltips": "popup",
 							"codeintel_word_completions": "buffer",
 							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 43.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
