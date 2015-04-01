@@ -38,7 +38,7 @@ responses_df = pd.DataFrame(responses['rows'])
 responses_df.columns = responses['column_headings']
 
 for_historical = False
-if len(args.surveys) > 2:
+if len(args.surveys) > 1:
     assert os.path.exists(
         'hist_demographics.xlsx'), "hist_demographics.xlsx expected in current folder"
 

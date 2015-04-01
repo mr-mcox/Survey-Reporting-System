@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"ret",
+				"result_type"
+			],
+			[
+				"result_ty",
+				"result_types"
+			],
+			[
 				"not",
 				"notnull"
 			],
@@ -360,10 +368,6 @@
 				"assertEqual	(attribute, instance)"
 			],
 			[
-				"ret",
-				"return_value"
-			],
-			[
 				"mo",
 				"modify_for_combinations_of_demographics"
 			],
@@ -510,15 +514,43 @@
 			[
 				"in",
 				"integer_strings"
-			],
-			[
-				"la",
-				"labels"
 			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"file": "export_cuts_in_separate_files.py",
+			"settings":
+			{
+				"buffer_size": 2937,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "NumericOutputCalculator/NumericOutputCalculator.py",
+			"settings":
+			{
+				"buffer_size": 21422,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/mcox/Box Sync/Surveys/One Off Analyses/20150309-Talamo-CMs_per_school/demographics_checking.py",
+			"settings":
+			{
+				"buffer_size": 864,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "CalculationCoordinator/CalculationCoordinator.py",
+			"settings":
+			{
+				"buffer_size": 49521,
+				"line_ending": "Unix"
+			}
+		},
 		{
 			"file": "compute_results.py",
 			"settings":
@@ -529,9 +561,14 @@
 		}
 	],
 	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
 	"command_palette":
 	{
 		"height": 87.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -539,12 +576,16 @@
 				"Git: Push"
 			],
 			[
-				"git com",
+				"git comm",
 				"Git: Commit"
 			],
 			[
 				"git add",
 				"Git: Add..."
+			],
+			[
+				"git com",
+				"Git: Commit"
 			],
 			[
 				"git pus",
@@ -557,10 +598,6 @@
 			[
 				"con",
 				"Indentation: Convert to Spaces"
-			],
-			[
-				"git comm",
-				"Git: Commit"
 			],
 			[
 				"conv",
@@ -682,21 +719,27 @@
 	],
 	"file_history":
 	[
+		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/Lookups.xlsx",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/export_cuts_to_seperate_files.feature",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/output_dimension_value_combinations.feature",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/get_mapping_by_dimension.feature",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/NumericOutputCalculator.py",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/export_cuts_in_separate_files.py",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/include_specified_question.feature",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writer_test.py",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/compute_results.py",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/create_pilot_dashboard.py",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/.gitignore",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration/migrate.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_net_strong_weak_average.feature",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps/basic_computations.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration/test/test_db_migration.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/migrate_db.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/noc_helper.py",
-		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/NumericOutputCalculator.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_statistical_signficance.feature",
-		"/Users/mcox/Code/Python/SurveyReportingSystem/export_cuts_in_separate_files.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/database/mdis_db_migration/migrate_old_survey_db_format_to_new.py",
-		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writer_test.py",
-		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py",
 		"/Users/mcox/Box Sync/Surveys/1415MYS/design_setup/config_files/config.yaml",
-		"/Users/mcox/Code/Python/SurveyReportingSystem/compute_results.py",
-		"/Users/mcox/Code/Python/SurveyReportingSystem/.gitignore",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration/import_dump_to_nr_table.py",
 		"/Users/mcox/.odbc.ini",
 		"/private/var/folders/cc/bdv8qvl150sg7h4_t3vk1_7m0000gn/T/pip_build_mcox/pyodbc/setup.py",
@@ -803,13 +846,7 @@
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/dimensions_by_cut_title.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/features/retrieve_numeric_results.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/excel_helper.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/for_excel_export.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/steps/get_mapping_by_dimension_steps.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/get_mapping_by_dimension.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/PythonSurveyReportingSystem/NumericOutputCalculator/__init__.py",
-		"/Users/mcox/Library/Application Support/Sublime Text 2/Packages/SideBarEnhancements/messages/11.13.2012.1305.0.txt",
-		"/Users/mcox/Dropbox/MDIS/Survey_Dashboards/1314F8W/Supporting_scripts/for_progress_report/config.yaml",
-		"/Users/mcox/Dropbox/MDIS/Code/PythonCMContinuumET/Transform/features/determine_errant_records.feature"
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/for_excel_export.feature"
 	],
 	"find":
 	{
@@ -831,6 +868,12 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"export",
+			"result_types",
+			"result_type",
+			"logging",
+			"add_composite_question_calculation",
+			"survey_code",
 			"set_trace",
 			"clean",
 			"clean_CALI",
@@ -952,13 +995,7 @@
 			"2014Inst-EIS",
 			"'CSI'",
 			"expected_df",
-			"survey",
-			"survey_df",
-			"empty_db",
-			"survey_",
-			"numerical_responses",
-			"question_category",
-			"numerical_responses"
+			"survey"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -986,11 +1023,129 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
+					"file": "export_cuts_in_separate_files.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2937,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1380,
+								1380
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "NumericOutputCalculator/NumericOutputCalculator.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 21422,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2556,
+								2567
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 56.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/mcox/Box Sync/Surveys/One Off Analyses/20150309-Talamo-CMs_per_school/demographics_checking.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 864,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								312,
+								93
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "CalculationCoordinator/CalculationCoordinator.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 49521,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13164,
+								13164
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3804.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "compute_results.py",
 					"semi_transient": false,
 					"settings":
@@ -1008,95 +1163,6 @@
 						],
 						"settings":
 						{
-							"auto_complete": false,
-							"codeintel": true,
-							"codeintel_database_dir": "~/.codeintel",
-							"codeintel_enabled_languages":
-							[
-								"JavaScript",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Node.js",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_exclude_scopes_from_complete_triggers":
-							[
-								"comment"
-							],
-							"codeintel_language_settings":
-							{
-								"JavaScript":
-								{
-									"codeintel_max_recursive_dir_depth": 2,
-									"codeintel_scan_exclude_dir":
-									[
-										"/build/",
-										"/min/"
-									],
-									"codeintel_scan_extra_dir":
-									[
-									],
-									"codeintel_scan_files_in_project": false,
-									"codeintel_selected_catalogs":
-									[
-										"jQuery"
-									]
-								},
-								"PHP":
-								{
-									"codeintel_max_recursive_dir_depth": 15,
-									"codeintel_scan_exclude_dir":
-									[
-										"/Applications/MAMP/bin/php/php5.5.3/"
-									],
-									"codeintel_scan_extra_dir":
-									[
-									],
-									"codeintel_scan_files_in_project": true,
-									"php": "/Applications/MAMP/bin/php/php5.5.3/bin/php"
-								},
-								"Python3":
-								{
-									"codeintel_scan_extra_dir":
-									[
-										"/Applications/Sublime Text.app/Contents/MacOS",
-										"~/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/arch",
-										"~/Library/Application Support/Sublime Text 3/Packages/SublimeCodeIntel/libs"
-									],
-									"codeintel_scan_files_in_project": true,
-									"codeintel_selected_catalogs":
-									[
-									],
-									"python3": "/usr/local/bin/python3.3"
-								}
-							},
-							"codeintel_live": true,
-							"codeintel_max_recursive_dir_depth": 10,
-							"codeintel_scan_exclude_dir":
-							[
-							],
-							"codeintel_scan_files_in_project": true,
-							"codeintel_selected_catalogs":
-							[
-							],
-							"codeintel_snippets": false,
-							"codeintel_syntax_map":
-							{
-								"Python Django": "Python"
-							},
-							"codeintel_tooltips": "popup",
-							"codeintel_word_completions": "buffer",
 							"syntax": "Packages/Python/Python.tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
@@ -1105,7 +1171,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
@@ -1154,6 +1220,7 @@
 	{
 		"height": 100.0
 	},
+	"pinned_build_system": "",
 	"project": "SurveyReportingSystem.sublime-project",
 	"replace":
 	{
@@ -1163,6 +1230,7 @@
 	"select_file":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -1239,6 +1307,7 @@
 	"select_project":
 	{
 		"height": 500.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -1247,6 +1316,7 @@
 	"select_symbol":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],

@@ -280,6 +280,7 @@ class CalculationCoordinator(object):
 		self.hist_responses = self.remove_questions_not_used(self.hist_responses)
 		for_historical = kwargs.pop('for_historical',False)
 		cut_sets = self.config.cuts_to_be_created(for_historical=for_historical)
+		self.result_types = self.config.config['result_types']
 
 		responses = self.responses
 		demographic_data = self.demographic_data
