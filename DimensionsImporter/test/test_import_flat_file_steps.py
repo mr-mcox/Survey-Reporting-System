@@ -36,6 +36,10 @@ def test_import_table_from_xlsx():
 def demographic_file():
 	return os.path.dirname(os.path.realpath(__file__)) + '/test_data/cm_demographics.xlsx'
 
+@given('file cm_demographic_data_with_blank_rows.xlsx')
+def demographic_file():
+    return os.path.dirname(os.path.realpath(__file__)) + '/test_data/cm_demographic_data_with_blank_rows.xlsx'
+
 @given('DimensionsImporter is initialized with xlsx file')
 def importer_with_data(demographic_file):
 	return DimensionsImporter.DimensionsImporter(flat_file = demographic_file)

@@ -12,3 +12,8 @@ Feature: Import of flat file
 		And an importer
 		When this data is assigned to demographic_data
 		Then demographic_data has a column titled "respondent_id"
+
+	Scenario: When an xlsx file with blank_rows is specified, only records with non-blank respondent_ids are loaded
+		Given file cm_demographic_data_with_blank_rows.xlsx
+		And DimensionsImporter is initialized with xlsx file
+		Then demographic_data has a table with 6 rows

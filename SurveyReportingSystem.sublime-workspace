@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"que",
+				"questions"
+			],
+			[
 				"ret",
 				"result_type"
 			],
@@ -34,10 +38,6 @@
 			[
 				"is",
 				"is_confidential"
-			],
-			[
-				"que",
-				"question_code"
 			],
 			[
 				"res",
@@ -567,21 +567,29 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 87.0,
-		"last_filter": "",
+		"height": 392.0,
+		"last_filter": "spac",
 		"selected_items":
 		[
+			[
+				"spac",
+				"Indentation: Convert to Spaces"
+			],
 			[
 				"git push",
 				"Git: Push"
 			],
 			[
-				"git comm",
+				"git c",
 				"Git: Commit"
 			],
 			[
 				"git add",
 				"Git: Add..."
+			],
+			[
+				"git comm",
+				"Git: Commit"
 			],
 			[
 				"git com",
@@ -626,10 +634,6 @@
 			[
 				"space",
 				"Indentation: Convert to Spaces"
-			],
-			[
-				"spac",
-				"FindKeyConflicts: Single Package Conflicts"
 			],
 			[
 				"git",
@@ -688,7 +692,7 @@
 				"Set Syntax: JavaScript"
 			]
 		],
-		"width": 512.0
+		"width": 593.0
 	},
 	"console":
 	{
@@ -711,6 +715,10 @@
 	[
 		"/Users/mcox/Code/Python/SurveyReportingSystem",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/ConfigurationReader",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/ConfigurationReader/features",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/ConfigurationReader/test",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/ConfigurationReader/test/__pycache__",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration/test",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator",
@@ -719,6 +727,8 @@
 	],
 	"file_history":
 	[
+		"/Users/mcox/Box Sync/Surveys/One Off Analyses/20150401-Flowers-School_Request/assemble_cut.py",
+		"/Users/mcox/Box Sync/Surveys/One Off Analyses/20150309-Talamo-POC_Update/assemble_cut.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/Lookups.xlsx",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/export_cuts_to_seperate_files.feature",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/output_dimension_value_combinations.feature",
@@ -844,9 +854,7 @@
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/load_cut_definitions.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/dimensions_by_cut_title_steps.py",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/dimensions_by_cut_title.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/features/retrieve_numeric_results.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/excel_helper.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/for_excel_export.feature"
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/features/retrieve_numeric_results.feature"
 	],
 	"find":
 	{
@@ -854,7 +862,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 93.0,
 		"where_history":
 		[
 			"/Users/mcox/Code/Python/SurveyReportingSystem",
@@ -868,6 +876,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"is_confident",
+			"confidential",
 			"export",
 			"result_types",
 			"result_type",
@@ -993,9 +1003,7 @@
 			"),\n",
 			"CSI1",
 			"2014Inst-EIS",
-			"'CSI'",
-			"expected_df",
-			"survey"
+			"'CSI'"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1054,7 +1062,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -1080,10 +1088,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 56.0,
+						"translation.y": 525.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -1127,8 +1135,8 @@
 						"selection":
 						[
 							[
-								13164,
-								13164
+								13721,
+								13726
 							]
 						],
 						"settings":
@@ -1138,7 +1146,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3804.0,
+						"translation.y": 73.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1171,7 +1179,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
