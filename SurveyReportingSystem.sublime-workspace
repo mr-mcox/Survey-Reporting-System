@@ -552,10 +552,26 @@
 			}
 		},
 		{
-			"file": "compute_results.py",
+			"file": "DimensionsImporter/DimensionsImporter.py",
 			"settings":
 			{
-				"buffer_size": 2869,
+				"buffer_size": 954,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "DimensionsImporter/test/test_import_flat_file_steps.py",
+			"settings":
+			{
+				"buffer_size": 2493,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "DimensionsImporter/test/import_flat_file.feature",
+			"settings":
+			{
+				"buffer_size": 858,
 				"line_ending": "Unix"
 			}
 		}
@@ -567,20 +583,16 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 392.0,
-		"last_filter": "spac",
+		"height": 87.0,
+		"last_filter": "git push",
 		"selected_items":
 		[
-			[
-				"spac",
-				"Indentation: Convert to Spaces"
-			],
 			[
 				"git push",
 				"Git: Push"
 			],
 			[
-				"git c",
+				"git com",
 				"Git: Commit"
 			],
 			[
@@ -588,11 +600,15 @@
 				"Git: Add..."
 			],
 			[
-				"git comm",
+				"spac",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"git c",
 				"Git: Commit"
 			],
 			[
-				"git com",
+				"git comm",
 				"Git: Commit"
 			],
 			[
@@ -692,7 +708,7 @@
 				"Set Syntax: JavaScript"
 			]
 		],
-		"width": 593.0
+		"width": 512.0
 	},
 	"console":
 	{
@@ -721,12 +737,19 @@
 		"/Users/mcox/Code/Python/SurveyReportingSystem/ConfigurationReader/test/__pycache__",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration/test",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/DimensionsImporter",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/DimensionsImporter/test",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/DimensionsImporter/test/test_data",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps"
 	],
 	"file_history":
 	[
+		"/Users/mcox/Code/Python/SurveyReportingSystem/.gitignore",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/compute_results.py",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/DimensionsImporter/test/import_flat_file.feature",
+		"/Users/mcox/Code/Python/SurveyReportingSystem/DimensionsImporter/test/test_import_flat_file_steps.py",
 		"/Users/mcox/Box Sync/Surveys/One Off Analyses/20150401-Flowers-School_Request/assemble_cut.py",
 		"/Users/mcox/Box Sync/Surveys/One Off Analyses/20150309-Talamo-POC_Update/assemble_cut.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/Lookups.xlsx",
@@ -738,9 +761,7 @@
 		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/CalculationCoordinator.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/include_specified_question.feature",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/CalculationCoordinator/test/excel_writer_test.py",
-		"/Users/mcox/Code/Python/SurveyReportingSystem/compute_results.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/create_pilot_dashboard.py",
-		"/Users/mcox/Code/Python/SurveyReportingSystem/.gitignore",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/db_migration/migrate.py",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/compute_net_strong_weak_average.feature",
 		"/Users/mcox/Code/Python/SurveyReportingSystem/NumericOutputCalculator/features/steps/basic_computations.py",
@@ -852,9 +873,7 @@
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/assemble_cuts_from_config_reader.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/CalculationCoordinator/features/export_to_grid.feature",
 		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/load_cut_definitions.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/dimensions_by_cut_title_steps.py",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/dimensions_by_cut_title.feature",
-		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ResultsRetriever/features/retrieve_numeric_results.feature"
+		"/Users/mcox/Dropbox/MDIS/Code/Python/SurveyReportingSystem/ConfigurationReader/features/steps/dimensions_by_cut_title_steps.py"
 	],
 	"find":
 	{
@@ -1031,7 +1050,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -1062,7 +1081,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -1091,7 +1110,7 @@
 						"translation.y": 525.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1119,7 +1138,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1146,27 +1165,57 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 73.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "compute_results.py",
+					"file": "DimensionsImporter/DimensionsImporter.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2869,
+						"buffer_size": 954,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								692,
-								628
+								399,
+								399
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "DimensionsImporter/test/test_import_flat_file_steps.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2493,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1180,6 +1229,35 @@
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "DimensionsImporter/test/import_flat_file.feature",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 858,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
 					"type": "text"
 				}
 			]

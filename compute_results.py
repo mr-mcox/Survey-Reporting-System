@@ -38,6 +38,9 @@ responses = retriever.retrieve_responses_for_survey(
 responses_df = pd.DataFrame(responses['rows'])
 responses_df.columns = responses['column_headings']
 
+demographic_data = pd.read_excel('demographics.xlsx', sheetname="Sheet1")
+demographic_data = demographic_data[demographic_data.respondent_id.notnull()]
+
 if len(args.surveys) > 2:
     assert os.path.exists(
         'hist_demographics.xlsx'), "hist_demographics.xlsx expected in current folder"
@@ -50,8 +53,7 @@ if len(args.surveys) > 2:
 
     print("Starting calculations with historical data")
     calc = CalculationCoordinator.CalculationCoordinator(responses=responses_df,
-                                                         demographic_data=pd.read_excel(
-                                                             'demographics.xlsx', sheetname="Sheet1"),
+                                                         demographic_data=demographic_data,
                                                          hist_responses=hist_responses_df,
                                                          hist_demographic_data=pd.read_excel(
                                                              'hist_demographics.xlsx', sheetname="Sheet1"),
@@ -59,7 +61,6 @@ if len(args.surveys) > 2:
 else:
     print("Starting calculations")
     calc = CalculationCoordinator.CalculationCoordinator(responses=responses_df,
-                                                         demographic_data=pd.read_excel(
-                                                             'demographics.xlsx', sheetname="Sheet1"),
+                                                         demographic_data=demographic_data,
                                                          config=config)
 calc.export_to_excel()
